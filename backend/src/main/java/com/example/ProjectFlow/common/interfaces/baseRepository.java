@@ -2,7 +2,7 @@
 // packages
 package com.example.ProjectFlow.common.interfaces;
 
-// imports
+// import list
 import java.util.List;
 
 
