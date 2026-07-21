@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.common.interfaces;
+package com.example.ProjectFlow.common.interfaces.crudBase;
 
 // import list
 import java.util.List;
