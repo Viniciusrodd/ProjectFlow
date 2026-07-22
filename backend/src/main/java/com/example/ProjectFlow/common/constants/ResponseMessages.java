@@ -22,6 +22,5 @@ public class ResponseMessages {
    public static final String INTERNAL_ERROR = "Erro interno do servidor";
    public static final String DUPLICATE = "Recurso já existe";
    public static final String INVALID_DATA = "Dados inválidos";
-   public static final String BUSINESS_ERROR = "Erro de negócio";
 
 }
