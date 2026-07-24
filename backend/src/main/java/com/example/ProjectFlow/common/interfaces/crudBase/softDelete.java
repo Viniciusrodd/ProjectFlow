@@ -6,7 +6,7 @@ package com.example.ProjectFlow.common.interfaces.crudBase;
 import java.time.LocalDateTime;
 
 
-public interface softDelete {
+public interface SoftDelete {
  
    boolean isDeleted();
    LocalDateTime getDeletedAt();
