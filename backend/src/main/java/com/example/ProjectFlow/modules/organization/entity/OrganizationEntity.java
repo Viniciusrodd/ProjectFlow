@@ -1,20 +1,20 @@
 
 // packages
-package com.example.ProjectFlow.modules.user.entity;
+package com.example.ProjectFlow.modules.organization.entity;
 
 // imports
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 // jakarta imports
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
@@ -23,34 +23,32 @@ import jakarta.persistence.Column;
 import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
 
 // import entities
-import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
+import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 
 @Entity
-@Table(name = "users")
-@SQLRestriction("deleted_at IS NULL") // auto. filter not deleted registers
-public class UserEntity implements SoftDelete {
+@Table(name = "organizations")
+@SQLRestriction("deleted_at IS NULL")
+public class OrganizationEntity implements SoftDelete {
  
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   // 1(owner user) : N(organizations)
-   @OneToMany(mappedBy = "owner")
-   private List<OrganizationEntity> ownedOrganizations = new ArrayList<>();
+   // N(organizations) : 1(owner user)
+   @ManyToOne(fetch = FetchType.LAZY) // only necessary fields -> better performance 
+   @JoinColumn(name = "owner_id", nullable = false)
+   private UserEntity owner;
 
    @Column(nullable = false, length = 120)
    private String name;
 
-   @Column(nullable = false, length = 255, unique = true)
-   private String email;
+   @Column(length = 700)
+   private String description;
 
-   @Column(nullable = false, length = 255)
-   private String password;
+   @Column(name = "logo_image_id")
+   private String logoImageId; // mongo ref.
 
-   @Column(name = "profile_image_id")
-   private String profileImageId; // mongo ref.
-   
    @CreationTimestamp
    @Column(name = "created_at", updatable = false)
    private LocalDateTime createdAt;
@@ -63,15 +61,14 @@ public class UserEntity implements SoftDelete {
    private LocalDateTime deletedAt;
 
    // constructor
-   protected UserEntity() {}
+   protected OrganizationEntity() {}
 
    // getters
    public Long getId() { return this.id; }
-   public List<OrganizationEntity> getOwnedOrganizations() { return this.ownedOrganizations; }
+   public UserEntity getOwner() { return this.owner; }
    public String getName() { return this.name; }
-   public String getEmail() { return this.email; }
-   public String getPassword() { return this.password; }
-   public String getProfileImageId() { return this.profileImageId; }
+   public String getDescription() { return this.description; }
+   public String getLogoImageId() { return this.logoImageId; }
    public LocalDateTime getCreatedAt() { return this.createdAt; }
    public LocalDateTime getUpdatedAt() { return this.updatedAt; }
    public LocalDateTime getDeletedAt() { return this.deletedAt; }
@@ -79,9 +76,8 @@ public class UserEntity implements SoftDelete {
    // setters
    public void setId(Long id) { this.id = id; }
    public void setName(String name) { this.name = name; }
-   public void setEmail(String email) { this.email = email; }
-   public void setPassword(String password) { this.password = password; }
-   public void setProfileImageId(String profileImageId) { this.profileImageId = profileImageId; }
+   public void setDescription(String description) { this.description = description; }
+   public void setLogoImageId(String logoImageId) { this.logoImageId = logoImageId; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
    public void setDeletedAt(LocalDateTime deletedAt) { this.deletedAt = deletedAt; }
