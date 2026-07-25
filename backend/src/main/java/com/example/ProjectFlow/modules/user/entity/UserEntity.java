@@ -12,11 +12,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 // jakarta imports
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 // import interfaces
@@ -24,6 +26,7 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
 
 // import entities
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
+import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
 
 
 @Entity
@@ -38,6 +41,10 @@ public class UserEntity implements SoftDelete {
    // 1(owner user) : N(organizations)
    @OneToMany(mappedBy = "owner")
    private List<OrganizationEntity> ownedOrganizations = new ArrayList<>();
+
+   // 1(user member) : N(organization_members)
+   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<OrganizationMembersEntity> organizationMemberships = new ArrayList<>();
 
    @Column(nullable = false, length = 120)
    private String name;
@@ -68,6 +75,7 @@ public class UserEntity implements SoftDelete {
    // getters
    public Long getId() { return this.id; }
    public List<OrganizationEntity> getOwnedOrganizations() { return this.ownedOrganizations; }
+   public List<OrganizationMembersEntity> getOrganizationMemberships() { return this.organizationMemberships; }
    public String getName() { return this.name; }
    public String getEmail() { return this.email; }
    public String getPassword() { return this.password; }

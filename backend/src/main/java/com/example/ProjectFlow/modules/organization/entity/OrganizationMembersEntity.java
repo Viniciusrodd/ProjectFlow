@@ -40,15 +40,15 @@ public class OrganizationMembersEntity implements SoftDelete {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   // N(organizations) : 1(organization_members)
-   @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "organization_id", nullable = false)
-   private OrganizationEntity organization;
-
    // N(users) : 1(organization_members)
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "user_id", nullable = false)
    private UserEntity user;
+   
+   // N(organizations) : 1(organization_members)
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "organization_id", nullable = false)
+   private OrganizationEntity organization;
 
    @Enumerated(EnumType.STRING)
    @Column(nullable = false)
