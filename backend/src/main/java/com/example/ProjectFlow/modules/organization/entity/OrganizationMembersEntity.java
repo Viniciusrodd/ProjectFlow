@@ -49,6 +49,10 @@ public class OrganizationMembersEntity implements SoftDelete {
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "organization_id", nullable = false)
    private OrganizationEntity organization;
+   
+   
+   //// fields
+   
 
    @Enumerated(EnumType.STRING)
    @Column(nullable = false)
@@ -65,8 +69,10 @@ public class OrganizationMembersEntity implements SoftDelete {
    @Column(name = "deleted_at")
    private LocalDateTime deletedAt;
 
+
    // constructor
    protected OrganizationMembersEntity() {} 
+
 
    // getters
    public Long getId() { return this.id; }
@@ -76,6 +82,7 @@ public class OrganizationMembersEntity implements SoftDelete {
    public LocalDateTime getJoinedAt() { return this.joinedAt; }
    public LocalDateTime getDeletedAt() { return this.deletedAt; }
 
+
    // setters
    public void setId(Long id) { this.id = id; }
    public void setOrganization(OrganizationEntity organization) { this.organization = organization; }
@@ -83,6 +90,7 @@ public class OrganizationMembersEntity implements SoftDelete {
    public void setRole(RoleEnum role) { this.role = role; }
    public void setJoinedAt(LocalDateTime joinedAt) { this.joinedAt = joinedAt; }
    public void setDeletedAt(LocalDateTime deletedAt) { this.deletedAt = deletedAt; }
+
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }

@@ -36,7 +36,7 @@ import com.example.ProjectFlow.modules.project.enums.StatusEnum;
 @Table(name = "projects")
 @SQLRestriction("deleted_at IS NULL")
 public class ProjectEntity implements SoftDelete {
- 
+   
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
@@ -45,11 +45,15 @@ public class ProjectEntity implements SoftDelete {
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "organization_id", nullable = false)
    private OrganizationEntity organization;
-
+   
    // N(projects) : 1(owner user)
    @ManyToOne(fetch = FetchType.LAZY) 
    @JoinColumn(name = "owner_id", nullable = false)
    private UserEntity owner;
+   
+
+   //// fields
+ 
 
    @Column(nullable = false, length = 120)
    private String name;
@@ -75,12 +79,14 @@ public class ProjectEntity implements SoftDelete {
    @Column(name = "deleted_at")
    private LocalDateTime deletedAt;
 
+
    // constructor
    protected ProjectEntity() {}
 
+
    // getters
    public Long getId() { return this.id; }
-   public OrganizationEntity getOrganizations() { return this.organization; }
+   public OrganizationEntity getOrganization() { return this.organization; }
    public UserEntity getOwner() { return this.owner; }
    public String getName() { return this.name; }
    public String getDescription() { return this.description; }
@@ -90,8 +96,11 @@ public class ProjectEntity implements SoftDelete {
    public LocalDateTime getUpdatedAt() { return this.updatedAt; }
    public LocalDateTime getDeletedAt() { return this.deletedAt; }
 
+
    // setters
    public void setId(Long id) { this.id = id; }
+   public void setOrganization(OrganizationEntity organization) { this.organization = organization; }
+   public void setOwner(UserEntity owner) { this.owner = owner; }
    public void setName(String name) { this.name = name; }
    public void setDescription(String description) { this.description = description; }
    public void setStatus(StatusEnum status) { this.status = status; }
@@ -99,6 +108,7 @@ public class ProjectEntity implements SoftDelete {
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
    public void setDeletedAt(LocalDateTime deletedAt) { this.deletedAt = deletedAt; }
+
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }

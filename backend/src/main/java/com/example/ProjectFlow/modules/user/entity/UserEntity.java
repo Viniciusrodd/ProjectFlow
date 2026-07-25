@@ -40,16 +40,20 @@ public class UserEntity implements SoftDelete {
    private Long id;
 
    // 1(owner user) : N(organizations)
-   @OneToMany(mappedBy = "owner")
+   @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
    private List<OrganizationEntity> ownedOrganizations = new ArrayList<>();
 
    // 1(user member) : N(organization_members)
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<OrganizationMembersEntity> organizationMemberships = new ArrayList<>();
-
+   
    // 1(owner user) : N(projects)
-   @OneToMany(mappedBy = "owner")
+   @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
    private List<ProjectEntity> ownedProjects = new ArrayList<>();
+ 
+   
+   //// fields
+
 
    @Column(nullable = false, length = 120)
    private String name;
@@ -74,8 +78,10 @@ public class UserEntity implements SoftDelete {
    @Column(name = "deleted_at")
    private LocalDateTime deletedAt;
 
+
    // constructor
    protected UserEntity() {}
+
 
    // getters
    public Long getId() { return this.id; }
@@ -90,8 +96,12 @@ public class UserEntity implements SoftDelete {
    public LocalDateTime getUpdatedAt() { return this.updatedAt; }
    public LocalDateTime getDeletedAt() { return this.deletedAt; }
 
+
    // setters
    public void setId(Long id) { this.id = id; }
+   public void setOwnedOrganizations(List<OrganizationEntity> ownedOrganizations) { this.ownedOrganizations = ownedOrganizations; }
+   public void setOrganizationMemberships(List<OrganizationMembersEntity> organizationMemberships) { this.organizationMemberships = organizationMemberships; }   
+   public void setOwnedProjects(List<ProjectEntity> ownedProjects) { this.ownedProjects = ownedProjects; }
    public void setName(String name) { this.name = name; }
    public void setEmail(String email) { this.email = email; }
    public void setPassword(String password) { this.password = password; }
@@ -99,6 +109,7 @@ public class UserEntity implements SoftDelete {
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
    public void setDeletedAt(LocalDateTime deletedAt) { this.deletedAt = deletedAt; }
+
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }

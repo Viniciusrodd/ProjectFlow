@@ -21,6 +21,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 // import interfaces
@@ -35,7 +36,7 @@ import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 @Table(name = "organizations")
 @SQLRestriction("deleted_at IS NULL")
 public class OrganizationEntity implements SoftDelete {
- 
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
@@ -44,14 +45,18 @@ public class OrganizationEntity implements SoftDelete {
    @ManyToOne(fetch = FetchType.LAZY) // only necessary fields -> better performance 
    @JoinColumn(name = "owner_id", nullable = false)
    private UserEntity owner;
-
+   
    // 1(organization) : N(organization_members)
-   @OneToMany(mappedBy = "organization")
+   @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<OrganizationMembersEntity> members = new ArrayList<>();
-
+   
    // 1(organization) : N(projects)
-   @OneToMany(mappedBy = "organization")
+   @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<ProjectEntity> projects = new ArrayList<>();
+
+
+   //// fields
+   
 
    @Column(nullable = false, length = 120)
    private String name;
@@ -73,8 +78,10 @@ public class OrganizationEntity implements SoftDelete {
    @Column(name = "deleted_at")
    private LocalDateTime deletedAt;
 
+
    // constructor
    protected OrganizationEntity() {}
+
 
    // getters
    public Long getId() { return this.id; }
@@ -88,14 +95,19 @@ public class OrganizationEntity implements SoftDelete {
    public LocalDateTime getUpdatedAt() { return this.updatedAt; }
    public LocalDateTime getDeletedAt() { return this.deletedAt; }
 
+
    // setters
    public void setId(Long id) { this.id = id; }
+   public void setOwner(UserEntity owner) { this.owner = owner; }
+   public void setMembers(List<OrganizationMembersEntity> members) { this.members = members; }
+   public void setProjects(List<ProjectEntity> projects) { this.projects = projects; }
    public void setName(String name) { this.name = name; }
    public void setDescription(String description) { this.description = description; }
    public void setLogoImageId(String logoImageId) { this.logoImageId = logoImageId; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
    public void setDeletedAt(LocalDateTime deletedAt) { this.deletedAt = deletedAt; }
+
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
