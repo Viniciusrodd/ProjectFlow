@@ -4,6 +4,9 @@ package com.example.ProjectFlow.modules.organization.entity;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,6 +18,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
@@ -39,6 +43,10 @@ public class OrganizationEntity implements SoftDelete {
    @ManyToOne(fetch = FetchType.LAZY) // only necessary fields -> better performance 
    @JoinColumn(name = "owner_id", nullable = false)
    private UserEntity owner;
+
+   // 1(organization) : N(organization_members)
+   @OneToMany(mappedBy = "organization")
+   private List<OrganizationMembersEntity> members = new ArrayList<>();
 
    @Column(nullable = false, length = 120)
    private String name;
@@ -66,6 +74,7 @@ public class OrganizationEntity implements SoftDelete {
    // getters
    public Long getId() { return this.id; }
    public UserEntity getOwner() { return this.owner; }
+   public List<OrganizationMembersEntity> getMembers() { return this.members; }
    public String getName() { return this.name; }
    public String getDescription() { return this.description; }
    public String getLogoImageId() { return this.logoImageId; }
