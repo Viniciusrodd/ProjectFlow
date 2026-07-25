@@ -27,6 +27,7 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
 // import entities
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
+import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
 
 @Entity
@@ -45,6 +46,10 @@ public class UserEntity implements SoftDelete {
    // 1(user member) : N(organization_members)
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<OrganizationMembersEntity> organizationMemberships = new ArrayList<>();
+
+   // 1(owner user) : N(projects)
+   @OneToMany(mappedBy = "owner")
+   private List<ProjectEntity> ownedProjects = new ArrayList<>();
 
    @Column(nullable = false, length = 120)
    private String name;
@@ -76,6 +81,7 @@ public class UserEntity implements SoftDelete {
    public Long getId() { return this.id; }
    public List<OrganizationEntity> getOwnedOrganizations() { return this.ownedOrganizations; }
    public List<OrganizationMembersEntity> getOrganizationMemberships() { return this.organizationMemberships; }
+   public List<ProjectEntity> getOwnedProjects() { return this.ownedProjects; }
    public String getName() { return this.name; }
    public String getEmail() { return this.email; }
    public String getPassword() { return this.password; }
