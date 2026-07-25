@@ -4,6 +4,8 @@ package com.example.ProjectFlow.modules.project.entity;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,8 +19,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 // import interfaces
@@ -50,6 +54,10 @@ public class ProjectEntity implements SoftDelete {
    @ManyToOne(fetch = FetchType.LAZY) 
    @JoinColumn(name = "owner_id", nullable = false)
    private UserEntity owner;
+
+   // 1(project) : N(project_members)
+   @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<ProjectMembersEntity> members = new ArrayList<>();
    
 
    //// fields
@@ -88,6 +96,7 @@ public class ProjectEntity implements SoftDelete {
    public Long getId() { return this.id; }
    public OrganizationEntity getOrganization() { return this.organization; }
    public UserEntity getOwner() { return this.owner; }
+   public List<ProjectMembersEntity> getMembers() { return this.members; }
    public String getName() { return this.name; }
    public String getDescription() { return this.description; }
    public StatusEnum getStatus() { return this.status; }
@@ -101,6 +110,7 @@ public class ProjectEntity implements SoftDelete {
    public void setId(Long id) { this.id = id; }
    public void setOrganization(OrganizationEntity organization) { this.organization = organization; }
    public void setOwner(UserEntity owner) { this.owner = owner; }
+   public void setMembers(List<ProjectMembersEntity> members) { this.members = members; }   
    public void setName(String name) { this.name = name; }
    public void setDescription(String description) { this.description = description; }
    public void setStatus(StatusEnum status) { this.status = status; }
