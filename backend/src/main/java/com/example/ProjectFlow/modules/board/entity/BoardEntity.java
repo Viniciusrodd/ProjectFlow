@@ -4,10 +4,11 @@ package com.example.ProjectFlow.modules.board.entity;
 
 // imports
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import java.util.List;
 
 // jakarta imports
 import jakarta.persistence.Entity;
@@ -15,9 +16,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 // import interfaces
@@ -41,6 +44,10 @@ public class BoardEntity implements SoftDelete {
    @JoinColumn(name = "project_id", nullable = false)
    private ProjectEntity project;
 
+   // 1(board) : N(board_columns)
+   @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<BoardColumnsEntity> boardColumns = new ArrayList<>();
+
 
    //// fields
 
@@ -63,6 +70,7 @@ public class BoardEntity implements SoftDelete {
    // getters
    public Long getId() { return this.id; }
    public ProjectEntity getProject() { return this.project; }
+   public List<BoardColumnsEntity> getBoardColumns() { return this.boardColumns; }
    public String getName() { return this.name; }
    public LocalDateTime getCreatedAt() { return this.createdAt; }
    public LocalDateTime getUpdatedAt() { return this.updatedAt; }
@@ -72,6 +80,7 @@ public class BoardEntity implements SoftDelete {
    // setters
    public void setId(Long id) { this.id = id; }
    public void setProject(ProjectEntity project) { this.project = project; }
+   public void setBoardColumns(List<BoardColumnsEntity> boardColumns) { this.boardColumns = boardColumns; }
    public void setName(String name) { this.name = name; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
