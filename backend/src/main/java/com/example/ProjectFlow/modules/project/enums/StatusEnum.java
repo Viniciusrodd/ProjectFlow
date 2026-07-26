@@ -5,8 +5,8 @@ package com.example.ProjectFlow.modules.project.enums;
 
 public enum StatusEnum {
  
-   ACTIVE("ACTIVE"),
-   FINISH("FINISH");
+   ACTIVE("active"),
+   FINISH("finish");
 
    private final String type;
 
