@@ -29,6 +29,7 @@ import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
+import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 
 @Entity
@@ -55,6 +56,10 @@ public class UserEntity implements SoftDelete {
    // 1(user member) : N(project_members)
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<ProjectMembersEntity> projectMemberships = new ArrayList<>();
+
+   // 1(owner user) : N(tasks)
+   @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+   private List<TasksEntity> tasks = new ArrayList<>();
  
    
    //// fields
@@ -94,6 +99,7 @@ public class UserEntity implements SoftDelete {
    public List<OrganizationMembersEntity> getOrganizationMemberships() { return this.organizationMemberships; }
    public List<ProjectEntity> getOwnedProjects() { return this.ownedProjects; }
    public List<ProjectMembersEntity> getProjectMemberships() { return this.projectMemberships; }
+   public List<TasksEntity> getTasks() { return this.tasks; }
    public String getName() { return this.name; }
    public String getEmail() { return this.email; }
    public String getPassword() { return this.password; }
@@ -109,6 +115,7 @@ public class UserEntity implements SoftDelete {
    public void setOrganizationMemberships(List<OrganizationMembersEntity> organizationMemberships) { this.organizationMemberships = organizationMemberships; }   
    public void setOwnedProjects(List<ProjectEntity> ownedProjects) { this.ownedProjects = ownedProjects; }
    public void setProjectMemberships(List<ProjectMembersEntity> projectMemberships) { this.projectMemberships = projectMemberships; }   
+   public void setTasks(List<TasksEntity> tasks) { this.tasks = tasks; }
    public void setName(String name) { this.name = name; }
    public void setEmail(String email) { this.email = email; }
    public void setPassword(String password) { this.password = password; }
