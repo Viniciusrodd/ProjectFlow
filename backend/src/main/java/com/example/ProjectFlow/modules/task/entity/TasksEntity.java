@@ -5,6 +5,8 @@ package com.example.ProjectFlow.modules.task.entity;
 // imports
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,8 +20,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 // import interfaces
@@ -29,6 +33,7 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
 
 // import enums
 import com.example.ProjectFlow.modules.task.enums.PriorityEnum;
@@ -57,6 +62,10 @@ public class TasksEntity implements SoftDelete {
    @ManyToOne(fetch = FetchType.LAZY) 
    @JoinColumn(name = "owner_id", nullable = false)
    private UserEntity owner;
+
+   // 1(task) : N(comments)
+   @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<CommentEntity> comments = new ArrayList<>(); 
 
 
    //// fields 
@@ -99,6 +108,7 @@ public class TasksEntity implements SoftDelete {
    public ProjectEntity getProject() { return this.project; }
    public BoardColumnsEntity getBoardColumn() { return this.boardColumn; }
    public UserEntity getOwner() { return this.owner; }
+   public List<CommentEntity> getComments() { return this.comments; }
    public String getTitle() { return this.title; }
    public String getDescription() { return this.description; }
    public PriorityEnum getPriority() { return this.priority; }
@@ -114,6 +124,7 @@ public class TasksEntity implements SoftDelete {
    public void setProject(ProjectEntity project) { this.project = project; }
    public void setBoardColumn(BoardColumnsEntity boardColumn) { this.boardColumn = boardColumn; }
    public void setOwner(UserEntity owner) { this.owner = owner; }
+   public void setComments(List<CommentEntity> comments) { this.comments = comments; }
    public void setTitle(String title) { this.title = title; }
    public void setDescription(String description) { this.description = description; }
    public void setPriority(PriorityEnum priority) { this.priority = priority; }
