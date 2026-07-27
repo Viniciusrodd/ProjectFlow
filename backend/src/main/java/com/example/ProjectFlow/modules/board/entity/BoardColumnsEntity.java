@@ -4,6 +4,8 @@ package com.example.ProjectFlow.modules.board.entity;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,12 +19,16 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
 // import interfaces
 import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
+
+// import entities
+import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import enums
 import com.example.ProjectFlow.modules.board.enums.BoardEnum;
@@ -41,6 +47,10 @@ public class BoardColumnsEntity implements SoftDelete {
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "board_id", nullable = false)
    private BoardEntity board;
+
+   // 1(board_column) : N(tasks)
+   @OneToMany(mappedBy = "boardColumn", fetch = FetchType.LAZY)
+   private List<TasksEntity> tasks = new ArrayList<>();
 
 
    //// fields
@@ -75,6 +85,7 @@ public class BoardColumnsEntity implements SoftDelete {
    // getters
    public Long getId() { return this.id; }
    public BoardEntity getBoard() { return this.board; }
+   public List<TasksEntity> getTasks() { return this.tasks; }
    public BoardEnum getName() { return this.name; } 
    public int getPosition() { return this.position; } 
    public String getColor() { return this.color; }
@@ -86,6 +97,7 @@ public class BoardColumnsEntity implements SoftDelete {
    // setters
    public void setId(Long id) { this.id = id; }
    public void setBoard(BoardEntity board) { this.board = board; }
+   public void setTasks(List<TasksEntity> tasks) { this.tasks = tasks; }
    public void setName(BoardEnum name) { this.name = name; }
    public void setPosition(int position) { this.position = position; }
    public void setColor(String color) { this.color = color; }
