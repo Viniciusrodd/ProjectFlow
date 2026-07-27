@@ -33,6 +33,7 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
+import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import enums
 import com.example.ProjectFlow.modules.project.enums.StatusEnum;
@@ -64,6 +65,10 @@ public class ProjectEntity implements SoftDelete {
    // 1(project) : 1(board)
    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private BoardEntity board;
+
+   // 1(project) : N(tasks)
+   @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<TasksEntity> tasks = new ArrayList<>();
    
 
    //// fields
@@ -104,6 +109,7 @@ public class ProjectEntity implements SoftDelete {
    public UserEntity getOwner() { return this.owner; }
    public List<ProjectMembersEntity> getMembers() { return this.members; }
    public BoardEntity getBoard() { return this.board; }
+   public List<TasksEntity> getTasks() { return this.tasks; }
    public String getName() { return this.name; }
    public String getDescription() { return this.description; }
    public StatusEnum getStatus() { return this.status; }
@@ -119,6 +125,7 @@ public class ProjectEntity implements SoftDelete {
    public void setOwner(UserEntity owner) { this.owner = owner; }
    public void setMembers(List<ProjectMembersEntity> members) { this.members = members; }
    public void setBoard(BoardEntity board) { this.board = board; }
+   public void setTasks(List<TasksEntity> tasks) { this.tasks = tasks; }
    public void setName(String name) { this.name = name; }
    public void setDescription(String description) { this.description = description; }
    public void setStatus(StatusEnum status) { this.status = status; }
