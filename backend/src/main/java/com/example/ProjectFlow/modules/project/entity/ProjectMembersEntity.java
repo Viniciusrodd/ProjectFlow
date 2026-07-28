@@ -14,6 +14,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -30,7 +31,10 @@ import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 
 @Entity
-@Table(name = "project_members")
+@Table(
+   name = "project_members",
+   uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "project_id" }) }
+)
 @SQLRestriction("deleted_at IS NULL")
 public class ProjectMembersEntity implements SoftDelete {
  
