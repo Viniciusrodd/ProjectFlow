@@ -122,7 +122,7 @@ public class TasksEntity implements SoftDelete {
    public String getTitle() { return this.title; }
    public String getDescription() { return this.description; }
    public PriorityEnum getPriority() { return this.priority; }
-   public LocalDate getDuoDate() { return this.dueDate; }
+   public LocalDate getDueDate() { return this.dueDate; }
    public LocalDateTime getCreatedAt() { return this.createdAt; }
    public LocalDateTime getUpdatedAt() { return this.updatedAt; }
    public LocalDateTime getCompletedAt() { return this.completedAt; }
@@ -140,7 +140,7 @@ public class TasksEntity implements SoftDelete {
    public void setTitle(String title) { this.title = title; }
    public void setDescription(String description) { this.description = description; }
    public void setPriority(PriorityEnum priority) { this.priority = priority; }
-   public void setDuoDate(LocalDate dueDate) { this.dueDate = dueDate; }
+   public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
    public void setCompletedAt(LocalDateTime completedAt) { this.completedAt = completedAt; }
