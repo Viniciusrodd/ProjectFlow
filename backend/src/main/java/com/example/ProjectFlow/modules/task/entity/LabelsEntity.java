@@ -3,6 +3,8 @@
 package com.example.ProjectFlow.modules.task.entity;
 
 // imports
+import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,8 +17,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 // import interfaces
@@ -39,6 +43,10 @@ public class LabelsEntity implements SoftDelete {
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "project_id", nullable = false)
    private ProjectEntity project;
+
+   // 1(label) : N(task_labels)
+   @OneToMany(mappedBy = "label", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<TaskLabelsEntity> tasks = new ArrayList<>();
 
    
    //// fields
@@ -69,6 +77,7 @@ public class LabelsEntity implements SoftDelete {
    // getters
    public Long getId() { return this.id; }
    public ProjectEntity getProject() { return this.project; }
+   public List<TaskLabelsEntity> getTasks() { return this.tasks; }
    public String getName() { return this.name; }
    public String getColor() { return this.color; }
    public LocalDateTime getCreatedAt() { return this.createdAt; }
@@ -79,6 +88,7 @@ public class LabelsEntity implements SoftDelete {
    // setters
    public void setId(Long id) { this.id = id; }
    public void setProject(ProjectEntity project) { this.project = project; }
+   public void setTasks(List<TaskLabelsEntity> tasks) { this.tasks = tasks; }
    public void setName(String name) { this.name = name; }
    public void setColor(String color) { this.color = color; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

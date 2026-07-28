@@ -67,6 +67,14 @@ public class TasksEntity implements SoftDelete {
    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<CommentEntity> comments = new ArrayList<>(); 
 
+   // 1(task) : N(task_labels)
+   @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<TaskLabelsEntity> labels = new ArrayList<>();
+
+   // 1(task) : N(task_checklist)
+   @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<TaskChecklistEntity> checklist = new ArrayList<>();
+
 
    //// fields 
 
@@ -109,6 +117,8 @@ public class TasksEntity implements SoftDelete {
    public BoardColumnsEntity getBoardColumn() { return this.boardColumn; }
    public UserEntity getOwner() { return this.owner; }
    public List<CommentEntity> getComments() { return this.comments; }
+   public List<TaskChecklistEntity> getChecklist() { return this.checklist; }
+   public List<TaskLabelsEntity> getLabels() { return this.labels; }
    public String getTitle() { return this.title; }
    public String getDescription() { return this.description; }
    public PriorityEnum getPriority() { return this.priority; }
@@ -125,6 +135,8 @@ public class TasksEntity implements SoftDelete {
    public void setBoardColumn(BoardColumnsEntity boardColumn) { this.boardColumn = boardColumn; }
    public void setOwner(UserEntity owner) { this.owner = owner; }
    public void setComments(List<CommentEntity> comments) { this.comments = comments; }
+   public void setChecklist(List<TaskChecklistEntity> checklist) { this.checklist = checklist; }
+   public void setLabels(List<TaskLabelsEntity> labels) { this.labels = labels; }
    public void setTitle(String title) { this.title = title; }
    public void setDescription(String description) { this.description = description; }
    public void setPriority(PriorityEnum priority) { this.priority = priority; }
