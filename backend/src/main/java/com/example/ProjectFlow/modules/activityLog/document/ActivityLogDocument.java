@@ -3,7 +3,8 @@
 package com.example.ProjectFlow.modules.activityLog.document;
 
 // imports
-import java.sql.Date;
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
 
 // mongodb imports
@@ -36,7 +37,7 @@ public class ActivityLogDocument {
    private String description;
 
    @Field("createdAt")
-   private Date createdAt;
+   private LocalDateTime createdAt;
 
 
    // constructor
@@ -51,7 +52,7 @@ public class ActivityLogDocument {
    public Long getUserId() { return this.userId; }
    public String getAction() { return this.action; }
    public String getDescription() { return this.description; }
-   public Date getCreatedAt() { return this.createdAt; }
+   public LocalDateTime getCreatedAt() { return this.createdAt; }
 
 
    // setters
@@ -62,6 +63,6 @@ public class ActivityLogDocument {
    public void setUserId(Long userId) { this.userId = userId; }
    public void setAction(String action) { this.action = action; }
    public void setDescription(String description) { this.description = description; }
-   public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+   public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
 }

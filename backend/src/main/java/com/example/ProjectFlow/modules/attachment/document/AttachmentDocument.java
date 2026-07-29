@@ -3,7 +3,8 @@
 package com.example.ProjectFlow.modules.attachment.document;
 
 // imports
-import java.sql.Date;
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
 
 // mongodb imports
@@ -33,7 +34,7 @@ public class AttachmentDocument {
    private Long size;
 
    @Field("uploadDate")
-   private Date uploadDate;
+   private LocalDateTime uploadDate;
    
    @Field("binary")
    private byte[] binary; // image data
@@ -50,7 +51,7 @@ public class AttachmentDocument {
    public String getFileName() { return this.fileName; }
    public String getMimeType() { return this.mimeType; }
    public Long getSize() { return this.size; }
-   public Date getUploadDate() { return this.uploadDate; }
+   public LocalDateTime getUploadDate() { return this.uploadDate; }
    public byte[] getBinary() { return this.binary; }
 
 
@@ -61,7 +62,7 @@ public class AttachmentDocument {
    public void setFileName(String fileName) { this.fileName = fileName; }
    public void setMimeType(String mimeType) { this.mimeType = mimeType; }
    public void setSize(Long size) { this.size = size; }
-   public void setUploadDate(Date uploadDate) { this.uploadDate = uploadDate; }
+   public void setUploadDate(LocalDateTime uploadDate) { this.uploadDate = uploadDate; }
    public void setBinary(byte[] binary) { this.binary = binary; }   
 
 }

@@ -3,7 +3,8 @@
 package com.example.ProjectFlow.modules.notification.document;
 
 // imports
-import java.sql.Date;
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
 
 // mongodb imports
@@ -30,7 +31,7 @@ public class NotificationDocument {
    private boolean read;
 
    @Field("createdAt")
-   private Date createdAt;
+   private LocalDateTime createdAt;
 
 
    // constructor
@@ -43,7 +44,7 @@ public class NotificationDocument {
    public String getTitle() { return this.title; }
    public String getMessage() { return this.message; }
    public boolean getRead() { return this.read; }
-   public Date getCreatedAt() { return this.createdAt; }
+   public LocalDateTime getCreatedAt() { return this.createdAt; }
 
    // setters
    public void setId(String id) { this.id = id; }
@@ -51,6 +52,6 @@ public class NotificationDocument {
    public void setTitleId(String title) { this.title = title; }
    public void setMessageId(String message) { this.message = message; }
    public void setRead(boolean read) { this.read = read; }
-   public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+   public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
 }
