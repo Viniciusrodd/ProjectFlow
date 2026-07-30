@@ -21,7 +21,7 @@ public class RegisterValidator {
  
    // validate
    public void validate(RegisterDTO data) {
-      
+
       // name
       if(data.name() == null | data.name().trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
@@ -55,6 +55,8 @@ public class RegisterValidator {
             ResponseMessages.INVALID_DATA
          ));
       }
+
+      // check if email already exists...
 
       // password
       if(data.password() == null | data.password().trim().isEmpty()) {
