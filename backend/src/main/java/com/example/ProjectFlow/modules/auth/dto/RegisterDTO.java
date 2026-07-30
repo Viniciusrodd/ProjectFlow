@@ -3,7 +3,7 @@
 package com.example.ProjectFlow.modules.auth.dto;
 
 
-public record AuthDTO (
+public record RegisterDTO (
 
    String name,
    String email,
