@@ -95,7 +95,7 @@ public class UserEntity implements SoftDeleteInterface {
 
 
    // constructor
-   protected UserEntity() {}
+   public UserEntity() {}
 
 
    // getters
