@@ -23,7 +23,7 @@ public class RegisterValidator {
    public void validate(RegisterDTO data) {
 
       // name
-      if(data.name() == null | data.name().trim().isEmpty()) {
+      if(data.name() == null || data.name().trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Nome é obrigatório",
             ResponseMessages.BAD_REQUEST
@@ -41,7 +41,7 @@ public class RegisterValidator {
       }
 
       // email
-      if(data.email() == null | data.email().trim().isEmpty()) {
+      if(data.email() == null || data.email().trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Email é obrigatório",
             ResponseMessages.BAD_REQUEST
@@ -59,7 +59,7 @@ public class RegisterValidator {
       // check if email already exists...
 
       // password
-      if(data.password() == null | data.password().trim().isEmpty()) {
+      if(data.password() == null || data.password().trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Senha é obrigatório",
             ResponseMessages.BAD_REQUEST
@@ -79,9 +79,12 @@ public class RegisterValidator {
    }
 
 
+   //// private
+
+
    // email validation
    private boolean isValidEmail(String email) {
-      String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+      String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
       return email.matches(emailRegex);
    }
 
