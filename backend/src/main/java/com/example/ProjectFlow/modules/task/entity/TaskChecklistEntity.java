@@ -20,13 +20,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
 // import interfaces
-import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
+import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 
 
 @Entity
 @Table(name = "task_checklist")
 @SQLRestriction("deleted_at IS NULL")
-public class TaskChecklistEntity implements SoftDelete {
+public class TaskChecklistEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)

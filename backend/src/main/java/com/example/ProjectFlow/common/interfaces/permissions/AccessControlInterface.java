@@ -6,7 +6,7 @@ package com.example.ProjectFlow.common.interfaces.permissions;
 import java.util.UUID;
 
 
-public interface AccessControl<T> {
+public interface AccessControlInterface<T> {
 
    enum Role { OWNER, ADMIN, MEMBER }
    boolean hasAccess(UUID userId, Role requiredRole);

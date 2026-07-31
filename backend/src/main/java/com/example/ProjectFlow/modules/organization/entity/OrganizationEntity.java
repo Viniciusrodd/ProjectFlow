@@ -24,7 +24,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 // import interfaces
-import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
+import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 
 // import entities
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
@@ -34,7 +34,7 @@ import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 @Entity
 @Table(name = "organizations")
 @SQLRestriction("deleted_at IS NULL")
-public class OrganizationEntity implements SoftDelete {
+public class OrganizationEntity implements SoftDeleteInterface {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)

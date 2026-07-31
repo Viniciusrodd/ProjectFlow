@@ -6,7 +6,7 @@ package com.example.ProjectFlow.common.interfaces.mapper;
 import java.util.List;
 
 
-public interface mapperInterface<DTO, E> {
+public interface MapperInterface<DTO, E> {
  
    DTO toDto(E entity);
    E toEntity(DTO dto);

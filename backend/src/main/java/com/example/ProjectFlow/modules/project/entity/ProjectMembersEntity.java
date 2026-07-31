@@ -23,7 +23,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
 // import interfaces
-import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
+import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 
 // import entities
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
@@ -36,7 +36,7 @@ import com.example.ProjectFlow.modules.user.entity.UserEntity;
    uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "project_id" }) }
 )
 @SQLRestriction("deleted_at IS NULL")
-public class ProjectMembersEntity implements SoftDelete {
+public class ProjectMembersEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)

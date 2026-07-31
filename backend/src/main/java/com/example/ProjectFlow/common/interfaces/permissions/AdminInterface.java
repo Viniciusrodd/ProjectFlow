@@ -6,7 +6,7 @@ package com.example.ProjectFlow.common.interfaces.permissions;
 import java.util.UUID;
 
 
-public interface Admin {
+public interface AdminInterface {
    
    UUID getAdminId();
    void setAdminId(UUID adminId);

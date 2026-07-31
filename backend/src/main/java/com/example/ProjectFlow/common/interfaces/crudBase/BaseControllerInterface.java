@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.ProjectFlow.common.responses.ApiResponse;
 
 
-public interface baseController<T, DTO, ID> {
+public interface BaseControllerInterface<T, DTO, ID> {
  
    ResponseEntity<ApiResponse<T>> findById(@PathVariable ID id);
    ResponseEntity<ApiResponse<List<T>>> findAll();

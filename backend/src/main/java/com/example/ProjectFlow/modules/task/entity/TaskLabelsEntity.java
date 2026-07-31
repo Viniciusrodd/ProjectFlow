@@ -20,7 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
 // import interfaces
-import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
+import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 
 
 @Entity
@@ -29,7 +29,7 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
    uniqueConstraints = { @UniqueConstraint(columnNames = { "task_id", "label_id" }) } // (task + label id) combination must be unique
 )
 @SQLRestriction("deleted_at IS NULL")
-public class TaskLabelsEntity implements SoftDelete {
+public class TaskLabelsEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,7 +6,7 @@ package com.example.ProjectFlow.common.interfaces.permissions;
 import java.util.UUID;
 
 
-public interface Ownable {
+public interface OwnableInterface {
  
    UUID getOwnerId();
    void setOwnerId(UUID ownerId);

@@ -6,7 +6,7 @@ package com.example.ProjectFlow.common.interfaces.permissions;
 import java.time.LocalDateTime;
 
 
-public interface Auditable {
+public interface AuditableInterface {
    LocalDateTime getCreatedAt();
    LocalDateTime getUpdatedAt();
 }

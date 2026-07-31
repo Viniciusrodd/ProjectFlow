@@ -6,13 +6,13 @@ package com.example.ProjectFlow.common.interfaces.crudBase;
 import java.util.List;
 
 
-public interface baseService<T, DTO, ID> {
+public interface BaseRepositoryInterface<T, ID> {
  
    T findById(ID id);
    List<T> findAll();
-   T create(DTO data);
-   T update(ID id, DTO data);
+   T create(T entity);
+   T update(ID id, T entity);
    void delete(ID id);
    boolean existsById(ID id);
-
+   
 }

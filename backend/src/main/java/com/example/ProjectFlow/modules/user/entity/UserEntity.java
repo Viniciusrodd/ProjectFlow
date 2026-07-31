@@ -22,7 +22,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 // import interfaces
-import com.example.ProjectFlow.common.interfaces.crudBase.SoftDelete;
+import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 
 // import entities
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -36,7 +36,7 @@ import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
 @Entity
 @Table(name = "users")
 @SQLRestriction("deleted_at IS NULL") // auto. filter not deleted registers
-public class UserEntity implements SoftDelete {
+public class UserEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
