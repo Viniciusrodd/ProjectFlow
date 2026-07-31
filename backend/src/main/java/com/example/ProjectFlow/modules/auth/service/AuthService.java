@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.auth.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
 
 // import repository
 import com.example.ProjectFlow.modules.auth.repository.AuthRepository;
@@ -27,8 +28,8 @@ public class AuthService {
    private final AuthRepository authRepository;
    private final PasswordService passwordService;
    private final RegisterValidator registerValidator;
-   private final LoginValidator loginValidator;
-   private final JwtService jwtService;
+   //private final LoginValidator loginValidator;
+   //private final JwtService jwtService;
 
    // constructor - dependency injection
    public AuthService(
@@ -41,12 +42,13 @@ public class AuthService {
       this.authRepository = authRepository;
       this.passwordService = passwordService;
       this.registerValidator = registerValidator;
-      this.loginValidator = loginValidator;
-      this.jwtService = jwtService;
+      //this.loginValidator = loginValidator;
+      //this.jwtService = jwtService;
    }
 
 
    // register
+   @Transactional
    public RegisterResponseDTO register(RegisterDTO data) {
       // validation
       this.registerValidator.validate(data);
