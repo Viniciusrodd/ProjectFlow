@@ -40,8 +40,8 @@ public class UserRepository {
    }
 
 
-   // exist by email
-   public boolean existByEmail(String email) {
+   // exists by email
+   public boolean existsByEmail(String email) {
       Long count = entityManager
          .createQuery("SELECT COUNT(u) FROM UserEntity u WHERE u.email = :email", Long.class)
          .setParameter("email", email)

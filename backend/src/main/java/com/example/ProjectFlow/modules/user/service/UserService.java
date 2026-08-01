@@ -6,7 +6,6 @@ package com.example.ProjectFlow.modules.user.service;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.NoResultException;
-import jakarta.transaction.Transactional;
 
 // import repository
 import com.example.ProjectFlow.modules.user.repository.UserRepository;
@@ -42,9 +41,7 @@ public class UserService {
 
 
    // find by email
-   @Transactional
    public UserDTO findByEmail(String email) {
-      // validation
       this.userValidator.emailValidate(email);
 
       try {
@@ -53,6 +50,14 @@ public class UserService {
       catch (NoResultException error) {
          throw MultiExceptions.notFound(ResponseMessages.NOT_FOUND);
       }
+   }
+
+
+   // exists by email
+   public boolean existsByEmail(String email) {
+      this.userValidator.emailValidate(email);
+
+      return this.userRepository.existsByEmail(email);
    }
 
 }
