@@ -42,6 +42,7 @@ public class UserService {
 
    // find by email
    public UserDTO findByEmail(String email) {
+      // validation
       this.userValidator.emailValidate(email);
 
       try {
@@ -55,6 +56,7 @@ public class UserService {
 
    // exists by email
    public boolean existsByEmail(String email) {
+      // validation
       this.userValidator.emailValidate(email);
 
       return this.userRepository.existsByEmail(email);
