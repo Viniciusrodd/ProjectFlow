@@ -23,6 +23,8 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 // import DTOs
 import com.example.ProjectFlow.modules.auth.dto.RegisterDTO;
 import com.example.ProjectFlow.modules.auth.dto.RegisterResponseDTO;
+import com.example.ProjectFlow.modules.auth.dto.LoginResponseDTO;
+import com.example.ProjectFlow.modules.auth.dto.LoginDTO;
 
 
 @RestController
@@ -41,7 +43,7 @@ public class AuthController {
    // register
    @PostMapping("/register")
    public ResponseEntity<ApiResponse<RegisterResponseDTO>> register(@RequestBody RegisterDTO data) {
-      RegisterResponseDTO registeredUser = authService.register(data);
+      RegisterResponseDTO registeredUser = this.authService.register(data);
 
       ApiResponse<RegisterResponseDTO> response = new ApiResponse.Builder<RegisterResponseDTO>()
          .success(true)
@@ -51,6 +53,22 @@ public class AuthController {
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // login
+   @PostMapping("/login")
+   public ResponseEntity<ApiResponse<LoginResponseDTO>> login(@RequestBody LoginDTO data) {
+      LoginResponseDTO loggedUser = this.authService.login(data);
+
+      ApiResponse<LoginResponseDTO> response = new ApiResponse.Builder<LoginResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.LOGIN_SUCCESS)
+         .data(loggedUser)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
