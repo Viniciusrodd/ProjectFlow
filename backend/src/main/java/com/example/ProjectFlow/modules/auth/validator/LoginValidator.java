@@ -22,7 +22,7 @@ public class LoginValidator {
    public void validate(LoginDTO data) {
 
       // email
-      if(data.email() == null | data.email().trim().isEmpty()) {
+      if(data.email() == null || data.email().trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Email é obrigatório",
             ResponseMessages.BAD_REQUEST
@@ -30,14 +30,12 @@ public class LoginValidator {
       }
 
       // password
-      if(data.password() == null | data.password().trim().isEmpty()) {
+      if(data.password() == null || data.password().trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Senha é obrigatório",
             ResponseMessages.BAD_REQUEST
          ));
       }
-
-      // check if user exists...
 
    }
 
