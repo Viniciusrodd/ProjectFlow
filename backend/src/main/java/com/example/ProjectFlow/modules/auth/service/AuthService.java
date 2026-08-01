@@ -19,6 +19,18 @@ import com.example.ProjectFlow.security.JWT.JwtService;
 // import DTOs
 import com.example.ProjectFlow.modules.auth.dto.RegisterDTO;
 import com.example.ProjectFlow.modules.auth.dto.RegisterResponseDTO;
+import com.example.ProjectFlow.modules.auth.dto.LoginDTO;
+import com.example.ProjectFlow.modules.auth.dto.LoginResponseDTO;
+import com.example.ProjectFlow.modules.user.dto.UserDTO;
+
+// import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
+
+// import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
+
+// import services
+import com.example.ProjectFlow.modules.user.service.UserService;
 
 
 @Service
@@ -28,8 +40,9 @@ public class AuthService {
    private final AuthRepository authRepository;
    private final PasswordService passwordService;
    private final RegisterValidator registerValidator;
-   //private final LoginValidator loginValidator;
-   //private final JwtService jwtService;
+   private final LoginValidator loginValidator;
+   private final JwtService jwtService;
+   private final UserService userService;
 
    // constructor - dependency injection
    public AuthService(
@@ -37,13 +50,15 @@ public class AuthService {
       PasswordService passwordService,
       RegisterValidator registerValidator,
       LoginValidator loginValidator,
-      JwtService jwtService
+      JwtService jwtService,
+      UserService userService
    ) {
       this.authRepository = authRepository;
       this.passwordService = passwordService;
       this.registerValidator = registerValidator;
-      //this.loginValidator = loginValidator;
-      //this.jwtService = jwtService;
+      this.loginValidator = loginValidator;
+      this.jwtService = jwtService;
+      this.userService = userService;
    }
 
 
@@ -64,6 +79,34 @@ public class AuthService {
       );
 
       return this.authRepository.register(userData);
+   }
+
+
+   // login
+   public LoginResponseDTO login(LoginDTO data) {
+      // validation
+      this.loginValidator.validate(data);
+
+      // find user by email
+      UserDTO user = this.userService.findByEmail(data.email());
+
+      // password matches - check
+      if(!this.passwordService.matches(data.password(), user.password())) {
+         throw MultiExceptions.unauthorized(String.format(
+            "%s: Senha incorreta",
+            ResponseMessages.UNAUTHORIZED
+         ));
+      }
+
+      // JWT token - generation
+      String token = this.jwtService.generateToken(user);
+
+      return new LoginResponseDTO(
+         token,
+         user.email(),
+         user.name(),
+         user.id()
+      );
    }
 
 }

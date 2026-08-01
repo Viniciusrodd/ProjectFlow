@@ -33,7 +33,8 @@ public class UserRepository {
       return new UserDTO(
          user.getId(),
          user.getEmail(),
-         user.getName()
+         user.getName(),
+         user.getPassword()
       );
    }
 

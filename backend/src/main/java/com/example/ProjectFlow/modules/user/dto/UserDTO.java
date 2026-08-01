@@ -7,6 +7,7 @@ public record UserDTO (
    
    Long id,
    String email,
-   String name 
+   String name,
+   String password
 
 ) {}
