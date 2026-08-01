@@ -11,11 +11,24 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+// import JWT
+import com.example.ProjectFlow.security.JWT.JwtFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+   // properties
+   private final JwtFilter jwtFilter;
+
+   // constructor - dependency injection
+   public SecurityConfig(JwtFilter jwtFilter) {
+      this.jwtFilter = jwtFilter;
+   }
+
  
    // security filter chain
    @Bean
@@ -28,7 +41,8 @@ public class SecurityConfig {
          )
          .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // stateless app -> its jwt based
-         );
+         )
+         .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
       
       return http.build();
    }
