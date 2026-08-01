@@ -23,6 +23,7 @@ public class UserRepository {
    @PersistenceContext
    private EntityManager entityManager;
 
+   
    // find by email
    public UserDTO findByEmail(String email) {
       UserEntity user = entityManager
@@ -36,6 +37,17 @@ public class UserRepository {
          user.getName(),
          user.getPassword()
       );
+   }
+
+
+   // exist by email
+   public boolean existByEmail(String email) {
+      Long count = entityManager
+         .createQuery("SELECT COUNT(u) FROM UserEntity u WHERE u.email = :email", Long.class)
+         .setParameter("email", email)
+         .getSingleResult();
+      
+      return count > 0;
    }
 
 }
