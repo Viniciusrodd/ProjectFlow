@@ -8,7 +8,6 @@ import java.security.Key;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Date;
-import java.util.function.Function;
 
 // jwt imports
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -52,28 +51,25 @@ public class JwtService {
          .compact();
    }
 
-   // extract a claim
-   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-      final Claims claims = extractAllClaims(token);
-      return claimsResolver.apply(claims); // get a specific claim
-   }
-
-   // get email
+   // extract email
    public String extractEmail(String token) {
-      return extractClaim(token, Claims::getSubject);
+      final Claims claims = extractAllClaims(token);
+      return claims.getSubject();
    }
    
-   // get id
+   // extract id
    public Long extractId(String token) {
-      return extractClaim(token, claims -> claims.get("id", Long.class));
+      final Claims claims = extractAllClaims(token);
+      return claims.get("id", Long.class);      
    }
    
-   // get expiration
+   // extract expiration
    public Date extractExpiration(String token) {
-      return extractClaim(token, Claims::getExpiration);
+      final Claims claims = extractAllClaims(token);
+      return claims.getExpiration();      
    }
 
-   // validate token
+   // token validation check
    public Boolean validateToken(String token, UserDTO user) {
       final String email = extractEmail(token);
       boolean validation = email.equals(user.email()) && !isTokenExpired(token);
