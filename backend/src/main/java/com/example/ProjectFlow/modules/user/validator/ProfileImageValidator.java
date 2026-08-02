@@ -57,6 +57,25 @@ public class ProfileImageValidator {
             ResponseMessages.INVALID_DATA
          ));
       }
+
+   }
+
+
+   // profile id validation
+   public void profileImageIdValidate(String profileImageId) {
+      if(profileImageId == null) {
+         throw MultiExceptions.badRequest(String.format(
+            "%s: Id de imagem é obrigatório",
+            ResponseMessages.BAD_REQUEST
+         ));
+      }
+
+      if(profileImageId.length() <= 0) {
+         throw MultiExceptions.invalid(String.format(
+            "%s: Id de imagem deve ser maior que 0",
+            ResponseMessages.INVALID_DATA
+         ));
+      }
    }
 
 }
