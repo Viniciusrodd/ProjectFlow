@@ -5,6 +5,7 @@ package com.example.ProjectFlow.modules.user.service;
 // imports
 import org.springframework.stereotype.Service;
 
+// jakart imports
 import jakarta.persistence.NoResultException;
 
 // import repository
@@ -12,6 +13,7 @@ import com.example.ProjectFlow.modules.user.repository.UserRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.user.validator.UserValidator;
+import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
 
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
@@ -29,14 +31,17 @@ public class UserService {
    // properties
    private final UserRepository userRepository;
    private final UserValidator userValidator;
+   private final ProfileImageValidator profileImageValidator;
 
    // constructor - dependency injection
    public UserService(
       UserRepository userRepository,
-      UserValidator userValidator
+      UserValidator userValidator,
+      ProfileImageValidator profileImageValidator
    ) {
       this.userRepository = userRepository;
       this.userValidator = userValidator;
+      this.profileImageValidator = profileImageValidator;
    }
 
 
@@ -69,6 +74,16 @@ public class UserService {
       this.userValidator.emailValidate(email);
 
       return this.userRepository.existsByEmail(email);
+   }
+
+
+   // update profile image id
+   public void updateProfileImageId(Long userId, String profileImageId) {
+      // validations
+      this.userValidator.idValidate(userId);
+      this.profileImageValidator.idValidate(profileImageId);
+
+      this.userRepository.updateProfileImageId(userId, profileImageId);
    }
 
 }
