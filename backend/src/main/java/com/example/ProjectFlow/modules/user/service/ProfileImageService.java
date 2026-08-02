@@ -38,6 +38,7 @@ public class ProfileImageService {
    UserService userService;
    ProfileImageValidator profileImageValidator;
 
+   
    // constructor - dependency injection
    public ProfileImageService(
       ProfileImageRepository profileImageRepository,
@@ -79,16 +80,19 @@ public class ProfileImageService {
          document.setUploadDate(LocalDateTime.now());
          document.setBinary(file.getBytes());
 
+         // save document
+         ProfileImagesDocument savedDocument = profileImageRepository.save(document);
+
          // update user profile image id - mysql reference
-         this.userService.updateProfileImageId(userId, document.getId());
+         this.userService.updateProfileImageId(userId, savedDocument.getId());
 
          return new ProfileImageResponseDTO(
-            document.getId(),
-            document.getUserId(),
-            document.getFileName(),
-            document.getMimeType(),
-            document.getSize(),
-            document.getUploadDate()
+            savedDocument.getId(),
+            savedDocument.getUserId(),
+            savedDocument.getFileName(),
+            savedDocument.getMimeType(),
+            savedDocument.getSize(),
+            savedDocument.getUploadDate()
          );
       }
       catch (IOException error) {

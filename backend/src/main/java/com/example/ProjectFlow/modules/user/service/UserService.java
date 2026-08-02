@@ -24,6 +24,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import entity
+import com.example.ProjectFlow.modules.user.entity.UserEntity;
+
 
 @Service
 public class UserService {
@@ -83,7 +86,14 @@ public class UserService {
       this.userValidator.idValidate(userId);
       this.profileImageValidator.idValidate(profileImageId);
 
-      this.userRepository.updateProfileImageId(userId, profileImageId);
+      UserEntity user = this.userRepository.updateProfileImageId(userId, profileImageId);
+      
+      if(user == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não encontrado", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
