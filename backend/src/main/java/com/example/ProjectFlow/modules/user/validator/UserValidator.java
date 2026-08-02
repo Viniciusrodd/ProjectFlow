@@ -10,6 +10,7 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
+import com.example.ProjectFlow.common.constants.ValidationConstants;
 
 
 @Component
@@ -47,6 +48,14 @@ public class UserValidator {
          throw MultiExceptions.invalid(String.format(
             "%s: Formato de email inválido",
             ResponseMessages.INVALID_DATA
+         ));
+      }
+
+      if(email.length() > ValidationConstants.MAX_EMAIL_LENGTH) {
+         throw MultiExceptions.invalid(String.format(
+            "%s: Email deve ser menor que %d caracteres",
+            ResponseMessages.INVALID_DATA,
+            ValidationConstants.MAX_EMAIL_LENGTH
          ));
       }
    }
