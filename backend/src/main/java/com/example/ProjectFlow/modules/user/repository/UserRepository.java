@@ -23,6 +23,17 @@ public class UserRepository {
    @PersistenceContext
    private EntityManager entityManager;
 
+
+   // exists by id
+   public boolean existsById(Long id) {
+      Long count = entityManager
+         .createQuery("SELECT COUNT(u) FROM UserEntity u WHERE u.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
    
    // find by email
    public UserDTO findByEmail(String email) {
