@@ -61,4 +61,17 @@ public class UserRepository {
       return count > 0;
    }
 
+
+   // update profile image id
+   public void updateProfileImageId(Long userId, String profileImageId) {
+      UserEntity user = entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
+         .setParameter("userId", userId)
+         .getSingleResult();
+
+      user.setProfileImageId(profileImageId);
+
+      this.entityManager.persist(user);
+   }
+
 }
