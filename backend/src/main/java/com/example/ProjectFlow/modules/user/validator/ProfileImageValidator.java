@@ -62,7 +62,7 @@ public class ProfileImageValidator {
 
 
    // profile id validation
-   public void profileImageIdValidate(String profileImageId) {
+   public void idValidate(String profileImageId) {
       if(profileImageId == null) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Id de imagem é obrigatório",

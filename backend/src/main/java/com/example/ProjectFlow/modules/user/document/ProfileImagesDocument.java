@@ -38,7 +38,7 @@ public class ProfileImagesDocument {
 
 
    // constructor
-   protected ProfileImagesDocument() {}
+   public ProfileImagesDocument() {}
 
 
    // getters
