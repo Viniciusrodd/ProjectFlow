@@ -40,6 +40,15 @@ public class UserService {
    }
 
 
+   // exists by id
+   public boolean existsById(Long id) {
+      // validation
+      this.userValidator.idValidate(id);
+
+      return this.userRepository.existsById(id);
+   }
+
+
    // find by email
    public UserDTO findByEmail(String email) {
       // validation
