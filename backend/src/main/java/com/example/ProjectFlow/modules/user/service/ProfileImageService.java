@@ -82,7 +82,7 @@ public class ProfileImageService {
             .build();
 
          // save document - mongodb
-         ProfileImagesDocument savedDocument = profileImageRepository.save(document);
+         ProfileImagesDocument savedDocument = this.profileImageRepository.save(document);
 
          // update user profile image id - mysql
          this.userService.updateProfileImageId(userId, savedDocument.getId());
@@ -97,6 +97,28 @@ public class ProfileImageService {
             error.getMessage()
          ));
       }
+   }
+
+
+   // get profile image
+   public ProfileImagesDocument getProfileImage(Long userId) {
+      // user existence - validation
+      if(!this.userService.existsById(userId)) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      ProfileImagesDocument profileImage = this.profileImageRepository.findByUserId(userId);
+      if(profileImage == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Imagem de perfil não encontrada",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return profileImage;
    }
 
 }
