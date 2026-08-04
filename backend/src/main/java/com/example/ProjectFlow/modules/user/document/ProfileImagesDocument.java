@@ -5,9 +5,8 @@ package com.example.ProjectFlow.modules.user.document;
 // imports
 import java.time.LocalDateTime;
 
-import org.springframework.data.annotation.Id;
-
 // mongodb imports
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -38,7 +37,14 @@ public class ProfileImagesDocument {
 
 
    // constructor
-   public ProfileImagesDocument() {}
+   public ProfileImagesDocument(Builder builder) {
+      setUserId(builder.userId);
+      setFileName(builder.fileName);
+      setMimeType(builder.mimeType);
+      setSize(builder.size);
+      setUploadDate(builder.uploadDate);
+      setBinary(builder.binary);
+   }
 
 
    // getters
@@ -59,5 +65,52 @@ public class ProfileImagesDocument {
    public void setSize(Long size) { this.size = size; }
    public void setUploadDate(LocalDateTime uploadDate) { this.uploadDate = uploadDate; }
    public void setBinary(byte[] binary) { this.binary = binary; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private Long userId;
+      private String fileName;
+      private String mimeType;
+      private Long size;
+      private LocalDateTime uploadDate;
+      private byte[] binary;
+
+      public Builder userId(Long userId) {
+         this.userId = userId;
+         return this;
+      }
+
+      public Builder fileName(String fileName) {
+         this.fileName = fileName;
+         return this;
+      }
+
+      public Builder mimeType(String mimeType) {
+         this.mimeType = mimeType;
+         return this;
+      }
+
+      public Builder size(Long size) {
+         this.size = size;
+         return this;
+      }
+
+      public Builder uploadDate(LocalDateTime uploadDate) {
+         this.uploadDate = uploadDate;
+         return this;
+      }
+
+      public Builder binary(byte[] binary) {
+         this.binary = binary;
+         return this;
+      }
+
+      public ProfileImagesDocument build() {
+         return new ProfileImagesDocument(this);
+      }
+   }
 
 }
