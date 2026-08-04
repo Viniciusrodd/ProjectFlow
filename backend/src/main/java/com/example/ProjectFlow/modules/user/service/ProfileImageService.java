@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
@@ -92,7 +93,7 @@ public class ProfileImageService {
       }
       catch (IOException error) {
          throw MultiExceptions.internal(String.format(
-            "%s: Erro ao processar imagem de usuário: %e", 
+            "%s: Falha a   o processar imagem de usuário: %e", 
             ResponseMessages.INTERNAL_ERROR,
             error.getMessage()
          ));
@@ -113,12 +114,26 @@ public class ProfileImageService {
       ProfileImagesDocument profileImage = this.profileImageRepository.findByUserId(userId);
       if(profileImage == null) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Imagem de perfil não encontrada",
+            "%s: Imagem de perfil não existe",
             ResponseMessages.NOT_FOUND
          ));
       }
 
       return profileImage;
+   }
+
+
+   // get all profile images
+   public List<ProfileImagesDocument> getAllProfileImages() {
+      List<ProfileImagesDocument> profileImages = this.profileImageRepository.findAll();
+      if(profileImages.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Imagens de perfil não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return profileImages;
    }
 
 }
