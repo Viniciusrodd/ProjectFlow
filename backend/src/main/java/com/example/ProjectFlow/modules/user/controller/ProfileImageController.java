@@ -6,6 +6,7 @@ package com.example.ProjectFlow.modules.user.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,6 +98,22 @@ public class ProfileImageController {
          .contentType(MediaType.parseMediaType(document.getMimeType()))
          .header("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"")
          .body(document.getBinary());
+   }
+
+
+   // delete profile image
+   @DeleteMapping(value = "/{userId}")
+   @Operation(summary = "Profile image delete")
+   public ResponseEntity<ApiResponse<Void>> deleteProfileImage(@PathVariable Long userId) {
+      this.profileImageService.deleteProfileImage(userId);
+
+      ApiResponse<Void> response = new ApiResponse.Builder<Void>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
