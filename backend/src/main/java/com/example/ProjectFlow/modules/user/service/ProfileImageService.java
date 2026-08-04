@@ -93,7 +93,7 @@ public class ProfileImageService {
       }
       catch (IOException error) {
          throw MultiExceptions.internal(String.format(
-            "%s: Falha a   o processar imagem de usuário: %e", 
+            "%s: Falha ao processar imagem de usuário: %e", 
             ResponseMessages.INTERNAL_ERROR,
             error.getMessage()
          ));
@@ -134,6 +134,32 @@ public class ProfileImageService {
       }
 
       return profileImages;
+   }
+
+
+   // delete profile image
+   public void deleteProfileImage(Long userId) {
+      // user existence - validation
+      if(!this.userService.existsById(userId)) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // profile image existence - validation
+      if(this.profileImageRepository.findByUserId(userId) == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Imagem de perfil não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // delete profile image - mongodb
+      this.profileImageRepository.deleteByUserId(userId);
+
+      // delete profile image id - mysql
+      this.userService.removeProfileImageId(userId);
    }
 
 }
