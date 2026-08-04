@@ -68,7 +68,6 @@ public class UserRepository {
 
       // update
       user.setProfileImageId(profileImageId);
-      this.entityManager.merge(user);
 
       return user;
    }
@@ -80,7 +79,6 @@ public class UserRepository {
 
       // remove
       user.setProfileImageId(null);
-      this.entityManager.merge(user);
 
       return user;
    }

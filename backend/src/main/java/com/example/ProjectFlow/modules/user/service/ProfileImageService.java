@@ -155,11 +155,11 @@ public class ProfileImageService {
          ));
       }
 
-      // delete profile image - mongodb
-      this.profileImageRepository.deleteByUserId(userId);
-
       // delete profile image id - mysql
       this.userService.removeProfileImageId(userId);
+      
+      // delete profile image - mongodb
+      this.profileImageRepository.deleteByUserId(userId);
    }
 
 }
