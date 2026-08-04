@@ -2,6 +2,9 @@
 // packages
 package com.example.ProjectFlow.common.responses;
 
+// imports
+import java.util.Optional;
+
 
 public class ApiResponse<T> {
    
@@ -9,21 +12,21 @@ public class ApiResponse<T> {
    private final String message;
    private final int statusCode;
    private final boolean success;
-   private final T data;
+   private final Optional<T> data;
    
    // response
    private ApiResponse(Builder<T> builder) {
       this.message = builder.message;
       this.statusCode = builder.statusCode;
       this.success = builder.success;
-      this.data = builder.data;
+      this.data = Optional.ofNullable(builder.data);
    }
 
    // getters
    public String getMessage() { return message; }
    public int getStatusCode() { return statusCode; }
    public boolean getSuccess() { return success; }
-   public T getData() { return data; }
+   public Optional<T> getData() { return data; }
 
 
    /////
