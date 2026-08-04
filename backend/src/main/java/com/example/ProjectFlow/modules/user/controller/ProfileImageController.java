@@ -68,9 +68,9 @@ public class ProfileImageController {
    }
 
 
-   // get profile image
+   // get profile image - infos
    @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   @Operation(summary = "get profile image data informations")
+   @Operation(summary = "Get profile image data informations")
    public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> getProfileImage(@PathVariable Long userId) {
       ProfileImagesDocument profileImageDocument = this.profileImageService.getProfileImage(userId);
       ProfileImageResponseDTO profileImage = ProfileImageResponseDTO.get(profileImageDocument);
@@ -83,6 +83,20 @@ public class ProfileImageController {
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get profile image - download
+   @GetMapping(value = "/{userId}/download")
+   @Operation(summary = "Download profile image")
+   public ResponseEntity<byte[]> getProfileImageData(@PathVariable Long userId) {
+      ProfileImagesDocument document = this.profileImageService.getProfileImage(userId);
+
+      return ResponseEntity
+         .ok()
+         .contentType(MediaType.parseMediaType(document.getMimeType()))
+         .header("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"")
+         .body(document.getBinary());
    }
 
 }
