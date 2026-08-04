@@ -6,11 +6,11 @@ package com.example.ProjectFlow.modules.user.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +54,7 @@ public class ProfileImageController {
    @PostMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> uploadProfileImage(
       @PathVariable Long userId, 
-      @RequestBody MultipartFile file
+      @RequestParam MultipartFile file
    ) {
       ProfileImageResponseDTO profileImageData = this.profileImageService.uploadProfileImage(userId, file);
 
@@ -70,7 +70,7 @@ public class ProfileImageController {
 
 
    // get profile image - infos
-   @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+   @GetMapping(value = "/{userId}")
    @Operation(summary = "Get profile image data informations")
    public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> getProfileImage(@PathVariable Long userId) {
       ProfileImagesDocument profileImageDocument = this.profileImageService.getProfileImage(userId);
@@ -88,7 +88,10 @@ public class ProfileImageController {
 
 
    // get profile image - download
-   @GetMapping(value = "/{userId}/download")
+   @GetMapping(
+      value = "/{userId}/download", 
+      produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp" }
+   )
    @Operation(summary = "Download profile image")
    public ResponseEntity<byte[]> getProfileImageData(@PathVariable Long userId) {
       ProfileImagesDocument document = this.profileImageService.getProfileImage(userId);
