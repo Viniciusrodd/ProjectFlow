@@ -72,28 +72,23 @@ public class ProfileImageService {
          }
 
          // document - setup
-         ProfileImagesDocument document = new ProfileImagesDocument();
-         document.setUserId(userId);
-         document.setFileName(file.getOriginalFilename());
-         document.setMimeType(file.getContentType());
-         document.setSize(file.getSize());
-         document.setUploadDate(LocalDateTime.now());
-         document.setBinary(file.getBytes());
+         ProfileImagesDocument document = new ProfileImagesDocument.Builder()
+            .userId(userId)
+            .fileName(file.getOriginalFilename())
+            .mimeType(file.getContentType())
+            .size(file.getSize())
+            .uploadDate(LocalDateTime.now())
+            .binary(file.getBytes())
+            .build();
 
-         // save document
+         // save document - mongodb
          ProfileImagesDocument savedDocument = profileImageRepository.save(document);
 
-         // update user profile image id - mysql reference
+         // update user profile image id - mysql
          this.userService.updateProfileImageId(userId, savedDocument.getId());
 
-         return new ProfileImageResponseDTO(
-            savedDocument.getId(),
-            savedDocument.getUserId(),
-            savedDocument.getFileName(),
-            savedDocument.getMimeType(),
-            savedDocument.getSize(),
-            savedDocument.getUploadDate()
-         );
+         // return saved document
+         return ProfileImageResponseDTO.get(savedDocument);
       }
       catch (IOException error) {
          throw MultiExceptions.internal(String.format(
