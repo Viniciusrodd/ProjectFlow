@@ -96,4 +96,20 @@ public class UserService {
       }
    }
 
+
+   // remove profile image id
+   public void removeProfileImageId(Long userId) {
+      // validations
+      this.userValidator.idValidate(userId);
+
+      UserEntity user = this.userRepository.removeProfileImageId(userId);
+
+      if(user == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não encontrado", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }

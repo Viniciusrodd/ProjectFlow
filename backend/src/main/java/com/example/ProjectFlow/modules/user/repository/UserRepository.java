@@ -73,4 +73,16 @@ public class UserRepository {
       return user;
    }
 
+
+   // remove profile image id
+   public UserEntity removeProfileImageId(Long userId) {
+      UserEntity user = entityManager.find(UserEntity.class, userId);
+
+      // remove
+      user.setProfileImageId(null);
+      this.entityManager.merge(user);
+
+      return user;
+   }
+
 }
