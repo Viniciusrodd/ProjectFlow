@@ -36,6 +36,10 @@ public class ProfileImagesDocument {
    private byte[] binary; // image data
 
 
+   // constructor - empty
+   public ProfileImagesDocument() {}
+
+
    // constructor
    public ProfileImagesDocument(Builder builder) {
       setUserId(builder.userId);

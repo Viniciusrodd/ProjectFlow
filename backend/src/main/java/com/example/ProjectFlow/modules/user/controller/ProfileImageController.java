@@ -6,12 +6,16 @@ package com.example.ProjectFlow.modules.user.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
+// swagger imports
+import io.swagger.v3.oas.annotations.Operation;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ApiConstants;
@@ -21,6 +25,9 @@ import com.example.ProjectFlow.modules.user.service.ProfileImageService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
+
+// import entities
+import com.example.ProjectFlow.modules.user.document.ProfileImagesDocument;
 
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.ProfileImageResponseDTO;
@@ -58,6 +65,24 @@ public class ProfileImageController {
          .build();
       
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get profile image
+   @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+   @Operation(summary = "get profile image data informations")
+   public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> getProfileImage(@PathVariable Long userId) {
+      ProfileImagesDocument profileImageDocument = this.profileImageService.getProfileImage(userId);
+      ProfileImageResponseDTO profileImage = ProfileImageResponseDTO.get(profileImageDocument);
+
+      ApiResponse<ProfileImageResponseDTO> response = new ApiResponse.Builder<ProfileImageResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.SUCCESS)
+         .data(profileImage)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
