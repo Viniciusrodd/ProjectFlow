@@ -5,11 +5,12 @@ package com.example.ProjectFlow.modules.user.service;
 // imports
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
+import java.util.Optional;
 
 // jakart imports
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
-import java.util.Optional;
 
 // import repository
 import com.example.ProjectFlow.modules.user.repository.UserRepository;
@@ -73,7 +74,7 @@ public class UserService {
 
 
    // get by id
-   public UserProfileDTO getById(Long id) {
+   public UserProfileDTO getById(UUID id) {
       this.userValidator.idValidate(id);
 
       try {
@@ -105,7 +106,7 @@ public class UserService {
 
 
    // exists by id
-   public boolean existsById(Long id) {
+   public boolean existsById(UUID id) {
       this.userValidator.idValidate(id);
 
       boolean exist = this.userRepository.existsById(id);
@@ -136,7 +137,7 @@ public class UserService {
 
    // update profile image id
    @Transactional
-   public void updateProfileImageId(Long userId, String profileImageId) {
+   public void updateProfileImageId(UUID userId, String profileImageId) {
       this.userValidator.idValidate(userId);
       this.profileImageValidator.idValidate(profileImageId);
 
@@ -154,7 +155,7 @@ public class UserService {
 
    // remove profile image id
    @Transactional
-   public void removeProfileImageId(Long userId) {
+   public void removeProfileImageId(UUID userId) {
       this.userValidator.idValidate(userId);
 
       try {
@@ -171,7 +172,7 @@ public class UserService {
 
    // update user
    @Transactional
-   public UserProfileDTO updateUser(Long userId, UserUpdateDTO data) {
+   public UserProfileDTO updateUser(UUID userId, UserUpdateDTO data) {
       this.userValidator.updateValidations(data);
       
       try {
@@ -204,7 +205,7 @@ public class UserService {
 
    // delete user
    @Transactional
-   public UserDeletedDTO deleteUser(Long userId) {
+   public UserDeletedDTO deleteUser(UUID userId) {
       this.userValidator.idValidate(userId);
 
       try {
@@ -220,7 +221,7 @@ public class UserService {
 
 
    // is deleted
-   public boolean isDeleted(Long userId) {
+   public boolean isDeleted(UUID userId) {
       this.userValidator.idValidate(userId);
 
       try {

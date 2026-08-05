@@ -5,6 +5,7 @@ package com.example.ProjectFlow.modules.user.validator;
 // imports
 import org.springframework.stereotype.Component;
 import java.util.Optional;
+import java.util.UUID;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -25,18 +26,11 @@ public class UserValidator {
 
  
    // id validate
-   public void idValidate(Long id) {
+   public void idValidate(UUID id) {
       if(id == null) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Id é obrigatório",
             ResponseMessages.BAD_REQUEST
-         ));
-      }
-
-      if(id <= 0) {
-         throw MultiExceptions.invalid(String.format(
-            "%s: Id deve ser maior que 0",
-            ResponseMessages.INVALID_DATA
          ));
       }
    }

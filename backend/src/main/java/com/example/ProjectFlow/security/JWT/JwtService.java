@@ -6,6 +6,7 @@ package com.example.ProjectFlow.security.JWT;
 import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Map;
+import java.util.UUID;
 import java.util.HashMap;
 import java.util.Date;
 
@@ -58,9 +59,9 @@ public class JwtService {
    }
    
    // extract id
-   public Long extractId(String token) {
+   public UUID extractId(String token) {
       final Claims claims = extractAllClaims(token);
-      return claims.get("id", Long.class);      
+      return claims.get("id", UUID.class);      
    }
    
    // extract expiration

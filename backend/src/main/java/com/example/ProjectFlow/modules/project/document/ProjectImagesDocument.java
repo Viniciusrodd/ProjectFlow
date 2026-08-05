@@ -4,7 +4,7 @@ package com.example.ProjectFlow.modules.project.document;
 
 // imports
 import java.time.LocalDateTime;
-
+import java.util.UUID;
 import org.springframework.data.annotation.Id;
 
 // mongodb imports
@@ -19,7 +19,7 @@ public class ProjectImagesDocument {
    private String id;
 
    @Field("projectId")
-   private Long projectId; // mysql ref.
+   private UUID projectId; // mysql ref.
 
    @Field("fileName")
    private String fileName;
@@ -43,7 +43,7 @@ public class ProjectImagesDocument {
 
    // getters
    public String getId() { return this.id; }
-   public Long getProjectId() { return this.projectId; }
+   public UUID getProjectId() { return this.projectId; }
    public String getFileName() { return this.fileName; }
    public String getMimeType() { return this.mimeType; }
    public Long getSize() { return this.size; }
@@ -53,7 +53,7 @@ public class ProjectImagesDocument {
 
    // setters
    public void setId(String id) { this.id = id; }
-   public void setProjectId(Long projectId) { this.projectId = projectId; }
+   public void setProjectId(UUID projectId) { this.projectId = projectId; }
    public void setFileName(String fileName) { this.fileName = fileName; }
    public void setMimeType(String mimeType) { this.mimeType = mimeType; }
    public void setSize(Long size) { this.size = size; }

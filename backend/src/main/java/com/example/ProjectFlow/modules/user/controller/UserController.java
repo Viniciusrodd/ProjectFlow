@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.user.controller;
 
 // imports
 import java.util.List;
+import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
@@ -72,7 +73,7 @@ public class UserController {
    // get by id
    @GetMapping(value = "/user/{id}")
    @Operation(summary = "Get user by id")
-   public ResponseEntity<ApiResponse<UserProfileDTO>> getById(@PathVariable Long id) {
+   public ResponseEntity<ApiResponse<UserProfileDTO>> getById(@PathVariable UUID id) {
       UserProfileDTO user = this.userService.getById(id);
 
       ApiResponse<UserProfileDTO> response = new ApiResponse.Builder<UserProfileDTO>()
@@ -90,7 +91,7 @@ public class UserController {
    @PutMapping(value = "/user/{userId}")
    @Operation(summary = "Update user")
    public ResponseEntity<ApiResponse<UserProfileDTO>> updateUser(
-      @PathVariable Long userId, 
+      @PathVariable UUID userId, 
       @RequestBody UserUpdateDTO data
    ) {
       UserProfileDTO user = this.userService.updateUser(userId, data);
@@ -109,7 +110,7 @@ public class UserController {
    // delete user
    @DeleteMapping(value = "user/{userId}")
    @Operation(summary = "Delete user")
-   public ResponseEntity<ApiResponse<UserDeletedDTO>> deleteUser(@PathVariable Long userId) {
+   public ResponseEntity<ApiResponse<UserDeletedDTO>> deleteUser(@PathVariable UUID userId) {
       UserDeletedDTO userDeleted = this.userService.deleteUser(userId);
 
       ApiResponse<UserDeletedDTO> response = new ApiResponse.Builder<UserDeletedDTO>()

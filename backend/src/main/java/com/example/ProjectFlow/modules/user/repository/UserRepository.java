@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
@@ -50,7 +51,7 @@ public class UserRepository {
 
 
    // get by id
-   public UserProfileDTO getById(Long id) throws NoResultException {
+   public UserProfileDTO getById(UUID id) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :id", UserEntity.class)
          .setParameter("id", id)
@@ -72,7 +73,7 @@ public class UserRepository {
 
    
    // exists by id
-   public boolean existsById(Long id) {
+   public boolean existsById(UUID id) {
       Long count = this.entityManager
          .createQuery("SELECT COUNT(u) FROM UserEntity u WHERE u.id = :id", Long.class)
          .setParameter("id", id)
@@ -95,7 +96,7 @@ public class UserRepository {
 
    // update profile image id
    @Transactional
-   public UserEntity updateProfileImageId(Long userId, String profileImageId) throws NoResultException {
+   public UserEntity updateProfileImageId(UUID userId, String profileImageId) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
@@ -110,7 +111,7 @@ public class UserRepository {
 
    // remove profile image id
    @Transactional
-   public UserEntity removeProfileImageId(Long userId) throws NoResultException {
+   public UserEntity removeProfileImageId(UUID userId) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
@@ -125,7 +126,7 @@ public class UserRepository {
 
    // update user
    @Transactional
-   public UserProfileDTO updateUser(Long userId, UserUpdateDTO data) throws NoResultException {
+   public UserProfileDTO updateUser(UUID userId, UserUpdateDTO data) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
@@ -141,7 +142,7 @@ public class UserRepository {
 
    // delete user
    @Transactional
-   public UserDeletedDTO deleteUser(Long userId) throws NoResultException {
+   public UserDeletedDTO deleteUser(UUID userId) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
@@ -154,7 +155,7 @@ public class UserRepository {
 
 
    // is deleted
-   public boolean isDeleted(Long userId) throws NoResultException {
+   public boolean isDeleted(UUID userId) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)

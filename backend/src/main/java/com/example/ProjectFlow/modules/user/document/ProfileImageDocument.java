@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.user.document;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 // mongodb imports
 import org.springframework.data.annotation.Id;
@@ -18,7 +19,7 @@ public class ProfileImageDocument {
    private String id;
 
    @Field("userId")
-   private Long userId; // mysql ref.
+   private UUID userId; // mysql ref.
 
    @Field("fileName")
    private String fileName;
@@ -53,7 +54,7 @@ public class ProfileImageDocument {
 
    // getters
    public String getId() { return this.id; }
-   public Long getUserId() { return this.userId; }
+   public UUID getUserId() { return this.userId; }
    public String getFileName() { return this.fileName; }
    public String getMimeType() { return this.mimeType; }
    public Long getSize() { return this.size; }
@@ -63,7 +64,7 @@ public class ProfileImageDocument {
 
    // setters
    public void setId(String id) { this.id = id; }
-   public void setUserId(Long userId) { this.userId = userId; }
+   public void setUserId(UUID userId) { this.userId = userId; }
    public void setFileName(String fileName) { this.fileName = fileName; }
    public void setMimeType(String mimeType) { this.mimeType = mimeType; }
    public void setSize(Long size) { this.size = size; }
@@ -75,14 +76,14 @@ public class ProfileImageDocument {
 
 
    public static class Builder {
-      private Long userId;
+      private UUID userId;
       private String fileName;
       private String mimeType;
       private Long size;
       private LocalDateTime uploadDate;
       private byte[] binary;
 
-      public Builder userId(Long userId) {
+      public Builder userId(UUID userId) {
          this.userId = userId;
          return this;
       }

@@ -2,13 +2,16 @@
 // packages
 package com.example.ProjectFlow.modules.auth.dto;
 
+// imports
+import java.util.UUID;
+
 // import DTO
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
 
 
 public record LoginResponseDTO (
 
-   Long id,
+   UUID id,
    String name,
    String email,
    String token

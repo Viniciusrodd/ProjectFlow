@@ -2,6 +2,9 @@
 // packages
 package com.example.ProjectFlow.modules.user.controller;
 
+// imports
+import java.util.UUID;
+
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,7 +59,7 @@ public class ProfileImageController {
    @PostMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload profile image")
    public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> uploadProfileImage(
-      @PathVariable Long userId, 
+      @PathVariable UUID userId, 
       @RequestParam MultipartFile file
    ) {
       ProfileImageResponseDTO profileImageData = this.profileImageService.uploadProfileImage(userId, file);
@@ -75,7 +78,7 @@ public class ProfileImageController {
    // get profile image - infos
    @GetMapping(value = "/{userId}")
    @Operation(summary = "Get profile image data informations")
-   public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> getProfileImage(@PathVariable Long userId) {
+   public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> getProfileImage(@PathVariable UUID userId) {
       ProfileImageDocument profileImageDocument = this.profileImageService.getProfileImage(userId);
       ProfileImageResponseDTO profileImage = ProfileImageResponseDTO.get(profileImageDocument);
 
@@ -96,7 +99,7 @@ public class ProfileImageController {
       produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp" }
    )
    @Operation(summary = "Download profile image")
-   public ResponseEntity<byte[]> getProfileImageData(@PathVariable Long userId) {
+   public ResponseEntity<byte[]> getProfileImageData(@PathVariable UUID userId) {
       ProfileImageDocument document = this.profileImageService.getProfileImage(userId);
 
       return ResponseEntity
@@ -110,7 +113,7 @@ public class ProfileImageController {
    // delete profile image
    @DeleteMapping(value = "/{userId}")
    @Operation(summary = "Profile image delete")
-   public ResponseEntity<ApiResponse<Void>> deleteProfileImage(@PathVariable Long userId) {
+   public ResponseEntity<ApiResponse<Void>> deleteProfileImage(@PathVariable UUID userId) {
       this.profileImageService.deleteProfileImage(userId);
 
       ApiResponse<Void> response = new ApiResponse.Builder<Void>()

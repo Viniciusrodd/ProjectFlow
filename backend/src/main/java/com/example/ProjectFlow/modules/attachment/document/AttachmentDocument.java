@@ -4,7 +4,7 @@ package com.example.ProjectFlow.modules.attachment.document;
 
 // imports
 import java.time.LocalDateTime;
-
+import java.util.UUID;
 import org.springframework.data.annotation.Id;
 
 // mongodb imports
@@ -19,10 +19,10 @@ public class AttachmentDocument {
    private String id;
 
    @Field("taskId")
-   private Long taskId; // mysql ref.
+   private UUID taskId; // mysql ref.
 
    @Field("uploadedBy")
-   private Long uploadedBy; // mysql ref. - user
+   private UUID uploadedBy; // mysql ref. - user
 
    @Field("fileName")
    private String fileName;
@@ -46,8 +46,8 @@ public class AttachmentDocument {
 
    // getters
    public String getId() { return this.id; }
-   public Long getTaskId() { return this.taskId; }
-   public Long getUploadedBy() { return this.uploadedBy; }
+   public UUID getTaskId() { return this.taskId; }
+   public UUID getUploadedBy() { return this.uploadedBy; }
    public String getFileName() { return this.fileName; }
    public String getMimeType() { return this.mimeType; }
    public Long getSize() { return this.size; }
@@ -57,8 +57,8 @@ public class AttachmentDocument {
 
    // setters
    public void setId(String id) { this.id = id; }
-   public void setTaskId(Long taskId) { this.taskId = taskId; }
-   public void setUploadedBy(Long uploadedBy) { this.uploadedBy = uploadedBy; }
+   public void setTaskId(UUID taskId) { this.taskId = taskId; }
+   public void setUploadedBy(UUID uploadedBy) { this.uploadedBy = uploadedBy; }
    public void setFileName(String fileName) { this.fileName = fileName; }
    public void setMimeType(String mimeType) { this.mimeType = mimeType; }
    public void setSize(Long size) { this.size = size; }

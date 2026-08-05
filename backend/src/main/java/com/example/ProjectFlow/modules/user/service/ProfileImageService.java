@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
@@ -54,7 +55,7 @@ public class ProfileImageService {
 
    // profile image upload
    @Transactional
-   public ProfileImageResponseDTO uploadProfileImage(Long userId, MultipartFile file) {
+   public ProfileImageResponseDTO uploadProfileImage(UUID userId, MultipartFile file) {
       // user existence - validation
       this.userService.existsById(userId);
 
@@ -97,7 +98,7 @@ public class ProfileImageService {
 
 
    // get profile image
-   public ProfileImageDocument getProfileImage(Long userId) {
+   public ProfileImageDocument getProfileImage(UUID userId) {
       // user existence - validation
       this.userService.existsById(userId);
 
@@ -128,7 +129,7 @@ public class ProfileImageService {
 
 
    // delete profile image
-   public void deleteProfileImage(Long userId) {
+   public void deleteProfileImage(UUID userId) {
       // user existence - validation
       this.userService.existsById(userId);
 

@@ -2,6 +2,9 @@
 // packages
 package com.example.ProjectFlow.modules.user.repository;
 
+// imports
+import java.util.UUID;
+
 // mongo imports
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -12,12 +15,12 @@ import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 public interface ProfileImageRepository extends MongoRepository<ProfileImageDocument, String> {
  
    // find image by user id
-   ProfileImageDocument findByUserId(Long userId);
+   ProfileImageDocument findByUserId(UUID userId);
 
    // delete by user id
-   void deleteByUserId(Long userId);
+   void deleteByUserId(UUID userId);
 
    // exists by user id
-   boolean existsByUserId(Long userId);
+   boolean existsByUserId(UUID userId);
 
 }

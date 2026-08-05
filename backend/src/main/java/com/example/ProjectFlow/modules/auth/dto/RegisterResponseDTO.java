@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.auth.dto;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
@@ -11,7 +12,7 @@ import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 public record RegisterResponseDTO (
 
-   Long id,
+   UUID id,
    String name,
    String email,
    LocalDateTime createdAt

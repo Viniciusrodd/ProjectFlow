@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.user.dto;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 // import documents
 import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
@@ -12,7 +13,7 @@ import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 public record ProfileImageResponseDTO (
 
    String id,
-   Long userId,
+   UUID userId,
    String fileName,
    String mimeType,
    Long size,

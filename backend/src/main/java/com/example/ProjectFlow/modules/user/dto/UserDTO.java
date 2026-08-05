@@ -2,13 +2,16 @@
 // packages
 package com.example.ProjectFlow.modules.user.dto;
 
+// imports
+import java.util.UUID;
+
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 
 public record UserDTO (
    
-   Long id,
+   UUID id,
    String email,
    String name,
    String password
