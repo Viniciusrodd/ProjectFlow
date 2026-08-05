@@ -96,7 +96,7 @@ public class AuthService {
       this.loginValidator.validate(data);
 
       // find user by email
-      UserDTO user = this.userService.findByEmail(data.email());
+      UserDTO user = this.userService.getByEmail(data.email());
 
       // password matches - check
       if(!this.passwordService.matches(data.password(), user.password())) {

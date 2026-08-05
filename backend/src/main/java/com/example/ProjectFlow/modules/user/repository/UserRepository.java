@@ -42,7 +42,18 @@ public class UserRepository {
       return users;
    }
 
+   
+   // get by email
+   public UserDTO getByEmail(String email) {
+      UserEntity user = entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.email = :email", UserEntity.class)
+         .setParameter("email", email)
+         .getSingleResult();
+      
+      return UserDTO.get(user);
+   }
 
+   
    // exists by id
    public boolean existsById(Long id) {
       Long count = entityManager
@@ -51,17 +62,6 @@ public class UserRepository {
          .getSingleResult();
 
       return count > 0;
-   }
-
-   
-   // find by email
-   public UserDTO findByEmail(String email) {
-      UserEntity user = entityManager
-         .createQuery("SELECT u FROM UserEntity u WHERE u.email = :email", UserEntity.class)
-         .setParameter("email", email)
-         .getSingleResult();
-      
-      return UserDTO.get(user);
    }
 
 

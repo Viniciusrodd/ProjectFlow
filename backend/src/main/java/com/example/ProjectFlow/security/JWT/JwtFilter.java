@@ -62,7 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
       // token email / user authentication in actual request - validation
       if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-         UserDTO user = this.userService.findByEmail(userEmail);
+         UserDTO user = this.userService.getByEmail(userEmail);
 
          // token validation
          if(this.jwtService.validateToken(jwt, user)) {

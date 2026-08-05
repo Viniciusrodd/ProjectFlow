@@ -63,6 +63,20 @@ public class UserService {
 
       return users;
    }
+   
+   
+   // get by email
+   public UserDTO getByEmail(String email) {
+      // validation
+      this.userValidator.emailValidate(email);
+
+      try {
+         return this.userRepository.getByEmail(email);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(ResponseMessages.NOT_FOUND);
+      }
+   }
 
 
    // exists by id
@@ -71,20 +85,6 @@ public class UserService {
       this.userValidator.idValidate(id);
 
       return this.userRepository.existsById(id);
-   }
-
-
-   // find by email
-   public UserDTO findByEmail(String email) {
-      // validation
-      this.userValidator.emailValidate(email);
-
-      try {
-         return this.userRepository.findByEmail(email);
-      }
-      catch (NoResultException error) {
-         throw MultiExceptions.notFound(ResponseMessages.NOT_FOUND);
-      }
    }
 
 
