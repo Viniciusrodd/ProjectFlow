@@ -2,13 +2,15 @@
 // packages
 package com.example.ProjectFlow.modules.auth.controller;
 
-// imports
+// web imports
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+// http imports
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ApiConstants;
@@ -16,6 +18,8 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import services
 import com.example.ProjectFlow.modules.auth.service.AuthService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
@@ -42,6 +46,7 @@ public class AuthController {
    
    // register
    @PostMapping("/register")
+   @Operation(summary = "User register")
    public ResponseEntity<ApiResponse<RegisterResponseDTO>> register(@RequestBody RegisterDTO data) {
       RegisterResponseDTO registeredUser = this.authService.register(data);
 
@@ -58,6 +63,7 @@ public class AuthController {
 
    // login
    @PostMapping("/login")
+   @Operation(summary = "User login")
    public ResponseEntity<ApiResponse<LoginResponseDTO>> login(@RequestBody LoginDTO data) {
       LoginResponseDTO loggedUser = this.authService.login(data);
 

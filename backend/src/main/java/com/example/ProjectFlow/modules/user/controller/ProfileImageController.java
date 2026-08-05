@@ -2,7 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.user.controller;
 
-// imports
+// web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+// http imports
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +54,7 @@ public class ProfileImageController {
 
    // upload profile image
    @PostMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @Operation(summary = "Upload profile image")
    public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> uploadProfileImage(
       @PathVariable Long userId, 
       @RequestParam MultipartFile file
@@ -79,7 +82,7 @@ public class ProfileImageController {
       ApiResponse<ProfileImageResponseDTO> response = new ApiResponse.Builder<ProfileImageResponseDTO>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
-         .message(ResponseMessages.SUCCESS)
+         .message(ResponseMessages.FOUND)
          .data(profileImage)
          .build();
 
