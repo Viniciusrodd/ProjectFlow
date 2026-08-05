@@ -15,6 +15,7 @@ import jakarta.persistence.NoResultException;
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
 import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
+import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
@@ -113,6 +114,19 @@ public class UserRepository {
       user.setProfileImageId(null);
 
       return user;
+   }
+
+
+   // update user
+   public void updateUser(Long userId, UserUpdateDTO data) throws NoResultException {
+      UserEntity user = entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
+         .setParameter("userId", userId)
+         .getSingleResult();
+
+      data.name().ifPresent(user::setName);
+      data.email().ifPresent(user::setEmail);
+      data.password().ifPresent(user::setPassword);
    }
 
 }
