@@ -109,12 +109,7 @@ public class AuthService {
       // JWT token - generation
       String token = this.jwtService.generateToken(user);
 
-      return new LoginResponseDTO(
-         token,
-         user.email(),
-         user.name(),
-         user.id()
-      );
+      return LoginResponseDTO.get(user, token);
    }
 
 }

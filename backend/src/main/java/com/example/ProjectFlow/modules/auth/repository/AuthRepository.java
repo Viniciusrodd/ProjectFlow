@@ -26,20 +26,15 @@ public class AuthRepository {
    
    // register
    public RegisterResponseDTO register(RegisterDTO data) {
-      UserEntity userEntity = new UserEntity();
+      UserEntity user = new UserEntity();
         
-      userEntity.setName(data.name());
-      userEntity.setEmail(data.email());
-      userEntity.setPassword(data.password());
+      user.setName(data.name());
+      user.setEmail(data.email());
+      user.setPassword(data.password());
       
-      this.entityManager.persist(userEntity);
+      this.entityManager.persist(user);
       
-      return new RegisterResponseDTO(
-         userEntity.getId(),
-         userEntity.getName(),
-         userEntity.getEmail(),
-         userEntity.getCreatedAt()
-      );
+      return RegisterResponseDTO.get(user);
    }
 
 }
