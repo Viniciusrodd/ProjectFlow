@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 
 @Document(collection = "profile_images")
-public class ProfileImagesDocument {
+public class ProfileImageDocument {
 
    @Id
    private String id;
@@ -37,11 +37,11 @@ public class ProfileImagesDocument {
 
 
    // constructor - empty
-   public ProfileImagesDocument() {}
+   public ProfileImageDocument() {}
 
 
    // constructor
-   public ProfileImagesDocument(Builder builder) {
+   public ProfileImageDocument(Builder builder) {
       setUserId(builder.userId);
       setFileName(builder.fileName);
       setMimeType(builder.mimeType);
@@ -112,8 +112,8 @@ public class ProfileImagesDocument {
          return this;
       }
 
-      public ProfileImagesDocument build() {
-         return new ProfileImagesDocument(this);
+      public ProfileImageDocument build() {
+         return new ProfileImageDocument(this);
       }
    }
 

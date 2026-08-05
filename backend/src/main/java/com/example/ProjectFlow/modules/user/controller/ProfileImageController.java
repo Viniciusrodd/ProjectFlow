@@ -30,7 +30,7 @@ import com.example.ProjectFlow.modules.user.service.ProfileImageService;
 import com.example.ProjectFlow.common.responses.ApiResponse;
 
 // import entities
-import com.example.ProjectFlow.modules.user.document.ProfileImagesDocument;
+import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.ProfileImageResponseDTO;
@@ -76,7 +76,7 @@ public class ProfileImageController {
    @GetMapping(value = "/{userId}")
    @Operation(summary = "Get profile image data informations")
    public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> getProfileImage(@PathVariable Long userId) {
-      ProfileImagesDocument profileImageDocument = this.profileImageService.getProfileImage(userId);
+      ProfileImageDocument profileImageDocument = this.profileImageService.getProfileImage(userId);
       ProfileImageResponseDTO profileImage = ProfileImageResponseDTO.get(profileImageDocument);
 
       ApiResponse<ProfileImageResponseDTO> response = new ApiResponse.Builder<ProfileImageResponseDTO>()
@@ -97,7 +97,7 @@ public class ProfileImageController {
    )
    @Operation(summary = "Download profile image")
    public ResponseEntity<byte[]> getProfileImageData(@PathVariable Long userId) {
-      ProfileImagesDocument document = this.profileImageService.getProfileImage(userId);
+      ProfileImageDocument document = this.profileImageService.getProfileImage(userId);
 
       return ResponseEntity
          .ok()

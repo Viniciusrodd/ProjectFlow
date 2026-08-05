@@ -6,7 +6,7 @@ package com.example.ProjectFlow.modules.user.dto;
 import java.time.LocalDateTime;
 
 // import documents
-import com.example.ProjectFlow.modules.user.document.ProfileImagesDocument;
+import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 
 
 public record ProfileImageResponseDTO (
@@ -20,7 +20,7 @@ public record ProfileImageResponseDTO (
 
 ) {
 
-   public static ProfileImageResponseDTO get(ProfileImagesDocument document) {
+   public static ProfileImageResponseDTO get(ProfileImageDocument document) {
       return new ProfileImageResponseDTO(
          document.getId(),
          document.getUserId(),

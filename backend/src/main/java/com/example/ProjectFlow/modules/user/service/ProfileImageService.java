@@ -28,7 +28,7 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import entities
-import com.example.ProjectFlow.modules.user.document.ProfileImagesDocument;
+import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 
 
 @Service
@@ -68,7 +68,7 @@ public class ProfileImageService {
          }
 
          // document - setup
-         ProfileImagesDocument document = new ProfileImagesDocument.Builder()
+         ProfileImageDocument document = new ProfileImageDocument.Builder()
             .userId(userId)
             .fileName(file.getOriginalFilename())
             .mimeType(file.getContentType())
@@ -78,7 +78,7 @@ public class ProfileImageService {
             .build();
 
          // save document - mongodb
-         ProfileImagesDocument savedDocument = this.profileImageRepository.save(document);
+         ProfileImageDocument savedDocument = this.profileImageRepository.save(document);
 
          // update user profile image id - mysql
          this.userService.updateProfileImageId(userId, savedDocument.getId());
@@ -97,11 +97,11 @@ public class ProfileImageService {
 
 
    // get profile image
-   public ProfileImagesDocument getProfileImage(Long userId) {
+   public ProfileImageDocument getProfileImage(Long userId) {
       // user existence - validation
       this.userService.existsById(userId);
 
-      ProfileImagesDocument profileImage = this.profileImageRepository.findByUserId(userId);
+      ProfileImageDocument profileImage = this.profileImageRepository.findByUserId(userId);
       if(profileImage == null) {
          throw MultiExceptions.notFound(String.format(
             "%s: Imagem de perfil não existe",
@@ -114,8 +114,8 @@ public class ProfileImageService {
 
 
    // get all profile images
-   public List<ProfileImagesDocument> getAllProfileImages() {
-      List<ProfileImagesDocument> profileImages = this.profileImageRepository.findAll();
+   public List<ProfileImageDocument> getAllProfileImages() {
+      List<ProfileImageDocument> profileImages = this.profileImageRepository.findAll();
       if(profileImages.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Imagens de perfil não existem",

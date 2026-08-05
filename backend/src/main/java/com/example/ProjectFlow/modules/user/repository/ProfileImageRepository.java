@@ -6,13 +6,13 @@ package com.example.ProjectFlow.modules.user.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 // import entities
-import com.example.ProjectFlow.modules.user.document.ProfileImagesDocument;
+import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 
 
-public interface ProfileImageRepository extends MongoRepository<ProfileImagesDocument, String> {
+public interface ProfileImageRepository extends MongoRepository<ProfileImageDocument, String> {
  
    // find image by user id
-   ProfileImagesDocument findByUserId(Long userId);
+   ProfileImageDocument findByUserId(Long userId);
 
    // delete by user id
    void deleteByUserId(Long userId);
