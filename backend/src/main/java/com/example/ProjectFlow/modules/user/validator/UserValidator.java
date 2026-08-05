@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.user.validator;
 
 // imports
 import org.springframework.stereotype.Component;
+import java.util.Optional;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -70,7 +71,7 @@ public class UserValidator {
    // update validations
    public void updateValidations(UserUpdateDTO data) {
       // name
-      data.name().ifPresent(name -> {
+      Optional.ofNullable(data.name()).ifPresent(name -> {
          if(name.trim().isEmpty()) {
             throw MultiExceptions.badRequest(String.format(
                "%s: Nome não pode ser vazio",
@@ -89,7 +90,7 @@ public class UserValidator {
       });
 
       // email
-      data.email().ifPresent(email -> {
+      Optional.ofNullable(data.email()).ifPresent(email -> {
          if(email.trim().isEmpty()) {
             throw MultiExceptions.badRequest(String.format(
                "%s: Email não pode ser vazio",
@@ -114,7 +115,7 @@ public class UserValidator {
       });
 
       // password
-      data.password().ifPresent(password -> {
+      Optional.ofNullable(data.password()).ifPresent(password -> {
          if(password.trim().isEmpty()) {
             throw MultiExceptions.badRequest(String.format(
                "%s: Senha não pode ser vazia",

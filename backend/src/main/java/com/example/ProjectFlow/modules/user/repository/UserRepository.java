@@ -6,9 +6,11 @@ package com.example.ProjectFlow.modules.user.repository;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
@@ -31,7 +33,7 @@ public class UserRepository {
 
    // get all
    public List<UserProfileDTO> getAllUsers() {
-      List<UserEntity> usersDocument = entityManager
+      List<UserEntity> usersDocument = this.entityManager
          .createQuery("SELECT u FROM UserEntity u ORDER BY u.id ASC", UserEntity.class)
          .getResultList();
       
@@ -47,7 +49,7 @@ public class UserRepository {
 
    // get by id
    public UserProfileDTO getById(Long id) throws NoResultException {
-      UserEntity user = entityManager
+      UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :id", UserEntity.class)
          .setParameter("id", id)
          .getSingleResult();
@@ -58,7 +60,7 @@ public class UserRepository {
    
    // get by email
    public UserDTO getByEmail(String email) throws NoResultException {
-      UserEntity user = entityManager
+      UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.email = :email", UserEntity.class)
          .setParameter("email", email)
          .getSingleResult();
@@ -69,7 +71,7 @@ public class UserRepository {
    
    // exists by id
    public boolean existsById(Long id) {
-      Long count = entityManager
+      Long count = this.entityManager
          .createQuery("SELECT COUNT(u) FROM UserEntity u WHERE u.id = :id", Long.class)
          .setParameter("id", id)
          .getSingleResult();
@@ -80,7 +82,7 @@ public class UserRepository {
 
    // exists by email
    public boolean existsByEmail(String email) {
-      Long count = entityManager
+      Long count = this.entityManager
          .createQuery("SELECT COUNT(u) FROM UserEntity u WHERE u.email = :email", Long.class)
          .setParameter("email", email)
          .getSingleResult();
@@ -90,8 +92,9 @@ public class UserRepository {
 
 
    // update profile image id
+   @Transactional
    public UserEntity updateProfileImageId(Long userId, String profileImageId) throws NoResultException {
-      UserEntity user = entityManager
+      UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
          .getSingleResult();
@@ -104,8 +107,9 @@ public class UserRepository {
 
 
    // remove profile image id
+   @Transactional
    public UserEntity removeProfileImageId(Long userId) throws NoResultException {
-      UserEntity user = entityManager
+      UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
          .getSingleResult();
@@ -118,15 +122,18 @@ public class UserRepository {
 
 
    // update user
-   public void updateUser(Long userId, UserUpdateDTO data) throws NoResultException {
-      UserEntity user = entityManager
+   @Transactional
+   public UserProfileDTO updateUser(Long userId, UserUpdateDTO data) throws NoResultException {
+      UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
          .getSingleResult();
 
-      data.name().ifPresent(user::setName);
-      data.email().ifPresent(user::setEmail);
-      data.password().ifPresent(user::setPassword);
+      Optional.ofNullable(data.name()).ifPresent(user::setName);
+      Optional.ofNullable(data.email()).ifPresent(user::setEmail);
+      Optional.ofNullable(data.password()).ifPresent(user::setPassword);
+
+      return UserProfileDTO.get(user);
    }
 
 }

@@ -8,6 +8,8 @@ import java.util.List;
 
 // jakart imports
 import jakarta.persistence.NoResultException;
+import jakarta.transaction.Transactional;
+import java.util.Optional;
 
 // import repository
 import com.example.ProjectFlow.modules.user.repository.UserRepository;
@@ -132,6 +134,7 @@ public class UserService {
 
 
    // update profile image id
+   @Transactional
    public void updateProfileImageId(Long userId, String profileImageId) {
       this.userValidator.idValidate(userId);
       this.profileImageValidator.idValidate(profileImageId);
@@ -149,6 +152,7 @@ public class UserService {
 
 
    // remove profile image id
+   @Transactional
    public void removeProfileImageId(Long userId) {
       this.userValidator.idValidate(userId);
 
@@ -165,27 +169,28 @@ public class UserService {
 
 
    // update user
-   public void updateUser(Long userId, UserUpdateDTO data) {
+   @Transactional
+   public UserProfileDTO updateUser(Long userId, UserUpdateDTO data) {
       this.userValidator.updateValidations(data);
       
       try {
          UserUpdateDTO finalData = data;
 
          // existing email - check
-         if(data.email().isPresent()) {
+         if(Optional.ofNullable(data.email()).isPresent()) {
             UserProfileDTO currentUser = this.getById(userId); // userId will be validate here
-            if(!currentUser.email().equals(data.email().get())) {
-               this.isRegister(data.email().get());
+            if(!currentUser.email().equals(data.email())) {
+               this.isRegister(data.email());
             }
          }
 
          // password - check
-         if(data.password().isPresent()) {
-            String encryptedPassword = this.passwordService.encryptPassword(data.password().get());
+         if(Optional.ofNullable(data.password()).isPresent()) {
+            String encryptedPassword = this.passwordService.encryptPassword(data.password());
             finalData = data.withEncryptedPassword(encryptedPassword);
          }
 
-         this.userRepository.updateUser(userId, finalData);
+         return this.userRepository.updateUser(userId, finalData);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(

@@ -2,15 +2,12 @@
 // packages
 package com.example.ProjectFlow.modules.user.dto;
 
-// imports
-import java.util.Optional;
-
 
 public record UserUpdateDTO (
 
-   Optional<String> name,
-   Optional<String> email,
-   Optional<String> password
+   String name,
+   String email,
+   String password
 
 ) {
 
@@ -18,7 +15,7 @@ public record UserUpdateDTO (
       return new UserUpdateDTO(
          name, 
          email, 
-         Optional.of(encryptedPassword)
+         encryptedPassword
       );
    }
 
