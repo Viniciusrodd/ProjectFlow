@@ -19,12 +19,16 @@ import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
 import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
+import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
+
+// import services
+import com.example.ProjectFlow.modules.auth.service.PasswordService;
 
 
 @Service
@@ -34,16 +38,19 @@ public class UserService {
    private final UserRepository userRepository;
    private final UserValidator userValidator;
    private final ProfileImageValidator profileImageValidator;
+   private final PasswordService passwordService;
 
    // constructor - dependency injection
    public UserService(
       UserRepository userRepository,
       UserValidator userValidator,
-      ProfileImageValidator profileImageValidator
+      ProfileImageValidator profileImageValidator,
+      PasswordService passwordService
    ) {
       this.userRepository = userRepository;
       this.userValidator = userValidator;
       this.profileImageValidator = profileImageValidator;
+      this.passwordService = passwordService;
    }
 
 
@@ -147,6 +154,38 @@ public class UserService {
 
       try {
          this.userRepository.removeProfileImageId(userId);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // update user
+   public void updateUser(Long userId, UserUpdateDTO data) {
+      this.userValidator.updateValidations(data);
+      
+      try {
+         UserUpdateDTO finalData = data;
+
+         // existing email - check
+         if(data.email().isPresent()) {
+            UserProfileDTO currentUser = this.getById(userId); // userId will be validate here
+            if(!currentUser.email().equals(data.email().get())) {
+               this.isRegister(data.email().get());
+            }
+         }
+
+         // password - check
+         if(data.password().isPresent()) {
+            String encryptedPassword = this.passwordService.encryptPassword(data.password().get());
+            finalData = data.withEncryptedPassword(encryptedPassword);
+         }
+
+         this.userRepository.updateUser(userId, finalData);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(

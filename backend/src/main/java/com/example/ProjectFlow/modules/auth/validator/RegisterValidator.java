@@ -56,8 +56,6 @@ public class RegisterValidator {
          ));
       }
 
-      // check if email already exists...
-
       // password
       if(data.password() == null || data.password().trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
