@@ -63,25 +63,42 @@ public class UserService {
 
       return users;
    }
+
+
+   // get by id
+   public UserProfileDTO getById(Long id) {
+      this.userValidator.idValidate(id);
+
+      try {
+         return this.userRepository.getById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
    
    
    // get by email
    public UserDTO getByEmail(String email) {
-      // validation
       this.userValidator.emailValidate(email);
 
       try {
          return this.userRepository.getByEmail(email);
       }
       catch (NoResultException error) {
-         throw MultiExceptions.notFound(ResponseMessages.NOT_FOUND);
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
       }
    }
 
 
    // exists by id
    public boolean existsById(Long id) {
-      // validation
       this.userValidator.idValidate(id);
 
       return this.userRepository.existsById(id);
@@ -90,7 +107,6 @@ public class UserService {
 
    // exists by email
    public boolean existsByEmail(String email) {
-      // validation
       this.userValidator.emailValidate(email);
 
       return this.userRepository.existsByEmail(email);
@@ -99,7 +115,6 @@ public class UserService {
 
    // update profile image id
    public void updateProfileImageId(Long userId, String profileImageId) {
-      // validations
       this.userValidator.idValidate(userId);
       this.profileImageValidator.idValidate(profileImageId);
 
@@ -116,7 +131,6 @@ public class UserService {
 
    // remove profile image id
    public void removeProfileImageId(Long userId) {
-      // validations
       this.userValidator.idValidate(userId);
 
       UserEntity user = this.userRepository.removeProfileImageId(userId);

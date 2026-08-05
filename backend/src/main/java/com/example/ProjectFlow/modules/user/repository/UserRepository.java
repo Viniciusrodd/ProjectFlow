@@ -10,6 +10,7 @@ import java.util.List;
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
@@ -40,6 +41,17 @@ public class UserRepository {
       }
 
       return users;
+   }
+
+
+   // get by id
+   public UserProfileDTO getById(Long id) throws NoResultException {
+      UserEntity user = entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.id = :id", UserEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+      
+      return UserProfileDTO.get(user);
    }
 
    
