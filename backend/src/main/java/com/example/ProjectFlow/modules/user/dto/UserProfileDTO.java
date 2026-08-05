@@ -2,7 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.user.dto;
 
-// import eneities
+// import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 

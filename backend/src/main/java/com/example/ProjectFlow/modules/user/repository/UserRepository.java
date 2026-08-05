@@ -62,12 +62,7 @@ public class UserRepository {
          .setParameter("email", email)
          .getSingleResult();
       
-      return new UserDTO(
-         user.getId(),
-         user.getEmail(),
-         user.getName(),
-         user.getPassword()
-      );
+      return UserDTO.get(user);
    }
 
 
