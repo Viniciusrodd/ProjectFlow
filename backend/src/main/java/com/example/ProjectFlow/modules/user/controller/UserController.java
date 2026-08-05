@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PathVariable;
 // http imports
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +57,23 @@ public class UserController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(users)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get by id
+   @GetMapping(value = "/user/{id}")
+   @Operation(summary = "Get user by id")
+   public ResponseEntity<ApiResponse<UserProfileDTO>> getById(@PathVariable Long id) {
+      UserProfileDTO user = this.userService.getById(id);
+
+      ApiResponse<UserProfileDTO> response = new ApiResponse.Builder<UserProfileDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(user)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
