@@ -56,7 +56,7 @@ public class UserRepository {
 
    
    // get by email
-   public UserDTO getByEmail(String email) {
+   public UserDTO getByEmail(String email) throws NoResultException {
       UserEntity user = entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.email = :email", UserEntity.class)
          .setParameter("email", email)
@@ -89,8 +89,11 @@ public class UserRepository {
 
 
    // update profile image id
-   public UserEntity updateProfileImageId(Long userId, String profileImageId) {
-      UserEntity user = entityManager.find(UserEntity.class, userId);
+   public UserEntity updateProfileImageId(Long userId, String profileImageId) throws NoResultException {
+      UserEntity user = entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
+         .setParameter("userId", userId)
+         .getSingleResult();
 
       // update
       user.setProfileImageId(profileImageId);
@@ -100,8 +103,11 @@ public class UserRepository {
 
 
    // remove profile image id
-   public UserEntity removeProfileImageId(Long userId) {
-      UserEntity user = entityManager.find(UserEntity.class, userId);
+   public UserEntity removeProfileImageId(Long userId) throws NoResultException {
+      UserEntity user = entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
+         .setParameter("userId", userId)
+         .getSingleResult();
 
       // remove
       user.setProfileImageId(null);

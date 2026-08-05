@@ -26,9 +26,6 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
-// import entity
-import com.example.ProjectFlow.modules.user.entity.UserEntity;
-
 
 @Service
 public class UserService {
@@ -101,15 +98,29 @@ public class UserService {
    public boolean existsById(Long id) {
       this.userValidator.idValidate(id);
 
-      return this.userRepository.existsById(id);
+      boolean exist = this.userRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+      
+      return exist;
    }
 
 
-   // exists by email
-   public boolean existsByEmail(String email) {
+   // user is already register
+   public void isRegister(String email) {
       this.userValidator.emailValidate(email);
 
-      return this.userRepository.existsByEmail(email);
+      boolean exist = this.userRepository.existsByEmail(email);
+      if(exist) {
+         throw MultiExceptions.duplicate(String.format(
+            "%s: Email já cadastrado",
+            ResponseMessages.DUPLICATE
+         ));
+      }
    }
 
 
@@ -118,9 +129,10 @@ public class UserService {
       this.userValidator.idValidate(userId);
       this.profileImageValidator.idValidate(profileImageId);
 
-      UserEntity user = this.userRepository.updateProfileImageId(userId, profileImageId);
-      
-      if(user == null) {
+      try {
+         this.userRepository.updateProfileImageId(userId, profileImageId);
+      }
+      catch(NoResultException error) {
          throw MultiExceptions.notFound(String.format(
             "%s: Usuário não existe", 
             ResponseMessages.NOT_FOUND
@@ -133,9 +145,10 @@ public class UserService {
    public void removeProfileImageId(Long userId) {
       this.userValidator.idValidate(userId);
 
-      UserEntity user = this.userRepository.removeProfileImageId(userId);
-
-      if(user == null) {
+      try {
+         this.userRepository.removeProfileImageId(userId);
+      }
+      catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
             "%s: Usuário não existe", 
             ResponseMessages.NOT_FOUND
