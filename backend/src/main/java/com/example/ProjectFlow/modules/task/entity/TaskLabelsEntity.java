@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 
 // jakarta imports
 import jakarta.persistence.Entity;
@@ -34,7 +35,8 @@ public class TaskLabelsEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
-   @Column(columnDefinition = "UUID")
+   @Column(columnDefinition = "VARCHAR(36)", length = 36)
+   @JdbcTypeCode(java.sql.Types.VARCHAR)
    private UUID id;
 
    // N(tasks) : 1(task_labels)

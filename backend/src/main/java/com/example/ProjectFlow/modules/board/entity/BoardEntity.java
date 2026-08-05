@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +39,8 @@ public class BoardEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
-   @Column(columnDefinition = "UUID")
+   @Column(columnDefinition = "VARCHAR(36)", length = 36)
+   @JdbcTypeCode(java.sql.Types.VARCHAR)
    private UUID id;
 
    // 1(project) : 1(board)

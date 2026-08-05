@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 
 // jakarta imports
@@ -41,7 +42,8 @@ public class ProjectMembersEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
-   @Column(columnDefinition = "UUID")
+   @Column(columnDefinition = "VARCHAR(36)", length = 36)
+   @JdbcTypeCode(java.sql.Types.VARCHAR)
    private UUID id;
 
    // N(users) : 1(project_members)

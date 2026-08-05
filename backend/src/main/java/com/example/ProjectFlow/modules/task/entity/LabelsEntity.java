@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 
 // jakarta imports
@@ -38,7 +39,8 @@ public class LabelsEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
-   @Column(columnDefinition = "UUID")
+   @Column(columnDefinition = "VARCHAR(36)", length = 36)
+   @JdbcTypeCode(java.sql.Types.VARCHAR)
    private UUID id;
 
    // N(labels) : 1(project)

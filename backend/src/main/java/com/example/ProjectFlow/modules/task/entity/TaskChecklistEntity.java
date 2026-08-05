@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 
 // jakarta imports
 import jakarta.persistence.Entity;
@@ -31,7 +32,8 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
  
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
-   @Column(columnDefinition = "UUID")
+   @Column(columnDefinition = "VARCHAR(36)", length = 36)
+   @JdbcTypeCode(java.sql.Types.VARCHAR)
    private UUID id;
    
    // N(task_checklist) : 1(task)
