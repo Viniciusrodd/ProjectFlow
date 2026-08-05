@@ -2,12 +2,26 @@
 // packages
 package com.example.ProjectFlow.modules.auth.dto;
 
+// import DTO
+import com.example.ProjectFlow.modules.user.dto.UserDTO;
+
 
 public record LoginResponseDTO (
 
-   String token,
-   String email,
+   Long id,
    String name,
-   Long id
+   String email,
+   String token
 
-) {}
+) {
+
+   public static LoginResponseDTO get(UserDTO document, String token) {
+      return new LoginResponseDTO(
+         document.id(),
+         document.name(),
+         document.email(),
+         token
+      );
+   }
+
+}
