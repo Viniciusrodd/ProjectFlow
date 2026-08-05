@@ -68,13 +68,8 @@ public class AuthService {
       // validation
       this.registerValidator.validate(data);
 
-      // email already exists - check
-      if(this.userService.existsByEmail(data.email())) {
-         throw MultiExceptions.duplicate(String.format(
-            "%s: Email já cadastrado",
-            ResponseMessages.DUPLICATE
-         ));
-      }
+      // user is already register - check
+      this.userService.isRegister(data.email());
 
       // encrypt password
       final String encryptedPassword = this.passwordService.encryptPassword(data.password());

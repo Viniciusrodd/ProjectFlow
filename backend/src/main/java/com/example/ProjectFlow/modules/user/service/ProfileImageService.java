@@ -56,12 +56,7 @@ public class ProfileImageService {
    @Transactional
    public ProfileImageResponseDTO uploadProfileImage(Long userId, MultipartFile file) {
       // user existence - validation
-      if(!this.userService.existsById(userId)) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Usuário não existe",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
+      this.userService.existsById(userId);
 
       // image file - validation
       this.profileImageValidator.validate(file);
@@ -104,12 +99,7 @@ public class ProfileImageService {
    // get profile image
    public ProfileImagesDocument getProfileImage(Long userId) {
       // user existence - validation
-      if(!this.userService.existsById(userId)) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Usuário não existe",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
+      this.userService.existsById(userId);
 
       ProfileImagesDocument profileImage = this.profileImageRepository.findByUserId(userId);
       if(profileImage == null) {
@@ -140,12 +130,7 @@ public class ProfileImageService {
    // delete profile image
    public void deleteProfileImage(Long userId) {
       // user existence - validation
-      if(!this.userService.existsById(userId)) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Usuário não existe",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
+      this.userService.existsById(userId);
 
       // profile image existence - validation
       if(this.profileImageRepository.findByUserId(userId) == null) {
