@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 // http imports
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 // swagger imports
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ApiConstants;
@@ -90,10 +91,6 @@ public class UserController {
       @PathVariable Long userId, 
       @RequestBody UserUpdateDTO data
    ) {
-      System.out.println("------------------------------------------");
-      System.out.println(data);
-      System.out.println("------------------------------------------");
-
       UserProfileDTO user = this.userService.updateUser(userId, data);
 
       ApiResponse<UserProfileDTO> response = new ApiResponse.Builder<UserProfileDTO>()
