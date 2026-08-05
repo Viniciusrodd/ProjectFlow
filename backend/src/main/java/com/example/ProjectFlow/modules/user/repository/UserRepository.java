@@ -2,6 +2,9 @@
 // packages
 package com.example.ProjectFlow.modules.user.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // imports
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +14,7 @@ import jakarta.persistence.EntityManager;
 
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
+import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
@@ -22,6 +26,22 @@ public class UserRepository {
    // properties
    @PersistenceContext
    private EntityManager entityManager;
+
+
+   // get all
+   public List<UserProfileDTO> getAllUsers() {
+      List<UserEntity> usersDocument = entityManager
+         .createQuery("SELECT u FROM UserEntity u ORDER BY u.id ASC", UserEntity.class)
+         .getResultList();
+      
+      List<UserProfileDTO> users = new ArrayList<>();
+      
+      for(UserEntity user : usersDocument) {
+         users.add(UserProfileDTO.get(user));
+      }
+
+      return users;
+   }
 
 
    // exists by id
