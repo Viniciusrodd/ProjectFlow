@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.entity;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,8 +30,9 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 public class TaskChecklistEntity implements SoftDeleteInterface {
  
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(columnDefinition = "UUID")
+   private UUID id;
    
    // N(task_checklist) : 1(task)
    @ManyToOne(fetch = FetchType.LAZY)
@@ -67,7 +69,7 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
 
 
    // getters
-   public Long getId() { return this.id; }
+   public UUID getId() { return this.id; }
    public TasksEntity getTask() { return this.task; }
    public String getDescription() { return this.description; }
    public boolean getCompleted() { return this.completed; }
@@ -78,7 +80,7 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
 
 
    // setters
-   public void setId(Long id) { this.id = id; }
+   public void setId(UUID id) { this.id = id; }
    public void setDescription(String description) { this.description = description; }
    public void setCompleted(boolean completed) { this.completed = completed; }
    public void setPosition(int position) { this.position = position; }

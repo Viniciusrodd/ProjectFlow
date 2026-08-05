@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -45,8 +46,9 @@ import com.example.ProjectFlow.modules.task.enums.PriorityEnum;
 public class TasksEntity implements SoftDeleteInterface {
  
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(columnDefinition = "UUID")
+   private UUID id;
 
    // N(tasks) : 1(project)
    @ManyToOne(fetch = FetchType.LAZY)
@@ -112,7 +114,7 @@ public class TasksEntity implements SoftDeleteInterface {
 
 
    // getters
-   public Long getId() { return this.id; }
+   public UUID getId() { return this.id; }
    public ProjectEntity getProject() { return this.project; }
    public BoardColumnsEntity getBoardColumn() { return this.boardColumn; }
    public UserEntity getOwner() { return this.owner; }
@@ -130,7 +132,7 @@ public class TasksEntity implements SoftDeleteInterface {
 
 
    // setters
-   public void setId(Long id) { this.id = id; }
+   public void setId(UUID id) { this.id = id; }
    public void setProject(ProjectEntity project) { this.project = project; }
    public void setBoardColumn(BoardColumnsEntity boardColumn) { this.boardColumn = boardColumn; }
    public void setOwner(UserEntity owner) { this.owner = owner; }

@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.List;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.persistence.Entity;
@@ -36,8 +37,9 @@ import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 public class BoardEntity implements SoftDeleteInterface {
  
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(columnDefinition = "UUID")
+   private UUID id;
 
    // 1(project) : 1(board)
    @OneToOne(fetch = FetchType.LAZY)
@@ -68,7 +70,7 @@ public class BoardEntity implements SoftDeleteInterface {
 
 
    // getters
-   public Long getId() { return this.id; }
+   public UUID getId() { return this.id; }
    public ProjectEntity getProject() { return this.project; }
    public List<BoardColumnsEntity> getBoardColumns() { return this.boardColumns; }
    public String getName() { return this.name; }
@@ -78,7 +80,7 @@ public class BoardEntity implements SoftDeleteInterface {
 
 
    // setters
-   public void setId(Long id) { this.id = id; }
+   public void setId(UUID id) { this.id = id; }
    public void setProject(ProjectEntity project) { this.project = project; }
    public void setBoardColumns(List<BoardColumnsEntity> boardColumns) { this.boardColumns = boardColumns; }
    public void setName(String name) { this.name = name; }

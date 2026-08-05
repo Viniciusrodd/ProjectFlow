@@ -6,6 +6,7 @@ package com.example.ProjectFlow.modules.board.entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -40,8 +41,9 @@ import com.example.ProjectFlow.modules.board.enums.BoardEnum;
 public class BoardColumnsEntity implements SoftDeleteInterface {
  
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(columnDefinition = "UUID")
+   private UUID id;
 
    // N(board_columns) : 1(board)
    @ManyToOne(fetch = FetchType.LAZY)
@@ -83,7 +85,7 @@ public class BoardColumnsEntity implements SoftDeleteInterface {
 
 
    // getters
-   public Long getId() { return this.id; }
+   public UUID getId() { return this.id; }
    public BoardEntity getBoard() { return this.board; }
    public List<TasksEntity> getTasks() { return this.tasks; }
    public BoardEnum getName() { return this.name; } 
@@ -95,7 +97,7 @@ public class BoardColumnsEntity implements SoftDeleteInterface {
 
    
    // setters
-   public void setId(Long id) { this.id = id; }
+   public void setId(UUID id) { this.id = id; }
    public void setBoard(BoardEntity board) { this.board = board; }
    public void setTasks(List<TasksEntity> tasks) { this.tasks = tasks; }
    public void setName(BoardEnum name) { this.name = name; }

@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.entity;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -32,8 +33,9 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 public class TaskLabelsEntity implements SoftDeleteInterface {
  
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(columnDefinition = "UUID")
+   private UUID id;
 
    // N(tasks) : 1(task_labels)
    @ManyToOne(fetch = FetchType.LAZY)
@@ -62,7 +64,7 @@ public class TaskLabelsEntity implements SoftDeleteInterface {
 
 
    // getters
-   public Long getId() { return this.id; }
+   public UUID getId() { return this.id; }
    public TasksEntity getTask() { return this.task; }
    public LabelsEntity getLabel() { return this.label; }
    public LocalDateTime getCreatedAt() { return this.createdAt; }
@@ -70,7 +72,7 @@ public class TaskLabelsEntity implements SoftDeleteInterface {
 
 
    // setters
-   public void setId(Long id) { this.id = id; }
+   public void setId(UUID id) { this.id = id; }
    public void setTask(TasksEntity task) { this.task = task; }
    public void setLabel(LabelsEntity label) { this.label = label; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

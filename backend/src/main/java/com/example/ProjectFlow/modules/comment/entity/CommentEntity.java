@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.comment.entity;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -33,8 +34,9 @@ import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 public class CommentEntity implements SoftDeleteInterface {
    
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(columnDefinition = "UUID")
+   private UUID id;
 
    // N(comments) : 1(task)
    @ManyToOne(fetch = FetchType.LAZY)
@@ -70,7 +72,7 @@ public class CommentEntity implements SoftDeleteInterface {
 
 
    // getters
-   public Long getId() { return this.id; }
+   public UUID getId() { return this.id; }
    public TasksEntity getTask() { return this.task; }
    public UserEntity getAuthor() { return this.author; }
    public String getContent() { return this.content; }
@@ -80,7 +82,7 @@ public class CommentEntity implements SoftDeleteInterface {
 
 
    // setters
-   public void setId(Long id) { this.id = id; }
+   public void setId(UUID id) { this.id = id; }
    public void setTask(TasksEntity task) { this.task = task; }
    public void setAuthor(UserEntity author) { this.author = author; }      
    public void setContent(String content) { this.content = content; }

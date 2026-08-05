@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.organization.entity;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -41,8 +42,9 @@ import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 public class OrganizationMembersEntity implements SoftDeleteInterface {
  
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(columnDefinition = "UUID")
+   private UUID id;
 
    // N(users) : 1(organization_members)
    @ManyToOne(fetch = FetchType.LAZY)
@@ -79,7 +81,7 @@ public class OrganizationMembersEntity implements SoftDeleteInterface {
 
 
    // getters
-   public Long getId() { return this.id; }
+   public UUID getId() { return this.id; }
    public OrganizationEntity getOrganization() { return this.organization; }
    public UserEntity getUser() { return this.user; }
    public RoleEnum getRole() { return this.role; }
@@ -89,7 +91,7 @@ public class OrganizationMembersEntity implements SoftDeleteInterface {
 
 
    // setters
-   public void setId(Long id) { this.id = id; }
+   public void setId(UUID id) { this.id = id; }
    public void setOrganization(OrganizationEntity organization) { this.organization = organization; }
    public void setUser(UserEntity user) { this.user = user; }
    public void setRole(RoleEnum role) { this.role = role; }
