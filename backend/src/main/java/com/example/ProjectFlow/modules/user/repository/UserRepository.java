@@ -152,4 +152,15 @@ public class UserRepository {
       return UserDeletedDTO.get(user);
    }
 
+
+   // is deleted
+   public boolean isDeleted(Long userId) throws NoResultException {
+      UserEntity user = this.entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
+         .setParameter("userId", userId)
+         .getSingleResult();
+
+      return user.isDeleted();
+   }
+
 }

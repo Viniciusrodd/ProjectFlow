@@ -218,4 +218,20 @@ public class UserService {
       }
    }
 
+
+   // is deleted
+   public boolean isDeleted(Long userId) {
+      this.userValidator.idValidate(userId);
+
+      try {
+         return this.userRepository.isDeleted(userId);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
