@@ -22,6 +22,7 @@ import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
 import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
 import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
+import com.example.ProjectFlow.modules.user.dto.UserDeletedDTO;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -191,6 +192,23 @@ public class UserService {
          }
 
          return this.userRepository.updateUser(userId, finalData);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // delete user
+   @Transactional
+   public UserDeletedDTO deleteUser(Long userId) {
+      this.userValidator.idValidate(userId);
+
+      try {
+         return this.userRepository.deleteUser(userId);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(

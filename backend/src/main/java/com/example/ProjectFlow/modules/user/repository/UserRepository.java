@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.user.repository;
 
 // imports
 import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import jakarta.persistence.NoResultException;
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
 import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
 import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
+import com.example.ProjectFlow.modules.user.dto.UserDeletedDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
@@ -134,6 +136,20 @@ public class UserRepository {
       Optional.ofNullable(data.password()).ifPresent(password -> user.setPassword(password));
 
       return UserProfileDTO.get(user);
+   }
+
+
+   // delete user
+   @Transactional
+   public UserDeletedDTO deleteUser(Long userId) throws NoResultException {
+      UserEntity user = this.entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
+         .setParameter("userId", userId)
+         .getSingleResult();
+
+      user.setDeletedAt(LocalDateTime.now());
+
+      return UserDeletedDTO.get(user);
    }
 
 }
