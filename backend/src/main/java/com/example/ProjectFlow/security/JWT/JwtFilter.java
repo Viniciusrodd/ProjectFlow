@@ -39,6 +39,14 @@ public class JwtFilter extends OncePerRequestFilter {
    }
 
 
+   // to not filter
+   @Override
+   protected boolean shouldNotFilter(HttpServletRequest request) {
+      String path = request.getRequestURI();
+      return path.startsWith("/api/v1/auth/");
+   }
+
+
    // do filter internal - override method
    @Override
    protected void doFilterInternal(
