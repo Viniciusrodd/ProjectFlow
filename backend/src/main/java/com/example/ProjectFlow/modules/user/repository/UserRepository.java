@@ -2,11 +2,10 @@
 // packages
 package com.example.ProjectFlow.modules.user.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // imports
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;

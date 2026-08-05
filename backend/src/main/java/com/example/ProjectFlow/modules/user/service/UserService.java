@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.user.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 // jakart imports
 import jakarta.persistence.NoResultException;
@@ -17,6 +18,7 @@ import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
 
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
+import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -45,6 +47,21 @@ public class UserService {
       this.userRepository = userRepository;
       this.userValidator = userValidator;
       this.profileImageValidator = profileImageValidator;
+   }
+
+
+   // get all users
+   public List<UserProfileDTO> getAllUsers() {
+      List<UserProfileDTO> users = this.userRepository.getAllUsers();
+
+      if(users.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuários não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return users;
    }
 
 
@@ -90,7 +107,7 @@ public class UserService {
       
       if(user == null) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Usuário não encontrado", 
+            "%s: Usuário não existe", 
             ResponseMessages.NOT_FOUND
          ));
       }
@@ -106,7 +123,7 @@ public class UserService {
 
       if(user == null) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Usuário não encontrado", 
+            "%s: Usuário não existe", 
             ResponseMessages.NOT_FOUND
          ));
       }
