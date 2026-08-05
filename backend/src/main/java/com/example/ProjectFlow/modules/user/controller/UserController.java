@@ -8,6 +8,7 @@ import java.util.List;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,6 +33,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 // import DTOs
 import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
 import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
+import com.example.ProjectFlow.modules.user.dto.UserDeletedDTO;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
@@ -98,6 +100,23 @@ public class UserController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.UPDATED)
          .data(user)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete user
+   @DeleteMapping(value = "user/{userId}")
+   @Operation(summary = "Delete user")
+   public ResponseEntity<ApiResponse<UserDeletedDTO>> deleteUser(@PathVariable Long userId) {
+      UserDeletedDTO userDeleted = this.userService.deleteUser(userId);
+
+      ApiResponse<UserDeletedDTO> response = new ApiResponse.Builder<UserDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(userDeleted)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
