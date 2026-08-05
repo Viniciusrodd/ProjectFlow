@@ -129,9 +129,9 @@ public class UserRepository {
          .setParameter("userId", userId)
          .getSingleResult();
 
-      Optional.ofNullable(data.name()).ifPresent(user::setName);
-      Optional.ofNullable(data.email()).ifPresent(user::setEmail);
-      Optional.ofNullable(data.password()).ifPresent(user::setPassword);
+      Optional.ofNullable(data.name()).ifPresent(name -> user.setName(name));
+      Optional.ofNullable(data.email()).ifPresent(email -> user.setEmail(email));
+      Optional.ofNullable(data.password()).ifPresent(password -> user.setPassword(password));
 
       return UserProfileDTO.get(user);
    }
