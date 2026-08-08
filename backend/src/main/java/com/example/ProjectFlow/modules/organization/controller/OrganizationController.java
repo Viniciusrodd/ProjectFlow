@@ -2,14 +2,17 @@
 // packages
 package com.example.ProjectFlow.modules.organization.controller;
 
+// imports
+import java.util.List;
+import java.util.UUID;
+
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -78,6 +81,23 @@ public class OrganizationController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(organizations)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get organization by id
+   @GetMapping("/organization/{id}")
+   @Operation(summary = "Get organization by id")
+   public ResponseEntity<ApiResponse<OrganizationResponseDTO>> getById(@PathVariable UUID id) {
+      OrganizationResponseDTO organization = this.organizationService.getById(id);
+
+      ApiResponse<OrganizationResponseDTO> response = new ApiResponse.Builder<OrganizationResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(organization)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
