@@ -37,7 +37,7 @@ public class UserRepository {
    // get all
    public List<UserProfileDTO> getAll() {
       List<UserEntity> usersDocument = this.entityManager
-         .createQuery("SELECT u FROM UserEntity u ORDER BY u.id ASC", UserEntity.class)
+         .createQuery("SELECT u FROM UserEntity u ORDER BY u.createdAt ASC", UserEntity.class)
          .getResultList();
       
       List<UserProfileDTO> users = new ArrayList<>();
