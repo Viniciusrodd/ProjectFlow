@@ -61,13 +61,6 @@ public class OrganizationValidator {
 
    // description validate
    public void descriptionValidate(String description) {
-      if(description == null || description.trim().isEmpty()) {
-         throw MultiExceptions.badRequest(String.format(
-            "%s: Descrição não pode ser vazia",
-            ResponseMessages.BAD_REQUEST
-         ));
-      }
-
       if(description.length() > ValidationConstants.MAX_DESCRIPTION_LENGTH) {
          throw MultiExceptions.invalid(String.format(
             "%s: Descrição deve ser no máximo %d caracteres",
