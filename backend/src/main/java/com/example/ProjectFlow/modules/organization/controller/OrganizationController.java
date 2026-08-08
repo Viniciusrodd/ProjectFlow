@@ -1,0 +1,66 @@
+
+// packages
+package com.example.ProjectFlow.modules.organization.controller;
+
+// web imports
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+// http imports
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+// swagger imports
+import io.swagger.v3.oas.annotations.Operation;
+
+// import constants
+import com.example.ProjectFlow.common.constants.ApiConstants;
+
+// import services
+import com.example.ProjectFlow.modules.organization.service.OrganizationService;
+
+// import responses
+import com.example.ProjectFlow.common.responses.ApiResponse;
+
+// import DTOs
+import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
+
+// import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
+
+
+@RestController
+@RequestMapping(ApiConstants.BASE_API_PATH)
+public class OrganizationController {
+ 
+   // properties
+   private OrganizationService organizationService;
+
+   // constructor - dependency injection
+   public OrganizationController(OrganizationService organizationService) {
+      this.organizationService = organizationService;
+   }
+
+
+   // create organization
+   @PostMapping("/organization")
+   @Operation(summary = "Create a organization")
+   public ResponseEntity<ApiResponse<OrganizationResponseDTO>> createOrganization(
+      @RequestBody OrganizationDTO data
+   ) {
+      OrganizationResponseDTO organization = this.organizationService.create(data);
+
+      ApiResponse<OrganizationResponseDTO> response = new ApiResponse.Builder<OrganizationResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.CREATED.value())
+         .message(ResponseMessages.CREATED)
+         .data(organization)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+}

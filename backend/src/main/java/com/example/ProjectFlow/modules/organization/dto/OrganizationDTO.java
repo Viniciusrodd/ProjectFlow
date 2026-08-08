@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public record OrganizationDTO (
 
+   UUID ownerId,
    String name,
-   String description,
-   UUID ownerId   
+   String description
 
 ) {}
