@@ -72,4 +72,15 @@ public class OrganizationRepository {
       return OrganizationResponseDTO.get(organization);
    }
 
+
+   // get entity by id
+   public OrganizationEntity getEntityById(UUID id) throws NoResultException {
+      OrganizationEntity organization = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return organization;
+   }
+
 }
