@@ -103,4 +103,21 @@ public class OrganizationController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // get organization by owner id
+   @GetMapping("/organizations/{ownerId}")
+   @Operation(summary = "Get organizations by owner id")
+   public ResponseEntity<ApiResponse<List<OrganizationResponseDTO>>> getByOwnerId(@PathVariable UUID ownerId) {
+      List<OrganizationResponseDTO> organizations = this.organizationService.getByOwnerId(ownerId);
+
+      ApiResponse<List<OrganizationResponseDTO>> response = new ApiResponse.Builder<List<OrganizationResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(organizations)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
