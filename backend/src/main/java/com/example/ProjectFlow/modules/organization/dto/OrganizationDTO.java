@@ -12,18 +12,18 @@ import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 public record OrganizationDTO (
 
    UUID id,
+   UUID ownerId,
    String name,
-   String description,
-   UUID ownerId
+   String description
 
 ) {
  
    public static OrganizationDTO get(OrganizationEntity document) {
       return new OrganizationDTO(
          document.getId(),
+         document.getOwnerId(),
          document.getName(),
-         document.getDescription(),
-         document.getOwnerId()
+         document.getDescription()
       );
    }
 
