@@ -100,4 +100,26 @@ public class OrganizationRepository {
       return organizations;
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(o) FROM OrganizationEntity o WHERE o.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
+
+   // exists by owner id
+   public boolean existsByOwnerId(UUID ownerId) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(o) FROM OrganizationEntity o WHERE o.owner.id = :ownerId", Long.class)
+         .setParameter("ownerId", ownerId)
+         .getSingleResult();
+
+      return count > 0;
+   }   
+
 }
