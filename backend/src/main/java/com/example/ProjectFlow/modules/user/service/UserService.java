@@ -59,8 +59,8 @@ public class UserService {
 
 
    // get all users
-   public List<UserProfileDTO> getAllUsers() {
-      List<UserProfileDTO> users = this.userRepository.getAllUsers();
+   public List<UserProfileDTO> getAll() {
+      List<UserProfileDTO> users = this.userRepository.getAll();
 
       if(users.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
@@ -172,7 +172,7 @@ public class UserService {
 
    // update user
    @Transactional
-   public UserProfileDTO updateUser(UUID userId, UserUpdateDTO data) {
+   public UserProfileDTO update(UUID userId, UserUpdateDTO data) {
       this.userValidator.updateValidations(data);
       
       try {
@@ -192,7 +192,7 @@ public class UserService {
             finalData = data.withEncryptedPassword(encryptedPassword);
          }
 
-         return this.userRepository.updateUser(userId, finalData);
+         return this.userRepository.update(userId, finalData);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -205,11 +205,11 @@ public class UserService {
 
    // delete user
    @Transactional
-   public UserDeletedDTO deleteUser(UUID userId) {
+   public UserDeletedDTO delete(UUID userId) {
       this.userValidator.idValidate(userId);
 
       try {
-         return this.userRepository.deleteUser(userId);
+         return this.userRepository.delete(userId);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(

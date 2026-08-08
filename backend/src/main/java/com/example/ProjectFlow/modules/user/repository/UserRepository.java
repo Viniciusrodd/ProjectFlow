@@ -35,7 +35,7 @@ public class UserRepository {
 
 
    // get all
-   public List<UserProfileDTO> getAllUsers() {
+   public List<UserProfileDTO> getAll() {
       List<UserEntity> usersDocument = this.entityManager
          .createQuery("SELECT u FROM UserEntity u ORDER BY u.id ASC", UserEntity.class)
          .getResultList();
@@ -126,7 +126,7 @@ public class UserRepository {
 
    // update user
    @Transactional
-   public UserProfileDTO updateUser(UUID userId, UserUpdateDTO data) throws NoResultException {
+   public UserProfileDTO update(UUID userId, UserUpdateDTO data) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
@@ -142,7 +142,7 @@ public class UserRepository {
 
    // delete user
    @Transactional
-   public UserDeletedDTO deleteUser(UUID userId) throws NoResultException {
+   public UserDeletedDTO delete(UUID userId) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)

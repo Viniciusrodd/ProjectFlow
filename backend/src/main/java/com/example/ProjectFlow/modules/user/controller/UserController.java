@@ -57,7 +57,7 @@ public class UserController {
    @GetMapping("/users")
    @Operation(summary = "Get all users")
    public ResponseEntity<ApiResponse<List<UserProfileDTO>>> getAllUsers() {
-      List<UserProfileDTO> users = this.userService.getAllUsers();
+      List<UserProfileDTO> users = this.userService.getAll();
 
       ApiResponse<List<UserProfileDTO>> response = new ApiResponse.Builder<List<UserProfileDTO>>()
          .success(true)
@@ -94,7 +94,7 @@ public class UserController {
       @PathVariable UUID userId, 
       @RequestBody UserUpdateDTO data
    ) {
-      UserProfileDTO user = this.userService.updateUser(userId, data);
+      UserProfileDTO user = this.userService.update(userId, data);
 
       ApiResponse<UserProfileDTO> response = new ApiResponse.Builder<UserProfileDTO>()
          .success(true)
@@ -111,7 +111,7 @@ public class UserController {
    @DeleteMapping(value = "user/{userId}")
    @Operation(summary = "Delete user")
    public ResponseEntity<ApiResponse<UserDeletedDTO>> deleteUser(@PathVariable UUID userId) {
-      UserDeletedDTO userDeleted = this.userService.deleteUser(userId);
+      UserDeletedDTO userDeleted = this.userService.delete(userId);
 
       ApiResponse<UserDeletedDTO> response = new ApiResponse.Builder<UserDeletedDTO>()
          .success(true)
