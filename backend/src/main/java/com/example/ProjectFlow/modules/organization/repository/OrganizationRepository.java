@@ -83,4 +83,21 @@ public class OrganizationRepository {
       return organization;
    }
 
+
+   // get by owner id
+   public List<OrganizationResponseDTO> getByOwnerId(UUID ownerId) {
+      List<OrganizationEntity> organizationsDocument = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.owner.id = :ownerId ORDER BY o.createdAt ASC", OrganizationEntity.class)
+         .setParameter("ownerId", ownerId)
+         .getResultList();
+
+      List<OrganizationResponseDTO> organizations = new ArrayList<>();
+
+      for(OrganizationEntity organization : organizationsDocument) {
+         organizations.add(OrganizationResponseDTO.get(organization));
+      }
+
+      return organizations;
+   }
+
 }
