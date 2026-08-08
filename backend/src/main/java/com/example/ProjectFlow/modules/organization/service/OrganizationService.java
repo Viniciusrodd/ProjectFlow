@@ -4,8 +4,11 @@ package com.example.ProjectFlow.modules.organization.service;
 
 // imports
 import org.springframework.stereotype.Service;
+
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 
 // import repository
 import com.example.ProjectFlow.modules.organization.repository.OrganizationRepository;
@@ -76,6 +79,22 @@ public class OrganizationService {
       }
 
       return organizations;
+   }
+
+
+   // get by id
+   public OrganizationResponseDTO getById(UUID id) {
+      this.organizationValidator.idValidate(id);
+
+      try {
+         return this.organizationRepository.getById(id);
+      } 
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
