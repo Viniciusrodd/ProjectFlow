@@ -114,4 +114,21 @@ public class OrganizationService {
       }
    }
 
+
+   // get by owner id
+   public List<OrganizationResponseDTO> getByOwnerId(UUID ownerId) {
+      this.organizationValidator.ownerIdValidate(ownerId);
+
+      List<OrganizationResponseDTO> organizations = this.organizationRepository.getByOwnerId(ownerId);
+
+      if(organizations.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organizações não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return organizations;
+   }
+
 }
