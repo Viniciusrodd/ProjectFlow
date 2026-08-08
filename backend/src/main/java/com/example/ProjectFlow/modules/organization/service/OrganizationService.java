@@ -18,6 +18,7 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationValida
 
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
+import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
 
 // import service
@@ -88,6 +89,22 @@ public class OrganizationService {
 
       try {
          return this.organizationRepository.getById(id);
+      } 
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // get entity by id
+   public OrganizationEntity getEntityById(UUID id) {
+      this.organizationValidator.idValidate(id);
+
+      try {
+         return this.organizationRepository.getEntityById(id);
       } 
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
