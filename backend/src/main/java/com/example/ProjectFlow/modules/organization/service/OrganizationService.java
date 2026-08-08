@@ -131,4 +131,36 @@ public class OrganizationService {
       return organizations;
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.organizationValidator.idValidate(id);
+
+      boolean exist = this.organizationRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+      
+      return exist;
+   }
+
+
+   // exists by owner id
+   public boolean existsByOwnerId(UUID ownerId) {
+      this.organizationValidator.ownerIdValidate(ownerId);
+
+      boolean exist = this.organizationRepository.existsByOwnerId(ownerId);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+      
+      return exist;
+   }
+
 }
