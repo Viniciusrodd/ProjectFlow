@@ -89,6 +89,7 @@ public class OrganizationEntity implements SoftDeleteInterface {
    // getters
    public UUID getId() { return this.id; }
    public UserEntity getOwner() { return this.owner; }
+   public UUID getOwnerId() { return this.owner.getId(); }
    public List<OrganizationMembersEntity> getMembers() { return this.members; }
    public List<ProjectEntity> getProjects() { return this.projects; }
    public String getName() { return this.name; }
