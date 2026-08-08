@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 
 // import DTOs
@@ -25,6 +26,7 @@ public class AuthRepository {
    private EntityManager entityManager;
    
    // register
+   @Transactional
    public RegisterResponseDTO register(RegisterDTO data) {
       UserEntity user = new UserEntity();
         
