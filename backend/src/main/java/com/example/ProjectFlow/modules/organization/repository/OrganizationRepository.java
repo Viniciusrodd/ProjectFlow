@@ -4,6 +4,8 @@ package com.example.ProjectFlow.modules.organization.repository;
 
 // imports
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
@@ -39,6 +41,22 @@ public class OrganizationRepository {
       this.entityManager.persist(organization);
 
       return OrganizationResponseDTO.get(organization);
-   } 
+   }
+
+
+   // get all
+   public List<OrganizationResponseDTO> getAll() {
+      List<OrganizationEntity> organizationsDocument = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o ORDER BY o.createdAt ASC", OrganizationEntity.class)
+         .getResultList();
+
+      List<OrganizationResponseDTO> organizations = new ArrayList<>();
+
+      for(OrganizationEntity organization : organizationsDocument) {
+         organizations.add(OrganizationResponseDTO.get(organization));
+      }
+
+      return organizations;
+   }
 
 }
