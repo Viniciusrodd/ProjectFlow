@@ -23,6 +23,7 @@ import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
 import com.example.ProjectFlow.modules.user.dto.UserDTO;
 import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
 import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
+import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.user.dto.UserDeletedDTO;
 
 // import exceptions
@@ -79,6 +80,22 @@ public class UserService {
 
       try {
          return this.userRepository.getById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // get entity by id
+   public UserEntity getEntityById(UUID id) {
+      this.userValidator.idValidate(id);
+
+      try {
+         return this.userRepository.getEntityById(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(

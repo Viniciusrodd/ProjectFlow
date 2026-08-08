@@ -31,7 +31,7 @@ public class UserRepository {
  
    // properties
    @PersistenceContext
-   private EntityManager entityManager;
+   private EntityManager entityManager;   
 
 
    // get all
@@ -58,6 +58,17 @@ public class UserRepository {
          .getSingleResult();
       
       return UserProfileDTO.get(user);
+   }
+
+
+   // get entity by id
+   public UserEntity getEntityById(UUID id) throws NoResultException {
+      UserEntity user = this.entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.id = :id", UserEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return user;
    }
 
    
