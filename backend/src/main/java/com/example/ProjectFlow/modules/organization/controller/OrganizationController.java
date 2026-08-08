@@ -5,8 +5,11 @@ package com.example.ProjectFlow.modules.organization.controller;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -61,6 +64,23 @@ public class OrganizationController {
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get all organizations
+   @GetMapping("/organizations")
+   @Operation(summary = "Get all organizations")
+   public ResponseEntity<ApiResponse<List<OrganizationResponseDTO>>> getAllOrganizations() {
+      List<OrganizationResponseDTO> organizations = this.organizationService.getAll();
+
+      ApiResponse<List<OrganizationResponseDTO>> response = new ApiResponse.Builder<List<OrganizationResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(organizations)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
