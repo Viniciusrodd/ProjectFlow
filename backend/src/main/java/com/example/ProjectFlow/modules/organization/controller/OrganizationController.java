@@ -9,6 +9,7 @@ import java.util.UUID;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationUpdateDTO;
 
@@ -137,6 +139,23 @@ public class OrganizationController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.UPDATED)
          .data(organization)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete organization
+   @DeleteMapping("/organization/{id}")
+   @Operation(summary = "Delete organization")
+   public ResponseEntity<ApiResponse<OrganizationDeletedDTO>> deleteOrganization(@PathVariable UUID id) {
+      OrganizationDeletedDTO organizationDeleted = this.organizationService.delete(id);
+
+      ApiResponse<OrganizationDeletedDTO> response = new ApiResponse.Builder<OrganizationDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(organizationDeleted)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
