@@ -137,4 +137,19 @@ public class OrganizationRepository {
       return organization;
    }
 
+
+   // remove logo image id
+   @Transactional
+   public OrganizationEntity removeLogoImageId(UUID id) throws NoResultException {
+      OrganizationEntity organization = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // remove
+      organization.setLogoImageId(null);
+
+      return organization;
+   }
+
 }
