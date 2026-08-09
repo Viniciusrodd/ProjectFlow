@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.organization.repository;
 
 // imports
 import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import jakarta.persistence.NoResultException;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationUpdateDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationDeletedDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -173,5 +175,20 @@ public class OrganizationRepository {
    
       return OrganizationResponseDTO.get(organization);
    }
+
+
+   // delete organization
+   @Transactional
+   public OrganizationDeletedDTO delete(UUID id) throws NoResultException {
+      OrganizationEntity organization = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      organization.setDeletedAt(LocalDateTime.now());
+
+      return OrganizationDeletedDTO.get(organization);
+   } 
 
 }
