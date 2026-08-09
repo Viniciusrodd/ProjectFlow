@@ -6,6 +6,7 @@ package com.example.ProjectFlow.modules.organization.repository;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 // jakarta imports
@@ -17,6 +18,7 @@ import jakarta.persistence.NoResultException;
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationUpdateDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -33,12 +35,12 @@ public class OrganizationRepository {
 
    // create organization
    @Transactional
-   public OrganizationResponseDTO create(OrganizationDTO data, UserEntity owner) {
+   public OrganizationResponseDTO create(OrganizationDTO data, UserEntity ownerEntity) {
       OrganizationEntity organization = new OrganizationEntity();
 
       organization.setName(data.name());
       organization.setDescription(data.description());
-      organization.setOwner(owner);
+      organization.setOwner(ownerEntity);
 
       this.entityManager.persist(organization);
 
@@ -150,6 +152,26 @@ public class OrganizationRepository {
       organization.setLogoImageId(null);
 
       return organization;
+   }
+
+
+   // update organization
+   @Transactional
+   public OrganizationResponseDTO update(
+      UUID id, 
+      OrganizationUpdateDTO data, 
+      Optional<UserEntity> owner
+   ) throws NoResultException {
+      OrganizationEntity organization = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      owner.ifPresent(ownerId -> organization.setOwner(ownerId));
+      Optional.ofNullable(data.name()).ifPresent(name -> organization.setName(name));
+      Optional.ofNullable(data.description()).ifPresent(description -> organization.setDescription(description));
+   
+      return OrganizationResponseDTO.get(organization);
    }
 
 }
