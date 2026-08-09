@@ -39,6 +39,24 @@ public class OrganizationValidator {
    }
 
 
+   // logo image id validate
+   public void logoImageIdValidate(String logoImageId) {
+      if(logoImageId == null) {
+         throw MultiExceptions.badRequest(String.format(
+            "%s: Id da logo é obrigatório",
+            ResponseMessages.BAD_REQUEST
+         ));
+      }
+
+      if(logoImageId.length() < 0) {
+         throw MultiExceptions.invalid(String.format(
+            "%s: Id da logo deve ser maior que 0",
+            ResponseMessages.INVALID_DATA
+         ));
+      }
+   }
+
+
    // name validate
    public void nameValidate(String name) {
       if(name == null || name.trim().isEmpty()) {
