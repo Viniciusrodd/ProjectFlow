@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 // http imports
@@ -33,6 +34,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationUpdateDTO;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
@@ -115,6 +117,26 @@ public class OrganizationController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(organizations)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update organization
+   @PutMapping("/organization/{id}")
+   @Operation(summary = "Update organization")
+   public ResponseEntity<ApiResponse<OrganizationResponseDTO>> updateOrganization(
+      @PathVariable UUID id,
+      @RequestBody OrganizationUpdateDTO data
+   ) {
+      OrganizationResponseDTO organization = this.organizationService.update(id, data);
+
+      ApiResponse<OrganizationResponseDTO> response = new ApiResponse.Builder<OrganizationResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(organization)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
