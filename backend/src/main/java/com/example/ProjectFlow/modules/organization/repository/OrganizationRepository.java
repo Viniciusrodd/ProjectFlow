@@ -120,6 +120,21 @@ public class OrganizationRepository {
          .getSingleResult();
 
       return count > 0;
-   }   
+   }
+
+
+   // update logo image id
+   @Transactional
+   public OrganizationEntity updateLogoImageId(UUID id, String logoImageId) throws NoResultException {
+      OrganizationEntity organization = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      organization.setLogoImageId(logoImageId);
+
+      return organization;
+   }
 
 }
