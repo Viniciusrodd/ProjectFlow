@@ -163,4 +163,22 @@ public class OrganizationService {
       return exist;
    }
 
+
+   // update logo image id
+   @Transactional
+   public void updateLogoImageId(UUID id, String logoImageId) {
+      this.organizationValidator.idValidate(id);
+      this.organizationValidator.logoImageIdValidate(logoImageId);
+
+      try {
+         this.organizationRepository.updateLogoImageId(id, logoImageId);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
