@@ -20,14 +20,15 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationValida
 
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
-import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationUpdateDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
 
 // import entity
+import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import exceptions
@@ -214,6 +215,23 @@ public class OrganizationService {
             .map(ownerId -> this.userService.getEntityById(ownerId));
 
          return this.organizationRepository.update(id, data, owner);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // delete organization
+   @Transactional
+   public OrganizationDeletedDTO delete(UUID id) {
+      this.organizationValidator.idValidate(id);
+
+      try {
+         return this.organizationRepository.delete(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
