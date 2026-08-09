@@ -241,4 +241,20 @@ public class OrganizationService {
       }
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      this.organizationValidator.idValidate(id);
+
+      try {
+         return this.organizationRepository.isDeleted(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }

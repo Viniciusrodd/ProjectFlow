@@ -189,6 +189,17 @@ public class OrganizationRepository {
       organization.setDeletedAt(LocalDateTime.now());
 
       return OrganizationDeletedDTO.get(organization);
-   } 
+   }
+
+
+   // is deleted
+   public boolean isDeleted(UUID id) throws NoResultException {
+      OrganizationEntity organization = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return organization.isDeleted();
+   }
 
 }
