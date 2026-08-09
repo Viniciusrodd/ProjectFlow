@@ -4,11 +4,13 @@ package com.example.ProjectFlow.modules.organization.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+// jakarta imports
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.UUID;
 
 // import repository
 import com.example.ProjectFlow.modules.organization.repository.OrganizationRepository;
@@ -20,6 +22,7 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationValida
 import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationUpdateDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
@@ -62,9 +65,9 @@ public class OrganizationService {
       if(!data.description().trim().isEmpty()) this.organizationValidator.descriptionValidate(data.description());
    
       // get owner data
-      UserEntity user = this.userService.getEntityById(data.ownerId());
+      UserEntity owner = this.userService.getEntityById(data.ownerId());
 
-      return this.organizationRepository.create(data, user);
+      return this.organizationRepository.create(data, owner);
    }
 
 
@@ -189,6 +192,28 @@ public class OrganizationService {
 
       try {
          this.organizationRepository.removeLogoImageId(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // update organization
+   @Transactional
+   public OrganizationResponseDTO update(UUID id, OrganizationUpdateDTO data) {
+      this.organizationValidator.idValidate(id);
+      this.organizationValidator.updateValidations(data);
+      
+      try {
+         // owner update - check
+         Optional<UserEntity> owner = Optional.ofNullable(data.ownerId())
+            .map(ownerId -> this.userService.getEntityById(ownerId));
+
+         return this.organizationRepository.update(id, data, owner);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
