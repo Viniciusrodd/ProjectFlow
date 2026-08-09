@@ -181,4 +181,21 @@ public class OrganizationService {
       }
    }
 
+
+   // remove logo image id
+   @Transactional
+   public void removeLogoImageId(UUID id) {
+      this.organizationValidator.idValidate(id);
+
+      try {
+         this.organizationRepository.removeLogoImageId(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
