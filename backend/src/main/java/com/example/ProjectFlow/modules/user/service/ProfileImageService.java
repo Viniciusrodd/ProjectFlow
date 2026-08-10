@@ -28,7 +28,7 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
-// import entities
+// import document
 import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 
 
@@ -56,10 +56,7 @@ public class ProfileImageService {
    // profile image upload
    @Transactional
    public ProfileImageResponseDTO uploadProfileImage(UUID userId, MultipartFile file) {
-      // user existence - validation
       this.userService.existsById(userId);
-
-      // image file - validation
       this.profileImageValidator.validate(file);
 
       try {
@@ -89,7 +86,7 @@ public class ProfileImageService {
       }
       catch (IOException error) {
          throw MultiExceptions.internal(String.format(
-            "%s: Falha ao processar imagem de usuário: %e", 
+            "%s: Falha ao processar imagem de usuário: %s", 
             ResponseMessages.INTERNAL_ERROR,
             error.getMessage()
          ));
@@ -99,7 +96,6 @@ public class ProfileImageService {
 
    // get profile image
    public ProfileImageDocument getProfileImage(UUID userId) {
-      // user existence - validation
       this.userService.existsById(userId);
 
       ProfileImageDocument profileImage = this.profileImageRepository.findByUserId(userId);
@@ -130,7 +126,6 @@ public class ProfileImageService {
 
    // delete profile image
    public void deleteProfileImage(UUID userId) {
-      // user existence - validation
       this.userService.existsById(userId);
 
       // profile image existence - validation

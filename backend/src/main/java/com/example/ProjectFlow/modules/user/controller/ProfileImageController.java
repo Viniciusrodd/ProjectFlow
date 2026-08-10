@@ -32,7 +32,7 @@ import com.example.ProjectFlow.modules.user.service.ProfileImageService;
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
 
-// import entities
+// import document
 import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 
 // import DTOs
