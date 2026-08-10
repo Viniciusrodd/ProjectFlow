@@ -8,7 +8,7 @@ import java.util.UUID;
 // mongo imports
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-// import entities
+// import document
 import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 
 
