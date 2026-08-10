@@ -26,18 +26,19 @@ public class ValidationConstants {
 
    // file limits
    public static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
-   public static final long MAX_ATTACHMENT_SIZE = 25 * 1024 * 1024; // 25MB
+   public static final long MAX_ORGANIZATION_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
    public static final long MAX_PROJECT_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
+   public static final long MAX_ATTACHMENT_SIZE = 25 * 1024 * 1024; // 25MB
 
    // image MIME types
    public static final String[] ALLOWED_IMAGE_TYPES = {
-      "image/jpeg", "image/png", "image/webp"
+      "image/jpg", "image/jpeg", "image/png", "image/webp"
    };
 
    // attachment MIME types
    public static final String[] ALLOWED_ATTACHMENT_TYPES = {
       "application/pdf", 
-      "image/jpeg", "image/png",
+      "image/jpg", "image/jpeg", "image/png", "image/webp",
       "application/msword", 
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       "application/vnd.ms-excel",
