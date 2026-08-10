@@ -18,9 +18,26 @@ import com.example.ProjectFlow.common.constants.ValidationConstants;
 
 @Component
 public class ProfileImageValidator {
- 
-   public void validate(MultipartFile file) {
+   
+   // id validation
+   public void idValidate(String id) {
+      if(id == null) {
+         throw MultiExceptions.badRequest(String.format(
+            "%s: Id da imagem é obrigatório",
+            ResponseMessages.BAD_REQUEST
+         ));
+      }
+   
+      if(id.length() <= 0) {
+         throw MultiExceptions.invalid(String.format(
+            "%s: Id da imagem deve ser maior que 0",
+            ResponseMessages.INVALID_DATA
+         ));
+      }
+   }
 
+
+   public void validate(MultipartFile file) {
       // file
       if(file == null || file.isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
@@ -41,7 +58,7 @@ public class ProfileImageValidator {
       String mimeType = file.getContentType();
       if(mimeType == null || !Arrays.asList(ValidationConstants.ALLOWED_IMAGE_TYPES).contains(mimeType)) {
          throw MultiExceptions.badRequest(String.format(
-            "%s: Formato de imagem não suportado. Use: JPEG, PNG ou WEBP", 
+            "%s: Formato de imagem não suportado. Use: JPG, JPEG, PNG ou WEBP", 
             ResponseMessages.INVALID_DATA
          ));
       }
@@ -49,30 +66,11 @@ public class ProfileImageValidator {
       // extension
       String fileName = file.getOriginalFilename();
       String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-      List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "gif", "webp");
+      List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "webp");
       
       if(!allowedExtensions.contains(extension)) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Extensão de arquivo não suportada", 
-            ResponseMessages.INVALID_DATA
-         ));
-      }
-
-   }
-
-
-   // profile id validation
-   public void idValidate(String profileImageId) {
-      if(profileImageId == null) {
-         throw MultiExceptions.badRequest(String.format(
-            "%s: Id de imagem é obrigatório",
-            ResponseMessages.BAD_REQUEST
-         ));
-      }
-
-      if(profileImageId.length() <= 0) {
-         throw MultiExceptions.invalid(String.format(
-            "%s: Id de imagem deve ser maior que 0",
             ResponseMessages.INVALID_DATA
          ));
       }
