@@ -101,7 +101,7 @@ public class OrganizationImageService {
       OrganizationImageDocument organizationImage = this.organizationImageRepository.findByOrganizationId(organizationId);
       if(organizationImage == null) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Imagem da organização não existe",
+            "%s: Imagem de organização não existe",
             ResponseMessages.NOT_FOUND
          ));
       }
@@ -121,6 +121,26 @@ public class OrganizationImageService {
       }
 
       return organizationImages;
+   }
+
+
+   // delete organization image
+   public void deleteOrganizationImage(UUID organizationId) {
+      this.organizationService.existsById(organizationId);
+
+      // organization image existence - validation
+      if(this.organizationImageRepository.findByOrganizationId(organizationId) == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Imagem de organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // delete organization image id - mysql
+      this.organizationService.removeLogoImageId(organizationId);
+
+      // delete profile image - mongodb
+      this.organizationImageRepository.deleteByOrganizationId(organizationId);
    }
 
 }
