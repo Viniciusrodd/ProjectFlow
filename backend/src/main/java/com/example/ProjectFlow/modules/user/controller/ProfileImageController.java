@@ -96,7 +96,7 @@ public class ProfileImageController {
    // get profile image - download
    @GetMapping(
       value = "/{userId}/download", 
-      produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp" }
+      produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp", "image/jpg" }
    )
    @Operation(summary = "Download profile image")
    public ResponseEntity<byte[]> getProfileImageData(@PathVariable UUID userId) {
