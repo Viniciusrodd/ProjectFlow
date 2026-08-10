@@ -21,6 +21,6 @@ public interface OrganizationImageRepository extends MongoRepository<Organizatio
    void deleteByOrganizationId(UUID organizationId);
 
    // exists by organization id
-   OrganizationImageDocument existsByOrganizationId(UUID organizationId);
+   boolean existsByOrganizationId(UUID organizationId);
 
 }
