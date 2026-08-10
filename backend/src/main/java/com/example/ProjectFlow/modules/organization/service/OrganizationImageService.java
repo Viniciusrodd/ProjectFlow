@@ -90,7 +90,22 @@ public class OrganizationImageService {
             error.getMessage()
          ));
       }
+   }
 
+
+   // get organization image
+   public OrganizationImageDocument getOrganizationImage(UUID organizationId) {
+      this.organizationService.existsById(organizationId);
+
+      OrganizationImageDocument organizationImage = this.organizationImageRepository.findByOrganizationId(organizationId);
+      if(organizationImage == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Imagem da organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return organizationImage;
    }
 
 }
