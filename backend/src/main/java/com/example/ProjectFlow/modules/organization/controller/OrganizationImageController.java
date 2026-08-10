@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -29,6 +30,7 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationImageSer
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
+import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
 
 // import document
 
@@ -70,6 +72,28 @@ public class OrganizationImageController {
       
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
    }
+
+
+   
+   // get organization image - infos
+   @GetMapping(value = "/{organizationId}")
+   @Operation(summary = "Get organization image data informations")
+   public ResponseEntity<ApiResponse<OrganizationImageResponseDTO>> getOrganizationImage(
+      @PathVariable UUID organizationId
+   ) {
+      OrganizationImageDocument organizationImageDocument = this.organizationImageService.getOrganizationImage(organizationId);
+      OrganizationImageResponseDTO organizationImage = OrganizationImageResponseDTO.get(organizationImageDocument);
+
+      ApiResponse<OrganizationImageResponseDTO> response = new ApiResponse.Builder<OrganizationImageResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(organizationImage)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 
 
 }
