@@ -73,7 +73,6 @@ public class OrganizationImageController {
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
    }
 
-
    
    // get organization image - infos
    @GetMapping(value = "/{organizationId}")
@@ -95,5 +94,20 @@ public class OrganizationImageController {
    }
 
 
+   // get organization image - download
+   @GetMapping(
+      value = "/{organizationId}/download",
+      produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp", "image/jpg" }
+   )
+   @Operation(summary = "Download organization image")
+   public ResponseEntity<byte[]> getOrganizationImageData(@PathVariable UUID organizationId) {
+      OrganizationImageDocument document = this.organizationImageService.getOrganizationImage(organizationId);
+
+      return ResponseEntity
+         .ok()
+         .contentType(MediaType.parseMediaType(document.getMimeType()))
+         .header("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"")
+         .body(document.getBinary());
+   }
 
 }
