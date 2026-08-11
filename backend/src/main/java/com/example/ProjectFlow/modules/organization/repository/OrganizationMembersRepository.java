@@ -18,6 +18,7 @@ import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersRespo
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
+import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 
@@ -40,7 +41,7 @@ public class OrganizationMembersRepository {
 
       organizationMembers.setUser(user);
       organizationMembers.setOrganization(organization);
-      organizationMembers.setRole(data.role());
+      organizationMembers.setRole(RoleEnum.valueOf(data.role()));
       organizationMembers.setJoinedAt(LocalDateTime.now());
 
       this.entityManager.persist(organizationMembers);
