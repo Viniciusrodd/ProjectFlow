@@ -23,6 +23,7 @@ import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationUpdateDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
@@ -37,6 +38,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import enum
+import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
+
 
 @Service
 public class OrganizationService {
@@ -45,16 +49,19 @@ public class OrganizationService {
    private final OrganizationRepository organizationRepository;
    private final OrganizationValidator organizationValidator;
    private final UserService userService;
+   private final OrganizationMemberService organizationMemberService;
 
    // constructor - dependency injection
    public OrganizationService(
       OrganizationRepository organizationRepository,
       OrganizationValidator organizationValidator,
-      UserService userService
+      UserService userService,
+      OrganizationMemberService organizationMemberService
    ) {
       this.organizationRepository = organizationRepository;
       this.organizationValidator = organizationValidator;
       this.userService = userService; 
+      this.organizationMemberService = organizationMemberService;
    }
 
 
@@ -68,7 +75,18 @@ public class OrganizationService {
       // get owner data
       UserEntity owner = this.userService.getEntityById(data.ownerId());
 
-      return this.organizationRepository.create(data, owner);
+      // organization creation
+      OrganizationResponseDTO organizationCreated = this.organizationRepository.create(data, owner);
+
+      // set organization member - owner
+      OrganizationMembersDTO organizationMembersData = new OrganizationMembersDTO(
+         organizationCreated.id(),
+         owner.getId(),
+         RoleEnum.OWNER.toString()
+      );
+      this.organizationMemberService.createMemberParticipation(organizationMembersData);
+
+      return organizationCreated;
    }
 
 

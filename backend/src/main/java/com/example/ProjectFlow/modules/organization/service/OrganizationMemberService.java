@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.organization.service;
 
+import org.springframework.context.annotation.Lazy;
 // imports
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class OrganizationMemberService {
       OrganizationMembersRepository organizationMembersRepository,
       OrganizationMembersValidator organizationMembersValidator,
       UserService userService,
-      OrganizationService organizationService
+      @Lazy OrganizationService organizationService // intentional cycle of circular dependency - (OrganizationService) needs to create "members", (OrganizationMemberService) needs to get "organizations".
    ) {
       this.organizationMembersRepository = organizationMembersRepository;
       this.organizationMembersValidator = organizationMembersValidator;
@@ -58,7 +59,7 @@ public class OrganizationMemberService {
    public OrganizationMembersResponseDTO createMemberParticipation(OrganizationMembersDTO data) {
       this.organizationMembersValidator.organizationIdValidate(data.organizationId());
       this.organizationMembersValidator.userIdValidate(data.userId());
-      this.organizationMembersValidator.roleValidate(data.role().toString());
+      this.organizationMembersValidator.roleValidate(data.role());
 
       // get organization data
       OrganizationEntity organization = this.organizationService.getEntityById(data.organizationId());
