@@ -121,4 +121,27 @@ public class OrganizationMemberService {
       return members;
    }
 
+
+   // check if user is a membership
+   public boolean checkUserMembership(UUID userId, UUID organizationId) {
+      this.organizationMembersValidator.userIdValidate(userId);
+      this.organizationMembersValidator.organizationIdValidate(organizationId);
+      
+      // user existence - check
+      this.userService.existsById(userId);
+      
+      // organization existence - check
+      this.organizationService.existsById(organizationId);
+
+      boolean exist = this.organizationMembersRepository.checkUserMembership(userId, organizationId);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não participa da organização",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
 }
