@@ -79,13 +79,15 @@ public class OrganizationMembersEntity implements SoftDeleteInterface {
 
 
    // constructor
-   protected OrganizationMembersEntity() {} 
+   public OrganizationMembersEntity() {} 
 
 
    // getters
    public UUID getId() { return this.id; }
    public OrganizationEntity getOrganization() { return this.organization; }
+   public UUID getOrganizationId() { return this.organization.getId(); }
    public UserEntity getUser() { return this.user; }
+   public UUID getUserId() { return this.user.getId(); }   
    public RoleEnum getRole() { return this.role; }
    public LocalDateTime getJoinedAt() { return this.joinedAt; }
    public LocalDateTime getUpdatedAt() { return this.updatedAt; }

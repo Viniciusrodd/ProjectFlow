@@ -2,6 +2,9 @@
 // packages
 package com.example.ProjectFlow.modules.organization.enums;
 
+// imports
+import com.fasterxml.jackson.annotation.JsonValue;
+
 
 public enum RoleEnum {
  
@@ -17,6 +20,20 @@ public enum RoleEnum {
    }
 
    // getters
+   @JsonValue
    public String getType() { return type; }
+
+   // is valid
+   public static boolean isValid(String type) {
+      if(type == null) return false;
+      
+      for(RoleEnum role : RoleEnum.values()) {
+         if(role.getType().equalsIgnoreCase(type)) {
+            return true;
+         }
+      }
+      
+      return false;
+   }
 
 }
