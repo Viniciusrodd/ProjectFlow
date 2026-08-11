@@ -89,4 +89,24 @@ public class OrganizationMembersController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // get all members by role
+   @GetMapping(value = "/organization/{organizationId}/members/role/{role}")
+   @Operation(summary = "Get all members of an organization by role")
+   public ResponseEntity<ApiResponse<List<OrganizationMembersCompleteResponseDTO>>> getAllMembersByRole(
+      @PathVariable UUID organizationId,
+      @PathVariable String role
+   ) {
+      List<OrganizationMembersCompleteResponseDTO> members = this.organizationMemberService.getAllMembersByRole(organizationId, role);
+
+      ApiResponse<List<OrganizationMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<OrganizationMembersCompleteResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(members)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
