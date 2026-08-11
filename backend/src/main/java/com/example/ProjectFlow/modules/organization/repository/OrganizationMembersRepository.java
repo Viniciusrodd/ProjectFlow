@@ -22,8 +22,10 @@ import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompl
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
-import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+
+// import enum
+import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 
 
 @Repository
@@ -45,7 +47,7 @@ public class OrganizationMembersRepository {
 
       organizationMembers.setUser(user);
       organizationMembers.setOrganization(organization);
-      organizationMembers.setRole(RoleEnum.valueOf(data.role()));
+      organizationMembers.setRole(RoleEnum.valueOf(data.role().toUpperCase()));
       organizationMembers.setJoinedAt(LocalDateTime.now());
 
       this.entityManager.persist(organizationMembers);
@@ -76,5 +78,34 @@ public class OrganizationMembersRepository {
 
       return allMembers;
    }
+
+
+   // get all members by role
+   public List<OrganizationMembersCompleteResponseDTO> getAllMembersByRole(
+      UUID organizationId,
+      RoleEnum role
+   ) {
+      List<OrganizationMembersEntity> members = this.entityManager
+         .createQuery(
+            "SELECT om FROM OrganizationMembersEntity om " +
+            "JOIN FETCH om.user " +
+            "WHERE om.organization.id = :organizationId " +
+            "AND om.role = :role " +
+            "AND om.deletedAt IS NULL",
+            OrganizationMembersEntity.class
+         )
+         .setParameter("organizationId", organizationId)
+         .setParameter("role", role)
+         .getResultList();
+
+      List<OrganizationMembersCompleteResponseDTO> allMembers = new ArrayList<>();
+      
+      for(OrganizationMembersEntity member : members) {
+         allMembers.add(OrganizationMembersCompleteResponseDTO.get(member));
+      }
+
+      return allMembers;
+   }
+
 
 }
