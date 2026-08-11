@@ -2,9 +2,12 @@
 // packages
 package com.example.ProjectFlow.modules.organization.service;
 
-import org.springframework.context.annotation.Lazy;
 // imports
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.context.annotation.Lazy;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
@@ -18,6 +21,7 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationMember
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
@@ -27,8 +31,10 @@ import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Service
@@ -68,6 +74,26 @@ public class OrganizationMemberService {
       UserEntity user = this.userService.getEntityById(data.userId());
 
       return this.organizationMembersRepository.createMemberParticipation(data, user, organization);
+   }
+
+
+   // get all organization members
+   public List<OrganizationMembersCompleteResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
+      this.organizationMembersValidator.organizationIdValidate(organizationId);
+      
+      // organization existence - check
+      this.organizationService.existsById(organizationId);
+
+      List<OrganizationMembersCompleteResponseDTO> members = this.organizationMembersRepository.getAllMembersByOrganizationId(organizationId);
+
+      if(members.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membros não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return members;
    }
 
 }
