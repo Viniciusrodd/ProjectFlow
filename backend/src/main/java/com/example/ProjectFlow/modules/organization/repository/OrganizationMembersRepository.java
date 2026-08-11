@@ -5,6 +5,9 @@ package com.example.ProjectFlow.modules.organization.repository;
 // imports
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
@@ -14,6 +17,7 @@ import jakarta.persistence.EntityManager;
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -47,6 +51,30 @@ public class OrganizationMembersRepository {
       this.entityManager.persist(organizationMembers);
 
       return OrganizationMembersResponseDTO.get(organizationMembers);
+   }
+
+
+   // get all organization members
+   public List<OrganizationMembersCompleteResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
+      List<OrganizationMembersEntity> members = this.entityManager
+         .createQuery(
+            "SELECT om FROM OrganizationMembersEntity om " +
+            "JOIN FETCH om.user " +
+            "WHERE om.organization.id = :organizationId " +
+            "AND om.deletedAt IS NULL " +
+            "ORDER BY om.joinedAt DESC", 
+            OrganizationMembersEntity.class
+         )
+         .setParameter("organizationId", organizationId)
+         .getResultList();
+
+      List<OrganizationMembersCompleteResponseDTO> allMembers = new ArrayList<>();
+      
+      for(OrganizationMembersEntity member : members) {
+         allMembers.add(OrganizationMembersCompleteResponseDTO.get(member));
+      }
+
+      return allMembers;
    }
 
 }
