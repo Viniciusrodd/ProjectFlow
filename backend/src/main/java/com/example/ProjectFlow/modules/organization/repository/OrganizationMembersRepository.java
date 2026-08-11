@@ -108,4 +108,22 @@ public class OrganizationMembersRepository {
    }
 
 
+   // check if user is a membership
+   public boolean checkUserMembership(UUID userId, UUID organizationId) {
+      Long count = this.entityManager
+         .createQuery(
+            "SELECT COUNT(om) FROM OrganizationMembersEntity om " +
+            "WHERE om.user.id = :userId " +
+            "AND om.organization.id = :organizationId " +
+            "AND om.deletedAt IS NULL",
+            Long.class
+         )
+         .setParameter("userId", userId)
+         .setParameter("organizationId", organizationId)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
+
 }
