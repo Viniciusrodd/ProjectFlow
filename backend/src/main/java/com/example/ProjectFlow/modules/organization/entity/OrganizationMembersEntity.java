@@ -79,7 +79,7 @@ public class OrganizationMembersEntity implements SoftDeleteInterface {
 
 
    // constructor
-   protected OrganizationMembersEntity() {} 
+   public OrganizationMembersEntity() {} 
 
 
    // getters
