@@ -2,6 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.project.service;
 
+import java.util.List;
+
 // imports
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,10 @@ import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import enum
 
@@ -75,6 +79,21 @@ public class ProjectService {
       // set project member - admin...
 
       return this.projectRepository.create(data, organization, owner);
+   }
+
+
+   // get all 
+   public List<ProjectResponseDTO> getAll() {
+      List<ProjectResponseDTO> projects = this.projectRepository.getAll();
+
+      if(projects.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projetos não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return projects;
    }
 
 }
