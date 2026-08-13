@@ -90,4 +90,22 @@ public class ProjectRepository {
       return project;
    }
 
+
+   // get all by organization id
+   public List<ProjectResponseDTO> getByOrganizationId(UUID organizationId) {
+      List<ProjectEntity> projectsDocument = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.organization.id = :organizationId ORDER BY p.createdAt ASC", ProjectEntity.class)
+         .setParameter("organizationId", organizationId)
+         .getResultList();
+
+      List<ProjectResponseDTO> projects = new ArrayList<>();
+
+      for(ProjectEntity project : projectsDocument) {
+         projects.add(ProjectResponseDTO.get(project));
+      }
+
+      return projects;
+   }
+
+
 }
