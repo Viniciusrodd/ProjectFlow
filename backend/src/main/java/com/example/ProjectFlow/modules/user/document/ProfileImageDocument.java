@@ -41,7 +41,7 @@ public class ProfileImageDocument {
    public ProfileImageDocument() {}
 
 
-   // constructor
+   // constructor - builder
    public ProfileImageDocument(Builder builder) {
       setUserId(builder.userId);
       setFileName(builder.fileName);
