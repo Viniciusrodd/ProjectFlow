@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.project.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 // imports
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
@@ -64,6 +66,17 @@ public class ProjectRepository {
       }
 
       return projects;
+   }
+
+
+   // get by id
+   public ProjectResponseDTO getById(UUID id) throws NoResultException {
+      ProjectEntity project = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return ProjectResponseDTO.get(project);
    }
 
 }
