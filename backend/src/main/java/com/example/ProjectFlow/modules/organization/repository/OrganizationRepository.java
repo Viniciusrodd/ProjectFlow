@@ -88,7 +88,7 @@ public class OrganizationRepository {
    }
 
 
-   // get by owner id
+   // get all by owner id
    public List<OrganizationResponseDTO> getByOwnerId(UUID ownerId) {
       List<OrganizationEntity> organizationsDocument = this.entityManager
          .createQuery("SELECT o FROM OrganizationEntity o WHERE o.owner.id = :ownerId ORDER BY o.createdAt ASC", OrganizationEntity.class)

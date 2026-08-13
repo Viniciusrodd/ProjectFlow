@@ -108,9 +108,9 @@ public class OrganizationController {
    }
 
 
-   // get organization by owner id
+   // get all organizations by owner id
    @GetMapping(value = "/organizations/{ownerId}")
-   @Operation(summary = "Get organizations by owner id")
+   @Operation(summary = "Get all organizations by owner id")
    public ResponseEntity<ApiResponse<List<OrganizationResponseDTO>>> getByOwnerId(@PathVariable UUID ownerId) {
       List<OrganizationResponseDTO> organizations = this.organizationService.getByOwnerId(ownerId);
 
