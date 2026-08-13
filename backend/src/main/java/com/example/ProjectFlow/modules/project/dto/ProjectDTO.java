@@ -11,7 +11,6 @@ public record ProjectDTO (
    UUID organizationId,
    UUID ownerId,
    String name,
-   String description,
-   String status
+   String description
 
 ) {}
