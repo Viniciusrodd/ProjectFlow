@@ -170,22 +170,6 @@ public class OrganizationService {
    }
 
 
-   // exists by owner id
-   public boolean existsByOwnerId(UUID ownerId) {
-      this.organizationValidator.ownerIdValidate(ownerId);
-
-      boolean exist = this.organizationRepository.existsByOwnerId(ownerId);
-      if(!exist) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Organização não existe",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-      
-      return exist;
-   }
-
-
    // update logo image id
    @Transactional
    public void updateLogoImageId(UUID id, String logoImageId) {

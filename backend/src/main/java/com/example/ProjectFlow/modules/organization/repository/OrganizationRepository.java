@@ -116,17 +116,6 @@ public class OrganizationRepository {
    }
 
 
-   // exists by owner id
-   public boolean existsByOwnerId(UUID ownerId) {
-      Long count = this.entityManager
-         .createQuery("SELECT COUNT(o) FROM OrganizationEntity o WHERE o.owner.id = :ownerId", Long.class)
-         .setParameter("ownerId", ownerId)
-         .getSingleResult();
-
-      return count > 0;
-   }
-
-
    // update logo image id
    @Transactional
    public OrganizationEntity updateLogoImageId(UUID id, String logoImageId) throws NoResultException {
