@@ -7,10 +7,12 @@ package com.example.ProjectFlow.modules.organization.controller;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -60,13 +62,13 @@ public class OrganizationMembersController {
    public ResponseEntity<ApiResponse<OrganizationMembersResponseDTO>> createMemberParticipation(
       @RequestBody OrganizationMembersDTO data
    ) {
-      OrganizationMembersResponseDTO organizationMember = this.organizationMemberService.createMemberParticipation(data);
+      OrganizationMembersResponseDTO member = this.organizationMemberService.createMemberParticipation(data);
 
       ApiResponse<OrganizationMembersResponseDTO> response = new ApiResponse.Builder<OrganizationMembersResponseDTO>()
          .success(true)
          .statusCode(HttpStatus.CREATED.value())
          .message(ResponseMessages.CREATED)
-         .data(organizationMember)
+         .data(member)
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -93,19 +95,39 @@ public class OrganizationMembersController {
 
 
    // get all members by role
-   @GetMapping(value = "/organization/{organizationId}/members/role/{role}")
+   @GetMapping(value = "/organization/{organizationId}/members/role")
    @Operation(summary = "Get all members of an organization by role")
    public ResponseEntity<ApiResponse<List<OrganizationMembersCompleteResponseDTO>>> getAllMembersByRole(
       @PathVariable UUID organizationId,
-      @PathVariable String role
+      @RequestParam String r
    ) {
-      List<OrganizationMembersCompleteResponseDTO> members = this.organizationMemberService.getAllMembersByRole(organizationId, role);
+      List<OrganizationMembersCompleteResponseDTO> members = this.organizationMemberService.getAllMembersByRole(organizationId, r);
 
       ApiResponse<List<OrganizationMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<OrganizationMembersCompleteResponseDTO>>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(members)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update member role
+   @PutMapping(value = "/organization/member/{id}")
+   @Operation(summary = "Update a member role")
+   public ResponseEntity<ApiResponse<OrganizationMembersResponseDTO>> updateMemberRole(
+      @PathVariable UUID id,
+      @RequestParam String r
+   ) {
+      OrganizationMembersResponseDTO updatedMember = this.organizationMemberService.updateMemberRole(id, r);
+
+      ApiResponse<OrganizationMembersResponseDTO> response = new ApiResponse.Builder<OrganizationMembersResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedMember)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
