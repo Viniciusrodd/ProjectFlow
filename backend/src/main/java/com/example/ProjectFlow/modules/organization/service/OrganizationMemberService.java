@@ -155,7 +155,23 @@ public class OrganizationMemberService {
       try {
          return this.organizationMembersRepository.delete(id);
       }
-      catch(NoResultException error) {
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Participação não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      this.organizationMembersValidator.idValidate(id);
+
+      try {
+         return this.organizationMembersRepository.isDeleted(id);
+      }
+      catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
             "%s: Participação não existe",
             ResponseMessages.NOT_FOUND

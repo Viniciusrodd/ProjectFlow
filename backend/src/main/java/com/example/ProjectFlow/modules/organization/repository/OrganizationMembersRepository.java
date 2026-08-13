@@ -140,7 +140,17 @@ public class OrganizationMembersRepository {
       participation.setDeletedAt(LocalDateTime.now());
 
       return OrganizationMembersDeletedDTO.get(participation);
-   }  
+   }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      OrganizationMembersEntity participation = this.entityManager
+         .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return participation.isDeleted();
+   }
 
 }
