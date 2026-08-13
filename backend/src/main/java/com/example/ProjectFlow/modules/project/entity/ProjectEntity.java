@@ -104,13 +104,15 @@ public class ProjectEntity implements SoftDeleteInterface {
 
 
    // constructor
-   protected ProjectEntity() {}
+   public ProjectEntity() {}
 
 
    // getters
    public UUID getId() { return this.id; }
    public OrganizationEntity getOrganization() { return this.organization; }
+   public UUID getOrganizationId() { return this.organization.getId(); }
    public UserEntity getOwner() { return this.owner; }
+   public UUID getOwnerId() { return this.owner.getId(); }
    public List<ProjectMembersEntity> getMembers() { return this.members; }
    public BoardEntity getBoard() { return this.board; }
    public List<TasksEntity> getTasks() { return this.tasks; }
