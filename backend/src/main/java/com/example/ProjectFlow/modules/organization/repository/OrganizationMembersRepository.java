@@ -13,9 +13,11 @@ import java.util.UUID;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
 
@@ -124,6 +126,21 @@ public class OrganizationMembersRepository {
 
       return count > 0;
    }
+
+
+   // delete member participation
+   @Transactional
+   public OrganizationMembersDeletedDTO delete(UUID id) throws NoResultException {
+      OrganizationMembersEntity participation = this.entityManager
+         .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      participation.setDeletedAt(LocalDateTime.now());
+
+      return OrganizationMembersDeletedDTO.get(participation);
+   }  
 
 
 }
