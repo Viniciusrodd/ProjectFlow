@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.springframework.context.annotation.Lazy;
 
+import jakarta.persistence.NoResultException;
 // jakarta imports
 import jakarta.transaction.Transactional;
 
@@ -20,6 +21,7 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationMember
 
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
 
@@ -142,6 +144,23 @@ public class OrganizationMemberService {
       }
 
       return exist;
+   }
+
+
+   // delete member participation
+   @Transactional
+   public OrganizationMembersDeletedDTO delete(UUID id) {
+      this.organizationMembersValidator.idValidate(id);
+
+      try {
+         return this.organizationMembersRepository.delete(id);
+      }
+      catch(NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Participação não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
