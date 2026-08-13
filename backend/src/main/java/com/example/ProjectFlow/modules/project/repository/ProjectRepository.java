@@ -79,4 +79,15 @@ public class ProjectRepository {
       return ProjectResponseDTO.get(project);
    }
 
+
+   // get entity by id
+   public ProjectEntity getEntityById(UUID id) throws NoResultException {
+      ProjectEntity project = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return project;
+   }
+
 }

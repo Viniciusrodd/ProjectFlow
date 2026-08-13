@@ -21,7 +21,7 @@ import com.example.ProjectFlow.modules.project.validator.ProjectValidator;
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
-
+import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
@@ -104,6 +104,22 @@ public class ProjectService {
 
       try {
          return this.projectRepository.getById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // get entity by id
+   public ProjectEntity getEntityById(UUID id) {
+      this.projectValidator.idValidate(id);
+
+      try {
+         return this.projectRepository.getEntityById(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
