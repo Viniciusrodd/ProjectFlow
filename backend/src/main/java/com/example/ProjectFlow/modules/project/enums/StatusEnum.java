@@ -18,4 +18,17 @@ public enum StatusEnum {
    // getters
    public String getType() { return type; }
 
+   // is valid
+   public static boolean isValid(String type) {
+      if(type == null) return false;
+
+      for(StatusEnum status : StatusEnum.values()) {
+         if(status.getType().equalsIgnoreCase(type)) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
 }
