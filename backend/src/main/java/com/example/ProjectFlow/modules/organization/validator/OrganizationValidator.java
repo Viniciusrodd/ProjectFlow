@@ -4,7 +4,6 @@ package com.example.ProjectFlow.modules.organization.validator;
 
 // imports
 import org.springframework.stereotype.Component;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,7 +32,7 @@ public class OrganizationValidator {
    }
 
 
-   // ownerId validate
+   // owner id validate
    public void ownerIdValidate(UUID ownerId) {
       if(ownerId == null) {
          throw MultiExceptions.badRequest(String.format(
@@ -44,7 +43,7 @@ public class OrganizationValidator {
    }
 
 
-   // logo image id validate
+   // logo image id validations
    public void logoImageIdValidate(String logoImageId) {
       if(logoImageId == null) {
          throw MultiExceptions.badRequest(String.format(
@@ -62,7 +61,7 @@ public class OrganizationValidator {
    }
 
 
-   // name validate
+   // name validations
    public void nameValidate(String name) {
       if(name == null || name.trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
@@ -75,8 +74,8 @@ public class OrganizationValidator {
          throw MultiExceptions.invalid(String.format(
             "%s: Nome deve estar entre %d e %d caracteres",
             ResponseMessages.INVALID_DATA,
-            ValidationConstants.MIN_NAME_LENGTH,
-            ValidationConstants.MAX_NAME_LENGTH
+            ValidationConstants.MIN_ORGANIZATION_NAME_LENGTH,
+            ValidationConstants.MAX_ORGANIZATION_NAME_LENGTH
          ));
       }
    }

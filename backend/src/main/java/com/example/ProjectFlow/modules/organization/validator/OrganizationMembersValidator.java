@@ -51,7 +51,7 @@ public class OrganizationMembersValidator {
       }
    }
 
-   // role validate
+   // role validations
    public void roleValidate(String role) {
       if(role == null || role.trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
