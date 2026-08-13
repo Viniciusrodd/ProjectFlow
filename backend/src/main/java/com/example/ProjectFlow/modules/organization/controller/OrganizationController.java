@@ -92,7 +92,7 @@ public class OrganizationController {
 
 
    // get organization by id
-   @GetMapping("/organization/{id}")
+   @GetMapping(value = "/organization/{id}")
    @Operation(summary = "Get organization by id")
    public ResponseEntity<ApiResponse<OrganizationResponseDTO>> getById(@PathVariable UUID id) {
       OrganizationResponseDTO organization = this.organizationService.getById(id);
@@ -109,7 +109,7 @@ public class OrganizationController {
 
 
    // get organization by owner id
-   @GetMapping("/organizations/{ownerId}")
+   @GetMapping(value = "/organizations/{ownerId}")
    @Operation(summary = "Get organizations by owner id")
    public ResponseEntity<ApiResponse<List<OrganizationResponseDTO>>> getByOwnerId(@PathVariable UUID ownerId) {
       List<OrganizationResponseDTO> organizations = this.organizationService.getByOwnerId(ownerId);
@@ -126,7 +126,7 @@ public class OrganizationController {
 
 
    // update organization
-   @PutMapping("/organization/{id}")
+   @PutMapping(value = "/organization/{id}")
    @Operation(summary = "Update organization")
    public ResponseEntity<ApiResponse<OrganizationResponseDTO>> updateOrganization(
       @PathVariable UUID id,
@@ -146,7 +146,7 @@ public class OrganizationController {
 
 
    // delete organization
-   @DeleteMapping("/organization/{id}")
+   @DeleteMapping(value = "/organization/{id}")
    @Operation(summary = "Delete organization")
    public ResponseEntity<ApiResponse<OrganizationDeletedDTO>> deleteOrganization(@PathVariable UUID id) {
       OrganizationDeletedDTO organizationDeleted = this.organizationService.delete(id);

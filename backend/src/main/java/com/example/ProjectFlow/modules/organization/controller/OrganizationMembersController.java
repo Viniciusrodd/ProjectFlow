@@ -7,6 +7,7 @@ package com.example.ProjectFlow.modules.organization.controller;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersResponseDTO;
 
 // import constants
@@ -53,7 +55,7 @@ public class OrganizationMembersController {
 
 
    // create member participation
-   @PostMapping(value = "/organization/members")
+   @PostMapping("/organization/member")
    @Operation(summary = "Create a organization member participation")
    public ResponseEntity<ApiResponse<OrganizationMembersResponseDTO>> createMemberParticipation(
       @RequestBody OrganizationMembersDTO data
@@ -104,6 +106,23 @@ public class OrganizationMembersController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(members)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete member participation
+   @DeleteMapping(value = "organization/{id}/member")
+   @Operation(summary = "Remove a member's participation")
+   public ResponseEntity<ApiResponse<OrganizationMembersDeletedDTO>> deleteMemberParticipation(@PathVariable UUID id) {
+      OrganizationMembersDeletedDTO participationDeleted = this.organizationMemberService.delete(id);
+
+      ApiResponse<OrganizationMembersDeletedDTO> response = new ApiResponse.Builder<OrganizationMembersDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(participationDeleted)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
