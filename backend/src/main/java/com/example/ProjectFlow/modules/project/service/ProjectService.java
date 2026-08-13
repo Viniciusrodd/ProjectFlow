@@ -146,4 +146,22 @@ public class ProjectService {
       return projects;
    }  
 
+
+   // get all by owner id
+   public List<ProjectResponseDTO> getByOwnerId(UUID ownerId) {
+      this.projectValidator.ownerIdValidate(ownerId);
+
+      List<ProjectResponseDTO> projects = this.projectRepository.getByOwnerId(ownerId);
+
+      if(projects.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projetos não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return projects;
+   }  
+
+
 }
