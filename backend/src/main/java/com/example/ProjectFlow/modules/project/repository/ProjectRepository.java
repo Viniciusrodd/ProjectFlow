@@ -2,6 +2,9 @@
 // packages
 package com.example.ProjectFlow.modules.project.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // imports
 import org.springframework.stereotype.Repository;
 
@@ -45,6 +48,22 @@ public class ProjectRepository {
       this.entityManager.persist(project);
 
       return ProjectResponseDTO.get(project);
+   }
+
+
+   // get all 
+   public List<ProjectResponseDTO> getAll() {
+      List<ProjectEntity> projectsDocument = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p ORDER BY p.createdAt ASC", ProjectEntity.class)
+         .getResultList();
+
+      List<ProjectResponseDTO> projects = new ArrayList<>();
+
+      for(ProjectEntity project : projectsDocument) {
+         projects.add(ProjectResponseDTO.get(project));
+      }
+
+      return projects;
    }
 
 }
