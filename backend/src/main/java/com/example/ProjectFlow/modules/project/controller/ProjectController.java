@@ -106,10 +106,27 @@ public class ProjectController {
 
 
    // get all projects by organization id
-   @GetMapping(value = "/projects/{organizationId}")
+   @GetMapping(value = "/projects/organization/{organizationId}")
    @Operation(summary = "Get all projects by organization id")
    public ResponseEntity<ApiResponse<List<ProjectResponseDTO>>> getByOrganizationId(@PathVariable UUID organizationId) {
       List<ProjectResponseDTO> projects = this.projectService.getByOrganizationId(organizationId);
+
+      ApiResponse<List<ProjectResponseDTO>> response = new ApiResponse.Builder<List<ProjectResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(projects)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get all projects by owner id
+   @GetMapping(value = "/projects/owner/{ownerId}")
+   @Operation(summary = "Get all projects by owner id")
+   public ResponseEntity<ApiResponse<List<ProjectResponseDTO>>> getByOwnerId(@PathVariable UUID ownerId) {
+      List<ProjectResponseDTO> projects = this.projectService.getByOwnerId(ownerId);
 
       ApiResponse<List<ProjectResponseDTO>> response = new ApiResponse.Builder<List<ProjectResponseDTO>>()
          .success(true)
