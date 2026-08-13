@@ -161,7 +161,23 @@ public class ProjectService {
       }
 
       return projects;
-   }  
+   }
+
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.projectValidator.idValidate(id);
+
+      boolean exist = this.projectRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
 
 
 }

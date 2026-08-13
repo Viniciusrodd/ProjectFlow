@@ -125,4 +125,15 @@ public class ProjectRepository {
    }
 
 
+   // exists by id
+   public boolean existsById(UUID id) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(p) FROM ProjectEntity p WHERE p.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
+
 }
