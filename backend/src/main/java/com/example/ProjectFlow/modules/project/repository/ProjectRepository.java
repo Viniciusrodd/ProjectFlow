@@ -108,4 +108,21 @@ public class ProjectRepository {
    }
 
 
+   // get all by owner id
+   public List<ProjectResponseDTO> getByOwnerId(UUID ownerId) {
+      List<ProjectEntity> projectsDocument = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.owner.id = :ownerId ORDER BY p.createdAt ASC", ProjectEntity.class)
+         .setParameter("ownerId", ownerId)
+         .getResultList();
+
+      List<ProjectResponseDTO> projects = new ArrayList<>();
+
+      for(ProjectEntity project : projectsDocument) {
+         projects.add(ProjectResponseDTO.get(project));
+      }
+
+      return projects;
+   }
+
+
 }
