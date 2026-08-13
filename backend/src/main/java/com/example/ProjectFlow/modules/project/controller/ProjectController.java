@@ -103,4 +103,22 @@ public class ProjectController {
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
+
+
+   // get all projects by organization id
+   @GetMapping(value = "/projects/{organizationId}")
+   @Operation(summary = "Get all projects by organization id")
+   public ResponseEntity<ApiResponse<List<ProjectResponseDTO>>> getByOrganizationId(@PathVariable UUID organizationId) {
+      List<ProjectResponseDTO> projects = this.projectService.getByOrganizationId(organizationId);
+
+      ApiResponse<List<ProjectResponseDTO>> response = new ApiResponse.Builder<List<ProjectResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(projects)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
