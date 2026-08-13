@@ -2,13 +2,15 @@
 // packages
 package com.example.ProjectFlow.modules.project.service;
 
-import java.util.List;
 
 // imports
+import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
+import jakarta.persistence.NoResultException;
 
 // import repository
 import com.example.ProjectFlow.modules.project.repository.ProjectRepository;
@@ -35,7 +37,6 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import enum
-
 
 
 @Service
@@ -94,6 +95,22 @@ public class ProjectService {
       }
 
       return projects;
+   }
+
+
+   // get by id
+   public ProjectResponseDTO getById(UUID id) {
+      this.projectValidator.idValidate(id);
+
+      try {
+         return this.projectRepository.getById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
