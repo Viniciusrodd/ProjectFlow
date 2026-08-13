@@ -8,10 +8,12 @@ package com.example.ProjectFlow.modules.project.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.UUID;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -80,6 +82,23 @@ public class ProjectController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(projects)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get project by id
+   @GetMapping(value = "/project/{id}")
+   @Operation(summary = "Get project by id")
+   public ResponseEntity<ApiResponse<ProjectResponseDTO>> getProjectById(@PathVariable UUID id) {
+      ProjectResponseDTO project = this.projectService.getById(id);
+
+      ApiResponse<ProjectResponseDTO> response = new ApiResponse.Builder<ProjectResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(project)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
