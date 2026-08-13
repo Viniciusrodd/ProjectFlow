@@ -129,4 +129,21 @@ public class ProjectService {
       }
    }
 
+
+   // get all by organization id
+   public List<ProjectResponseDTO> getByOrganizationId(UUID organizationId) {
+      this.projectValidator.organizationIdValidate(organizationId);
+
+      List<ProjectResponseDTO> projects = this.projectRepository.getByOrganizationId(organizationId);
+
+      if(projects.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projetos não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return projects;
+   }  
+
 }
