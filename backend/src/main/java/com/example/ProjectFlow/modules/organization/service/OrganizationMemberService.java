@@ -147,6 +147,24 @@ public class OrganizationMemberService {
    }
 
 
+   // update member role
+   @Transactional
+   public OrganizationMembersResponseDTO updateMemberRole(UUID id, String role) {
+      this.organizationMembersValidator.idValidate(id);
+      this.organizationMembersValidator.roleValidate(role);
+
+      try {
+         return this.organizationMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Participação não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
    // delete member participation
    @Transactional
    public OrganizationMembersDeletedDTO delete(UUID id) {
