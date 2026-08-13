@@ -65,7 +65,6 @@ public class OrganizationMembersRepository {
             "SELECT om FROM OrganizationMembersEntity om " +
             "JOIN FETCH om.user " +
             "WHERE om.organization.id = :organizationId " +
-            "AND om.deletedAt IS NULL " +
             "ORDER BY om.joinedAt DESC", 
             OrganizationMembersEntity.class
          )
@@ -92,8 +91,7 @@ public class OrganizationMembersRepository {
             "SELECT om FROM OrganizationMembersEntity om " +
             "JOIN FETCH om.user " +
             "WHERE om.organization.id = :organizationId " +
-            "AND om.role = :role " +
-            "AND om.deletedAt IS NULL",
+            "AND om.role = :role ",
             OrganizationMembersEntity.class
          )
          .setParameter("organizationId", organizationId)
@@ -116,8 +114,7 @@ public class OrganizationMembersRepository {
          .createQuery(
             "SELECT COUNT(om) FROM OrganizationMembersEntity om " +
             "WHERE om.user.id = :userId " +
-            "AND om.organization.id = :organizationId " +
-            "AND om.deletedAt IS NULL",
+            "AND om.organization.id = :organizationId ",
             Long.class
          )
          .setParameter("userId", userId)
@@ -125,6 +122,21 @@ public class OrganizationMembersRepository {
          .getSingleResult();
 
       return count > 0;
+   }
+
+
+   // update member role
+   @Transactional
+   public OrganizationMembersResponseDTO updateMemberRole(UUID id, RoleEnum role) throws NoResultException {
+      OrganizationMembersEntity member = this.entityManager
+         .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      member.setRole(role);
+
+      return OrganizationMembersResponseDTO.get(member);
    }
 
 
