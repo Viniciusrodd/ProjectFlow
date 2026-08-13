@@ -14,6 +14,7 @@ import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
 public record ProjectResponseDTO (
 
+   UUID id,
    UUID organizationId,
    UUID ownerId,
    String name,
@@ -24,6 +25,7 @@ public record ProjectResponseDTO (
 
    public static ProjectResponseDTO get(ProjectEntity document) {
       return new ProjectResponseDTO(
+         document.getId(),
          document.getOrganizationId(),
          document.getOwnerId(),
          document.getName(),
