@@ -136,4 +136,17 @@ public class ProjectRepository {
    }
 
 
+   // update logo image id
+   @Transactional
+   public void updateLogoImageId(UUID id, String logoImageId) throws NoResultException {
+      ProjectEntity project = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      project.setLogoImageId(logoImageId);
+   }
+
+
 }

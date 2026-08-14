@@ -180,4 +180,22 @@ public class ProjectService {
    }
 
 
+   // update logo image id
+   @Transactional
+   public void updateLogoImageId(UUID id, String logoImageId) {
+      this.projectValidator.idValidate(id);
+      this.projectValidator.logoImageIdValidate(logoImageId);
+
+      try {
+         this.projectRepository.updateLogoImageId(id, logoImageId);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
 }

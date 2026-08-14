@@ -118,7 +118,7 @@ public class OrganizationRepository {
 
    // update logo image id
    @Transactional
-   public OrganizationEntity updateLogoImageId(UUID id, String logoImageId) throws NoResultException {
+   public void updateLogoImageId(UUID id, String logoImageId) throws NoResultException {
       OrganizationEntity organization = this.entityManager
          .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
          .setParameter("id", id)
@@ -126,8 +126,6 @@ public class OrganizationRepository {
 
       // update
       organization.setLogoImageId(logoImageId);
-
-      return organization;
    }
 
 
