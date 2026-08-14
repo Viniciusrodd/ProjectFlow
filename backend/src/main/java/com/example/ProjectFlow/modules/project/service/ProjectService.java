@@ -198,4 +198,21 @@ public class ProjectService {
    }
 
 
+   // remove logo image id
+   @Transactional
+   public void removeLogoImageId(UUID id) {
+      this.projectValidator.idValidate(id);
+
+      try {
+         this.projectRepository.removeLogoImageId(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
 }
