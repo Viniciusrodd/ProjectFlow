@@ -147,13 +147,30 @@ public class OrganizationMemberService {
    }
 
 
+   // count admins members by organization
+   public void countAdminsByOrganization(UUID organizationId) {
+      this.organizationMembersValidator.organizationIdValidate(organizationId);
+
+      Long admins = this.organizationMembersRepository.countAdminsByOrganization(organizationId);
+      if(admins <= 1) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Uma organização deve ter pelo menos 1 administrador",
+            ResponseMessages.UNAUTHORIZED
+         ));
+      }
+   }
+
+
    // update member role
    @Transactional
    public OrganizationMembersResponseDTO updateMemberRole(UUID id, String role) {
       this.organizationMembersValidator.idValidate(id);
-      this.organizationMembersValidator.roleValidate(role);
+      this.organizationMembersValidator.roleValidate(role); // not allow update to "owner"
 
       try {
+         // last admin - check
+
+
          return this.organizationMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
       }
       catch (NoResultException error) {
