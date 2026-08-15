@@ -21,7 +21,8 @@ import com.example.ProjectFlow.modules.project.validator.ProjectValidator;
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
-import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
+import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
+
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
@@ -29,14 +30,13 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationService;
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
-
-// import enum
 
 
 @Service
@@ -213,6 +213,24 @@ public class ProjectService {
          ));
       }
    }
+
+
+   // update project
+   @Transactional
+   public ProjectResponseDTO update(UUID id, ProjectUpdateDTO data) {
+      projectValidator.idValidate(id);
+      projectValidator.updateValidations(data);
+
+      try {
+         return this.projectRepository.update(id, data);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   } 
 
 
 }
