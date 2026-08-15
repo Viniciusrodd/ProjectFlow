@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
 
@@ -179,5 +181,23 @@ public class ProjectController {
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
+
+
+   // delete project
+   @DeleteMapping(value = "/project/{id}")
+   @Operation(summary = "Delete project")
+   public ResponseEntity<ApiResponse<ProjectDeletedDTO>> deleteProject(@PathVariable UUID id) {
+      ProjectDeletedDTO deletedProject = this.projectService.delete(id);
+
+      ApiResponse<ProjectDeletedDTO> response = new ApiResponse.Builder<ProjectDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(deletedProject)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 
 }
