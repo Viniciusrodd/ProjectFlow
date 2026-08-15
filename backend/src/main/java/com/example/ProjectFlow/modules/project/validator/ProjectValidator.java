@@ -4,7 +4,7 @@ package com.example.ProjectFlow.modules.project.validator;
 
 // imports
 import org.springframework.stereotype.Component;
-
+import java.util.Optional;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -17,6 +17,9 @@ import com.example.ProjectFlow.common.constants.ValidationConstants;
 
 // import enums
 import com.example.ProjectFlow.modules.project.enums.StatusEnum;
+
+// import DTOs
+import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
 
 
 @Component
@@ -115,6 +118,34 @@ public class ProjectValidator {
             ResponseMessages.INVALID_DATA
          ));
       }
+   }
+
+
+   // update validations
+   public void updateValidations(ProjectUpdateDTO data) {
+      // name
+      Optional.ofNullable(data.name()).ifPresent(name -> {
+         if(name.trim().isEmpty()) {
+            throw MultiExceptions.badRequest(String.format(
+               "%s: Nome não pode ser vazio",
+               ResponseMessages.BAD_REQUEST
+            ));
+         }
+
+         if(name.length() < ValidationConstants.MIN_PROJECT_NAME_LENGTH || name.length() > ValidationConstants.MAX_PROJECT_NAME_LENGTH) {
+            throw MultiExceptions.invalid(String.format(
+               "%s: Nome deve estar entre %d e %d caracteres",
+               ResponseMessages.INVALID_DATA,
+               ValidationConstants.MIN_PROJECT_NAME_LENGTH,
+               ValidationConstants.MAX_PROJECT_NAME_LENGTH
+            ));
+         }
+      });
+
+      // description
+      Optional.ofNullable(data.description()).ifPresent(description -> 
+         this.descriptionValidate(description)
+      );
    }
 
 }
