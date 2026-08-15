@@ -4,8 +4,6 @@ package com.example.ProjectFlow.modules.organization.validator;
 
 // imports
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
 import java.util.UUID;
 
 // import exceptions
@@ -60,11 +58,12 @@ public class OrganizationMembersValidator {
          ));
       }
 
-      if(!RoleEnum.isValid(role)) {
+      if(!RoleEnum.isValid(role) || RoleEnum.OWNER.getType().equalsIgnoreCase(role)) {
          throw MultiExceptions.badRequest(String.format(
-            "%s: Papel de usuário inválido. Valores permitidos: %s",
+            "%s: Papel de usuário inválido. Valores permitidos: %s, %s",
             ResponseMessages.BAD_REQUEST,
-            Arrays.toString(RoleEnum.values())
+            RoleEnum.ADMIN,
+            RoleEnum.MEMBER
          ));
       }
    }
