@@ -30,6 +30,7 @@ import com.example.ProjectFlow.modules.user.service.UserService;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
+import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
@@ -124,6 +125,22 @@ public class OrganizationMemberService {
    }
 
 
+   // get entity by id
+   public OrganizationMembersEntity getEntityById(UUID id) {
+      this.organizationMembersValidator.idValidate(id);
+
+      try {
+         return this.organizationMembersRepository.getEntityById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Participante não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
    // check if user is a membership
    public boolean checkUserMembership(UUID userId, UUID organizationId) {
       this.organizationMembersValidator.userIdValidate(userId);
@@ -148,12 +165,19 @@ public class OrganizationMemberService {
 
 
    // count admins members by organization
-   public void countAdminsByOrganization(UUID organizationId) {
+   public Long countAdminsByOrganization(UUID organizationId) {
       this.organizationMembersValidator.organizationIdValidate(organizationId);
 
-      Long admins = this.organizationMembersRepository.countAdminsByOrganization(organizationId);
+      return this.organizationMembersRepository.countAdminsByOrganization(organizationId);
+   }
+
+
+   // last admin member by organization - validate
+   public void validateLastAdmin(UUID organizationId) {
+      long admins = this.countAdminsByOrganization(organizationId);
+
       if(admins <= 1) {
-         throw MultiExceptions.notFound(String.format(
+         throw MultiExceptions.unauthorized(String.format(
             "%s: Uma organização deve ter pelo menos 1 administrador",
             ResponseMessages.UNAUTHORIZED
          ));
@@ -169,7 +193,10 @@ public class OrganizationMemberService {
 
       try {
          // last admin - check
-
+         OrganizationMembersEntity member = this.getEntityById(id);
+         if(member.getRole() == RoleEnum.ADMIN && !role.equalsIgnoreCase("ADMIN")) {
+            this.validateLastAdmin(member.getOrganization().getId());
+         }
 
          return this.organizationMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
       }
@@ -188,6 +215,12 @@ public class OrganizationMemberService {
       this.organizationMembersValidator.idValidate(id);
 
       try {
+         // last admin - check
+         OrganizationMembersEntity member = this.getEntityById(id);
+         if(member.getRole() == RoleEnum.ADMIN) {
+            this.validateLastAdmin(member.getOrganization().getId());
+         }
+
          return this.organizationMembersRepository.delete(id);
       }
       catch (NoResultException error) {
