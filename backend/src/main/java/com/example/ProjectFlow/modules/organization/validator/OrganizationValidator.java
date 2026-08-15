@@ -99,7 +99,7 @@ public class OrganizationValidator {
       Optional.ofNullable(data.name()).ifPresent(name -> {
          if(name.trim().isEmpty()) {
             throw MultiExceptions.badRequest(String.format(
-               "%s: Nome é não pode ser vazio",
+               "%s: Nome não pode ser vazio",
                ResponseMessages.BAD_REQUEST
             ));
          }

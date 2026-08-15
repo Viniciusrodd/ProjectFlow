@@ -153,6 +153,7 @@ public class OrganizationRepository {
          .setParameter("id", id)
          .getSingleResult();
 
+      // update
       Optional.ofNullable(data.name()).ifPresent(name -> organization.setName(name));
       Optional.ofNullable(data.description()).ifPresent(description -> organization.setDescription(description));
    
