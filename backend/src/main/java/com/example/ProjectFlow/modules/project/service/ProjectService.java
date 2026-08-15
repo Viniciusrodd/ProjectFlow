@@ -20,6 +20,7 @@ import com.example.ProjectFlow.modules.project.validator.ProjectValidator;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
 
@@ -241,6 +242,23 @@ public class ProjectService {
 
       try {
          return this.projectRepository.updateStatus(id, StatusEnum.valueOf(status.toUpperCase()));
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   } 
+
+
+   // delete project
+   @Transactional
+   public ProjectDeletedDTO delete(UUID id) {
+      projectValidator.idValidate(id);
+
+      try {
+         return this.projectRepository.delete(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
