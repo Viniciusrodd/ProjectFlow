@@ -31,7 +31,7 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationService;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
-
+import com.example.ProjectFlow.modules.project.enums.StatusEnum;
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -223,6 +223,24 @@ public class ProjectService {
 
       try {
          return this.projectRepository.update(id, data);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   } 
+
+
+   // update status of project
+   @Transactional
+   public ProjectResponseDTO updateStatus(UUID id, String status) {
+      projectValidator.idValidate(id);
+      projectValidator.statusValidate(status);
+
+      try {
+         return this.projectRepository.updateStatus(id, StatusEnum.valueOf(status.toUpperCase()));
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
