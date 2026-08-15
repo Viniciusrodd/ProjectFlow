@@ -5,7 +5,6 @@ package com.example.ProjectFlow.modules.organization.service;
 // imports
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 // jakarta imports
@@ -212,11 +211,7 @@ public class OrganizationService {
       this.organizationValidator.updateValidations(data);
       
       try {
-         // owner update - check
-         Optional<UserEntity> owner = Optional.ofNullable(data.ownerId())
-            .map(ownerId -> this.userService.getEntityById(ownerId));
-
-         return this.organizationRepository.update(id, data, owner);
+         return this.organizationRepository.update(id, data);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(

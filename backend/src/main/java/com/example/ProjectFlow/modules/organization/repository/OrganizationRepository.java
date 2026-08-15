@@ -146,15 +146,13 @@ public class OrganizationRepository {
    @Transactional
    public OrganizationResponseDTO update(
       UUID id, 
-      OrganizationUpdateDTO data, 
-      Optional<UserEntity> owner
+      OrganizationUpdateDTO data
    ) throws NoResultException {
       OrganizationEntity organization = this.entityManager
          .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      owner.ifPresent(ownerId -> organization.setOwner(ownerId));
       Optional.ofNullable(data.name()).ifPresent(name -> organization.setName(name));
       Optional.ofNullable(data.description()).ifPresent(description -> organization.setDescription(description));
    
