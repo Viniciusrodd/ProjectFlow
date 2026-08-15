@@ -62,10 +62,10 @@ public class OrganizationMembersRepository {
    public List<OrganizationMembersCompleteResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
       List<OrganizationMembersEntity> members = this.entityManager
          .createQuery(
-            "SELECT om FROM OrganizationMembersEntity om " +
-            "JOIN FETCH om.user " +
-            "WHERE om.organization.id = :organizationId " +
-            "ORDER BY om.joinedAt DESC", 
+            "SELECT m FROM OrganizationMembersEntity m " +
+            "JOIN FETCH m.user " +
+            "WHERE m.organization.id = :organizationId " +
+            "ORDER BY m.joinedAt DESC", 
             OrganizationMembersEntity.class
          )
          .setParameter("organizationId", organizationId)
@@ -88,10 +88,10 @@ public class OrganizationMembersRepository {
    ) {
       List<OrganizationMembersEntity> members = this.entityManager
          .createQuery(
-            "SELECT om FROM OrganizationMembersEntity om " +
-            "JOIN FETCH om.user " +
-            "WHERE om.organization.id = :organizationId " +
-            "AND om.role = :role ",
+            "SELECT m FROM OrganizationMembersEntity m " +
+            "JOIN FETCH m.user " +
+            "WHERE m.organization.id = :organizationId " +
+            "AND m.role = :role ",
             OrganizationMembersEntity.class
          )
          .setParameter("organizationId", organizationId)
@@ -112,9 +112,9 @@ public class OrganizationMembersRepository {
    public boolean checkUserMembership(UUID userId, UUID organizationId) {
       Long count = this.entityManager
          .createQuery(
-            "SELECT COUNT(om) FROM OrganizationMembersEntity om " +
-            "WHERE om.user.id = :userId " +
-            "AND om.organization.id = :organizationId ",
+            "SELECT COUNT(m) FROM OrganizationMembersEntity m " +
+            "WHERE m.user.id = :userId " +
+            "AND m.organization.id = :organizationId ",
             Long.class
          )
          .setParameter("userId", userId)
@@ -122,6 +122,25 @@ public class OrganizationMembersRepository {
          .getSingleResult();
 
       return count > 0;
+   }
+
+
+   // count admins members by organization
+   public Long countAdminsByOrganization(UUID organizationId) {
+      String role = "ADMIN";
+
+      Long admins = this.entityManager
+         .createQuery(
+            "SELECT COUNT(m) FROM OrganizationMembersEntity m " +
+            "WHERE m.organizationId = :organizationId " +
+            "AND m.role = :role ",
+            Long.class
+         )
+         .setParameter("organizationId", organizationId)
+         .setParameter("role", role)
+         .getSingleResult();
+
+      return admins;
    }
 
 
