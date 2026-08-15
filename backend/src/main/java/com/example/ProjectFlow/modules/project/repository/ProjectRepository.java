@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.project.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
 // import entity
@@ -191,6 +193,21 @@ public class ProjectRepository {
       project.setStatus(status);
 
       return ProjectResponseDTO.get(project);
+   }
+
+
+   // delete project
+   @Transactional
+   public ProjectDeletedDTO delete(UUID id) throws NoResultException {
+      ProjectEntity project = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      project.setDeletedAt(LocalDateTime.now());
+
+      return ProjectDeletedDTO.get(project);
    }
 
 
