@@ -108,6 +108,17 @@ public class OrganizationMembersRepository {
    }
 
 
+   // get entity by id
+   public OrganizationMembersEntity getEntityById(UUID id) {
+      OrganizationMembersEntity member = this.entityManager
+         .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id ", OrganizationMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return member;
+   }
+
+
    // check if user is a membership
    public boolean checkUserMembership(UUID userId, UUID organizationId) {
       Long count = this.entityManager
@@ -127,17 +138,15 @@ public class OrganizationMembersRepository {
 
    // count admins members by organization
    public Long countAdminsByOrganization(UUID organizationId) {
-      String role = "ADMIN";
-
       Long admins = this.entityManager
          .createQuery(
             "SELECT COUNT(m) FROM OrganizationMembersEntity m " +
-            "WHERE m.organizationId = :organizationId " +
+            "WHERE m.organization.id = :organizationId " +
             "AND m.role = :role ",
             Long.class
          )
          .setParameter("organizationId", organizationId)
-         .setParameter("role", role)
+         .setParameter("role", RoleEnum.ADMIN)
          .getSingleResult();
 
       return admins;
