@@ -3,6 +3,8 @@
 package com.example.ProjectFlow.modules.project.controller;
 
 // imports
+import java.util.List;
+import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
@@ -10,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
-import java.util.UUID;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -34,6 +34,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
@@ -133,6 +134,26 @@ public class ProjectController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(projects)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // project update
+   @PutMapping(value = "/project/{id}")
+   @Operation(summary = "Update project")
+   public ResponseEntity<ApiResponse<ProjectResponseDTO>> updateProject(
+      @PathVariable UUID id,
+      @RequestBody ProjectUpdateDTO data
+   ) {
+      ProjectResponseDTO project = this.projectService.update(id, data);
+
+      ApiResponse<ProjectResponseDTO> response = new ApiResponse.Builder<ProjectResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(project)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
