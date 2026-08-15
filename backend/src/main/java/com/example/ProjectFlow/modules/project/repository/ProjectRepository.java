@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.project.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 // imports
@@ -18,7 +19,7 @@ import jakarta.persistence.NoResultException;
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
-
+import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -159,6 +160,22 @@ public class ProjectRepository {
 
       // remove
       project.setLogoImageId(null);
+   }
+
+
+   // update project
+   @Transactional
+   public ProjectResponseDTO update(UUID id, ProjectUpdateDTO data) throws NoResultException {
+      ProjectEntity project = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      Optional.ofNullable(data.name()).ifPresent(name -> project.setName(name));
+      Optional.ofNullable(data.description()).ifPresent(description -> project.setDescription(description));
+
+      return ProjectResponseDTO.get(project);
    }
 
 
