@@ -211,4 +211,15 @@ public class ProjectRepository {
    }
 
 
+   // is deleted
+   public boolean isDeleted(UUID id) throws NoResultException {
+      ProjectEntity project = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return project.isDeleted();
+   }
+
+
 }

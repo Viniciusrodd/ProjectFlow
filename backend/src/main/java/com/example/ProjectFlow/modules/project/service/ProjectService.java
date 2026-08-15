@@ -266,7 +266,23 @@ public class ProjectService {
             ResponseMessages.NOT_FOUND
          ));
       }
-   } 
+   }
+
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      projectValidator.idValidate(id);
+
+      try {
+         return this.projectRepository.isDeleted(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
 
 
 }
