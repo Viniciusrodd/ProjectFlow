@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -106,5 +107,21 @@ public class ProjectImageController {
          .header("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"")
          .body(document.getBinary());
    }
+
+
+   // delete project image
+   @DeleteMapping(value = "/{projectId}")
+   @Operation(summary = "Delete project image")
+   public ResponseEntity<ApiResponse<Void>> deleteProjectImage(@PathVariable UUID projectId) {
+      this.projectImageService.deleteProjectImage(projectId);
+
+      ApiResponse<Void> response = new ApiResponse.Builder<Void>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }   
 
 }

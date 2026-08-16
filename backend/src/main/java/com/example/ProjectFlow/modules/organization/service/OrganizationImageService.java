@@ -139,7 +139,7 @@ public class OrganizationImageService {
       // delete organization image id - mysql
       this.organizationService.removeLogoImageId(organizationId);
 
-      // delete profile image - mongodb
+      // delete organization image - mongodb
       this.organizationImageRepository.deleteByOrganizationId(organizationId);
    }
 
