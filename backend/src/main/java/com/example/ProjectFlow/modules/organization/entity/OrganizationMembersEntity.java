@@ -78,8 +78,17 @@ public class OrganizationMembersEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
+   // constructor - empty
    public OrganizationMembersEntity() {} 
+
+
+   // constructor - builder
+   public OrganizationMembersEntity(Builder builder) {
+      setUser(builder.user);
+      setOrganization(builder.organization);
+      setRole(builder.role);
+      setJoinedAt(builder.joinedAt);
+   }
 
 
    // getters
@@ -106,5 +115,40 @@ public class OrganizationMembersEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private UserEntity user;
+      private OrganizationEntity organization;
+      private RoleEnum role;
+      private LocalDateTime joinedAt;
+
+      public Builder user(UserEntity user) {
+         this.user = user;
+         return this;
+      }
+
+      public Builder organization(OrganizationEntity organization) {
+         this.organization = organization;
+         return this;
+      }
+
+      public Builder role(RoleEnum role) {
+         this.role = role;
+         return this;
+      }
+
+      public Builder joinedAt(LocalDateTime joinedAt) {
+         this.joinedAt = joinedAt;
+         return this;
+      }
+
+      public OrganizationMembersEntity build() {
+         return new OrganizationMembersEntity(this);
+      }
+   }
 
 }

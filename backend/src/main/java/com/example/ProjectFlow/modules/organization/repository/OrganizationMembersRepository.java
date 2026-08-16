@@ -45,12 +45,12 @@ public class OrganizationMembersRepository {
       UserEntity user,
       OrganizationEntity organization
    ) {
-      OrganizationMembersEntity organizationMembers = new OrganizationMembersEntity();
-
-      organizationMembers.setUser(user);
-      organizationMembers.setOrganization(organization);
-      organizationMembers.setRole(RoleEnum.valueOf(data.role().toUpperCase()));
-      organizationMembers.setJoinedAt(LocalDateTime.now());
+      OrganizationMembersEntity organizationMembers = new OrganizationMembersEntity.Builder()
+         .user(user)
+         .organization(organization)
+         .role(RoleEnum.valueOf(data.role().toUpperCase()))
+         .joinedAt(LocalDateTime.now())
+         .build();
 
       this.entityManager.persist(organizationMembers);
 
