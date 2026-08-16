@@ -92,4 +92,20 @@ public class ProjectImageService {
       } 
    }
 
+
+   // get project image
+   public ProjectImageDocument getProjectImage(UUID projectId) {
+      this.projectService.existsById(projectId);
+
+      ProjectImageDocument image = this.projectImageRepository.findByProjectId(projectId);
+      if(image == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Imagem de organização não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return image;
+   }
+
 }
