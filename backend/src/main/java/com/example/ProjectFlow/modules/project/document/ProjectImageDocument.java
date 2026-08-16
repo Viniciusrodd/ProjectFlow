@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 
 @Document(collection = "project_images")
-public class ProjectImagesDocument {
+public class ProjectImageDocument {
  
    @Id
    private String id;
@@ -38,11 +38,11 @@ public class ProjectImagesDocument {
 
 
    // constructor - empty
-   public ProjectImagesDocument() {}
+   public ProjectImageDocument() {}
 
 
    // constructor - builder
-   public ProjectImagesDocument(Builder builder) {
+   public ProjectImageDocument(Builder builder) {
       setProjectId(builder.projectId);
       setFileName(builder.fileName);
       setMimeType(builder.mimeType);
@@ -113,8 +113,8 @@ public class ProjectImagesDocument {
          return this;
       }
 
-      public ProjectImagesDocument build() {
-         return new ProjectImagesDocument(this);
+      public ProjectImageDocument build() {
+         return new ProjectImageDocument(this);
       }
    }
 

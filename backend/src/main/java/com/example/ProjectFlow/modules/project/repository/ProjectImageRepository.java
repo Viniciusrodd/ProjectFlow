@@ -9,13 +9,13 @@ import java.util.UUID;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 // import document
-import com.example.ProjectFlow.modules.project.document.ProjectImagesDocument;
+import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
 
 
-public interface ProjectImageRepository extends MongoRepository<ProjectImagesDocument, String> {
+public interface ProjectImageRepository extends MongoRepository<ProjectImageDocument, String> {
  
    // find image by project id
-   ProjectImagesDocument findByProjectId(UUID projectId);
+   ProjectImageDocument findByProjectId(UUID projectId);
 
    // delete image by project id
    void deleteByProjectId(UUID projectId);
