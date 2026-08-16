@@ -98,29 +98,29 @@ public class OrganizationImageService {
    public OrganizationImageDocument getOrganizationImage(UUID organizationId) {
       this.organizationService.existsById(organizationId);
 
-      OrganizationImageDocument organizationImage = this.organizationImageRepository.findByOrganizationId(organizationId);
-      if(organizationImage == null) {
+      OrganizationImageDocument image = this.organizationImageRepository.findByOrganizationId(organizationId);
+      if(image == null) {
          throw MultiExceptions.notFound(String.format(
             "%s: Imagem de organização não existe",
             ResponseMessages.NOT_FOUND
          ));
       }
 
-      return organizationImage;
+      return image;
    }
 
 
    // get all organization images
    public List<OrganizationImageDocument> getAllOrganizationImages() {
-      List<OrganizationImageDocument> organizationImages = this.organizationImageRepository.findAll();
-      if(organizationImages.isEmpty()) {
+      List<OrganizationImageDocument> images = this.organizationImageRepository.findAll();
+      if(images.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Imagens de organizações não existem",
             ResponseMessages.NOT_FOUND
          ));
       }
 
-      return organizationImages;
+      return images;
    }
 
 

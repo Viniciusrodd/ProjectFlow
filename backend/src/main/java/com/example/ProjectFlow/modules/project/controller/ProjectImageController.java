@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -29,7 +30,7 @@ import com.example.ProjectFlow.modules.project.service.ProjectImageService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
-
+import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectImageResponseDTO;
 
@@ -68,5 +69,25 @@ public class ProjectImageController {
       
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
    }
+
+
+   // get project image - infos
+   @GetMapping(value = "/{projectId}")
+   @Operation(summary = "Get project image data information")
+   public ResponseEntity<ApiResponse<ProjectImageResponseDTO>> getProjectImage(
+      @PathVariable UUID projectId
+   ) {
+      ProjectImageDocument projectImageDocument = this.projectImageService.getProjectImage(projectId);
+      ProjectImageResponseDTO projectImage = ProjectImageResponseDTO.get(projectImageDocument);
+
+      ApiResponse<ProjectImageResponseDTO> response = new ApiResponse.Builder<ProjectImageResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(projectImage)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }   
 
 }
