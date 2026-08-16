@@ -6,12 +6,11 @@ package com.example.ProjectFlow.modules.organization.service;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.context.annotation.Lazy;
 
-import jakarta.persistence.NoResultException;
 // jakarta imports
 import jakarta.transaction.Transactional;
+import jakarta.persistence.NoResultException;
 
 // import repository
 import com.example.ProjectFlow.modules.organization.repository.OrganizationMembersRepository;
@@ -67,15 +66,15 @@ public class OrganizationMemberService {
    // create member participation
    @Transactional
    public OrganizationMembersResponseDTO createMemberParticipation(OrganizationMembersDTO data) {
-      this.organizationMembersValidator.organizationIdValidate(data.organizationId());
       this.organizationMembersValidator.userIdValidate(data.userId());
+      this.organizationMembersValidator.organizationIdValidate(data.organizationId());
       this.organizationMembersValidator.roleValidate(data.role());
 
-      // get organization data
-      OrganizationEntity organization = this.organizationService.getEntityById(data.organizationId());
-      
       // get user data
       UserEntity user = this.userService.getEntityById(data.userId());
+      
+      // get organization data
+      OrganizationEntity organization = this.organizationService.getEntityById(data.organizationId());
 
       return this.organizationMembersRepository.createMemberParticipation(data, user, organization);
    }

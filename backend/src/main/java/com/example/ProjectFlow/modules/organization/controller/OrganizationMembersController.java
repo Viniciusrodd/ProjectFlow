@@ -3,6 +3,8 @@
 package com.example.ProjectFlow.modules.organization.controller;
 
 // imports
+import java.util.List;
+import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
-import java.util.UUID;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -33,11 +32,12 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationMemberSe
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
+
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
