@@ -33,8 +33,6 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationImageSer
 import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
 
-// import document
-
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.OrganizationImageResponseDTO;
 
@@ -47,7 +45,7 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 public class OrganizationImageController {
  
    // properties
-   private OrganizationImageService organizationImageService;
+   private final OrganizationImageService organizationImageService;
 
    // constructor - dependency injection
    public OrganizationImageController(OrganizationImageService organizationImageService) {

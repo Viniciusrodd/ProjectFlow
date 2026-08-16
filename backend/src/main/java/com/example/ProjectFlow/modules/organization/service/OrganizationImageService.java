@@ -36,9 +36,9 @@ import com.example.ProjectFlow.modules.organization.document.OrganizationImageDo
 public class OrganizationImageService {
  
    // properties
-   OrganizationImageRepository organizationImageRepository;
-   OrganizationService organizationService;
-   OrganizationImageValidator organizationImageValidator;
+   private final OrganizationImageRepository organizationImageRepository;
+   private final OrganizationService organizationService;
+   private final OrganizationImageValidator organizationImageValidator;
    
    
    // constructor - dependency injection
