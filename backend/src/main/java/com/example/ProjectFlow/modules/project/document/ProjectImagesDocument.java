@@ -37,8 +37,19 @@ public class ProjectImagesDocument {
    private byte[] binary; // image data
 
 
-   // constructor
-   protected ProjectImagesDocument() {}
+   // constructor - empty
+   public ProjectImagesDocument() {}
+
+
+   // constructor - builder
+   public ProjectImagesDocument(Builder builder) {
+      setProjectId(builder.projectId);
+      setFileName(builder.fileName);
+      setMimeType(builder.mimeType);
+      setSize(builder.size);
+      setUploadDate(builder.uploadDate);
+      setBinary(builder.binary);
+   }
 
 
    // getters
@@ -59,5 +70,52 @@ public class ProjectImagesDocument {
    public void setSize(Long size) { this.size = size; }
    public void setUploadDate(LocalDateTime uploadDate) { this.uploadDate = uploadDate; }
    public void setBinary(byte[] binary) { this.binary = binary; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private UUID projectId;
+      private String fileName;
+      private String mimeType;
+      private Long size;
+      private LocalDateTime uploadDate;
+      private byte[] binary;
+
+      public Builder projectId(UUID projectId) {
+         this.projectId = projectId;
+         return this;
+      }
+
+      public Builder fileName(String fileName) {
+         this.fileName = fileName;
+         return this;
+      }
+
+      public Builder mimeType(String mimeType) {
+         this.mimeType = mimeType;
+         return this;
+      }
+
+      public Builder size(Long size) {
+         this.size = size;
+         return this;
+      }
+
+      public Builder uploadDate(LocalDateTime uploadDate) {
+         this.uploadDate = uploadDate;
+         return this;
+      }
+
+      public Builder binary(byte[] binary) {
+         this.binary = binary;
+         return this;
+      }
+
+      public ProjectImagesDocument build() {
+         return new ProjectImagesDocument(this);
+      }
+   }
 
 }
