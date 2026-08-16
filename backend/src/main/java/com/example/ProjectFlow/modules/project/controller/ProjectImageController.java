@@ -90,4 +90,21 @@ public class ProjectImageController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }   
 
+
+   // get project image - download
+   @GetMapping(
+      value = "/{projectId}/download",
+      produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp", "image/jpg" }
+   )
+   @Operation(summary = "Download project image")
+   public ResponseEntity<byte[]> getProjectImageData(@PathVariable UUID projectId) {
+      ProjectImageDocument document = this.projectImageService.getProjectImage(projectId);
+
+      return ResponseEntity
+         .ok()
+         .contentType(MediaType.parseMediaType(document.getMimeType()))
+         .header("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"")
+         .body(document.getBinary());
+   }
+
 }
