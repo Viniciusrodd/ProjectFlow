@@ -31,7 +31,7 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import enums
-import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
+import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 
 
 @Entity
@@ -78,8 +78,17 @@ public class ProjectMembersEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
+   // constructor - empty
    public ProjectMembersEntity(){}
+
+
+   // constructor - builder
+   public ProjectMembersEntity(Builder builder) {
+      setUser(builder.user);
+      setProject(builder.project);
+      setRole(builder.role);
+      setJoinedAt(builder.joinedAt);
+   }
 
 
    // getters
@@ -106,5 +115,40 @@ public class ProjectMembersEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private UserEntity user;
+      private ProjectEntity project;
+      private RoleEnum role;
+      private LocalDateTime joinedAt;
+
+      public Builder user(UserEntity user) {
+         this.user = user;
+         return this;
+      }
+
+      public Builder project(ProjectEntity project) {
+         this.project = project;
+         return this;
+      }
+
+      public Builder role(RoleEnum role) {
+         this.role = role;
+         return this;
+      }
+
+      public Builder joinedAt(LocalDateTime joinedAt) {
+         this.joinedAt = joinedAt;
+         return this;
+      }
+
+      public ProjectMembersEntity build() {
+         return new ProjectMembersEntity(this);
+      }
+   }
 
 }
