@@ -28,8 +28,10 @@ import jakarta.persistence.Column;
 import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 
 // import entities
-import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+
+// import enums
+import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 
 
 @Entity
@@ -77,13 +79,15 @@ public class ProjectMembersEntity implements SoftDeleteInterface {
 
 
    // constructor
-   protected ProjectMembersEntity(){}
+   public ProjectMembersEntity(){}
 
 
    // getters
    public UUID getId() { return this.id; }
    public UserEntity getUser() { return this.user; }
+   public UUID getUserId() { return this.user.getId(); }   
    public ProjectEntity getProject() { return this.project; }
+   public UUID getProjectId() { return this.project.getId(); }
    public RoleEnum getRole() { return this.role; }
    public LocalDateTime getJoinedAt() { return this.joinedAt; }
    public LocalDateTime getUpdatedAt() { return this.updatedAt; }
