@@ -101,7 +101,7 @@ public class ProjectImageService {
       ProjectImageDocument image = this.projectImageRepository.findByProjectId(projectId);
       if(image == null) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Imagem do projeto não existe",
+            "%s: Imagem de projeto não existe",
             ResponseMessages.NOT_FOUND
          ));
       }
@@ -121,6 +121,26 @@ public class ProjectImageService {
       }
 
       return images;
+   }
+
+
+   // delete project image
+   public void deleteProjectImage(UUID projectId) {
+      this.projectService.existsById(projectId);
+      
+      // project image existence - validation
+      if(this.projectImageRepository.findByProjectId(projectId) == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Imagem de projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // delete project image id - mysql
+      this.projectService.removeLogoImageId(projectId);
+
+      // delete project image - mongodb
+      this.projectImageRepository.deleteByProjectId(projectId);
    }
 
 }
