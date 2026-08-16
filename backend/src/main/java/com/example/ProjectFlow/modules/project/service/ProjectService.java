@@ -23,6 +23,7 @@ import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectMembersDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
@@ -32,7 +33,11 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationService;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
+
+// import enums
+import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 import com.example.ProjectFlow.modules.project.enums.StatusEnum;
+
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -48,6 +53,7 @@ public class ProjectService {
    private final ProjectValidator projectValidator;
    private final UserService userService;
    private final OrganizationService organizationService;
+   private final ProjectMemberService projectMemberService;
 
 
    // constructor - dependency injection
@@ -55,32 +61,43 @@ public class ProjectService {
       ProjectRepository projectRepository,
       ProjectValidator projectValidator,
       UserService userService,
-      OrganizationService organizationService
+      OrganizationService organizationService,
+      ProjectMemberService projectMemberService
    ) {
       this.projectRepository = projectRepository;
       this.projectValidator = projectValidator;
       this.userService = userService;
       this.organizationService = organizationService;
+      this.projectMemberService = projectMemberService;
    }
 
 
    // project creation
    @Transactional
    public ProjectResponseDTO create(ProjectDTO data) {
-      this.projectValidator.organizationIdValidate(data.organizationId());
       this.projectValidator.ownerIdValidate(data.ownerId());
+      this.projectValidator.organizationIdValidate(data.organizationId());
       this.projectValidator.nameValidate(data.name());
       this.projectValidator.descriptionValidate(data.description());
 
+      // get owner data
+      UserEntity owner = this.userService.getEntityById(data.ownerId());
+      
       // get organization data
       OrganizationEntity organization = this.organizationService.getEntityById(data.organizationId());
 
-      // get owner data
-      UserEntity owner = this.userService.getEntityById(data.ownerId());
+      // project creation
+      ProjectResponseDTO projectCreated = this.projectRepository.create(data, organization, owner);
 
-      // set project member - admin...
+      // set project member - admin
+      ProjectMembersDTO projectMembersData = new ProjectMembersDTO(
+         projectCreated.id(),
+         owner.getId(),
+         RoleEnum.ADMIN.toString()
+      );
+      this.projectMemberService.createMemberParticipation(projectMembersData);
 
-      return this.projectRepository.create(data, organization, owner);
+      return projectCreated;
    }
 
 
