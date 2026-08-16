@@ -36,9 +36,9 @@ import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 public class ProfileImageService {
  
    // properties
-   ProfileImageRepository profileImageRepository;
-   UserService userService;
-   ProfileImageValidator profileImageValidator;
+   private final ProfileImageRepository profileImageRepository;
+   private final UserService userService;
+   private final ProfileImageValidator profileImageValidator;
 
    
    // constructor - dependency injection
