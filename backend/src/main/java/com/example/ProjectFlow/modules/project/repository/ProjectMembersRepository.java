@@ -19,7 +19,7 @@ import jakarta.persistence.NoResultException;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersCompleteResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersDTO;
-
+import com.example.ProjectFlow.modules.project.dto.ProjectMembersDeletedDTO;
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
@@ -167,6 +167,21 @@ public class ProjectMembersRepository {
       member.setRole(role);
 
       return ProjectMembersResponseDTO.get(member);
+   }
+
+
+   // delete member participation
+   @Transactional
+   public ProjectMembersDeletedDTO delete(UUID id) throws NoResultException {
+      ProjectMembersEntity member = this.entityManager
+         .createQuery("SELECT e FROM ProjectMembersEntity e WHERE e.id = :id", ProjectMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      member.setDeletedAt(LocalDateTime.now());
+
+      return ProjectMembersDeletedDTO.get(member);
    }
 
 }
