@@ -9,6 +9,7 @@ import java.util.UUID;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,6 +79,26 @@ public class ProjectMembersController {
       @PathVariable UUID projectId
    ) {
       List<ProjectMembersCompleteResponseDTO> members = this.projectMemberService.getAllMembersByProjectId(projectId);
+
+      ApiResponse<List<ProjectMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<ProjectMembersCompleteResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(members)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get project members by role
+   @GetMapping(value = "/project/{projectId}/members/role")
+   @Operation(summary = "Get all members of an project by role")
+   public ResponseEntity<ApiResponse<List<ProjectMembersCompleteResponseDTO>>> getAllMembersByRole(
+      @PathVariable UUID projectId,
+      @RequestParam String r
+   ) {
+      List<ProjectMembersCompleteResponseDTO> members = this.projectMemberService.getAllMembersByRole(projectId, r);
 
       ApiResponse<List<ProjectMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<ProjectMembersCompleteResponseDTO>>()
          .success(true)
