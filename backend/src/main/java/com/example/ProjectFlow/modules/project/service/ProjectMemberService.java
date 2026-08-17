@@ -137,4 +137,27 @@ public class ProjectMemberService {
       }
    }
 
+
+   // check if user is a membership
+   public boolean checkUserMembership(UUID userId, UUID projectId) {
+      this.projectMembersValidator.userIdValidate(userId);
+      this.projectMembersValidator.projectIdValidate(projectId);
+
+      // user existence - check
+      this.userService.existsById(userId);
+
+      // project existence - check
+      this.projectService.existsById(projectId);
+
+      boolean exist = this.projectMembersRepository.checkUserMembership(userId, projectId);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não participa do projeto",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
 }

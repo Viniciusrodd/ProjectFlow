@@ -120,4 +120,21 @@ public class ProjectMembersRepository {
       return entity;
    }
 
+
+   // check if user is a membership
+   public boolean checkUserMembership(UUID userId, UUID projectId) {
+      Long count = this.entityManager
+         .createQuery(
+            "SELECT COUNT(m) FROM ProjectMembersEntity m " +
+            "WHERE m.user.id = :userId " +
+            "AND m.project.id = :projectId ",
+            Long.class
+         )
+         .setParameter("userId", userId)
+         .setParameter("projectId", projectId)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
 }
