@@ -135,9 +135,11 @@ public class OrganizationMembersController {
 
 
    // delete member participation
-   @DeleteMapping(value = "organization/{id}/member")
+   @DeleteMapping(value = "/organization/member/{id}")
    @Operation(summary = "Remove a member's participation")
-   public ResponseEntity<ApiResponse<OrganizationMembersDeletedDTO>> deleteMemberParticipation(@PathVariable UUID id) {
+   public ResponseEntity<ApiResponse<OrganizationMembersDeletedDTO>> deleteMemberParticipation(
+      @PathVariable UUID id
+   ) {
       OrganizationMembersDeletedDTO participationDeleted = this.organizationMemberService.delete(id);
 
       ApiResponse<OrganizationMembersDeletedDTO> response = new ApiResponse.Builder<OrganizationMembersDeletedDTO>()
