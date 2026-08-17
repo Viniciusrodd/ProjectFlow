@@ -154,4 +154,19 @@ public class ProjectMembersRepository {
       return admins;
    }
 
+
+   // update member role
+   @Transactional
+   public ProjectMembersResponseDTO updateMemberRole(UUID id, RoleEnum role) throws NoResultException {
+      ProjectMembersEntity member = this.entityManager
+         .createQuery("SELECT e FROM ProjectMembersEntity e WHERE e.id = :id", ProjectMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      member.setRole(role);
+
+      return ProjectMembersResponseDTO.get(member);
+   }
+
 }
