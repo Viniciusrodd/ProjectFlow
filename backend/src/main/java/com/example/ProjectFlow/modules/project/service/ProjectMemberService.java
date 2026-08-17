@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Lazy;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.NoResultException;
 // jakarta imports
 import jakarta.transaction.Transactional;
+import jakarta.persistence.NoResultException;
 
 // import repository
 import com.example.ProjectFlow.modules.project.repository.ProjectMembersRepository;
@@ -173,10 +173,34 @@ public class ProjectMemberService {
    public void validateLastAdmin(UUID projectId) {
       Long admins = this.countAdminsByProject(projectId);
 
-      if(admins < 1) {
+      if(admins <= 1) {
          throw MultiExceptions.unauthorized(String.format(
             "%s: Um projeto deve ter pelo menos 1 administrador",
             ResponseMessages.UNAUTHORIZED
+         ));
+      }
+   }
+
+
+   // update member role
+   @Transactional
+   public ProjectMembersResponseDTO updateMemberRole(UUID id, String role) {
+      this.projectMembersValidator.idValidate(id);
+      this.projectMembersValidator.roleValidate(role);
+
+      try {
+         // last admin - check
+         ProjectMembersEntity member = this.getEntityById(id);
+         if(member.getRole() == RoleEnum.ADMIN && !role.equalsIgnoreCase("ADMIN")) {
+            this.validateLastAdmin(member.getProject().getId());
+         }
+
+         return this.projectMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Participação não existe",
+            ResponseMessages.NOT_FOUND
          ));
       }
    }
