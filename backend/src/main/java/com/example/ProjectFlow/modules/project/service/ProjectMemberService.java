@@ -22,6 +22,7 @@ import com.example.ProjectFlow.modules.project.validator.ProjectMembersValidator
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersCompleteResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectMembersDeletedDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
@@ -196,6 +197,29 @@ public class ProjectMemberService {
          }
 
          return this.projectMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Participação não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // delete member participation
+   @Transactional
+   public ProjectMembersDeletedDTO delete(UUID id) {
+      this.projectMembersValidator.idValidate(id);
+
+      try {
+         // last admin - check
+         ProjectMembersEntity member = this.getEntityById(id);
+         if(member.getRole() == RoleEnum.ADMIN) {
+            this.validateLastAdmin(member.getProject().getId());
+         }
+
+         return this.projectMembersRepository.delete(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
