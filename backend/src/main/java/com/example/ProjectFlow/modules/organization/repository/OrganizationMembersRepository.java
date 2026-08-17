@@ -64,6 +64,7 @@ public class OrganizationMembersRepository {
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
             "JOIN FETCH m.user " +
+            "JOIN FETCH m.organization " +
             "WHERE m.organization.id = :organizationId " +
             "ORDER BY m.joinedAt DESC", 
             OrganizationMembersEntity.class
