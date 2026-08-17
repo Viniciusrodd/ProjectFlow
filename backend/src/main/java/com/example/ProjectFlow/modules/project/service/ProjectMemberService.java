@@ -4,6 +4,10 @@ package com.example.ProjectFlow.modules.project.service;
 
 // imports
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.context.annotation.Lazy;
 
 // jakarta imports
@@ -17,6 +21,7 @@ import com.example.ProjectFlow.modules.project.validator.ProjectMembersValidator
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersResponseDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectMembersCompleteResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersDTO;
 
 // import service
@@ -27,8 +32,10 @@ import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Service
@@ -68,6 +75,26 @@ public class ProjectMemberService {
       ProjectEntity project = this.projectService.getEntityById(data.projectId());
 
       return this.projectMembersRepository.createMemberParticipation(data, user, project);
+   }
+
+
+   // get all project members
+   public List<ProjectMembersCompleteResponseDTO> getAllMembersByProjectId(UUID projectId) {
+      this.projectMembersValidator.projectIdValidate(projectId);
+
+      // project existence - check
+      this.projectService.existsById(projectId);
+
+      List<ProjectMembersCompleteResponseDTO> members = this.projectMembersRepository.getAllMembersByProjectId(projectId);
+      
+      if(members.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membros não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return members;
    }
 
 }
