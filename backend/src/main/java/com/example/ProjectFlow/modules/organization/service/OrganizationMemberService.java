@@ -133,7 +133,7 @@ public class OrganizationMemberService {
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Participante não existe",
+            "%s: Membro não existe",
             ResponseMessages.NOT_FOUND
          ));
       }

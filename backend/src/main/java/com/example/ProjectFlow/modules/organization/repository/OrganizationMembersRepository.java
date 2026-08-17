@@ -112,13 +112,13 @@ public class OrganizationMembersRepository {
 
 
    // get entity by id
-   public OrganizationMembersEntity getEntityById(UUID id) {
-      OrganizationMembersEntity member = this.entityManager
-         .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id ", OrganizationMembersEntity.class)
+   public OrganizationMembersEntity getEntityById(UUID id) throws NoResultException {
+      OrganizationMembersEntity entity = this.entityManager
+         .createQuery("SELECT e FROM OrganizationMembersEntity e WHERE e.id = :id ", OrganizationMembersEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return member;
+      return entity;
    }
 
 
