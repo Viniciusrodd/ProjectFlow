@@ -70,13 +70,42 @@ public class ProjectMembersRepository {
          .setParameter("projectId", projectId)
          .getResultList();
 
-         List<ProjectMembersCompleteResponseDTO> allMembers = new ArrayList<>();
+      List<ProjectMembersCompleteResponseDTO> allMembers = new ArrayList<>();
 
-         for(ProjectMembersEntity member : members) {
-            allMembers.add(ProjectMembersCompleteResponseDTO.get(member));
-         }
+      for(ProjectMembersEntity member : members) {
+         allMembers.add(ProjectMembersCompleteResponseDTO.get(member));
+      }
 
-         return allMembers;
+      return allMembers;
+   }
+
+
+   // get all members by role
+   public List<ProjectMembersCompleteResponseDTO> getAllMembersByRole(
+      UUID projectId,
+      RoleEnum role
+   ) {
+      List<ProjectMembersEntity> members = this.entityManager
+         .createQuery(
+            "SELECT m FROM ProjectMembersEntity m " +
+            "JOIN FETCH m.user " +
+            "JOIN FETCH m.project " +
+            "WHERE m.project.id = :projectId " +
+            "AND m.role = :role " +
+            "ORDER BY m.joinedAt DESC",
+            ProjectMembersEntity.class
+         )
+         .setParameter("projectId", projectId)
+         .setParameter("role", role)
+         .getResultList();
+
+      List<ProjectMembersCompleteResponseDTO> allMembers = new ArrayList<>();
+
+      for(ProjectMembersEntity member : members) {
+         allMembers.add(ProjectMembersCompleteResponseDTO.get(member));
+      }
+
+      return allMembers;
    }
 
 }
