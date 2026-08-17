@@ -29,6 +29,7 @@ import com.example.ProjectFlow.modules.user.service.UserService;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
+import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import exceptions
@@ -86,6 +87,27 @@ public class ProjectMemberService {
       this.projectService.existsById(projectId);
 
       List<ProjectMembersCompleteResponseDTO> members = this.projectMembersRepository.getAllMembersByProjectId(projectId);
+      
+      if(members.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membros não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return members;
+   }
+
+
+   // get all members by role
+   public List<ProjectMembersCompleteResponseDTO> getAllMembersByRole(UUID projectId, String role) {
+      this.projectMembersValidator.projectIdValidate(projectId);
+      this.projectMembersValidator.roleValidate(role);
+
+      // project existence - check
+      this.projectService.existsById(projectId);
+
+      List<ProjectMembersCompleteResponseDTO> members = this.projectMembersRepository.getAllMembersByRole(projectId, RoleEnum.valueOf(role.toUpperCase()));
       
       if(members.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
