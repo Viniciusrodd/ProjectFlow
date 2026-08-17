@@ -3,10 +3,14 @@
 package com.example.ProjectFlow.modules.project.controller;
 
 // imports
+import java.util.List;
+import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -28,6 +32,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersResponseDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectMembersCompleteResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersDTO;
 
 // import constants
@@ -63,6 +68,25 @@ public class ProjectMembersController {
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get all project members
+   @GetMapping(value = "/project/{projectId}/members")
+   @Operation(summary = "Get all members of an project")
+   public ResponseEntity<ApiResponse<List<ProjectMembersCompleteResponseDTO>>> getAllMembers(
+      @PathVariable UUID projectId
+   ) {
+      List<ProjectMembersCompleteResponseDTO> members = this.projectMemberService.getAllMembersByProjectId(projectId);
+
+      ApiResponse<List<ProjectMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<ProjectMembersCompleteResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(members)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
