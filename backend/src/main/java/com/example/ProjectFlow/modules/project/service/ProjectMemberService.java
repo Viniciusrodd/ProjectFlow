@@ -160,4 +160,25 @@ public class ProjectMemberService {
       return exist;
    }
 
+
+   // count admins members by project
+   public Long countAdminsByProject(UUID projectId) {
+      this.projectMembersValidator.projectIdValidate(projectId);
+
+      return this.projectMembersRepository.countAdminsByProject(projectId);
+   }
+
+
+   // last admin member by project - validate
+   public void validateLastAdmin(UUID projectId) {
+      Long admins = this.countAdminsByProject(projectId);
+
+      if(admins < 1) {
+         throw MultiExceptions.unauthorized(String.format(
+            "%s: Um projeto deve ter pelo menos 1 administrador",
+            ResponseMessages.UNAUTHORIZED
+         ));
+      }
+   }
+
 }

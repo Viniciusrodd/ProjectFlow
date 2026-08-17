@@ -137,4 +137,21 @@ public class ProjectMembersRepository {
       return count > 0;
    }
 
+
+   // count admins members by project
+   public Long countAdminsByProject(UUID projectId) {
+      Long admins = this.entityManager
+         .createQuery(
+            "SELECT COUNT(m) FROM ProjectMembersEntity m " +
+            "WHERE m.project.id = :projectId " +
+            "AND m.role = :role ",
+            Long.class
+         )
+         .setParameter("projectId", projectId)
+         .setParameter("role", RoleEnum.ADMIN)
+         .getSingleResult();
+
+      return admins;
+   }
+
 }
