@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersCompleteResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersDTO;
+import com.example.ProjectFlow.modules.project.dto.ProjectMembersDeletedDTO;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
@@ -126,6 +128,25 @@ public class ProjectMembersController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.UPDATED)
          .data(updatedMember)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete member participation
+   @DeleteMapping(value = "/project/member/{id}")
+   @Operation(summary = "Delete a member's participation")
+   public ResponseEntity<ApiResponse<ProjectMembersDeletedDTO>> deleteMemberParticipation(
+      @PathVariable UUID id
+   ) {
+      ProjectMembersDeletedDTO participationDeleted = this.projectMemberService.delete(id);
+
+      ApiResponse<ProjectMembersDeletedDTO> response = new ApiResponse.Builder<ProjectMembersDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(participationDeleted)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
