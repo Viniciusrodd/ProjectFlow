@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 // http imports
@@ -105,6 +106,26 @@ public class ProjectMembersController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(members)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update member role
+   @PutMapping(value = "/project/member/{id}")
+   @Operation(summary = "Update a member role")
+   public ResponseEntity<ApiResponse<ProjectMembersResponseDTO>> updateMemberRole(
+      @PathVariable UUID id,
+      @RequestParam String r
+   ) {
+      ProjectMembersResponseDTO updatedMember = this.projectMemberService.updateMemberRole(id, r);
+
+      ApiResponse<ProjectMembersResponseDTO> response = new ApiResponse.Builder<ProjectMembersResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedMember)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
