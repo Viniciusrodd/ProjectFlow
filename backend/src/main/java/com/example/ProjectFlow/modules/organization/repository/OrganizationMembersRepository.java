@@ -91,8 +91,10 @@ public class OrganizationMembersRepository {
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
             "JOIN FETCH m.user " +
+            "JOIN FETCH m.organization " +
             "WHERE m.organization.id = :organizationId " +
-            "AND m.role = :role ",
+            "AND m.role = :role " +
+            "ORDER BY m.joinedAt DESC",
             OrganizationMembersEntity.class
          )
          .setParameter("organizationId", organizationId)

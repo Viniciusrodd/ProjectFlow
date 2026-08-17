@@ -115,7 +115,7 @@ public class OrganizationMemberService {
 
       if(members.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Participantes não existem",
+            "%s: Membros não existem",
             ResponseMessages.NOT_FOUND
          ));
       }
