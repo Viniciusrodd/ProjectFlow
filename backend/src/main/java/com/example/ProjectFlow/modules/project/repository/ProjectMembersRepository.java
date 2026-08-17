@@ -13,6 +13,7 @@ import java.util.UUID;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.ProjectMembersResponseDTO;
@@ -106,6 +107,17 @@ public class ProjectMembersRepository {
       }
 
       return allMembers;
+   }
+
+
+   // get entity by id
+   public ProjectMembersEntity getEntityById(UUID id) throws NoResultException {
+      ProjectMembersEntity entity = this.entityManager
+         .createQuery("SELECT e FROM ProjectMembersEntity e WHERE e.id = :id", ProjectMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+         
+      return entity;
    }
 
 }

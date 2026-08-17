@@ -4,12 +4,11 @@ package com.example.ProjectFlow.modules.project.service;
 
 // imports
 import org.springframework.stereotype.Service;
-
+import org.springframework.context.annotation.Lazy;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.context.annotation.Lazy;
-
+import jakarta.persistence.NoResultException;
 // jakarta imports
 import jakarta.transaction.Transactional;
 
@@ -29,8 +28,11 @@ import com.example.ProjectFlow.modules.user.service.UserService;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
-import com.example.ProjectFlow.modules.project.enums.RoleEnum;
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+
+// import enums
+import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -117,6 +119,22 @@ public class ProjectMemberService {
       }
 
       return members;
+   }
+
+
+   // get entity by id
+   public ProjectMembersEntity getEntityById(UUID id) {
+      this.projectMembersValidator.idValidate(id);
+
+      try {
+         return this.projectMembersRepository.getEntityById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membro não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
