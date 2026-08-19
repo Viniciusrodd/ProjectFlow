@@ -5,6 +5,14 @@ package com.example.ProjectFlow.common.constants;
 
 public class ValidationConstants {
  
+   // min lengths
+   public static final int MIN_NAME_LENGTH = 4;
+   public static final int MIN_PASSWORD_LENGTH = 8;
+   public static final int MIN_TITLE_LENGTH = 3;
+   public static final int MIN_ORGANIZATION_NAME_LENGTH = 4;
+   public static final int MIN_PROJECT_NAME_LENGTH = 4;
+   public static final int MIN_BOARD_NAME_LENGTH = 3;
+   
    // max lengths
    public static final int MAX_NAME_LENGTH = 120;
    public static final int MAX_EMAIL_LENGTH = 255;
@@ -16,13 +24,7 @@ public class ValidationConstants {
    public static final int MAX_CHECKLIST_DESC_LENGTH = 255;
    public static final int MAX_ORGANIZATION_NAME_LENGTH = 120;
    public static final int MAX_PROJECT_NAME_LENGTH = 120;
-
-   // min lengths
-   public static final int MIN_NAME_LENGTH = 4;
-   public static final int MIN_PASSWORD_LENGTH = 8;
-   public static final int MIN_TITLE_LENGTH = 3;
-   public static final int MIN_ORGANIZATION_NAME_LENGTH = 4;
-   public static final int MIN_PROJECT_NAME_LENGTH = 4;
+   public static final int MAX_BOARD_NAME_LENGTH = 80;
 
    // file limits
    public static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
