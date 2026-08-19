@@ -5,12 +5,14 @@ package com.example.ProjectFlow.modules.board.repository;
 // imports
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardDTO;
@@ -43,7 +45,7 @@ public class BoardRepository {
    }
 
 
-   // get all boards
+   // get all
    public List<BoardResponseDTO> getAll() {
       List<BoardEntity> boardsDocument = this.entityManager
          .createQuery("SELECT b FROM BoardEntity b ORDER BY b.createdAt ASC", BoardEntity.class)
@@ -56,6 +58,17 @@ public class BoardRepository {
       }
 
       return boards;
+   }
+
+
+   // get by id
+   public BoardResponseDTO getById(UUID id) throws NoResultException {
+      BoardEntity board = this.entityManager
+         .createQuery("SELECT b FROM BoardEntity b WHERE b.id = :id", BoardEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return BoardResponseDTO.get(board);
    }
 
 }
