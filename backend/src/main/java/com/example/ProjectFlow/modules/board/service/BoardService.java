@@ -114,4 +114,20 @@ public class BoardService {
       }
    }
 
+
+   // get board by project id
+   public BoardResponseDTO getByProjectId(UUID projectId) {
+      this.boardValidator.projectIdValidate(projectId);
+
+      try {
+         return this.boardRepository.getByProjectId(projectId);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Quadro Kanban não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
