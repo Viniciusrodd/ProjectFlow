@@ -101,4 +101,21 @@ public class BoardController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // get board by project id
+   @GetMapping(value = "/board/project/{projectId}")
+   @Operation(summary = "Get board by project id")
+   public ResponseEntity<ApiResponse<BoardResponseDTO>> getByProjectId(@PathVariable UUID projectId) {
+      BoardResponseDTO board = this.boardService.getByProjectId(projectId);
+
+      ApiResponse<BoardResponseDTO> response = new ApiResponse.Builder<BoardResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(board)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
