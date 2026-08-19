@@ -146,4 +146,22 @@ public class BoardService {
       return exist;
    }
 
+
+   // update board name
+   @Transactional
+   public BoardResponseDTO updateName(UUID id, String name) {
+      this.boardValidator.idValidate(id);
+      this.boardValidator.nameValidate(name);
+
+      try {
+         return this.boardRepository.updateName(id, name);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Quadro Kanban não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
