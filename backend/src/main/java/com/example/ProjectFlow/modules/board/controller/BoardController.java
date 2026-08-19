@@ -3,19 +3,15 @@
 package com.example.ProjectFlow.modules.board.controller;
 
 // imports
-import java.util.List;
-import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -68,6 +64,23 @@ public class BoardController {
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get all boards
+   @GetMapping("/boards")
+   @Operation(summary = "Get all boards")
+   public ResponseEntity<ApiResponse<List<BoardResponseDTO>>> getAllBoards() {
+      List<BoardResponseDTO> boards = this.boardService.getAll();
+
+      ApiResponse<List<BoardResponseDTO>> response = new ApiResponse.Builder<List<BoardResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(boards)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
