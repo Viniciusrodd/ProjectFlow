@@ -8,10 +8,12 @@ package com.example.ProjectFlow.modules.board.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.UUID;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -78,6 +80,23 @@ public class BoardController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(boards)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get board by id
+   @GetMapping(value = "/board/{id}")
+   @Operation(summary = "Get board by id")
+   public ResponseEntity<ApiResponse<BoardResponseDTO>> getBoardById(@PathVariable UUID id) {
+      BoardResponseDTO board = this.boardService.getById(id);
+
+      ApiResponse<BoardResponseDTO> response = new ApiResponse.Builder<BoardResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(board)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
