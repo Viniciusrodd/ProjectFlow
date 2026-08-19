@@ -4,12 +4,10 @@ package com.example.ProjectFlow.modules.board.service;
 
 // imports
 import java.util.List;
-import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
-import jakarta.persistence.NoResultException;
 
 // import repository
 import com.example.ProjectFlow.modules.board.repository.BoardRepository;
@@ -25,7 +23,6 @@ import com.example.ProjectFlow.modules.board.dto.BoardResponseDTO;
 import com.example.ProjectFlow.modules.project.service.ProjectService;
 
 // import entity
-import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
 // import exceptions
@@ -66,6 +63,21 @@ public class BoardService {
       ProjectEntity project = this.projectService.getEntityById(data.projectId());
 
       return this.boardRepository.create(data, project);
+   }
+
+
+   // get all boards
+   public List<BoardResponseDTO> getAll() {
+      List<BoardResponseDTO> boards = this.boardRepository.getAll();
+
+      if(boards.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Quadros kanban não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return boards;
    }
 
 }
