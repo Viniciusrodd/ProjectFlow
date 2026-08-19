@@ -3,6 +3,7 @@
 package com.example.ProjectFlow.modules.board.repository;
 
 // imports
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardDTO;
+import com.example.ProjectFlow.modules.board.dto.BoardDeletedDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardResponseDTO;
 
 // import entity
@@ -118,5 +120,21 @@ public class BoardRepository {
 
       return BoardResponseDTO.get(board);
    }
+
+
+   // delete board
+   @Transactional
+   public BoardDeletedDTO delete(UUID id) throws NoResultException {
+      BoardEntity board = this.entityManager
+         .createQuery("SELECT b FROM BoardEntity b WHERE b.id = :id", BoardEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      board.setDeletedAt(LocalDateTime.now());
+
+      return BoardDeletedDTO.get(board);
+   }
+
 
 }
