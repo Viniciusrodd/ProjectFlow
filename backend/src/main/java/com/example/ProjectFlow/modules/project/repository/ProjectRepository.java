@@ -2,13 +2,12 @@
 // packages
 package com.example.ProjectFlow.modules.project.repository;
 
+// imports
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-// imports
 import org.springframework.stereotype.Repository;
 
 // jakarta imports
@@ -22,6 +21,7 @@ import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;

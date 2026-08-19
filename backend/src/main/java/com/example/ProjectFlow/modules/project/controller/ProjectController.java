@@ -59,9 +59,7 @@ public class ProjectController {
    // project creation
    @PostMapping("/project")
    @Operation(summary = "Create a project")
-   public ResponseEntity<ApiResponse<ProjectResponseDTO>> createProject(
-      @RequestBody ProjectDTO data
-   ) {
+   public ResponseEntity<ApiResponse<ProjectResponseDTO>> createProject(@RequestBody ProjectDTO data) {
       ProjectResponseDTO project = this.projectService.create(data);
 
       ApiResponse<ProjectResponseDTO> response = new ApiResponse.Builder<ProjectResponseDTO>()
