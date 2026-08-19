@@ -71,9 +71,14 @@ public class BoardEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
+   // constructor
+   public BoardEntity() {}
+
+
    // getters
    public UUID getId() { return this.id; }
    public ProjectEntity getProject() { return this.project; }
+   public UUID getProjectId() { return this.project.getId(); }
    public List<BoardColumnsEntity> getBoardColumns() { return this.boardColumns; }
    public String getName() { return this.name; }
    public LocalDateTime getCreatedAt() { return this.createdAt; }
