@@ -71,4 +71,15 @@ public class BoardRepository {
       return BoardResponseDTO.get(board);
    }
 
+
+   // get entity by id
+   public BoardEntity getEntityById(UUID id) throws NoResultException {
+      BoardEntity board = this.entityManager
+         .createQuery("SELECT b FROM BoardEntity b WHERE b.id = :id", BoardEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return board;
+   }
+
 }
