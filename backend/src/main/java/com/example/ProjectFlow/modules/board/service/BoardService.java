@@ -181,6 +181,22 @@ public class BoardService {
             ResponseMessages.NOT_FOUND
          ));
       }
-   }   
+   }
+
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      boardValidator.idValidate(id);
+
+      try {
+         return this.boardRepository.isDeleted(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Quadro Kanban não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
 
 }
