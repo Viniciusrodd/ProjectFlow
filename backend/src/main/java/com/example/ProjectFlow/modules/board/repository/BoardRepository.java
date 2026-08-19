@@ -82,4 +82,15 @@ public class BoardRepository {
       return board;
    }
 
+
+   // get board by project id
+   public BoardResponseDTO getByProjectId(UUID projectId) {
+      BoardEntity boards = this.entityManager
+         .createQuery("SELECT b FROM BoardEntity b WHERE b.project.id = :projectId", BoardEntity.class)
+         .setParameter("projectId", projectId)
+         .getSingleResult();
+
+      return BoardResponseDTO.get(boards);
+   }
+
 }
