@@ -19,12 +19,14 @@ import com.example.ProjectFlow.modules.board.validator.BoardValidator;
 
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardDTO;
+import com.example.ProjectFlow.modules.board.dto.BoardDeletedDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardResponseDTO;
-import com.example.ProjectFlow.modules.board.entity.BoardEntity;
+
 // import service
 import com.example.ProjectFlow.modules.project.service.ProjectService;
 
 // import entity
+import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
 // import exceptions
@@ -163,5 +165,22 @@ public class BoardService {
          ));
       }
    }
+
+
+   // delete board
+   @Transactional
+   public BoardDeletedDTO delete(UUID id) {
+      this.boardValidator.idValidate(id);
+
+      try {
+         return this.boardRepository.delete(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Quadro Kanban não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }   
 
 }
