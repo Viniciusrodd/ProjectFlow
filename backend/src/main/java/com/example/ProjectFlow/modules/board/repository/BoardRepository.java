@@ -93,4 +93,15 @@ public class BoardRepository {
       return BoardResponseDTO.get(boards);
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(b) FROM BoardEntity b WHERE b.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
 }

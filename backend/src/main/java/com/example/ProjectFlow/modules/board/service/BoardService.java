@@ -130,4 +130,20 @@ public class BoardService {
       }
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.boardValidator.idValidate(id);
+
+      boolean exist = this.boardRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Quadro Kanban não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
 }
