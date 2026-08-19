@@ -9,9 +9,11 @@ import java.util.UUID;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 // http imports
@@ -113,6 +115,26 @@ public class BoardController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(board)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update board name
+   @PutMapping(value = "/board/{id}/name")
+   @Operation(summary = "Update the name of board")
+   public ResponseEntity<ApiResponse<BoardResponseDTO>> updateBoardName(
+      @PathVariable UUID id,
+      @RequestParam String n
+   ) {
+      BoardResponseDTO updatedBoard = this.boardService.updateName(id, n);
+
+      ApiResponse<BoardResponseDTO> response = new ApiResponse.Builder<BoardResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedBoard)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
