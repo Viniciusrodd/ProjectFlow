@@ -3,6 +3,8 @@
 package com.example.ProjectFlow.modules.board.repository;
 
 // imports
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Repository;
 
 // jakarta imports
@@ -38,6 +40,22 @@ public class BoardRepository {
       this.entityManager.persist(board);
 
       return BoardResponseDTO.get(board);
+   }
+
+
+   // get all boards
+   public List<BoardResponseDTO> getAll() {
+      List<BoardEntity> boardsDocument = this.entityManager
+         .createQuery("SELECT b FROM BoardEntity b ORDER BY b.createdAt ASC", BoardEntity.class)
+         .getResultList();
+
+      List<BoardResponseDTO> boards = new ArrayList<>();
+
+      for(BoardEntity board : boardsDocument) {
+         boards.add(BoardResponseDTO.get(board));
+      }
+
+      return boards;
    }
 
 }
