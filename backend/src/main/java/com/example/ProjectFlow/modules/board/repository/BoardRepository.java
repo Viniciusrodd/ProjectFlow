@@ -104,4 +104,19 @@ public class BoardRepository {
       return count > 0;
    }
 
+
+   // update board name
+   @Transactional
+   public BoardResponseDTO updateName(UUID id, String name) {
+      BoardEntity board = this.entityManager
+         .createQuery("SELECT b FROM BoardEntity b WHERE b.id = :id", BoardEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      board.setName(name);
+
+      return BoardResponseDTO.get(board);
+   }
+
 }
