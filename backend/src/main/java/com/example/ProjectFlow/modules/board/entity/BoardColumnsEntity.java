@@ -82,13 +82,23 @@ public class BoardColumnsEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
-   protected BoardColumnsEntity() {}
+   // constructor - empty
+   public BoardColumnsEntity() {}
+
+   
+   // constructor - builder
+   public BoardColumnsEntity(Builder builder) {
+      setBoard(builder.board);
+      setName(builder.name);
+      setPosition(builder.position);
+      setColor(builder.color);
+   }
 
 
    // getters
    public UUID getId() { return this.id; }
    public BoardEntity getBoard() { return this.board; }
+   public UUID getBoardId() { return this.board.getId(); }
    public List<TasksEntity> getTasks() { return this.tasks; }
    public BoardEnum getName() { return this.name; } 
    public int getPosition() { return this.position; } 
@@ -112,5 +122,40 @@ public class BoardColumnsEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; } 
+
+
+   //// builder
+
+
+   public static class Builder {
+      private BoardEntity board;
+      private BoardEnum name;
+      private int position;
+      private String color;
+
+      public Builder board(BoardEntity board) {
+         this.board = board;
+         return this;
+      }
+
+      public Builder name(BoardEnum name) {
+         this.name = name;
+         return this;
+      }
+
+      public Builder position(int position) {
+         this.position = position;
+         return this;
+      }
+
+      public Builder color(String color) {
+         this.color = color;
+         return this;
+      }
+
+      public BoardColumnsEntity build() {
+         return new BoardColumnsEntity(this);
+      }
+   }
 
 }
