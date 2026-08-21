@@ -20,4 +20,17 @@ public enum BoardEnum {
    // getters
    public String getType() { return type; }
 
+   // is valid
+   public static boolean isValid(String type) {
+      if(type == null) return false;
+      
+      for(BoardEnum board : BoardEnum.values()) {
+         if(board.getType().equalsIgnoreCase(type)) {
+            return true;
+         }
+      }
+      
+      return false;
+   }
+
 }
