@@ -42,12 +42,12 @@ public class ProjectMembersRepository {
    @Transactional
    public ProjectMembersResponseDTO createMemberParticipation(
       ProjectMembersDTO data,
-      UserEntity user,
-      ProjectEntity project
+      UserEntity userEntity,
+      ProjectEntity projectEntity
    ) {
       ProjectMembersEntity projectMembers = new ProjectMembersEntity.Builder()
-         .user(user)
-         .project(project)
+         .user(userEntity)
+         .project(projectEntity)
          .role(RoleEnum.valueOf(data.role().toUpperCase()))
          .joinedAt(LocalDateTime.now())
          .build();
