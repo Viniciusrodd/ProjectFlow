@@ -4,8 +4,6 @@ package com.example.ProjectFlow.modules.board.validator;
 
 // imports
 import org.springframework.stereotype.Component;
-import java.util.Optional;
-import java.util.Arrays;
 import java.util.UUID;
 
 // import exceptions
