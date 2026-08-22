@@ -48,4 +48,15 @@ public class BoardColumnsRepository {
       return BoardColumnsResponseDTO.get(boardColumns);
    }
 
+
+   // check if column name already exist
+   public boolean checkColumnNameExistence(String name) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(c) FROM BoardColumnsEntity c WHERE c.name = :name", Long.class)
+         .setParameter("name", BoardEnum.valueOf(name.trim().toUpperCase().replace(" ", "")))
+         .getSingleResult();
+
+      return count > 0;
+   }
+
 }
