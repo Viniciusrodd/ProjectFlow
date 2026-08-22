@@ -70,7 +70,7 @@ public class BoardColumnsController {
    }
 
 
-   // get all board columns
+   // get all board columns by board id
    @GetMapping(value = "/board/{boardId}/columns")
    @Operation(summary = "Get all board columns")
    public ResponseEntity<ApiResponse<List<BoardColumnsResponseDTO>>> getAllBoardColumns(
@@ -83,6 +83,25 @@ public class BoardColumnsController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(boardColumns)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get board column by id
+   @GetMapping(value = "/board/column/{id}")
+   @Operation(summary = "Get board column by id")
+   public ResponseEntity<ApiResponse<BoardColumnsResponseDTO>> getBoardColumnById(
+      @PathVariable UUID id
+   ) {
+      BoardColumnsResponseDTO boardColumn = this.boardColumnService.getColumnById(id);
+
+      ApiResponse<BoardColumnsResponseDTO> response = new ApiResponse.Builder<BoardColumnsResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(boardColumn)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
