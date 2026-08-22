@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
@@ -75,7 +76,7 @@ public class BoardColumnsRepository {
    }
 
 
-   // get all board columns
+   // get all board columns by board id
    public List<BoardColumnsResponseDTO> getAllColumnsByBoardId(UUID boardId) {
       List<BoardColumnsEntity> columns = this.entityManager
          .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.board.id = :boardId", BoardColumnsEntity.class)
@@ -89,6 +90,17 @@ public class BoardColumnsRepository {
       }
 
       return allColumns;
-   }   
+   }
+
+
+   // get board column by id
+   public BoardColumnsResponseDTO getColumnById(UUID id) throws NoResultException {
+      BoardColumnsEntity column = this.entityManager
+         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return BoardColumnsResponseDTO.get(column);
+   }
 
 }
