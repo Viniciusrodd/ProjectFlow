@@ -4,6 +4,8 @@ package com.example.ProjectFlow.modules.board.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
@@ -18,12 +20,8 @@ import com.example.ProjectFlow.modules.board.validator.BoardColumnsValidator;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsResponseDTO;
 
-// import service
-
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
-
-// import enums
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -96,6 +94,26 @@ public class BoardColumnService {
             position
          ));
       }
+   }
+
+
+   // get all board columns
+   public List<BoardColumnsResponseDTO> getAllColumnsByBoardId(UUID boardId) {
+      this.boardColumnsValidator.boardIdValidate(boardId);
+
+      // board existence - check
+      this.boardService.existsById(boardId);
+
+      List<BoardColumnsResponseDTO> columns = this.boardColumnsRepository.getAllColumnsByBoardId(boardId);
+
+      if(columns.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Colunas não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return columns;
    }
 
 }
