@@ -63,6 +63,9 @@ public class BoardColumnService {
       // check column name existence
       this.checkColumnNameExistence(data.name());
 
+      // check column position existence
+      this.checkColumnPositionExistence(data.position());
+
       // get board data
       BoardEntity board = this.boardService.getEntityById(data.boardId());
 
@@ -78,6 +81,19 @@ public class BoardColumnService {
             "%s: A coluna '%s' já existe",
             ResponseMessages.INVALID_DATA,
             name
+         ));
+      }
+   }
+
+
+   // check if column position already exist
+   public void checkColumnPositionExistence(int position) {
+      boolean exist = this.boardColumnsRepository.checkColumnPositionExistence(position);
+      if(exist) {
+         throw MultiExceptions.invalid(String.format(
+            "%s: A coluna de posição '%s' já existe",
+            ResponseMessages.INVALID_DATA,
+            position
          ));
       }
    }
