@@ -26,8 +26,10 @@ import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 // import enums
 
 // import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Service
@@ -58,10 +60,26 @@ public class BoardColumnService {
       this.boardColumnsValidator.positionValidate(data.position());
       this.boardColumnsValidator.colorValidate(data.color());
 
+      // check column name existence
+      this.checkColumnNameExistence(data.name());
+
       // get board data
       BoardEntity board = this.boardService.getEntityById(data.boardId());
 
       return this.boardColumnsRepository.create(data, board);
+   }
+
+
+   // check if column name already exist
+   public void checkColumnNameExistence(String name) {
+      boolean exist = this.boardColumnsRepository.checkColumnNameExistence(name);
+      if(exist) {
+         throw MultiExceptions.invalid(String.format(
+            "%s: A coluna '%s' já existe",
+            ResponseMessages.INVALID_DATA,
+            name
+         ));
+      }
    }
 
 }
