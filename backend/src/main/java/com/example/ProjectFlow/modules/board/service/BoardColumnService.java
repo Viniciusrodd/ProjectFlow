@@ -9,6 +9,7 @@ import java.util.UUID;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
+import jakarta.persistence.NoResultException;
 
 // import repository
 import com.example.ProjectFlow.modules.board.repository.BoardColumnsRepository;
@@ -97,7 +98,7 @@ public class BoardColumnService {
    }
 
 
-   // get all board columns
+   // get all board columns by board id
    public List<BoardColumnsResponseDTO> getAllColumnsByBoardId(UUID boardId) {
       this.boardColumnsValidator.boardIdValidate(boardId);
 
@@ -114,6 +115,22 @@ public class BoardColumnService {
       }
 
       return columns;
+   }
+
+
+   // get board column by id
+   public BoardColumnsResponseDTO getColumnById(UUID id) {
+      this.boardColumnsValidator.idValidate(id);
+
+      try {
+         return this.boardColumnsRepository.getColumnById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Coluna não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
