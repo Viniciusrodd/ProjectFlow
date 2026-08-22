@@ -2,6 +2,10 @@
 // packages
 package com.example.ProjectFlow.modules.board.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 // imports
 import org.springframework.stereotype.Repository;
 
@@ -68,6 +72,23 @@ public class BoardColumnsRepository {
          .getSingleResult();
 
       return count > 0;
+   }
+
+
+   // get all board columns
+   public List<BoardColumnsResponseDTO> getAllColumnsByBoardId(UUID boardId) {
+      List<BoardColumnsEntity> columns = this.entityManager
+         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.board.id = :boardId", BoardColumnsEntity.class)
+         .setParameter("boardId", boardId)
+         .getResultList();
+
+      List<BoardColumnsResponseDTO> allColumns = new ArrayList<>();
+
+      for(BoardColumnsEntity column : columns) {
+         allColumns.add(BoardColumnsResponseDTO.get(column));
+      }
+
+      return allColumns;
    }   
 
 }
