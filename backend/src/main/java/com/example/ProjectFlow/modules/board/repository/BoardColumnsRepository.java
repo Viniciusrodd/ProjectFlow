@@ -59,4 +59,15 @@ public class BoardColumnsRepository {
       return count > 0;
    }
 
+
+   // check if column position already exist
+   public boolean checkColumnPositionExistence(int position) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(c) FROM BoardColumnsEntity c WHERE c.position = :position", Long.class)
+         .setParameter("position", position)
+         .getSingleResult();
+
+      return count > 0;
+   }   
+
 }
