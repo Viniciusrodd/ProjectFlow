@@ -4,6 +4,8 @@ package com.example.ProjectFlow.modules.board.repository;
 
 // imports
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,7 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
+import com.example.ProjectFlow.modules.board.dto.BoardColumnsDeletedDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsResponseDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsUpdateDTO;
 
@@ -80,7 +83,7 @@ public class BoardColumnsRepository {
    // get all board columns by board id
    public List<BoardColumnsResponseDTO> getAllColumnsByBoardId(UUID boardId) {
       List<BoardColumnsEntity> columns = this.entityManager
-         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.board.id = :boardId", BoardColumnsEntity.class)
+         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.board.id = :boardId ORDER BY c.position ASC", BoardColumnsEntity.class)
          .setParameter("boardId", boardId)
          .getResultList();
 
@@ -123,4 +126,18 @@ public class BoardColumnsRepository {
       return BoardColumnsResponseDTO.get(column);
    }
 
+
+   // delete board column
+   @Transactional
+   public BoardColumnsDeletedDTO delete(UUID id) throws NoResultException {
+      BoardColumnsEntity column = this.entityManager
+         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      column.setDeletedAt(LocalDateTime.now());
+
+      return BoardColumnsDeletedDTO.get(column);
+   }
 }
