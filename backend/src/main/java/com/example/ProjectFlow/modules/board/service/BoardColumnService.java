@@ -19,6 +19,7 @@ import com.example.ProjectFlow.modules.board.validator.BoardColumnsValidator;
 
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
+import com.example.ProjectFlow.modules.board.dto.BoardColumnsDeletedDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsResponseDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsUpdateDTO;
 
@@ -149,6 +150,23 @@ public class BoardColumnService {
 
       try {
          return this.boardColumnsRepository.update(id, data);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Coluna não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // delete board column
+   @Transactional
+   public BoardColumnsDeletedDTO delete(UUID id) {
+      this.boardColumnsValidator.idValidate(id);
+
+      try {
+         return this.boardColumnsRepository.delete(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
