@@ -2,12 +2,12 @@
 // packages
 package com.example.ProjectFlow.modules.board.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 // imports
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
@@ -18,6 +18,7 @@ import jakarta.persistence.NoResultException;
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsResponseDTO;
+import com.example.ProjectFlow.modules.board.dto.BoardColumnsUpdateDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
@@ -99,6 +100,25 @@ public class BoardColumnsRepository {
          .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
          .setParameter("id", id)
          .getSingleResult();
+
+      return BoardColumnsResponseDTO.get(column);
+   }
+
+
+   // update board column
+   @Transactional
+   public BoardColumnsResponseDTO update(UUID id, BoardColumnsUpdateDTO data) throws NoResultException {
+      BoardColumnsEntity column = this.entityManager
+         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      Optional.ofNullable(data.name()).ifPresent(name -> 
+         column.setName(BoardEnum.valueOf(name.trim().toUpperCase().replace(" ", "")))
+      );
+      Optional.ofNullable(data.position()).ifPresent(position -> column.setPosition(position));
+      Optional.ofNullable(data.color()).ifPresent(color -> column.setColor(color));
 
       return BoardColumnsResponseDTO.get(column);
    }
