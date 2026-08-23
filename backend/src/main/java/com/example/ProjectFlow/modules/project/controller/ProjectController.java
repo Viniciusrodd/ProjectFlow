@@ -148,13 +148,13 @@ public class ProjectController {
       @PathVariable UUID id,
       @RequestBody ProjectUpdateDTO data
    ) {
-      ProjectResponseDTO project = this.projectService.update(id, data);
+      ProjectResponseDTO updatedProject = this.projectService.update(id, data);
 
       ApiResponse<ProjectResponseDTO> response = new ApiResponse.Builder<ProjectResponseDTO>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.UPDATED)
-         .data(project)
+         .data(updatedProject)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);

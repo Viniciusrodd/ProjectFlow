@@ -35,6 +35,7 @@ public class ProjectValidator {
       }
    }
 
+
    // organization id validate
    public void organizationIdValidate(UUID organizationId) {
       if(organizationId == null) {
@@ -45,6 +46,7 @@ public class ProjectValidator {
       }
    }
 
+
    // owner id validate
    public void ownerIdValidate(UUID ownerId) {
       if(ownerId == null) {
@@ -54,6 +56,7 @@ public class ProjectValidator {
          ));
       }
    }
+
 
    // name validations
    public void nameValidate(String name) {
@@ -74,6 +77,7 @@ public class ProjectValidator {
       }
    }
 
+
    // description validate
    public void descriptionValidate(String description) {
       if(description.length() > ValidationConstants.MAX_DESCRIPTION_LENGTH) {
@@ -84,6 +88,7 @@ public class ProjectValidator {
          ));
       }
    }
+
 
    // status validations
    public void statusValidate(String status) {
@@ -103,6 +108,7 @@ public class ProjectValidator {
       }
    }
 
+   
    // logo image id validations
    public void logoImageIdValidate(String logoImageId) {
       if(logoImageId == null) {
