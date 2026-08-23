@@ -176,4 +176,20 @@ public class BoardColumnService {
       }
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      this.boardColumnsValidator.idValidate(id);
+
+      try {
+         return this.boardColumnsRepository.isDeleted(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Coluna não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }

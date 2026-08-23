@@ -140,4 +140,16 @@ public class BoardColumnsRepository {
 
       return BoardColumnsDeletedDTO.get(column);
    }
+
+
+   // is deleted
+   public boolean isDeleted(UUID id) throws NoResultException {
+      BoardColumnsEntity column = this.entityManager
+         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return column.isDeleted();
+   }
+
 }
