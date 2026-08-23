@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 // http imports
@@ -33,6 +34,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsResponseDTO;
+import com.example.ProjectFlow.modules.board.dto.BoardColumnsUpdateDTO;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
@@ -102,6 +104,26 @@ public class BoardColumnsController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(boardColumn)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update board column
+   @PutMapping(value = "/board/column/{id}")
+   @Operation(summary = "Update board column")
+   public ResponseEntity<ApiResponse<BoardColumnsResponseDTO>> updateColumn(
+      @PathVariable UUID id,
+      @RequestBody BoardColumnsUpdateDTO data
+   ) {
+      BoardColumnsResponseDTO updatedColumn = this.boardColumnService.update(id, data);
+
+      ApiResponse<BoardColumnsResponseDTO> response = new ApiResponse.Builder<BoardColumnsResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedColumn)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
