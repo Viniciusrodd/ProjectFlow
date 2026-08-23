@@ -20,6 +20,7 @@ import com.example.ProjectFlow.modules.board.validator.BoardColumnsValidator;
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsResponseDTO;
+import com.example.ProjectFlow.modules.board.dto.BoardColumnsUpdateDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
@@ -124,6 +125,30 @@ public class BoardColumnService {
 
       try {
          return this.boardColumnsRepository.getColumnById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Coluna não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // update board column
+   @Transactional
+   public BoardColumnsResponseDTO update(UUID id, BoardColumnsUpdateDTO data) {
+      this.boardColumnsValidator.idValidate(id);
+      this.boardColumnsValidator.updateValidations(data);
+
+      // check column name existence
+      if(data.name() != null) this.checkColumnNameExistence(data.name());
+
+      // check column position existence
+      if(data.position() != null) this.checkColumnPositionExistence(data.position()); 
+
+      try {
+         return this.boardColumnsRepository.update(id, data);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
