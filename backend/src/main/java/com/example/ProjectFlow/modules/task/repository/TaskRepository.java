@@ -120,4 +120,26 @@ public class TaskRepository {
       return tasks;
    }
 
+
+   // get tasks by board column id
+   public List<TasksCompleteResponseDTO> getByColumnId(UUID columnId) {
+      List<TasksEntity> tasksEntities = this.entityManager
+         .createQuery(
+            "SELECT t FROM TasksEntity t " + 
+            "WHERE t.boardColumn.id = :columnId " + 
+            "ORDER BY t.createdAt ASC ", 
+            TasksEntity.class
+         )
+         .setParameter("columnId", columnId)
+         .getResultList();
+
+      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
+
+      for(TasksEntity task : tasksEntities) {
+         tasks.add(TasksCompleteResponseDTO.get(task));
+      }
+
+      return tasks;
+   }
+
 }
