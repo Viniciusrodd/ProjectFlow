@@ -112,14 +112,29 @@ public class TasksEntity implements SoftDeleteInterface {
 
 
    // constructor
-   protected TasksEntity() {}
+   public TasksEntity() {}
+
+
+   // constructor - builder
+   public TasksEntity(Builder builder) {
+      setProject(builder.project);
+      setBoardColumn(builder.boardColumn);
+      setOwner(builder.owner);
+      setTitle(builder.title);
+      setDescription(builder.description);
+      setPriority(builder.priority);
+      setDueDate(builder.dueDate);
+   }
 
 
    // getters
    public UUID getId() { return this.id; }
    public ProjectEntity getProject() { return this.project; }
+   public UUID getProjectId() { return this.project.getId(); }
    public BoardColumnsEntity getBoardColumn() { return this.boardColumn; }
+   public UUID getBoardColumnId() { return this.boardColumn.getId(); }
    public UserEntity getOwner() { return this.owner; }
+   public UUID getOwnerId() { return this.owner.getId(); }
    public List<CommentEntity> getComments() { return this.comments; }
    public List<TaskChecklistEntity> getChecklist() { return this.checklist; }
    public List<TaskLabelsEntity> getLabels() { return this.labels; }
@@ -153,5 +168,58 @@ public class TasksEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private ProjectEntity project;
+      private BoardColumnsEntity boardColumn;
+      private UserEntity owner;
+      private String title;
+      private String description;
+      private PriorityEnum priority;
+      private LocalDate dueDate;
+
+      public Builder project(ProjectEntity project) {
+         this.project = project;
+         return this;
+      }
+
+      public Builder boardColumn(BoardColumnsEntity boardColumn) {
+         this.boardColumn = boardColumn;
+         return this;
+      }
+
+      public Builder owner(UserEntity owner) {
+         this.owner = owner;
+         return this;
+      }
+
+      public Builder title(String title) {
+         this.title = title;
+         return this;
+      }
+
+      public Builder description(String description) {
+         this.description = description;
+         return this;
+      }
+
+      public Builder priority(PriorityEnum priority) {
+         this.priority = priority;
+         return this;
+      }
+
+      public Builder dueDate(LocalDate dueDate) {
+         this.dueDate = dueDate;
+         return this;
+      }
+
+      public TasksEntity build() {
+         return new TasksEntity(this);
+      }
+   }
 
 }
