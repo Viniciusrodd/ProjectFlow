@@ -7,8 +7,11 @@ package com.example.ProjectFlow.modules.task.controller;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,7 @@ import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.common.responses.ApiResponse;
 
 // import DTOs
+import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
 
@@ -61,6 +65,23 @@ public class TaskController {
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get all tasks
+   @GetMapping("/tasks")
+   @Operation(summary = "Get all tasks")
+   public ResponseEntity<ApiResponse<List<TasksCompleteResponseDTO>>> getAllTasks() {
+      List<TasksCompleteResponseDTO> tasks = this.taskService.getAll();
+
+      ApiResponse<List<TasksCompleteResponseDTO>> response = new ApiResponse.Builder<List<TasksCompleteResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(tasks)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
