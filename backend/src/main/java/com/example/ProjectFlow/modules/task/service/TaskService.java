@@ -157,7 +157,7 @@ public class TaskService {
 
 
    // get tasks by board column id
-   public List<TasksCompleteResponseDTO> getBycolumnId(UUID columnId) {
+   public List<TasksCompleteResponseDTO> getByColumnId(UUID columnId) {
       this.tasksValidator.columnIdValidate(columnId);
 
       List<TasksCompleteResponseDTO> tasks = this.taskRepository.getByColumnId(columnId);
@@ -172,5 +172,21 @@ public class TaskService {
       return tasks;     
    }
 
+
+   // get tasks by owner id
+   public List<TasksCompleteResponseDTO> getByOwnerId(UUID ownerId) {
+      this.tasksValidator.ownerIdValidate(ownerId);
+
+      List<TasksCompleteResponseDTO> tasks = this.taskRepository.getByOwnerId(ownerId);
+
+      if(tasks.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefas não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return tasks;     
+   }
 
 }
