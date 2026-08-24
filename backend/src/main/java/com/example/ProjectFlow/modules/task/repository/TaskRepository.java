@@ -98,4 +98,26 @@ public class TaskRepository {
       return task;
    }
 
+
+   // get tasks by project id
+   public List<TasksCompleteResponseDTO> getByProjectId(UUID projectId) {
+      List<TasksEntity> tasksEntities = this.entityManager
+         .createQuery(
+            "SELECT t FROM TasksEntity t " + 
+            "WHERE t.project.id = :projectId " + 
+            "ORDER BY t.createdAt ASC ", 
+            TasksEntity.class
+         )
+         .setParameter("projectId", projectId)
+         .getResultList();
+
+      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
+
+      for(TasksEntity task : tasksEntities) {
+         tasks.add(TasksCompleteResponseDTO.get(task));
+      }
+
+      return tasks;
+   }
+
 }
