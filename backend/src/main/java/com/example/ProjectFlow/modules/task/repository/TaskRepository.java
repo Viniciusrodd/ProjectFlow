@@ -18,6 +18,7 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
+import com.example.ProjectFlow.modules.task.dto.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
@@ -226,6 +227,21 @@ public class TaskRepository {
       task.setCompletedAt(LocalDateTime.now());
 
       return TasksCompleteResponseDTO.get(task);
+   }
+
+
+   // delete task
+   @Transactional
+   public TasksDeletedDTO delete(UUID id) throws NoResultException {
+      TasksEntity task = this.entityManager
+         .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id ", TasksEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      task.setDeletedAt(LocalDateTime.now());
+
+      return TasksDeletedDTO.get(task);
    }
 
 }
