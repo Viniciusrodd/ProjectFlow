@@ -19,4 +19,17 @@ public enum PriorityEnum {
    // getters
    public String getType() { return type; }
 
+   // is valid
+   public static boolean isValid(String type) {
+      if(type == null) return false;
+
+      for(PriorityEnum priority : PriorityEnum.values()) {
+         if(priority.getType().equalsIgnoreCase(type)) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
 }
