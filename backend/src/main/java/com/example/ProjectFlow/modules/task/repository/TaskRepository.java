@@ -165,4 +165,14 @@ public class TaskRepository {
    }
 
 
+   // exists by id
+   public boolean existsById(UUID id) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(t) FROM TasksEntity t WHERE t.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
 }

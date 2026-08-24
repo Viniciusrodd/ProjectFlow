@@ -189,4 +189,20 @@ public class TaskService {
       return tasks;     
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.tasksValidator.idValidate(id);
+
+      boolean exist = this.taskRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
 }
