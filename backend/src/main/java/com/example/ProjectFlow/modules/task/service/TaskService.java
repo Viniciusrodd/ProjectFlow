@@ -20,9 +20,10 @@ import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
+import com.example.ProjectFlow.modules.task.dto.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
-import com.example.ProjectFlow.modules.task.entity.TasksEntity;
+
 // import service
 import com.example.ProjectFlow.modules.project.service.ProjectService;
 import com.example.ProjectFlow.modules.board.service.BoardColumnService;
@@ -32,8 +33,7 @@ import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
-
-// import enums
+import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -260,6 +260,23 @@ public class TaskService {
             ResponseMessages.NOT_FOUND
          ));
       }
-   }   
+   } 
+
+
+   // delete task
+   @Transactional
+   public TasksDeletedDTO delete(UUID id) {
+      this.tasksValidator.idValidate(id);
+
+      try {
+         return this.taskRepository.delete(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
 
 }
