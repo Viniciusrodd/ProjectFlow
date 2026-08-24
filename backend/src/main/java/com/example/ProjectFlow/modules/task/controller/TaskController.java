@@ -103,4 +103,20 @@ public class TaskController {
    }
 
 
+   // get all tasks by project id
+   @GetMapping(value = "/tasks/project/{projectId}")
+   @Operation(summary = "Get all tasks by project id")
+   public ResponseEntity<ApiResponse<List<TasksCompleteResponseDTO>>> getByProjectId(@PathVariable UUID projectId) {
+      List<TasksCompleteResponseDTO> tasks = this.taskService.getByProjectId(projectId);
+
+      ApiResponse<List<TasksCompleteResponseDTO>> response = new ApiResponse.Builder<List<TasksCompleteResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(tasks)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
