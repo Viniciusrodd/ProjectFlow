@@ -279,4 +279,20 @@ public class TaskService {
       }
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      this.tasksValidator.idValidate(id);
+
+      try {
+         return this.taskRepository.isDeleted(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
