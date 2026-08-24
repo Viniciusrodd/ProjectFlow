@@ -119,4 +119,21 @@ public class TaskController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // get all tasks by board column id
+   @GetMapping(value = "/tasks/column/{columnId}")
+   @Operation(summary = "Get all tasks by board column id")
+   public ResponseEntity<ApiResponse<List<TasksCompleteResponseDTO>>> getByColumnId(@PathVariable UUID columnId) {
+      List<TasksCompleteResponseDTO> tasks = this.taskService.getBycolumnId(columnId);
+
+      ApiResponse<List<TasksCompleteResponseDTO>> response = new ApiResponse.Builder<List<TasksCompleteResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(tasks)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
