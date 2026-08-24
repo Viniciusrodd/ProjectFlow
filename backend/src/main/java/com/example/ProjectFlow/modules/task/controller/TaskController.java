@@ -3,15 +3,16 @@
 package com.example.ProjectFlow.modules.task.controller;
 
 // imports
+import java.util.List;
+import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -83,5 +84,23 @@ public class TaskController {
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
+
+
+   // get task by id
+   @GetMapping(value = "/task/{id}")
+   @Operation(summary = "Get task by id")
+   public ResponseEntity<ApiResponse<TasksCompleteResponseDTO>> getTaskById(@PathVariable UUID id) {
+      TasksCompleteResponseDTO task = this.taskService.getById(id);
+
+      ApiResponse<TasksCompleteResponseDTO> response = new ApiResponse.Builder<TasksCompleteResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(task)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 
 }
