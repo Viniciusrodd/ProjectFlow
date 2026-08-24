@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
@@ -13,6 +14,7 @@ import com.example.ProjectFlow.modules.task.repository.TaskRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.task.validator.TasksValidator;
+import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
@@ -31,8 +33,10 @@ import com.example.ProjectFlow.modules.user.entity.UserEntity;
 // import enums
 
 // import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Service
@@ -83,6 +87,21 @@ public class TaskService {
       UserEntity owner = this.userService.getEntityById(data.ownerId());
 
       return this.taskRepository.create(data, project, column, owner);
+   }
+
+
+   // get all
+   public List<TasksCompleteResponseDTO> getAll() {
+      List<TasksCompleteResponseDTO> tasks = this.taskRepository.getAll();
+
+      if(tasks.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefas não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return tasks;
    }
 
 }
