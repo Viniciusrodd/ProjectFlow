@@ -175,4 +175,19 @@ public class TaskRepository {
       return count > 0;
    }
 
+
+   // update column id - task position
+   @Transactional
+   public TasksCompleteResponseDTO updateColumn(UUID id, BoardColumnsEntity boardColumnEntity) throws NoResultException {
+      TasksEntity task = this.entityManager
+         .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id ", TasksEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      task.setBoardColumn(boardColumnEntity);
+
+      return TasksCompleteResponseDTO.get(task);
+   }
+
 }
