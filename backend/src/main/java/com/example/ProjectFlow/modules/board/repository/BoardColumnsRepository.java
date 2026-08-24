@@ -108,6 +108,17 @@ public class BoardColumnsRepository {
    }
 
 
+   // get entity by id
+   public BoardColumnsEntity getEntityById(UUID id) throws NoResultException {
+      BoardColumnsEntity column = this.entityManager
+         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+      
+      return column;
+   }
+
+
    // update board column
    @Transactional
    public BoardColumnsResponseDTO update(UUID id, BoardColumnsUpdateDTO data) throws NoResultException {

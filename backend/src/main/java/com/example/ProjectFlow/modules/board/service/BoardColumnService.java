@@ -22,7 +22,7 @@ import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsDeletedDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsResponseDTO;
 import com.example.ProjectFlow.modules.board.dto.BoardColumnsUpdateDTO;
-
+import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 
@@ -126,6 +126,22 @@ public class BoardColumnService {
 
       try {
          return this.boardColumnsRepository.getColumnById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Coluna não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // get entity by id
+   public BoardColumnsEntity getEntityById(UUID id) {
+      this.boardColumnsValidator.idValidate(id);
+
+      try {
+         return this.boardColumnsRepository.getEntityById(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
