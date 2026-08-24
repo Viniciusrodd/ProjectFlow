@@ -6,6 +6,7 @@ package com.example.ProjectFlow.modules.task.repository;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 // jakarta imports
@@ -17,6 +18,7 @@ import jakarta.persistence.NoResultException;
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
 
 // import entity
@@ -186,6 +188,26 @@ public class TaskRepository {
 
       // update
       task.setBoardColumn(boardColumnEntity);
+
+      return TasksCompleteResponseDTO.get(task);
+   }
+
+
+   // update task
+   @Transactional
+   public TasksCompleteResponseDTO update(UUID id, TasksUpdateDTO data) throws NoResultException {
+      TasksEntity task = this.entityManager
+         .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id ", TasksEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      Optional.ofNullable(data.title()).ifPresent(title -> task.setTitle(title));
+      Optional.ofNullable(data.description()).ifPresent(description -> task.setDescription(description));
+      Optional.ofNullable(data.priority()).ifPresent(priority -> 
+         task.setPriority(PriorityEnum.valueOf(priority.toUpperCase()))
+      );
+      Optional.ofNullable(data.dueDate()).ifPresent(dueDate -> task.setDueDate(dueDate));
 
       return TasksCompleteResponseDTO.get(task);
    }
