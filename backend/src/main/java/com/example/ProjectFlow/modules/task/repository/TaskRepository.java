@@ -2,16 +2,17 @@
 // packages
 package com.example.ProjectFlow.modules.task.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // imports
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
@@ -73,6 +74,17 @@ public class TaskRepository {
       }
 
       return tasks;
+   }
+
+
+   // get by id
+   public TasksCompleteResponseDTO getById(UUID id) throws NoResultException {
+      TasksEntity task = this.entityManager
+         .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id", TasksEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return TasksCompleteResponseDTO.get(task);
    }
 
 }
