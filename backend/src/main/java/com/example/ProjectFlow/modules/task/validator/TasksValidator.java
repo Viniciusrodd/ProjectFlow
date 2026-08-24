@@ -59,6 +59,17 @@ public class TasksValidator {
    }
 
 
+   // owner id validate
+   public void ownerIdValidate(UUID ownerId) {
+      if(ownerId == null) {
+         throw MultiExceptions.badRequest(String.format(
+            "%s: Id do dono da tarefa é obrigatório",
+            ResponseMessages.BAD_REQUEST
+         ));
+      }
+   }
+
+
    // title validate
    public void titleValidate(String title) {
       if(title == null || title.trim().isEmpty()) {

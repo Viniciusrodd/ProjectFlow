@@ -15,6 +15,6 @@ public record TasksDTO (
    String title,
    String description,
    String priority,
-   LocalDate due_date
+   LocalDate dueDate
 
 ) {}
