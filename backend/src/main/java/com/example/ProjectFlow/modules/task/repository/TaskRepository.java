@@ -142,4 +142,27 @@ public class TaskRepository {
       return tasks;
    }
 
+
+   // get tasks by owner id
+   public List<TasksCompleteResponseDTO> getByOwnerId(UUID ownerId) {
+      List<TasksEntity> tasksEntities = this.entityManager
+         .createQuery(
+            "SELECT t FROM TasksEntity t " + 
+            "WHERE t.owner.id = :ownerId " + 
+            "ORDER BY t.createdAt ASC ", 
+            TasksEntity.class
+         )
+         .setParameter("ownerId", ownerId)
+         .getResultList();
+
+      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
+
+      for(TasksEntity task : tasksEntities) {
+         tasks.add(TasksCompleteResponseDTO.get(task));
+      }
+
+      return tasks;
+   }
+
+
 }
