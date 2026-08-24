@@ -194,4 +194,21 @@ public class TaskController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // set task complete
+   @PutMapping(value = "/task/{id}/complete")
+   @Operation(summary = "Set task complete")
+   public ResponseEntity<ApiResponse<TasksCompleteResponseDTO>> taskComplete(@PathVariable UUID id) {
+      TasksCompleteResponseDTO completedTask = this.taskService.taskComplete(id);
+
+      ApiResponse<TasksCompleteResponseDTO> response = new ApiResponse.Builder<TasksCompleteResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(completedTask)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
