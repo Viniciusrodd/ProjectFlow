@@ -5,8 +5,10 @@ package com.example.ProjectFlow.modules.task.service;
 // imports
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
 
 // jakarta imports
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 
 // import repository
@@ -102,6 +104,22 @@ public class TaskService {
       }
 
       return tasks;
+   }
+
+
+   // get by id
+   public TasksCompleteResponseDTO getById(UUID id) {
+      this.tasksValidator.idValidate(id);
+
+      try {
+         return this.taskRepository.getById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
