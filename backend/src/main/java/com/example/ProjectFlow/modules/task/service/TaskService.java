@@ -138,4 +138,21 @@ public class TaskService {
       }
    }
 
+
+   // get tasks by project id
+   public List<TasksCompleteResponseDTO> getByProjectId(UUID projectId) {
+      this.tasksValidator.projectIdValidate(projectId);
+
+      List<TasksCompleteResponseDTO> tasks = this.taskRepository.getByProjectId(projectId);
+
+      if(tasks.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefas não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return tasks;     
+   }
+
 }
