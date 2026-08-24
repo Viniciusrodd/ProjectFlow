@@ -104,7 +104,7 @@ public class TasksEntity implements SoftDeleteInterface {
    @Column(name = "updated_at")
    private LocalDateTime updatedAt;
 
-   @Column(name = "completed_at", updatable = false)
+   @Column(name = "completed_at")
    private LocalDateTime completedAt;
 
    @Column(name = "deleted_at")
