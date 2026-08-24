@@ -2,6 +2,9 @@
 // packages
 package com.example.ProjectFlow.modules.task.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // imports
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +16,7 @@ import jakarta.persistence.EntityManager;
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
@@ -53,6 +57,22 @@ public class TaskRepository {
       this.entityManager.persist(task);
 
       return TasksResponseDTO.get(task);
+   }
+
+
+   // get all
+   public List<TasksCompleteResponseDTO> getAll() {
+      List<TasksEntity> tasksEntities = this.entityManager
+         .createQuery("SELECT t FROM TasksEntity t ORDER BY t.createdAt ASC", TasksEntity.class)
+         .getResultList();
+      
+      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
+
+      for(TasksEntity task : tasksEntities) {
+         tasks.add(TasksCompleteResponseDTO.get(task));
+      }
+
+      return tasks;
    }
 
 }
