@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.repository;
 
 // imports
 import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -208,6 +209,21 @@ public class TaskRepository {
          task.setPriority(PriorityEnum.valueOf(priority.toUpperCase()))
       );
       Optional.ofNullable(data.dueDate()).ifPresent(dueDate -> task.setDueDate(dueDate));
+
+      return TasksCompleteResponseDTO.get(task);
+   }
+
+
+   // set task complete
+   @Transactional
+   public TasksCompleteResponseDTO taskComplete(UUID id) throws NoResultException {
+      TasksEntity task = this.entityManager
+         .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id ", TasksEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // complete
+      task.setCompletedAt(LocalDateTime.now());
 
       return TasksCompleteResponseDTO.get(task);
    }
