@@ -119,6 +119,17 @@ public class BoardColumnsRepository {
    }
 
 
+   // exists by id
+   public boolean existsById(UUID id) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(c) FROM BoardColumnsEntity c WHERE c.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
+
    // update board column
    @Transactional
    public BoardColumnsResponseDTO update(UUID id, BoardColumnsUpdateDTO data) throws NoResultException {

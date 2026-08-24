@@ -152,6 +152,22 @@ public class BoardColumnService {
    }
 
 
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.boardColumnsValidator.idValidate(id);
+
+      boolean exist = this.boardColumnsRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Coluna não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
+
    // update board column
    @Transactional
    public BoardColumnsResponseDTO update(UUID id, BoardColumnsUpdateDTO data) {
