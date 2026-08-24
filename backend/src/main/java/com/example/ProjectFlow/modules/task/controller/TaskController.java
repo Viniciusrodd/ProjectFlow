@@ -35,7 +35,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
-
+import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
@@ -163,6 +163,26 @@ public class TaskController {
       @PathVariable UUID columnId
    ) {
       TasksCompleteResponseDTO updatedTask = this.taskService.updateColumn(id, columnId);
+
+      ApiResponse<TasksCompleteResponseDTO> response = new ApiResponse.Builder<TasksCompleteResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedTask)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update task
+   @PutMapping(value = "/task/{id}")
+   @Operation(summary = "Update task")
+   public ResponseEntity<ApiResponse<TasksCompleteResponseDTO>> updateTask(
+      @PathVariable UUID id,
+      @RequestBody TasksUpdateDTO data
+   ) {
+      TasksCompleteResponseDTO updatedTask = this.taskService.update(id, data);
 
       ApiResponse<TasksCompleteResponseDTO> response = new ApiResponse.Builder<TasksCompleteResponseDTO>()
          .success(true)
