@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 // http imports
@@ -148,6 +149,26 @@ public class TaskController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(tasks)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update column id - task position
+   @PutMapping(value = "/task/{id}/column/{columnId}")
+   @Operation(summary = "Update task position by column id")
+   public ResponseEntity<ApiResponse<TasksCompleteResponseDTO>> updateColumn(
+      @PathVariable UUID id,
+      @PathVariable UUID columnId
+   ) {
+      TasksCompleteResponseDTO updatedTask = this.taskService.updateColumn(id, columnId);
+
+      ApiResponse<TasksCompleteResponseDTO> response = new ApiResponse.Builder<TasksCompleteResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedTask)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
