@@ -87,4 +87,15 @@ public class TaskRepository {
       return TasksCompleteResponseDTO.get(task);
    }
 
+
+   // get entity by id
+   public TasksEntity getEntityById(UUID id) throws NoResultException {
+      TasksEntity task = this.entityManager
+         .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id", TasksEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return task;
+   }
+
 }
