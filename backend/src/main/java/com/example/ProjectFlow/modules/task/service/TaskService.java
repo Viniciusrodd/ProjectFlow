@@ -21,6 +21,7 @@ import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 // import service
 import com.example.ProjectFlow.modules.project.service.ProjectService;
@@ -217,6 +218,24 @@ public class TaskService {
 
       try {
          return this.taskRepository.updateColumn(id, boardColumnEntity);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // update task
+   @Transactional
+   public TasksCompleteResponseDTO update(UUID id, TasksUpdateDTO data) {
+      this.tasksValidator.idValidate(id);
+      this.tasksValidator.updateValidations(data);
+
+      try {
+         return this.taskRepository.update(id, data);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
