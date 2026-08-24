@@ -9,6 +9,7 @@ import java.util.UUID;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksDTO;
+import com.example.ProjectFlow.modules.task.dto.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
 // import constants
@@ -206,6 +208,23 @@ public class TaskController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.UPDATED)
          .data(completedTask)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete task
+   @DeleteMapping(value = "/task/{id}")
+   @Operation(summary = "Delete task")
+   public ResponseEntity<ApiResponse<TasksDeletedDTO>> deleteTask(@PathVariable UUID id) {
+      TasksDeletedDTO deletedTask = this.taskService.delete(id);
+
+      ApiResponse<TasksDeletedDTO> response = new ApiResponse.Builder<TasksDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(deletedTask)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
