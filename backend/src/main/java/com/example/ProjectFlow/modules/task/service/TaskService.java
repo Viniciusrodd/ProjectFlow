@@ -205,4 +205,25 @@ public class TaskService {
       return exist;
    }
 
+
+   // update column id - task position
+   @Transactional
+   public TasksCompleteResponseDTO updateColumn(UUID id, UUID columnId) {
+      this.tasksValidator.idValidate(id);
+      this.tasksValidator.columnIdValidate(columnId);
+
+      // board column existence - check
+      BoardColumnsEntity boardColumnEntity = this.boardColumnService.getEntityById(columnId);
+
+      try {
+         return this.taskRepository.updateColumn(id, boardColumnEntity);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
