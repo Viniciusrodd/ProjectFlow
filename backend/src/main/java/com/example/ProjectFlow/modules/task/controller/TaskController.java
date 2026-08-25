@@ -25,20 +25,16 @@ import io.swagger.v3.oas.annotations.Operation;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ApiConstants;
-
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksCompleteResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDTO;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
 // import services
 import com.example.ProjectFlow.modules.task.service.TaskService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
-
-// import DTOs
-import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
-import com.example.ProjectFlow.modules.task.dto.TasksDTO;
-import com.example.ProjectFlow.modules.task.dto.TasksDeletedDTO;
-import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
-import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
-
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 

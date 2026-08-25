@@ -1,11 +1,11 @@
 
-
 // packages
-package com.example.ProjectFlow.modules.task.dto;
+package com.example.ProjectFlow.modules.task.dto.taskDTO;
 
 // imports
 import java.util.UUID;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 // import enums
 import com.example.ProjectFlow.modules.task.enums.PriorityEnum;
@@ -14,7 +14,7 @@ import com.example.ProjectFlow.modules.task.enums.PriorityEnum;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 
-public record TasksResponseDTO (
+public record TasksCompleteResponseDTO (
 
    UUID id,
    UUID projectId,
@@ -23,12 +23,13 @@ public record TasksResponseDTO (
    String title,
    String description,
    PriorityEnum priority,
-   LocalDate due_date
+   LocalDate due_date,
+   LocalDateTime completedAt
 
 ) {
 
-   public static TasksResponseDTO get(TasksEntity document) {
-      return new TasksResponseDTO(
+   public static TasksCompleteResponseDTO get(TasksEntity document) {
+      return new TasksCompleteResponseDTO(
          document.getId(),
          document.getProjectId(),
          document.getBoardColumnId(),
@@ -36,7 +37,8 @@ public record TasksResponseDTO (
          document.getTitle(),
          document.getDescription(),
          document.getPriority(),
-         document.getDueDate()
+         document.getDueDate(),
+         document.getCompletedAt()
       );
    }
 

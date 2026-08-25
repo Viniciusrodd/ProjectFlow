@@ -15,10 +15,7 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.common.constants.ValidationConstants;
-
-// import DTOs
-import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
-
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
 // import enums
 import com.example.ProjectFlow.modules.task.enums.PriorityEnum;
 

@@ -16,14 +16,6 @@ import com.example.ProjectFlow.modules.task.repository.TaskRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.task.validator.TasksValidator;
-import com.example.ProjectFlow.modules.task.dto.TasksCompleteResponseDTO;
-
-// import DTOs
-import com.example.ProjectFlow.modules.task.dto.TasksDTO;
-import com.example.ProjectFlow.modules.task.dto.TasksDeletedDTO;
-import com.example.ProjectFlow.modules.task.dto.TasksResponseDTO;
-import com.example.ProjectFlow.modules.task.dto.TasksUpdateDTO;
-
 // import service
 import com.example.ProjectFlow.modules.project.service.ProjectService;
 import com.example.ProjectFlow.modules.board.service.BoardColumnService;
@@ -33,6 +25,11 @@ import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksCompleteResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDTO;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import exceptions
