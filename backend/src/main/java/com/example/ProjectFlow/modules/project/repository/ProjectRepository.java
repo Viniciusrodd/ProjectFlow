@@ -174,6 +174,9 @@ public class ProjectRepository {
       // update
       Optional.ofNullable(data.name()).ifPresent(name -> project.setName(name));
       Optional.ofNullable(data.description()).ifPresent(description -> project.setDescription(description));
+      Optional.ofNullable(data.status()).ifPresent(status -> 
+         project.setStatus(StatusEnum.valueOf(status.toUpperCase()))
+      );
 
       return ProjectResponseDTO.get(project);
    }
