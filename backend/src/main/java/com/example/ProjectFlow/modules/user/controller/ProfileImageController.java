@@ -34,10 +34,7 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 
 // import document
 import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
-
-// import DTOs
-import com.example.ProjectFlow.modules.user.dto.ProfileImageResponseDTO;
-
+import com.example.ProjectFlow.modules.user.dto.profileImageDTO.ProfileImageResponseDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 

@@ -8,12 +8,10 @@ import java.time.LocalDateTime;
 
 // import enum
 import com.example.ProjectFlow.modules.project.enums.RoleEnum;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserProfileDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
-
-// import DTOs
-import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
 
 
 public record ProjectMembersCompleteResponseDTO (

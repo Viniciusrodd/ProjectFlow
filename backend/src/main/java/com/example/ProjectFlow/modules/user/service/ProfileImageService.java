@@ -18,10 +18,6 @@ import com.example.ProjectFlow.modules.user.repository.ProfileImageRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
-
-// import DTOs
-import com.example.ProjectFlow.modules.user.dto.ProfileImageResponseDTO;
-
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -30,6 +26,7 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import document
 import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
+import com.example.ProjectFlow.modules.user.dto.profileImageDTO.ProfileImageResponseDTO;
 
 
 @Service

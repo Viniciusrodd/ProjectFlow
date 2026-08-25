@@ -16,11 +16,9 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
-// import DTOs
-import com.example.ProjectFlow.modules.user.dto.UserDTO;
-
 // import configs
 import com.example.ProjectFlow.config.JwtProperties;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
 
 
 @Service

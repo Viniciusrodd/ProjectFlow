@@ -16,12 +16,10 @@ import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
-// import DTOs
-import com.example.ProjectFlow.modules.user.dto.UserDTO;
-import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
-import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
-import com.example.ProjectFlow.modules.user.dto.UserDeletedDTO;
-
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserDeletedDTO;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserProfileDTO;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserUpdateDTO;
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 

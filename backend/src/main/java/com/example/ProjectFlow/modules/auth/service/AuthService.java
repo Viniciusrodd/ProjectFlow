@@ -19,14 +19,12 @@ import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginDTO;
 import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginResponseDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterResponseDTO;
-import com.example.ProjectFlow.modules.user.dto.UserDTO;
-
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
-
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
 // import services
 import com.example.ProjectFlow.modules.user.service.UserService;
 

@@ -9,13 +9,10 @@ import java.util.UUID;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
-
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserUpdateDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.common.constants.ValidationConstants;
-
-// import DTO
-import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
 
 
 @Component

@@ -18,14 +18,11 @@ import com.example.ProjectFlow.modules.user.repository.UserRepository;
 // import validator
 import com.example.ProjectFlow.modules.user.validator.UserValidator;
 import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
-
-// import DTOs
-import com.example.ProjectFlow.modules.user.dto.UserDTO;
-import com.example.ProjectFlow.modules.user.dto.UserProfileDTO;
-import com.example.ProjectFlow.modules.user.dto.UserUpdateDTO;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserDeletedDTO;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserProfileDTO;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserUpdateDTO;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
-import com.example.ProjectFlow.modules.user.dto.UserDeletedDTO;
-
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 

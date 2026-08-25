@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.modules.user.dto;
+package com.example.ProjectFlow.modules.user.dto.userDTO;
 
 
 public record UserUpdateDTO (
