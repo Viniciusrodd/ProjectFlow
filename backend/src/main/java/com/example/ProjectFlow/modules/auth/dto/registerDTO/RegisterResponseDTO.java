@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.modules.auth.dto;
+package com.example.ProjectFlow.modules.auth.dto.registerDTO;
 
 // imports
 import java.time.LocalDateTime;

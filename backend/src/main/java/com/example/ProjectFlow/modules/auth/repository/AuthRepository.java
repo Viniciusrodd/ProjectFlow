@@ -10,10 +10,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 
-// import DTOs
-import com.example.ProjectFlow.modules.auth.dto.RegisterDTO;
-import com.example.ProjectFlow.modules.auth.dto.RegisterResponseDTO;
-
+import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
+import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterResponseDTO;
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 

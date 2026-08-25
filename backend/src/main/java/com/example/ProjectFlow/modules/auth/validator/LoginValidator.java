@@ -5,12 +5,9 @@ package com.example.ProjectFlow.modules.auth.validator;
 // imports
 import org.springframework.stereotype.Component;
 
-// import DTOs
-import com.example.ProjectFlow.modules.auth.dto.LoginDTO;
-
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
-
+import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 

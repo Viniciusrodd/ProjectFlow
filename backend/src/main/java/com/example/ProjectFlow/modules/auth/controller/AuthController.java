@@ -23,12 +23,10 @@ import io.swagger.v3.oas.annotations.Operation;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
-
-// import DTOs
-import com.example.ProjectFlow.modules.auth.dto.RegisterDTO;
-import com.example.ProjectFlow.modules.auth.dto.RegisterResponseDTO;
-import com.example.ProjectFlow.modules.auth.dto.LoginResponseDTO;
-import com.example.ProjectFlow.modules.auth.dto.LoginDTO;
+import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginDTO;
+import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginResponseDTO;
+import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
+import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterResponseDTO;
 
 
 @RestController
