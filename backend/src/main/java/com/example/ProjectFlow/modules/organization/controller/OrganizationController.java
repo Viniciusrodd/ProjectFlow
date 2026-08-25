@@ -31,13 +31,10 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
-
-// import DTOs
-import com.example.ProjectFlow.modules.organization.dto.OrganizationDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationDeletedDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationResponseDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationUpdateDTO;
-
+import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationDeletedDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationUpdateDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 

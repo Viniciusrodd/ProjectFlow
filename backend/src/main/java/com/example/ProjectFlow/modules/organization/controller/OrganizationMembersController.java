@@ -26,19 +26,15 @@ import io.swagger.v3.oas.annotations.Operation;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ApiConstants;
-
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersCompleteResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
 // import services
 import com.example.ProjectFlow.modules.organization.service.OrganizationMemberService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
-
-// import DTOs
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDeletedDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersResponseDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
-
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 

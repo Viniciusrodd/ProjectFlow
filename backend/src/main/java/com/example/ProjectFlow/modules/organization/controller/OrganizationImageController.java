@@ -32,10 +32,7 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationImageSer
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
-
-// import DTOs
-import com.example.ProjectFlow.modules.organization.dto.OrganizationImageResponseDTO;
-
+import com.example.ProjectFlow.modules.organization.dto.organizationImageDTO.OrganizationImageResponseDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 

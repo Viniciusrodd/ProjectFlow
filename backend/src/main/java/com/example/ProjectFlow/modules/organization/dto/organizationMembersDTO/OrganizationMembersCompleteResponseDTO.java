@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.modules.organization.dto;
+package com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO;
 
 // imports
 import java.util.UUID;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 // import enum
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
-
+import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationResponseDTO;
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
 

@@ -17,16 +17,12 @@ import com.example.ProjectFlow.modules.organization.repository.OrganizationMembe
 
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationMembersValidator;
-
-// import DTOs
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersDeletedDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersResponseDTO;
-import com.example.ProjectFlow.modules.organization.dto.OrganizationMembersCompleteResponseDTO;
-
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
-
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersCompleteResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;

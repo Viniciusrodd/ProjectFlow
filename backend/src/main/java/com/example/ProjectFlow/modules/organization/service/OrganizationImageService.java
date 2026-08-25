@@ -18,10 +18,6 @@ import com.example.ProjectFlow.modules.organization.repository.OrganizationImage
 
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationImageValidator;
-
-// import DTOs
-import com.example.ProjectFlow.modules.organization.dto.OrganizationImageResponseDTO;
-
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -30,6 +26,7 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import document
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
+import com.example.ProjectFlow.modules.organization.dto.organizationImageDTO.OrganizationImageResponseDTO;
 
 
 @Service

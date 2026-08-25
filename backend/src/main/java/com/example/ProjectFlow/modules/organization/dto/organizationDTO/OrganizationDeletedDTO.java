@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.modules.organization.dto;
+package com.example.ProjectFlow.modules.organization.dto.organizationDTO;
 
 import java.time.LocalDateTime;
 // imports
