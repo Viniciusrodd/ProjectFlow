@@ -149,6 +149,24 @@ public class ProjectValidator {
       Optional.ofNullable(data.description()).ifPresent(description -> 
          this.descriptionValidate(description)
       );
+
+      // status
+      Optional.ofNullable(data.status()).ifPresent(status -> {
+         if(status.trim().isEmpty()) {
+            throw MultiExceptions.badRequest(String.format(
+               "%s: Status do projeto não pode ser vazio",
+               ResponseMessages.BAD_REQUEST
+            ));
+         }
+
+         if(!StatusEnum.isValid(status)) {
+            throw MultiExceptions.badRequest(String.format(
+               "%s: Status de projeto inválido. Valores permitidos: %s",
+               ResponseMessages.BAD_REQUEST,
+               Arrays.toString(StatusEnum.values())
+            ));
+         }
+      });
    }
 
 }
