@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.modules.project.dto;
+package com.example.ProjectFlow.modules.project.dto.projectDTO;
 
 // imports
 import java.util.UUID;

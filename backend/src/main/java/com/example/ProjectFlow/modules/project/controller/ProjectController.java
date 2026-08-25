@@ -32,13 +32,10 @@ import com.example.ProjectFlow.modules.project.service.ProjectService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
-
-// import DTOs
-import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
-import com.example.ProjectFlow.modules.project.dto.ProjectDeletedDTO;
-import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
-import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
-
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDTO;
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 

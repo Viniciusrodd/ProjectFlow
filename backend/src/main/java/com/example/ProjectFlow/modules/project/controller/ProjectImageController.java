@@ -32,9 +32,7 @@ import com.example.ProjectFlow.modules.project.service.ProjectImageService;
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
-// import DTOs
-import com.example.ProjectFlow.modules.project.dto.ProjectImageResponseDTO;
-
+import com.example.ProjectFlow.modules.project.dto.projectImageDTO.ProjectImageResponseDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 

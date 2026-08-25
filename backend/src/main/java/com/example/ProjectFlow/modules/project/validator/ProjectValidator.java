@@ -14,12 +14,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.common.constants.ValidationConstants;
-
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
 // import enums
 import com.example.ProjectFlow.modules.project.enums.StatusEnum;
-
-// import DTOs
-import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
 
 
 @Component

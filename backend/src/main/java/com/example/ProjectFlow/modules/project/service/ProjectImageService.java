@@ -18,10 +18,6 @@ import com.example.ProjectFlow.modules.project.repository.ProjectImageRepository
 
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectImageValidator;
-
-// import DTOs
-import com.example.ProjectFlow.modules.project.dto.ProjectImageResponseDTO;
-
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -30,6 +26,7 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import document
 import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
+import com.example.ProjectFlow.modules.project.dto.projectImageDTO.ProjectImageResponseDTO;
 
 
 @Service

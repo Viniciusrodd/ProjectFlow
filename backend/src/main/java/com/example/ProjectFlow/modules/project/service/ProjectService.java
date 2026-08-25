@@ -17,14 +17,11 @@ import com.example.ProjectFlow.modules.project.repository.ProjectRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectValidator;
-
-// import DTOs
-import com.example.ProjectFlow.modules.project.dto.ProjectDTO;
-import com.example.ProjectFlow.modules.project.dto.ProjectDeletedDTO;
-import com.example.ProjectFlow.modules.project.dto.ProjectResponseDTO;
-import com.example.ProjectFlow.modules.project.dto.ProjectUpdateDTO;
-import com.example.ProjectFlow.modules.project.dto.ProjectMembersDTO;
-
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDTO;
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
+import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
+import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDTO;
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
