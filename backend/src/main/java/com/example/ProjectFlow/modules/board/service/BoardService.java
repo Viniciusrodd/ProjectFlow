@@ -16,15 +16,11 @@ import com.example.ProjectFlow.modules.board.repository.BoardRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.board.validator.BoardValidator;
-
-// import DTOs
-import com.example.ProjectFlow.modules.board.dto.BoardDTO;
-import com.example.ProjectFlow.modules.board.dto.BoardDeletedDTO;
-import com.example.ProjectFlow.modules.board.dto.BoardResponseDTO;
-
 // import service
 import com.example.ProjectFlow.modules.project.service.ProjectService;
-
+import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardDTO;
+import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardDeletedDTO;
+import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardResponseDTO;
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;

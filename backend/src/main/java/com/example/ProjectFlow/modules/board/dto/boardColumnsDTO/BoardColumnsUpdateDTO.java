@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.modules.board.dto;
+package com.example.ProjectFlow.modules.board.dto.boardColumnsDTO;
 
 
 public record BoardColumnsUpdateDTO (

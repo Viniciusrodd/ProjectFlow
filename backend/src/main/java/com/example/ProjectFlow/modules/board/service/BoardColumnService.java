@@ -16,12 +16,10 @@ import com.example.ProjectFlow.modules.board.repository.BoardColumnsRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.board.validator.BoardColumnsValidator;
-
-// import DTOs
-import com.example.ProjectFlow.modules.board.dto.BoardColumnsDTO;
-import com.example.ProjectFlow.modules.board.dto.BoardColumnsDeletedDTO;
-import com.example.ProjectFlow.modules.board.dto.BoardColumnsResponseDTO;
-import com.example.ProjectFlow.modules.board.dto.BoardColumnsUpdateDTO;
+import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsDTO;
+import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsDeletedDTO;
+import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsResponseDTO;
+import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsUpdateDTO;
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;

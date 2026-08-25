@@ -14,7 +14,7 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.common.constants.ValidationConstants;
-import com.example.ProjectFlow.modules.board.dto.BoardColumnsUpdateDTO;
+import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsUpdateDTO;
 // import enum
 import com.example.ProjectFlow.modules.board.enums.BoardEnum;
 

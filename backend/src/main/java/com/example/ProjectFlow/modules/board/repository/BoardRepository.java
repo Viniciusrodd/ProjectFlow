@@ -15,11 +15,9 @@ import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
-// import DTOs
-import com.example.ProjectFlow.modules.board.dto.BoardDTO;
-import com.example.ProjectFlow.modules.board.dto.BoardDeletedDTO;
-import com.example.ProjectFlow.modules.board.dto.BoardResponseDTO;
-
+import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardDTO;
+import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardDeletedDTO;
+import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardResponseDTO;
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;

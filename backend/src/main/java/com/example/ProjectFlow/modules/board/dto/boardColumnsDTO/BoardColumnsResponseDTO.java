@@ -1,10 +1,9 @@
 
 // packages
-package com.example.ProjectFlow.modules.board.dto;
+package com.example.ProjectFlow.modules.board.dto.boardColumnsDTO;
 
 // imports
 import java.util.UUID;
-import java.time.LocalDateTime;
 
 // import enums
 import com.example.ProjectFlow.modules.board.enums.BoardEnum;
@@ -13,25 +12,23 @@ import com.example.ProjectFlow.modules.board.enums.BoardEnum;
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 
 
-public record BoardColumnsDeletedDTO (
+public record BoardColumnsResponseDTO (
 
    UUID id,
    UUID boardId,
    BoardEnum name,
    Integer position,
-   String color,
-   LocalDateTime deletedAt
+   String color
 
 ) {
 
-   public static BoardColumnsDeletedDTO get(BoardColumnsEntity document) {
-      return new BoardColumnsDeletedDTO(
+   public static BoardColumnsResponseDTO get(BoardColumnsEntity document) {
+      return new BoardColumnsResponseDTO(
          document.getId(),
          document.getBoardId(),
          document.getName(),
          document.getPosition(),
-         document.getColor(),
-         document.getDeletedAt()
+         document.getColor()
       );
    }
 
