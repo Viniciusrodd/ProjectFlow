@@ -182,21 +182,6 @@ public class ProjectRepository {
    }
 
 
-   // update status of project
-   @Transactional
-   public ProjectResponseDTO updateStatus(UUID id, StatusEnum status) throws NoResultException {
-      ProjectEntity project = this.entityManager
-         .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
-         .setParameter("id", id)
-         .getSingleResult();
-
-      // update
-      project.setStatus(status);
-
-      return ProjectResponseDTO.get(project);
-   }
-
-
    // delete project
    @Transactional
    public ProjectDeletedDTO delete(UUID id) throws NoResultException {

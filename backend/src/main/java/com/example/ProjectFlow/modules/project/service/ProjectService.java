@@ -2,7 +2,6 @@
 // packages
 package com.example.ProjectFlow.modules.project.service;
 
-
 // imports
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +21,7 @@ import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDTO;
+
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
@@ -33,7 +33,6 @@ import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
 // import enums
 import com.example.ProjectFlow.modules.project.enums.RoleEnum;
-import com.example.ProjectFlow.modules.project.enums.StatusEnum;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -245,25 +244,7 @@ public class ProjectService {
             ResponseMessages.NOT_FOUND
          ));
       }
-   } 
-
-
-   // update status of project
-   @Transactional
-   public ProjectResponseDTO updateStatus(UUID id, String status) {
-      projectValidator.idValidate(id);
-      projectValidator.statusValidate(status);
-
-      try {
-         return this.projectRepository.updateStatus(id, StatusEnum.valueOf(status.toUpperCase()));
-      }
-      catch (NoResultException error) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Projeto não existe",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-   } 
+   }
 
 
    // delete project
