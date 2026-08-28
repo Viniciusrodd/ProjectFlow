@@ -141,4 +141,21 @@ public class CommentService {
       return comments;
    }
 
+
+   // get comments by author id
+   public List<CommentResponseDTO> getByAuthorId(UUID authorId) {
+      this.commentValidator.authorIdValidate(authorId);
+
+      List<CommentResponseDTO> comments = this.commentRepository.getByAuthorId(authorId);
+
+      if(comments.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentários não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return comments;
+   }
+
 }
