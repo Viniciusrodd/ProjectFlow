@@ -132,4 +132,15 @@ public class CommentRepository {
       return comments;
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(c) FROM CommentEntity c WHERE c.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
 }

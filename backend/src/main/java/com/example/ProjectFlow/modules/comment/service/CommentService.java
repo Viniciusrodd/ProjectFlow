@@ -158,4 +158,20 @@ public class CommentService {
       return comments;
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.commentValidator.idValidate(id);
+
+      boolean exist = this.commentRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
 }
