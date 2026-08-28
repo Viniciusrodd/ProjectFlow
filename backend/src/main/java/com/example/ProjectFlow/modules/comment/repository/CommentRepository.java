@@ -3,6 +3,8 @@
 package com.example.ProjectFlow.modules.comment.repository;
 
 // imports
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Repository;
 
 // jakarta imports
@@ -44,6 +46,22 @@ public class CommentRepository {
       this.entityManager.persist(comment);
 
       return CommentResponseDTO.get(comment);
+   }
+
+
+   // get all
+   public List<CommentResponseDTO> getAll() {
+      List<CommentEntity> commentsDocument = this.entityManager
+         .createQuery("SELECT c FROM CommentEntity c ORDER BY c.createdAt ASC", CommentEntity.class)
+         .getResultList();
+
+      List<CommentResponseDTO> comments = new ArrayList<>();
+
+      for(CommentEntity comment : commentsDocument) {
+         comments.add(CommentResponseDTO.get(comment));
+      }
+
+      return comments;
    }
 
 }
