@@ -120,4 +120,20 @@ public class CommentController {
    }
 
 
+   // get all comments by author id
+   @GetMapping(value = "/comments/author/{authorId}")
+   @Operation(summary = "Get all comments by author id")
+   public ResponseEntity<ApiResponse<List<CommentResponseDTO>>> getByAuthorId(@PathVariable UUID authorId) {
+      List<CommentResponseDTO> comments = this.commentService.getByAuthorId(authorId);
+
+      ApiResponse<List<CommentResponseDTO>> response = new ApiResponse.Builder<List<CommentResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(comments)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
