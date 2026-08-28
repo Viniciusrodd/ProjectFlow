@@ -4,7 +4,9 @@ package com.example.ProjectFlow.modules.comment.service;
 
 // imports
 import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.NoResultException;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
@@ -87,6 +89,22 @@ public class CommentService {
       }
 
       return comments;
+   }
+
+
+   // get by id
+   public CommentResponseDTO getById(UUID id) {
+      this.commentValidator.idValidate(id);
+
+      try {
+         return this.commentRepository.getById(id);
+      }
+      catch(NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
