@@ -124,4 +124,21 @@ public class CommentService {
       }
    }
 
+
+   // get comments by task id
+   public List<CommentResponseDTO> getByTaskId(UUID taskId) {
+      this.commentValidator.taskIdValidate(taskId);
+
+      List<CommentResponseDTO> comments = this.commentRepository.getByTaskId(taskId);
+
+      if(comments.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentários não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return comments;
+   }
+
 }
