@@ -26,6 +26,7 @@ import com.example.ProjectFlow.modules.comment.dto.CommentDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentResponseDTO;
 
 // import entity
+import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
@@ -98,6 +99,22 @@ public class CommentService {
 
       try {
          return this.commentRepository.getById(id);
+      }
+      catch(NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // get entity by id
+   public CommentEntity getEntityById(UUID id) {
+      this.commentValidator.idValidate(id);
+
+      try {
+         return this.commentRepository.getEntityById(id);
       }
       catch(NoResultException error) {
          throw MultiExceptions.notFound(String.format(

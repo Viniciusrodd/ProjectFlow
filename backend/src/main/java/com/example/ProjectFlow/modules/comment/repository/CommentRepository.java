@@ -77,4 +77,15 @@ public class CommentRepository {
       return CommentResponseDTO.get(comment);
    }
 
+
+   // get entity by id
+   public CommentEntity getEntityById(UUID id) throws NoResultException {
+      CommentEntity comment = this.entityManager
+         .createQuery("SELECT c FROM CommentEntity c WHERE c.id = :id", CommentEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return comment;
+   }
+
 }
