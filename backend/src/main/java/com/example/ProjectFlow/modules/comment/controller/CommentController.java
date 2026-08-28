@@ -8,10 +8,12 @@ package com.example.ProjectFlow.modules.comment.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.UUID;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -82,5 +84,23 @@ public class CommentController {
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
+
+
+   // get comment by id
+   @GetMapping(value = "/comment/{id}")
+   @Operation(summary = "Get task comment by id")
+   public ResponseEntity<ApiResponse<CommentResponseDTO>> getCommentById(@PathVariable UUID id) {
+      CommentResponseDTO comment = this.commentService.getById(id);
+
+      ApiResponse<CommentResponseDTO> response = new ApiResponse.Builder<CommentResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(comment)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 
 }
