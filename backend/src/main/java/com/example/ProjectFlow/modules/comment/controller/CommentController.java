@@ -103,4 +103,21 @@ public class CommentController {
    }
 
 
+   // get all comments by task id
+   @GetMapping(value = "/comments/task/{taskId}")
+   @Operation(summary = "Get all comments by task id")
+   public ResponseEntity<ApiResponse<List<CommentResponseDTO>>> getByTaskId(@PathVariable UUID taskId) {
+      List<CommentResponseDTO> comments = this.commentService.getByTaskId(taskId);
+
+      ApiResponse<List<CommentResponseDTO>> response = new ApiResponse.Builder<List<CommentResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(comments)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
 }
