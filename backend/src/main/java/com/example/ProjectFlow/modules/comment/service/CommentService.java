@@ -174,4 +174,22 @@ public class CommentService {
       return exist;
    }
 
+
+   // update comment content
+   @Transactional
+   public CommentResponseDTO updateContent(UUID id, String content) {
+      this.commentValidator.idValidate(id);
+      this.commentValidator.contentValidate(content);
+
+      try {
+         return this.commentRepository.updateContent(id, content);
+      }
+      catch(NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
