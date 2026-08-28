@@ -7,9 +7,11 @@ package com.example.ProjectFlow.modules.comment.controller;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -131,6 +133,26 @@ public class CommentController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(comments)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update comment content
+   @PutMapping(value = "/comment/{id}/content")
+   @Operation(summary = "Update the content of the comment")
+   public ResponseEntity<ApiResponse<CommentResponseDTO>> updateCommentContent(
+      @PathVariable UUID id,
+      @RequestParam String c
+   ) {
+      CommentResponseDTO updatedComment = this.commentService.updateContent(id, c);
+
+      ApiResponse<CommentResponseDTO> response = new ApiResponse.Builder<CommentResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedComment)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
