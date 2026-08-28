@@ -111,7 +111,7 @@ public class TasksEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
+   // constructor - empty
    public TasksEntity() {}
 
 
