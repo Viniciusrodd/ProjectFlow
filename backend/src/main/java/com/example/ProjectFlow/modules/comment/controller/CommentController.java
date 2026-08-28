@@ -8,6 +8,7 @@ package com.example.ProjectFlow.modules.comment.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ import com.example.ProjectFlow.common.constants.ApiConstants;
 
 // import DTOs
 import com.example.ProjectFlow.modules.comment.dto.CommentDTO;
+import com.example.ProjectFlow.modules.comment.dto.CommentDeleteDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentResponseDTO;
 
 // import services
@@ -153,6 +155,23 @@ public class CommentController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.UPDATED)
          .data(updatedComment)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete comment
+   @DeleteMapping(value = "/comment/{id}")
+   @Operation(summary = "Delete comment")
+   public ResponseEntity<ApiResponse<CommentDeleteDTO>> deleteComment(@PathVariable UUID id) {
+      CommentDeleteDTO deletedComment = this.commentService.delete(id);
+
+      ApiResponse<CommentDeleteDTO> response = new ApiResponse.Builder<CommentDeleteDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(deletedComment)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
