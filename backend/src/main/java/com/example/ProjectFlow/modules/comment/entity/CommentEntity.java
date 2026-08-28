@@ -69,8 +69,16 @@ public class CommentEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
-   protected CommentEntity() {}
+   // constructor - empty
+   public CommentEntity() {}
+
+
+   // constructor - builder
+   public CommentEntity(Builder builder) {
+      setTask(builder.task);
+      setAuthor(builder.author);
+      setContent(builder.content);
+   }
 
 
    // getters
@@ -95,5 +103,34 @@ public class CommentEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private TasksEntity task;
+      private UserEntity author;
+      private String content;
+
+      public Builder task(TasksEntity task) {
+         this.task = task;
+         return this;
+      }
+
+      public Builder author(UserEntity author) {
+         this.author = author;
+         return this;
+      }
+
+      public Builder content(String content) {
+         this.content = content;
+         return this;
+      }
+
+      public CommentEntity build() {
+         return new CommentEntity(this);
+      }
+   }
 
 }
