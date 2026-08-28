@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.comment.repository;
 
+import java.time.LocalDateTime;
 // imports
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.comment.dto.CommentDTO;
+import com.example.ProjectFlow.modules.comment.dto.CommentDeleteDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentResponseDTO;
 
 // import entity
@@ -156,6 +158,21 @@ public class CommentRepository {
       comment.setContent(content);
 
       return CommentResponseDTO.get(comment);
+   }
+
+
+   // delete comment
+   @Transactional
+   public CommentDeleteDTO delete(UUID id) throws NoResultException {
+      CommentEntity comment = this.entityManager
+         .createQuery("SELECT c FROM CommentEntity c WHERE c.id = :id", CommentEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      comment.setDeletedAt(LocalDateTime.now());
+
+      return CommentDeleteDTO.get(comment);
    }
 
 }
