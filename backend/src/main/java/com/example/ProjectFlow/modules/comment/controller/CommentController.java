@@ -7,8 +7,11 @@ package com.example.ProjectFlow.modules.comment.controller;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -61,6 +64,23 @@ public class CommentController {
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get all comments
+   @GetMapping("/comments")
+   @Operation(summary = "Get all task comments")
+   public ResponseEntity<ApiResponse<List<CommentResponseDTO>>> getAllComments() {
+      List<CommentResponseDTO> comments = this.commentService.getAll();
+
+      ApiResponse<List<CommentResponseDTO>> response = new ApiResponse.Builder<List<CommentResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(comments)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
