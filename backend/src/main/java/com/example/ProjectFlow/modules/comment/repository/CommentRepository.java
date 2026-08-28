@@ -143,4 +143,19 @@ public class CommentRepository {
       return count > 0;
    }
 
+
+   // update comment content
+   @Transactional
+   public CommentResponseDTO updateContent(UUID id, String content) throws NoResultException {
+      CommentEntity comment = this.entityManager
+         .createQuery("SELECT c FROM CommentEntity c WHERE c.id = :id", CommentEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      comment.setContent(content);
+
+      return CommentResponseDTO.get(comment);
+   }
+
 }
