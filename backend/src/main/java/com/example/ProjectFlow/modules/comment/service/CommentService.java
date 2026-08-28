@@ -3,6 +3,7 @@
 package com.example.ProjectFlow.modules.comment.service;
 
 // imports
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 // jakarta imports
@@ -27,8 +28,10 @@ import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Service
@@ -69,6 +72,21 @@ public class CommentService {
       UserEntity user = this.userService.getEntityById(data.authorId());
 
       return this.commentRepository.create(data, task, user);
+   }
+
+
+   // get all
+   public List<CommentResponseDTO> getAll() {
+      List<CommentResponseDTO> comments = this.commentRepository.getAll();
+
+      if(comments.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentários não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return comments;
    }
 
 }
