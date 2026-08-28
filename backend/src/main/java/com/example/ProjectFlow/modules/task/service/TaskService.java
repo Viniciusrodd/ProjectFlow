@@ -26,12 +26,14 @@ import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+import com.example.ProjectFlow.modules.task.entity.TasksEntity;
+
+// import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksCompleteResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
-import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
