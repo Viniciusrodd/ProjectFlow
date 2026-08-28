@@ -88,4 +88,26 @@ public class CommentRepository {
       return comment;
    }
 
+
+   // get comments by task id
+   public List<CommentResponseDTO> getByTaskId(UUID taskId) {
+      List<CommentEntity> commentsDocument = this.entityManager
+         .createQuery(
+            "SELECT c FROM CommentEntity c " +
+            "WHERE c.task.id = :taskId " +
+            "ORDER BY c.createdAt ASC ", 
+            CommentEntity.class
+         )
+         .setParameter("taskId", taskId)
+         .getResultList();
+
+      List<CommentResponseDTO> comments = new ArrayList<>();
+
+      for(CommentEntity comment : commentsDocument) {
+         comments.add(CommentResponseDTO.get(comment));
+      }
+
+      return comments;
+   }
+
 }
