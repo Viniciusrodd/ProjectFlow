@@ -175,4 +175,15 @@ public class CommentRepository {
       return CommentDeleteDTO.get(comment);
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) throws NoResultException {
+      CommentEntity comment = this.entityManager
+         .createQuery("SELECT c FROM CommentEntity c WHERE c.id = :id", CommentEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return comment.isDeleted();
+   }
+
 }

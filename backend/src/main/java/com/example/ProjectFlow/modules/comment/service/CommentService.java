@@ -210,4 +210,20 @@ public class CommentService {
       }
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      this.commentValidator.idValidate(id);
+
+      try {
+         return this.commentRepository.isDeleted(id);
+      }
+      catch(NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
