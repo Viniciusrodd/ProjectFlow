@@ -110,4 +110,26 @@ public class CommentRepository {
       return comments;
    }
 
+
+   // get comments by author id
+   public List<CommentResponseDTO> getByAuthorId(UUID authorId) {
+      List<CommentEntity> commentsDocument = this.entityManager
+         .createQuery(
+            "SELECT c FROM CommentEntity c " +
+            "WHERE c.author.id = :authorId " +
+            "ORDER BY c.createdAt ASC ", 
+            CommentEntity.class
+         )
+         .setParameter("authorId", authorId)
+         .getResultList();
+
+      List<CommentResponseDTO> comments = new ArrayList<>();
+
+      for(CommentEntity comment : commentsDocument) {
+         comments.add(CommentResponseDTO.get(comment));
+      }
+
+      return comments;
+   }
+
 }
