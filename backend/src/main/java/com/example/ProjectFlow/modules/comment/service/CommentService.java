@@ -23,6 +23,7 @@ import com.example.ProjectFlow.modules.user.service.UserService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.comment.dto.CommentDTO;
+import com.example.ProjectFlow.modules.comment.dto.CommentDeleteDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentResponseDTO;
 
 // import entity
@@ -183,6 +184,23 @@ public class CommentService {
 
       try {
          return this.commentRepository.updateContent(id, content);
+      }
+      catch(NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // delete comment
+   @Transactional
+   public CommentDeleteDTO delete(UUID id) {
+      this.commentValidator.idValidate(id);
+
+      try {
+         return this.commentRepository.delete(id);
       }
       catch(NoResultException error) {
          throw MultiExceptions.notFound(String.format(
