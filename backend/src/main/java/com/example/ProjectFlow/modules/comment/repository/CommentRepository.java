@@ -5,12 +5,14 @@ package com.example.ProjectFlow.modules.comment.repository;
 // imports
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.comment.dto.CommentDTO;
@@ -62,6 +64,17 @@ public class CommentRepository {
       }
 
       return comments;
+   }
+
+
+   // get by id
+   public CommentResponseDTO getById(UUID id) throws NoResultException {
+      CommentEntity comment = this.entityManager
+         .createQuery("SELECT c FROM CommentEntity c WHERE c.id = :id", CommentEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return CommentResponseDTO.get(comment);
    }
 
 }
