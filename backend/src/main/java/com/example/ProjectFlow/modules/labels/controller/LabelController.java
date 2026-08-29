@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 // http imports
@@ -27,6 +28,7 @@ import com.example.ProjectFlow.common.constants.ApiConstants;
 // import DTOs
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
+import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsUpdateDTO;
 
 // import services
 import com.example.ProjectFlow.modules.labels.service.LabelService;
@@ -95,6 +97,26 @@ public class LabelController {
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
+         .data(label)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update label
+   @PutMapping(value = "/label/{id}")
+   @Operation(summary = "Label update")
+   public ResponseEntity<ApiResponse<LabelsResponseDTO>> updateLabel(
+      @PathVariable UUID id,
+      @RequestBody LabelsUpdateDTO data
+   ) {
+      LabelsResponseDTO label = this.labelService.update(id, data);
+
+      ApiResponse<LabelsResponseDTO> response = new ApiResponse.Builder<LabelsResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
          .data(label)
          .build();
 
