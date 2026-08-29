@@ -138,4 +138,15 @@ public class LabelsRepository {
       return LabelsDeletedDTO.get(label);
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) throws NoResultException {
+      LabelsEntity label = this.entityManager
+         .createQuery("SELECT l FROM LabelsEntity l WHERE l.id = :id", LabelsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+      
+      return label.isDeleted();
+   }
+
 }

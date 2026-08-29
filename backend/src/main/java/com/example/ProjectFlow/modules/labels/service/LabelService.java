@@ -170,4 +170,20 @@ public class LabelService {
       }
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      this.labelsValidator.idValidate(id);
+
+      try {
+         return this.labelsRepository.isDeleted(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
