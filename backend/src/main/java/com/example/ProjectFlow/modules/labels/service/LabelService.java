@@ -23,7 +23,7 @@ import com.example.ProjectFlow.modules.labels.validator.LabelsValidator;
 // import DTOs
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
-
+import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
@@ -98,6 +98,38 @@ public class LabelService {
             ResponseMessages.NOT_FOUND
          ));
       }
+   }
+
+
+   // get entity by id
+   public LabelsEntity getEntityById(UUID id) {
+      this.labelsValidator.idValidate(id);
+
+      try {
+         return this.labelsRepository.getEntityById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.labelsValidator.idValidate(id);
+
+      boolean exist = this.labelsRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
    }
 
 }

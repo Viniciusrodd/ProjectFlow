@@ -81,4 +81,26 @@ public class LabelsRepository {
       return LabelsResponseDTO.get(label);
    }
 
+
+   // get entity by id
+   public LabelsEntity getEntityById(UUID id) throws NoResultException {
+      LabelsEntity label = this.entityManager
+         .createQuery("SELECT l FROM LabelsEntity l WHERE l.id = :id", LabelsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return label;
+   }
+
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(l) FROM LabelsEntity l WHERE l.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
 }
