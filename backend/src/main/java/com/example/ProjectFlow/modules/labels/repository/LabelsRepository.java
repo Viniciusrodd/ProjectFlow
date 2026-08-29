@@ -2,9 +2,10 @@
 // packages
 package com.example.ProjectFlow.modules.labels.repository;
 
-import java.util.ArrayList;
 // imports
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,7 @@ import jakarta.persistence.NoResultException;
 // import DTOs
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
+import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsUpdateDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -101,6 +103,22 @@ public class LabelsRepository {
          .getSingleResult();
 
       return count > 0;
+   }
+
+
+   // update label
+   @Transactional
+   public LabelsResponseDTO update(UUID id, LabelsUpdateDTO data) throws NoResultException {
+      LabelsEntity label = this.entityManager
+         .createQuery("SELECT l FROM LabelsEntity l WHERE l.id = :id", LabelsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      Optional.ofNullable(data.name()).ifPresent(name -> label.setName(name));
+      Optional.ofNullable(data.color()).ifPresent(color -> label.setColor(color));
+
+      return LabelsResponseDTO.get(label);
    }
 
 }
