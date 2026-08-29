@@ -22,6 +22,7 @@ import com.example.ProjectFlow.modules.labels.validator.LabelsValidator;
 
 // import DTOs
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
+import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDeletedDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsUpdateDTO;
 
@@ -143,6 +144,23 @@ public class LabelService {
 
       try {
          return this.labelsRepository.update(id, data);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // delete label
+   @Transactional
+   public LabelsDeletedDTO delete(UUID id) {
+      this.labelsValidator.idValidate(id);
+
+      try {
+         return this.labelsRepository.delete(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
