@@ -25,15 +25,19 @@ import io.swagger.v3.oas.annotations.Operation;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ApiConstants;
+
+// import DTOs
 import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsDTO;
 import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsDeletedDTO;
 import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsResponseDTO;
 import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsUpdateDTO;
+
 // import services
 import com.example.ProjectFlow.modules.board.service.BoardColumnService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
+
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
