@@ -4,6 +4,8 @@ package com.example.ProjectFlow.modules.labels.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
@@ -25,8 +27,10 @@ import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
 // import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Service
@@ -49,7 +53,7 @@ public class LabelService {
    }
 
 
-   // labels creation
+   // task labels creation
    @Transactional
    public LabelsResponseDTO create(LabelsDTO data) {
       this.labelsValidator.projectIdValidate(data.projectId());
@@ -60,6 +64,23 @@ public class LabelService {
       ProjectEntity project = this.projectService.getEntityById(data.projectId());
 
       return this.labelsRepository.create(data, project);
+   }
+
+
+   // get all task labels by project id
+   public List<LabelsResponseDTO> getAllByProjectId(UUID projectId) {
+      this.labelsValidator.projectIdValidate(projectId);
+
+      List<LabelsResponseDTO> labels = this.labelsRepository.getAllByProjectId(projectId);
+
+      if(labels.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiquetas do projeto não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return labels;
    }
 
 }
