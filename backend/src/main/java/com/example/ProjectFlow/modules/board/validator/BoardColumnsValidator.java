@@ -14,7 +14,10 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.common.constants.ValidationConstants;
+
+// import DTOs
 import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsUpdateDTO;
+
 // import enum
 import com.example.ProjectFlow.modules.board.enums.BoardEnum;
 
@@ -56,6 +59,7 @@ public class BoardColumnsValidator {
       if(name.length() < ValidationConstants.MIN_BOARD_NAME_LENGTH || name.length() > ValidationConstants.MAX_BOARD_NAME_LENGTH) {
          throw MultiExceptions.invalid(String.format(
             "%s: Nome deve estar entre %d e %d caracteres",
+            ResponseMessages.BAD_REQUEST,
             ValidationConstants.MIN_BOARD_NAME_LENGTH,
             ValidationConstants.MAX_BOARD_NAME_LENGTH
          ));
