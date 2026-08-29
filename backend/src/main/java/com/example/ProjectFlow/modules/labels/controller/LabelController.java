@@ -3,10 +3,14 @@
 package com.example.ProjectFlow.modules.labels.controller;
 
 // imports
+import java.util.List;
+import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -61,6 +65,23 @@ public class LabelController {
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get all task labels by project id
+   @GetMapping(value = "/labels/project/{projectId}")
+   @Operation(summary = "Get all project task labels")
+   public ResponseEntity<ApiResponse<List<LabelsResponseDTO>>> getAllByProjectId(@PathVariable UUID projectId) {
+      List<LabelsResponseDTO> labels = this.labelService.getAllByProjectId(projectId);
+
+      ApiResponse<List<LabelsResponseDTO>> response = new ApiResponse.Builder<List<LabelsResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(labels)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
