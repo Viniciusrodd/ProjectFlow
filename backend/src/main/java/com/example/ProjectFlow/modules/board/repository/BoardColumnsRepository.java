@@ -81,18 +81,23 @@ public class BoardColumnsRepository {
 
    // get all board columns by board id
    public List<BoardColumnsResponseDTO> getAllColumnsByBoardId(UUID boardId) {
-      List<BoardColumnsEntity> columns = this.entityManager
-         .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.board.id = :boardId ORDER BY c.position ASC", BoardColumnsEntity.class)
+      List<BoardColumnsEntity> columnsDocument = this.entityManager
+         .createQuery(
+            "SELECT c FROM BoardColumnsEntity c " + 
+            "WHERE c.board.id = :boardId " +
+            "ORDER BY c.position ASC ", 
+            BoardColumnsEntity.class
+         )
          .setParameter("boardId", boardId)
          .getResultList();
 
-      List<BoardColumnsResponseDTO> allColumns = new ArrayList<>();
+      List<BoardColumnsResponseDTO> columns = new ArrayList<>();
 
-      for(BoardColumnsEntity column : columns) {
-         allColumns.add(BoardColumnsResponseDTO.get(column));
+      for(BoardColumnsEntity column : columnsDocument) {
+         columns.add(BoardColumnsResponseDTO.get(column));
       }
 
-      return allColumns;
+      return columns;
    }
 
 

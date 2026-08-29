@@ -2,13 +2,17 @@
 // packages
 package com.example.ProjectFlow.modules.labels.repository;
 
+import java.util.ArrayList;
 // imports
+import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
@@ -27,7 +31,7 @@ public class LabelsRepository {
    private EntityManager entityManager;
 
    
-   // labels creation
+   // task labels creation
    @Transactional
    public LabelsResponseDTO create(
       LabelsDTO data, 
@@ -42,6 +46,28 @@ public class LabelsRepository {
       this.entityManager.persist(labels);
 
       return LabelsResponseDTO.get(labels);
+   }
+
+
+   // get all task labels by project id
+   public List<LabelsResponseDTO> getAllByProjectId(UUID projectId) throws NoResultException {
+      List<LabelsEntity> labelsDocument = this.entityManager
+         .createQuery(
+            "SELECT l FROM LabelsEntity l " + 
+            "WHERE l.project.id = :projectId " +
+            "ORDER BY l.createdAt ASC ",
+            LabelsEntity.class
+         )
+         .setParameter("projectId", projectId)
+         .getResultList();
+
+      List<LabelsResponseDTO> labels = new ArrayList<>();
+
+      for(LabelsEntity label : labelsDocument) {
+         labels.add(LabelsResponseDTO.get(label));
+      }
+
+      return labels;
    }
 
 }
