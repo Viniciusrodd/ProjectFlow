@@ -6,8 +6,8 @@ package com.example.ProjectFlow.modules.labels.service;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
-
 import jakarta.persistence.NoResultException;
+
 // jakarta imports
 import jakarta.transaction.Transactional;
 
@@ -23,9 +23,11 @@ import com.example.ProjectFlow.modules.labels.validator.LabelsValidator;
 // import DTOs
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
-import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;
+import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsUpdateDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
+import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -130,6 +132,24 @@ public class LabelService {
       }
 
       return exist;
+   }
+
+
+   // update label
+   @Transactional
+   public LabelsResponseDTO update(UUID id, LabelsUpdateDTO data) {
+      this.labelsValidator.idValidate(id);
+      this.labelsValidator.updateValidation(data);
+
+      try {
+         return this.labelsRepository.update(id, data);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
