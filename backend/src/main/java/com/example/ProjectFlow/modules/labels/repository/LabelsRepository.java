@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.labels.repository;
 
+import java.time.LocalDateTime;
 // imports
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import jakarta.persistence.NoResultException;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsUpdateDTO;
+import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDeletedDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -119,6 +121,21 @@ public class LabelsRepository {
       Optional.ofNullable(data.color()).ifPresent(color -> label.setColor(color));
 
       return LabelsResponseDTO.get(label);
+   }
+
+
+   // delete label
+   @Transactional
+   public LabelsDeletedDTO delete(UUID id) throws NoResultException {
+      LabelsEntity label = this.entityManager
+         .createQuery("SELECT l FROM LabelsEntity l WHERE l.id = :id", LabelsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      label.setDeletedAt(LocalDateTime.now());
+
+      return LabelsDeletedDTO.get(label);
    }
 
 }
