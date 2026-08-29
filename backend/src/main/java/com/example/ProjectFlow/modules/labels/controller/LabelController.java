@@ -9,6 +9,7 @@ import java.util.UUID;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import com.example.ProjectFlow.common.constants.ApiConstants;
 
 // import DTOs
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
+import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDeletedDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsUpdateDTO;
 
@@ -111,13 +113,30 @@ public class LabelController {
       @PathVariable UUID id,
       @RequestBody LabelsUpdateDTO data
    ) {
-      LabelsResponseDTO label = this.labelService.update(id, data);
+      LabelsResponseDTO updatedLabel = this.labelService.update(id, data);
 
       ApiResponse<LabelsResponseDTO> response = new ApiResponse.Builder<LabelsResponseDTO>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.UPDATED)
-         .data(label)
+         .data(updatedLabel)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete label
+   @DeleteMapping(value = "/label/{id}")
+   @Operation(summary = "Label delete")
+   public ResponseEntity<ApiResponse<LabelsDeletedDTO>> deleteLabel(@PathVariable UUID id) {
+      LabelsDeletedDTO deletedLabel = this.labelService.delete(id);
+
+      ApiResponse<LabelsDeletedDTO> response = new ApiResponse.Builder<LabelsDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(deletedLabel)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
