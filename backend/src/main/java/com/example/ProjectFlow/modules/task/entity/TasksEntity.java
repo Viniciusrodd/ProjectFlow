@@ -36,7 +36,7 @@ import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
-
+import com.example.ProjectFlow.modules.labels.entity.TaskLabelsEntity;
 // import enums
 import com.example.ProjectFlow.modules.task.enums.PriorityEnum;
 
