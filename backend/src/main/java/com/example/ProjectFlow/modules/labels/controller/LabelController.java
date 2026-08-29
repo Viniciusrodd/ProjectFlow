@@ -84,4 +84,21 @@ public class LabelController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // get label by id
+   @GetMapping(value = "/label/{id}")
+   @Operation(summary = "Get project label by id")
+   public ResponseEntity<ApiResponse<LabelsResponseDTO>> getLabelById(@PathVariable UUID id) {
+      LabelsResponseDTO label = this.labelService.getById(id);
+
+      ApiResponse<LabelsResponseDTO> response = new ApiResponse.Builder<LabelsResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(label)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
