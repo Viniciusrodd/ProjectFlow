@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.NoResultException;
 // jakarta imports
 import jakarta.transaction.Transactional;
 
@@ -81,6 +82,22 @@ public class LabelService {
       }
 
       return labels;
+   }
+
+
+   // get label by id
+   public LabelsResponseDTO getById(UUID id) {
+      this.labelsValidator.idValidate(id);
+
+      try {
+         return this.labelsRepository.getById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de projeto não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
