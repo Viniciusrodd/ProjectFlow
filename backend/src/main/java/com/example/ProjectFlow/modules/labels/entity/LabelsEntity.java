@@ -30,6 +30,7 @@ import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 
 // import entities
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
+import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
 
 
 @Entity

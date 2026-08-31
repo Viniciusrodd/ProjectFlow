@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.modules.labels.entity;
+package com.example.ProjectFlow.modules.task.entity;
 
 // imports
 import java.time.LocalDateTime;
@@ -21,9 +21,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
+// import entity
+import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;
+
 // import interfaces
 import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
-import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 
 @Entity
@@ -62,8 +64,15 @@ public class TaskLabelsEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
-   protected TaskLabelsEntity() {}
+   // constructor - empty
+   public TaskLabelsEntity() {}
+
+
+   // constructor - builder
+   public TaskLabelsEntity(Builder builder) {
+      setTask(builder.task);
+      setLabel(builder.label);
+   }
 
 
    // getters
@@ -84,5 +93,28 @@ public class TaskLabelsEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private TasksEntity task;
+      private LabelsEntity label;
+
+      public Builder task(TasksEntity task) {
+         this.task = task;
+         return this;
+      }
+
+      public Builder label(LabelsEntity label) {
+         this.label = label;
+         return this;
+      }
+
+      public TaskLabelsEntity build() {
+         return new TaskLabelsEntity(this);
+      }
+   }
 
 }
