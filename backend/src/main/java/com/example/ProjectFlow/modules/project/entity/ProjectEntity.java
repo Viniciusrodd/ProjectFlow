@@ -36,6 +36,7 @@ import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
+import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;
 
 // import enums
 import com.example.ProjectFlow.modules.project.enums.StatusEnum;
@@ -73,6 +74,10 @@ public class ProjectEntity implements SoftDeleteInterface {
    // 1(project) : N(tasks)
    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<TasksEntity> tasks = new ArrayList<>();
+
+   // 1(project) : N(labels)
+   @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<LabelsEntity> labels = new ArrayList<>();
    
 
    //// fields
@@ -126,6 +131,7 @@ public class ProjectEntity implements SoftDeleteInterface {
    public List<ProjectMembersEntity> getMembers() { return this.members; }
    public BoardEntity getBoard() { return this.board; }
    public List<TasksEntity> getTasks() { return this.tasks; }
+   public List<LabelsEntity> getLabels() { return this.labels; }
    public String getName() { return this.name; }
    public String getDescription() { return this.description; }
    public StatusEnum getStatus() { return this.status; }
@@ -142,6 +148,7 @@ public class ProjectEntity implements SoftDeleteInterface {
    public void setMembers(List<ProjectMembersEntity> members) { this.members = members; }
    public void setBoard(BoardEntity board) { this.board = board; }
    public void setTasks(List<TasksEntity> tasks) { this.tasks = tasks; }
+   public void setLabels(List<LabelsEntity> labels) { this.labels = labels; }
    public void setName(String name) { this.name = name; }
    public void setDescription(String description) { this.description = description; }
    public void setStatus(StatusEnum status) { this.status = status; }
