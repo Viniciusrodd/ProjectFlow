@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.UUID;
 
 // jakarta imports
@@ -20,10 +21,17 @@ import com.example.ProjectFlow.modules.labels.service.LabelService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.labelsByTaskResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;
+
+// import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
+
+// import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Service
@@ -65,6 +73,26 @@ public class TaskLabelService {
       this.taskLabelsValidator.projectValidation(task.getProjectId(), label.getProjectId());
 
       return this.taskLabelsRepository.create(task, label);
+   }
+
+
+   // get all labels by task id
+   public List<labelsByTaskResponseDTO> getAllByTaskId(UUID taskId) {
+      this.taskLabelsValidator.taskIdValidate(taskId);
+
+      // task existence - check
+      this.taskService.existsById(taskId);
+
+      List<labelsByTaskResponseDTO> taskLabels = this.taskLabelsRepository.getAllByTaskId(taskId);
+
+      if(taskLabels.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiquetas de tarefa não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return taskLabels;
    }
 
 }
