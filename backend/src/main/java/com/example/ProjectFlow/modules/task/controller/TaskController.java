@@ -32,6 +32,7 @@ import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.labelsByTaskResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 
 // import services
@@ -259,6 +260,23 @@ public class TaskController {
          .build();
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get all labels by task id
+   @GetMapping(value = "/task/{taskId}/labels")
+   @Operation(summary = "Get all labels by task id")
+   public ResponseEntity<ApiResponse<List<labelsByTaskResponseDTO>>> getByTaskId(@PathVariable UUID taskId) {
+      List<labelsByTaskResponseDTO> taskLabels = this.taskLabelService.getAllByTaskId(taskId);
+
+      ApiResponse<List<labelsByTaskResponseDTO>> response = new ApiResponse.Builder<List<labelsByTaskResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(taskLabels)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
