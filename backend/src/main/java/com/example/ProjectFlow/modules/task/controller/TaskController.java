@@ -32,9 +32,11 @@ import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 
 // import services
 import com.example.ProjectFlow.modules.task.service.TaskService;
+import com.example.ProjectFlow.modules.task.service.TaskLabelService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
@@ -49,10 +51,15 @@ public class TaskController {
  
    // properties
    private final TaskService taskService;
+   private final TaskLabelService taskLabelService;
 
    // constructor - dependency injection
-   public TaskController(TaskService taskService) {
+   public TaskController(
+      TaskService taskService,
+      TaskLabelService taskLabelService
+   ) {
       this.taskService = taskService;
+      this.taskLabelService = taskLabelService;
    }
 
 
@@ -229,6 +236,29 @@ public class TaskController {
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   //// task labels
+
+
+   // creating labels for tasks
+   @PostMapping(value = "/task/{taskId}/label/{labelId}")
+   @Operation(summary = "Creating labels for tasks")
+   public ResponseEntity<ApiResponse<TaskLabelsResponseDTO>> createTaskLabel(
+      @PathVariable UUID taskId,
+      @PathVariable UUID labelId
+   ) {
+      TaskLabelsResponseDTO taskLabel = this.taskLabelService.create(taskId, labelId);
+
+      ApiResponse<TaskLabelsResponseDTO> response = new ApiResponse.Builder<TaskLabelsResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.CREATED.value())
+         .message(ResponseMessages.CREATED)
+         .data(taskLabel)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
    }
 
 }
