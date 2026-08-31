@@ -12,6 +12,7 @@ import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
 
 public record TaskLabelsResponseDTO (
 
+   UUID id,
    UUID taskId,
    UUID labelId,
    LocalDateTime createdAt
@@ -20,6 +21,7 @@ public record TaskLabelsResponseDTO (
 
    public static TaskLabelsResponseDTO get(TaskLabelsEntity document) {
       return new TaskLabelsResponseDTO(
+         document.getId(),
          document.getTask().getId(),
          document.getLabel().getId(),
          document.getCreatedAt()
