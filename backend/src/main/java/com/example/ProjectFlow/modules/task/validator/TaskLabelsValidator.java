@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.validator;
 
 // imports
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 import java.util.UUID;
 
 // import exceptions
@@ -44,6 +45,17 @@ public class TaskLabelsValidator {
          throw MultiExceptions.badRequest(String.format(
             "%s: Id da etiqueta é obrigatório",
             ResponseMessages.BAD_REQUEST
+         ));
+      }
+   }
+
+
+   // task and label project - validation
+   public void projectValidation(UUID taskProjectId, UUID labelProjectId) {
+      if(!Objects.equals(taskProjectId, labelProjectId)) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projeto de tarefa e etiqueta devem ser iguais",
+            ResponseMessages.INVALID_DATA
          ));
       }
    }
