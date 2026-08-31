@@ -90,6 +90,7 @@ public class LabelsEntity implements SoftDeleteInterface {
    // getters
    public UUID getId() { return this.id; }
    public ProjectEntity getProject() { return this.project; }
+   public UUID getProjectId() { return this.project.getId(); }
    public List<TaskLabelsEntity> getTasks() { return this.tasks; }
    public String getName() { return this.name; }
    public String getColor() { return this.color; }
