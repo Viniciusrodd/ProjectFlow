@@ -8,8 +8,10 @@ import java.time.LocalDateTime;
 
 // import enum
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
+
+// import DTOs
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserProfileDTO;
-import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationResponseDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
 
@@ -18,7 +20,6 @@ public record OrganizationMembersCompleteResponseDTO (
 
    UUID id,
    UserProfileDTO user,
-   OrganizationResponseDTO organization,
    RoleEnum role,
    LocalDateTime joinedAt
 
@@ -28,7 +29,6 @@ public record OrganizationMembersCompleteResponseDTO (
       return new OrganizationMembersCompleteResponseDTO(
          document.getId(),
          UserProfileDTO.get(document.getUser()),
-         OrganizationResponseDTO.get(document.getOrganization()),
          document.getRole(),
          document.getJoinedAt()
       );
