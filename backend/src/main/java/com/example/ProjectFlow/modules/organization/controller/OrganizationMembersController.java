@@ -92,6 +92,25 @@ public class OrganizationMembersController {
    }
 
 
+   // get organization member by id
+   @GetMapping(value = "/organization/member/{id}")
+   @Operation(summary = "Get organization member data by id")
+   public ResponseEntity<ApiResponse<OrganizationMembersResponseDTO>> getOrganizationMember(
+      @PathVariable UUID id
+   ) {
+      OrganizationMembersResponseDTO member = this.organizationMemberService.getOrganizationMemberById(id);
+
+      ApiResponse<OrganizationMembersResponseDTO> response = new ApiResponse.Builder<OrganizationMembersResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(member)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
    // get all members by organization
    @GetMapping(value = "/organization/{organizationId}/members")
    @Operation(summary = "Get all members of an organization")
