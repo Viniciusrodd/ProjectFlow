@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
@@ -32,7 +33,7 @@ public class TaskLabelsRepository {
    private EntityManager entityManager;
 
 
-   // creating labels for tasks
+   // creating task label relation
    @Transactional
    public TaskLabelsResponseDTO create(TasksEntity tasksEntity, LabelsEntity labelsEntity) {
       TaskLabelsEntity taskLabel = new TaskLabelsEntity.Builder()
@@ -89,6 +90,17 @@ public class TaskLabelsRepository {
       }
 
       return tasks;
+   }
+
+
+   // get entity by id
+   public TaskLabelsEntity getEntityById(UUID id) throws NoResultException {
+      TaskLabelsEntity taskLabel = this.entityManager
+         .createQuery("SELECT tl FROM TaskLabelsEntity tl WHERE tl.id = :id", TaskLabelsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return taskLabel;
    }
 
 }
