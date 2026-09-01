@@ -15,6 +15,7 @@ import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEn
 
 public record OrganizationMembersResponseDTO (
 
+   UUID id,
    UUID organizationId,
    UUID userId,
    RoleEnum role,
@@ -24,6 +25,7 @@ public record OrganizationMembersResponseDTO (
 
    public static OrganizationMembersResponseDTO get(OrganizationMembersEntity document) {
       return new OrganizationMembersResponseDTO(
+         document.getId(),
          document.getOrganizationId(),
          document.getUserId(),
          document.getRole(),

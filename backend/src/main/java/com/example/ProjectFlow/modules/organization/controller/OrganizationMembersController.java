@@ -76,6 +76,23 @@ public class OrganizationMembersController {
 
 
    // get all organization members
+   @GetMapping(value = "/organization/members")
+   @Operation(summary = "Get all organization members data")
+   public ResponseEntity<ApiResponse<List<OrganizationMembersResponseDTO>>> getAllOrganizationMembers() {
+      List<OrganizationMembersResponseDTO> members = this.organizationMemberService.getAllOrganizationMembers();
+
+      ApiResponse<List<OrganizationMembersResponseDTO>> response = new ApiResponse.Builder<List<OrganizationMembersResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(members)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get all members by organization
    @GetMapping(value = "/organization/{organizationId}/members")
    @Operation(summary = "Get all members of an organization")
    public ResponseEntity<ApiResponse<List<OrganizationMembersCompleteResponseDTO>>> getAllMembers(
