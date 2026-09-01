@@ -16,7 +16,7 @@ import com.example.ProjectFlow.modules.user.dto.userDTO.UserProfileDTO;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
 
 
-public record OrganizationMembersCompleteResponseDTO (
+public record MembersByOrganizationResponseDTO (
 
    UUID id,
    UserProfileDTO user,
@@ -25,8 +25,8 @@ public record OrganizationMembersCompleteResponseDTO (
 
 ) {
  
-   public static OrganizationMembersCompleteResponseDTO get(OrganizationMembersEntity document) {
-      return new OrganizationMembersCompleteResponseDTO(
+   public static MembersByOrganizationResponseDTO get(OrganizationMembersEntity document) {
+      return new MembersByOrganizationResponseDTO(
          document.getId(),
          UserProfileDTO.get(document.getUser()),
          document.getRole(),

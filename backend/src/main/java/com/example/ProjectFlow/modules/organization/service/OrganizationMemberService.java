@@ -20,7 +20,7 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationMember
 
 // import DTOs
 import com.example.ProjectFlow.modules.user.service.UserService;
-import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersCompleteResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MembersByOrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
@@ -96,13 +96,13 @@ public class OrganizationMemberService {
 
 
    // get all members by organization
-   public List<OrganizationMembersCompleteResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
+   public List<MembersByOrganizationResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
       this.organizationMembersValidator.organizationIdValidate(organizationId);
       
       // organization existence - check
       this.organizationService.existsById(organizationId);
 
-      List<OrganizationMembersCompleteResponseDTO> members = this.organizationMembersRepository.getAllMembersByOrganizationId(organizationId);
+      List<MembersByOrganizationResponseDTO> members = this.organizationMembersRepository.getAllMembersByOrganizationId(organizationId);
 
       if(members.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
@@ -116,7 +116,7 @@ public class OrganizationMemberService {
 
 
    // get all members by role
-   public List<OrganizationMembersCompleteResponseDTO> getAllMembersByRole(
+   public List<MembersByOrganizationResponseDTO> getAllMembersByRole(
       UUID organizationId,
       String role
    ) {
@@ -126,7 +126,7 @@ public class OrganizationMemberService {
       // organization existence - check
       this.organizationService.existsById(organizationId);
 
-      List<OrganizationMembersCompleteResponseDTO> members = this.organizationMembersRepository.getAllMembersByRole(organizationId, RoleEnum.valueOf(role.toUpperCase()));
+      List<MembersByOrganizationResponseDTO> members = this.organizationMembersRepository.getAllMembersByRole(organizationId, RoleEnum.valueOf(role.toUpperCase()));
 
       if(members.isEmpty()) {
          throw MultiExceptions.notFound(String.format(

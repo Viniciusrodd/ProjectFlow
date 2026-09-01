@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import com.example.ProjectFlow.common.constants.ApiConstants;
 
 // import DTOs
-import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersCompleteResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MembersByOrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
@@ -95,12 +95,12 @@ public class OrganizationMembersController {
    // get all members by organization
    @GetMapping(value = "/organization/{organizationId}/members")
    @Operation(summary = "Get all members of an organization")
-   public ResponseEntity<ApiResponse<List<OrganizationMembersCompleteResponseDTO>>> getAllMembers(
+   public ResponseEntity<ApiResponse<List<MembersByOrganizationResponseDTO>>> getAllMembers(
       @PathVariable UUID organizationId
    ) {
-      List<OrganizationMembersCompleteResponseDTO> members = this.organizationMemberService.getAllMembersByOrganizationId(organizationId);
+      List<MembersByOrganizationResponseDTO> members = this.organizationMemberService.getAllMembersByOrganizationId(organizationId);
 
-      ApiResponse<List<OrganizationMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<OrganizationMembersCompleteResponseDTO>>()
+      ApiResponse<List<MembersByOrganizationResponseDTO>> response = new ApiResponse.Builder<List<MembersByOrganizationResponseDTO>>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
@@ -114,13 +114,13 @@ public class OrganizationMembersController {
    // get all members by role
    @GetMapping(value = "/organization/{organizationId}/members/role")
    @Operation(summary = "Get all members of an organization by role")
-   public ResponseEntity<ApiResponse<List<OrganizationMembersCompleteResponseDTO>>> getAllMembersByRole(
+   public ResponseEntity<ApiResponse<List<MembersByOrganizationResponseDTO>>> getAllMembersByRole(
       @PathVariable UUID organizationId,
       @RequestParam String r
    ) {
-      List<OrganizationMembersCompleteResponseDTO> members = this.organizationMemberService.getAllMembersByRole(organizationId, r);
+      List<MembersByOrganizationResponseDTO> members = this.organizationMemberService.getAllMembersByRole(organizationId, r);
 
-      ApiResponse<List<OrganizationMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<OrganizationMembersCompleteResponseDTO>>()
+      ApiResponse<List<MembersByOrganizationResponseDTO>> response = new ApiResponse.Builder<List<MembersByOrganizationResponseDTO>>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)

@@ -16,7 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 // import DTOs
-import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersCompleteResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MembersByOrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
@@ -75,7 +75,7 @@ public class OrganizationMembersRepository {
 
 
    // get all members by organization
-   public List<OrganizationMembersCompleteResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
+   public List<MembersByOrganizationResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
       List<OrganizationMembersEntity> membersDocument = this.entityManager
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
@@ -87,10 +87,10 @@ public class OrganizationMembersRepository {
          .setParameter("organizationId", organizationId)
          .getResultList();
 
-      List<OrganizationMembersCompleteResponseDTO> members = new ArrayList<>();
+      List<MembersByOrganizationResponseDTO> members = new ArrayList<>();
       
       for(OrganizationMembersEntity memberDocument : membersDocument) {
-         members.add(OrganizationMembersCompleteResponseDTO.get(memberDocument));
+         members.add(MembersByOrganizationResponseDTO.get(memberDocument));
       }
 
       return members;
@@ -98,7 +98,7 @@ public class OrganizationMembersRepository {
 
 
    // get all members by role
-   public List<OrganizationMembersCompleteResponseDTO> getAllMembersByRole(
+   public List<MembersByOrganizationResponseDTO> getAllMembersByRole(
       UUID organizationId,
       RoleEnum role
    ) {
@@ -115,10 +115,10 @@ public class OrganizationMembersRepository {
          .setParameter("role", role)
          .getResultList();
 
-      List<OrganizationMembersCompleteResponseDTO> members = new ArrayList<>();
+      List<MembersByOrganizationResponseDTO> members = new ArrayList<>();
       
       for(OrganizationMembersEntity memberDocument : membersDocument) {
-         members.add(OrganizationMembersCompleteResponseDTO.get(memberDocument));
+         members.add(MembersByOrganizationResponseDTO.get(memberDocument));
       }
 
       return members;
