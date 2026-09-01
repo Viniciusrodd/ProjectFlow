@@ -17,17 +17,21 @@ import com.example.ProjectFlow.modules.organization.repository.OrganizationMembe
 
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationMembersValidator;
-// import service
+
+// import DTOs
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersCompleteResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
-import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+
+// import enums
+import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -133,6 +137,22 @@ public class OrganizationMemberService {
             ResponseMessages.NOT_FOUND
          ));
       }
+   }
+
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.organizationMembersValidator.idValidate(id);
+
+      boolean exist = this.organizationMembersRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membro não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
    }
 
 
