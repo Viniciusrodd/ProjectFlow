@@ -32,8 +32,9 @@ import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
-import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.labelsByTaskResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 
 // import services
 import com.example.ProjectFlow.modules.task.service.TaskService;
@@ -266,14 +267,31 @@ public class TaskController {
    // get all labels by task id
    @GetMapping(value = "/task/{taskId}/labels")
    @Operation(summary = "Get all labels by task id")
-   public ResponseEntity<ApiResponse<List<labelsByTaskResponseDTO>>> getByTaskId(@PathVariable UUID taskId) {
-      List<labelsByTaskResponseDTO> taskLabels = this.taskLabelService.getAllByTaskId(taskId);
+   public ResponseEntity<ApiResponse<List<LabelsByTaskResponseDTO>>> getByTaskId(@PathVariable UUID taskId) {
+      List<LabelsByTaskResponseDTO> labels = this.taskLabelService.getAllByTaskId(taskId);
 
-      ApiResponse<List<labelsByTaskResponseDTO>> response = new ApiResponse.Builder<List<labelsByTaskResponseDTO>>()
+      ApiResponse<List<LabelsByTaskResponseDTO>> response = new ApiResponse.Builder<List<LabelsByTaskResponseDTO>>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
-         .data(taskLabels)
+         .data(labels)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get all tasks by label id
+   @GetMapping(value = "/tasks/label/{labelId}")
+   @Operation(summary = "Get all tasks by label id")
+   public ResponseEntity<ApiResponse<List<TasksByLabelResponseDTO>>> getByLabelId(@PathVariable UUID labelId) {
+      List<TasksByLabelResponseDTO> tasks = this.taskLabelService.getAllByLabelId(labelId);
+
+      ApiResponse<List<TasksByLabelResponseDTO>> response = new ApiResponse.Builder<List<TasksByLabelResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(tasks)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
