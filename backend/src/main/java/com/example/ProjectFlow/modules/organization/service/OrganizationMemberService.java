@@ -95,6 +95,22 @@ public class OrganizationMemberService {
    }
 
 
+   // get organization member by id
+   public OrganizationMembersResponseDTO getOrganizationMemberById(UUID id) {
+      this.organizationMembersValidator.idValidate(id);
+
+      try {
+         return this.organizationMembersRepository.getOrganizationMemberById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membro não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
    // get all members by organization
    public List<MembersByOrganizationResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
       this.organizationMembersValidator.organizationIdValidate(organizationId);
