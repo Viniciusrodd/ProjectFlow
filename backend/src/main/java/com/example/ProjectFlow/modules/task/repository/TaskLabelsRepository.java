@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.task.repository;
 
+import java.time.LocalDateTime;
 // imports
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import jakarta.persistence.NoResultException;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsDeletedDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
@@ -112,6 +114,21 @@ public class TaskLabelsRepository {
          .getSingleResult();
 
       return count > 0;
+   }
+
+
+   // remove task label relation
+   @Transactional
+   public TaskLabelsDeletedDTO removeRelation(UUID id) throws NoResultException {
+      TaskLabelsEntity taskLabel = this.entityManager
+         .createQuery("SELECT tl FROM TaskLabelsEntity tl WHERE tl.id = :id", TaskLabelsEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      taskLabel.setDeletedAt(LocalDateTime.now());
+
+      return TaskLabelsDeletedDTO.get(taskLabel);
    }
 
 }
