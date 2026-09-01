@@ -33,6 +33,7 @@ import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 
@@ -292,6 +293,23 @@ public class TaskController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(tasks)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // remove task label relation
+   @DeleteMapping(value = "/task/label/{id}")
+   @Operation(summary = "Remove task label relation")
+   public ResponseEntity<ApiResponse<TaskLabelsDeletedDTO>> removeTaskLabel(@PathVariable UUID id) {
+      TaskLabelsDeletedDTO removedTaskLabel = this.taskLabelService.removeRelation(id);
+
+      ApiResponse<TaskLabelsDeletedDTO> response = new ApiResponse.Builder<TaskLabelsDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(removedTaskLabel)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
