@@ -6,8 +6,8 @@ package com.example.ProjectFlow.modules.task.service;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
-
 import jakarta.persistence.NoResultException;
+
 // jakarta imports
 import jakarta.transaction.Transactional;
 
@@ -24,8 +24,10 @@ import com.example.ProjectFlow.modules.labels.service.LabelService;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
-import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsDeletedDTO;
+
 // import entity
+import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;
 
@@ -147,6 +149,23 @@ public class TaskLabelService {
       }
 
       return exist;
+   }
+
+
+   // remove task label relation
+   @Transactional
+   public TaskLabelsDeletedDTO removeRelation(UUID id) {
+      this.taskLabelsValidator.idValidate(id);
+
+      try {
+         return this.taskLabelsRepository.removeRelation(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
