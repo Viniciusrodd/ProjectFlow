@@ -81,6 +81,21 @@ public class OrganizationMemberService {
 
 
    // get all organization members
+   public List<OrganizationMembersResponseDTO> getAllOrganizationMembers() {
+      List<OrganizationMembersResponseDTO> members = this.organizationMembersRepository.getAllOrganizationMembers();
+
+      if(members.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membros não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return members;
+   }
+
+
+   // get all members by organization
    public List<OrganizationMembersCompleteResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
       this.organizationMembersValidator.organizationIdValidate(organizationId);
       
