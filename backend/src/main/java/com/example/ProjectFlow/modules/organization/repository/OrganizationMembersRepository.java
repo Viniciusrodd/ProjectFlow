@@ -15,10 +15,12 @@ import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+// import DTOs
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersCompleteResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
@@ -62,7 +64,6 @@ public class OrganizationMembersRepository {
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
             "JOIN FETCH m.user " +
-            "JOIN FETCH m.organization " +
             "WHERE m.organization.id = :organizationId " +
             "ORDER BY m.joinedAt DESC", 
             OrganizationMembersEntity.class
@@ -89,7 +90,6 @@ public class OrganizationMembersRepository {
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
             "JOIN FETCH m.user " +
-            "JOIN FETCH m.organization " +
             "WHERE m.organization.id = :organizationId " +
             "AND m.role = :role " +
             "ORDER BY m.joinedAt DESC",

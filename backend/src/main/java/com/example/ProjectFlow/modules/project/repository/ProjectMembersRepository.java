@@ -64,7 +64,6 @@ public class ProjectMembersRepository {
          .createQuery(
             "SELECT m FROM ProjectMembersEntity m " +
             "JOIN FETCH m.user " +
-            "JOIN FETCH m.project " +
             "WHERE m.project.id = :projectId " +
             "ORDER BY m.joinedAt DESC",
             ProjectMembersEntity.class
@@ -91,7 +90,6 @@ public class ProjectMembersRepository {
          .createQuery(
             "SELECT m FROM ProjectMembersEntity m " +
             "JOIN FETCH m.user " +
-            "JOIN FETCH m.project " +
             "WHERE m.project.id = :projectId " +
             "AND m.role = :role " +
             "ORDER BY m.joinedAt DESC",
