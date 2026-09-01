@@ -303,13 +303,13 @@ public class TaskController {
    @DeleteMapping(value = "/task/label/{id}")
    @Operation(summary = "Remove task label relation")
    public ResponseEntity<ApiResponse<TaskLabelsDeletedDTO>> removeTaskLabel(@PathVariable UUID id) {
-      TaskLabelsDeletedDTO removedTaskLabel = this.taskLabelService.removeRelation(id);
+      TaskLabelsDeletedDTO relationRemoved = this.taskLabelService.removeRelation(id);
 
       ApiResponse<TaskLabelsDeletedDTO> response = new ApiResponse.Builder<TaskLabelsDeletedDTO>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.DELETED)
-         .data(removedTaskLabel)
+         .data(relationRemoved)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);

@@ -134,19 +134,19 @@ public class ProjectMembersController {
    }
 
 
-   // delete member participation
+   // remove member participation
    @DeleteMapping(value = "/project/member/{id}")
-   @Operation(summary = "Delete a member's participation")
-   public ResponseEntity<ApiResponse<ProjectMembersDeletedDTO>> deleteMemberParticipation(
+   @Operation(summary = "Remove a member's participation")
+   public ResponseEntity<ApiResponse<ProjectMembersDeletedDTO>> removeMemberParticipation(
       @PathVariable UUID id
    ) {
-      ProjectMembersDeletedDTO participationDeleted = this.projectMemberService.delete(id);
+      ProjectMembersDeletedDTO participationRemoved = this.projectMemberService.removeParticipation(id);
 
       ApiResponse<ProjectMembersDeletedDTO> response = new ApiResponse.Builder<ProjectMembersDeletedDTO>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.DELETED)
-         .data(participationDeleted)
+         .data(participationRemoved)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);

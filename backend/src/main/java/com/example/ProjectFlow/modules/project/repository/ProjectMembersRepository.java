@@ -180,9 +180,9 @@ public class ProjectMembersRepository {
    }
 
 
-   // delete member participation
+   // remove member participation
    @Transactional
-   public ProjectMembersDeletedDTO delete(UUID id) throws NoResultException {
+   public ProjectMembersDeletedDTO removeParticipation(UUID id) throws NoResultException {
       ProjectMembersEntity member = this.entityManager
          .createQuery("SELECT e FROM ProjectMembersEntity e WHERE e.id = :id", ProjectMembersEntity.class)
          .setParameter("id", id)
