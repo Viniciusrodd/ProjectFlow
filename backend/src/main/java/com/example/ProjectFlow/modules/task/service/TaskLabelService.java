@@ -21,7 +21,8 @@ import com.example.ProjectFlow.modules.labels.service.LabelService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
-import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.labelsByTaskResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
@@ -77,22 +78,42 @@ public class TaskLabelService {
 
 
    // get all labels by task id
-   public List<labelsByTaskResponseDTO> getAllByTaskId(UUID taskId) {
+   public List<LabelsByTaskResponseDTO> getAllByTaskId(UUID taskId) {
       this.taskLabelsValidator.taskIdValidate(taskId);
 
       // task existence - check
       this.taskService.existsById(taskId);
 
-      List<labelsByTaskResponseDTO> taskLabels = this.taskLabelsRepository.getAllByTaskId(taskId);
+      List<LabelsByTaskResponseDTO> labels = this.taskLabelsRepository.getAllByTaskId(taskId);
 
-      if(taskLabels.isEmpty()) {
+      if(labels.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Etiquetas de tarefa não existem",
             ResponseMessages.NOT_FOUND
          ));
       }
 
-      return taskLabels;
+      return labels;
+   }
+
+
+   // get all tasks by label id
+   public List<TasksByLabelResponseDTO> getAllByLabelId(UUID labelId) {
+      this.taskLabelsValidator.labelIdValidate(labelId);
+
+      // label existence - check
+      this.labelService.existsById(labelId);
+
+      List<TasksByLabelResponseDTO> tasks = this.taskLabelsRepository.getAllByLabelId(labelId);
+
+      if(tasks.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefas da etiqueta não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return tasks;
    }
 
 }
