@@ -169,7 +169,7 @@ public class ProjectMembersRepository {
    @Transactional
    public ProjectMembersResponseDTO updateMemberRole(UUID id, RoleEnum role) throws NoResultException {
       ProjectMembersEntity member = this.entityManager
-         .createQuery("SELECT e FROM ProjectMembersEntity e WHERE e.id = :id", ProjectMembersEntity.class)
+         .createQuery("SELECT m FROM ProjectMembersEntity m WHERE m.id = :id", ProjectMembersEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
@@ -184,7 +184,7 @@ public class ProjectMembersRepository {
    @Transactional
    public ProjectMembersDeletedDTO removeParticipation(UUID id) throws NoResultException {
       ProjectMembersEntity member = this.entityManager
-         .createQuery("SELECT e FROM ProjectMembersEntity e WHERE e.id = :id", ProjectMembersEntity.class)
+         .createQuery("SELECT m FROM ProjectMembersEntity m WHERE m.id = :id", ProjectMembersEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
@@ -192,6 +192,17 @@ public class ProjectMembersRepository {
       member.setDeletedAt(LocalDateTime.now());
 
       return ProjectMembersDeletedDTO.get(member);
+   }
+
+
+   // is removed
+   public boolean isRemoved(UUID id) throws NoResultException {
+      ProjectMembersEntity member = this.entityManager
+         .createQuery("SELECT m FROM ProjectMembersEntity m WHERE m.id = :id", ProjectMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return member.isDeleted();
    }
 
 }

@@ -245,4 +245,20 @@ public class ProjectMemberService {
       }
    }
 
+
+   // is removed
+   public boolean isRemoved(UUID id) {
+      this.projectMembersValidator.idValidate(id);
+
+      try {
+         return this.projectMembersRepository.isRemoved(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Participação não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
