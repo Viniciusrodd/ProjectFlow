@@ -15,7 +15,8 @@ import jakarta.persistence.EntityManager;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
-import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.labelsByTaskResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
@@ -46,7 +47,7 @@ public class TaskLabelsRepository {
 
 
    // get all labels by task id
-   public List<labelsByTaskResponseDTO> getAllByTaskId(UUID taskId) {
+   public List<LabelsByTaskResponseDTO> getAllByTaskId(UUID taskId) {
       List<TaskLabelsEntity> taskLabelsDocument = this.entityManager
          .createQuery(
             "SELECT tl FROM TaskLabelsEntity tl " +
@@ -58,13 +59,36 @@ public class TaskLabelsRepository {
          .setParameter("taskId", taskId)
          .getResultList();
          
-      List<labelsByTaskResponseDTO> taskLabels = new ArrayList<>();
+      List<LabelsByTaskResponseDTO> labels = new ArrayList<>();
 
       for(TaskLabelsEntity taskLabel : taskLabelsDocument) {
-         taskLabels.add(labelsByTaskResponseDTO.get(taskLabel));
+         labels.add(LabelsByTaskResponseDTO.get(taskLabel));
       }
 
-      return taskLabels;
+      return labels;
+   }
+
+
+   // get all tasks by label id
+   public List<TasksByLabelResponseDTO> getAllByLabelId(UUID labelId) {
+      List<TaskLabelsEntity> taskLabelsDocument = this.entityManager
+         .createQuery(
+            "SELECT tl FROM TaskLabelsEntity tl " +
+            "JOIN FETCH tl.task " +
+            "WHERE tl.label.id = :labelId " +
+            "ORDER BY tl.createdAt ASC",
+            TaskLabelsEntity.class
+         )
+         .setParameter("labelId", labelId)
+         .getResultList();
+         
+      List<TasksByLabelResponseDTO> tasks = new ArrayList<>();
+
+      for(TaskLabelsEntity taskLabel : taskLabelsDocument) {
+         tasks.add(TasksByLabelResponseDTO.get(taskLabel));
+      }
+
+      return tasks;
    }
 
 }
