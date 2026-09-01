@@ -103,4 +103,15 @@ public class TaskLabelsRepository {
       return taskLabel;
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) throws NoResultException {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(tl) FROM TaskLabelsEntity tl WHERE tl.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
 }

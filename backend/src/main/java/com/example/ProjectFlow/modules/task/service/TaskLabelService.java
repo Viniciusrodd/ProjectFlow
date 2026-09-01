@@ -133,4 +133,20 @@ public class TaskLabelService {
       }
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.taskLabelsValidator.idValidate(id);
+
+      boolean exist = this.taskLabelsRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
 }
