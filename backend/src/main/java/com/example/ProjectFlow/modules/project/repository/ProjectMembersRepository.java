@@ -120,6 +120,17 @@ public class ProjectMembersRepository {
    }
 
 
+   // exists by id
+   public boolean existsById(UUID id) throws NoResultException {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(m) FROM ProjectMembersEntity m WHERE m.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
+
    // check if user is a membership
    public boolean checkUserMembership(UUID userId, UUID projectId) {
       Long count = this.entityManager
