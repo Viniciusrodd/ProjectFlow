@@ -123,7 +123,7 @@ public class OrganizationMembersRepository {
    // exists by id
    public boolean existsById(UUID id) throws NoResultException {
       Long count = this.entityManager
-         .createQuery("SELECT COUNT(e) FROM OrganizationMembersEntity e WHERE e.id = :id ", Long.class)
+         .createQuery("SELECT COUNT(m) FROM OrganizationMembersEntity m WHERE m.id = :id ", Long.class)
          .setParameter("id", id)
          .getSingleResult();
 
@@ -183,26 +183,26 @@ public class OrganizationMembersRepository {
    // remove member participation
    @Transactional
    public OrganizationMembersDeletedDTO removeParticipation(UUID id) throws NoResultException {
-      OrganizationMembersEntity participation = this.entityManager
+      OrganizationMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
       // delete
-      participation.setDeletedAt(LocalDateTime.now());
+      member.setDeletedAt(LocalDateTime.now());
 
-      return OrganizationMembersDeletedDTO.get(participation);
+      return OrganizationMembersDeletedDTO.get(member);
    }
 
 
-   // is deleted
-   public boolean isDeleted(UUID id) {
-      OrganizationMembersEntity participation = this.entityManager
+   // is removed
+   public boolean isRemoved(UUID id) throws NoResultException {
+      OrganizationMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return participation.isDeleted();
+      return member.isDeleted();
    }
 
 }

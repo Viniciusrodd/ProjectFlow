@@ -247,12 +247,12 @@ public class OrganizationMemberService {
    }
 
 
-   // is deleted
-   public boolean isDeleted(UUID id) {
+   // is removed
+   public boolean isRemoved(UUID id) {
       this.organizationMembersValidator.idValidate(id);
 
       try {
-         return this.organizationMembersRepository.isDeleted(id);
+         return this.organizationMembersRepository.isRemoved(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
