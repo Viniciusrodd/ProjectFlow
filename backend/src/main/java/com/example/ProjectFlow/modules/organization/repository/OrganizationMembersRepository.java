@@ -59,8 +59,24 @@ public class OrganizationMembersRepository {
 
 
    // get all organization members
+   public List<OrganizationMembersResponseDTO> getAllOrganizationMembers() {
+      List<OrganizationMembersEntity> membersDocument = this.entityManager
+         .createQuery("SELECT m FROM OrganizationMembersEntity m ORDER BY m.joinedAt DESC", OrganizationMembersEntity.class)
+         .getResultList();
+
+      List<OrganizationMembersResponseDTO> members = new ArrayList<>();
+
+      for(OrganizationMembersEntity memberDocument : membersDocument) {
+         members.add(OrganizationMembersResponseDTO.get(memberDocument));
+      }
+
+      return members;
+   }
+
+
+   // get all members by organization
    public List<OrganizationMembersCompleteResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
-      List<OrganizationMembersEntity> members = this.entityManager
+      List<OrganizationMembersEntity> membersDocument = this.entityManager
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -71,13 +87,13 @@ public class OrganizationMembersRepository {
          .setParameter("organizationId", organizationId)
          .getResultList();
 
-      List<OrganizationMembersCompleteResponseDTO> allMembers = new ArrayList<>();
+      List<OrganizationMembersCompleteResponseDTO> members = new ArrayList<>();
       
-      for(OrganizationMembersEntity member : members) {
-         allMembers.add(OrganizationMembersCompleteResponseDTO.get(member));
+      for(OrganizationMembersEntity memberDocument : membersDocument) {
+         members.add(OrganizationMembersCompleteResponseDTO.get(memberDocument));
       }
 
-      return allMembers;
+      return members;
    }
 
 
@@ -86,7 +102,7 @@ public class OrganizationMembersRepository {
       UUID organizationId,
       RoleEnum role
    ) {
-      List<OrganizationMembersEntity> members = this.entityManager
+      List<OrganizationMembersEntity> membersDocument = this.entityManager
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -99,13 +115,13 @@ public class OrganizationMembersRepository {
          .setParameter("role", role)
          .getResultList();
 
-      List<OrganizationMembersCompleteResponseDTO> allMembers = new ArrayList<>();
+      List<OrganizationMembersCompleteResponseDTO> members = new ArrayList<>();
       
-      for(OrganizationMembersEntity member : members) {
-         allMembers.add(OrganizationMembersCompleteResponseDTO.get(member));
+      for(OrganizationMembersEntity memberDocument : membersDocument) {
+         members.add(OrganizationMembersCompleteResponseDTO.get(memberDocument));
       }
 
-      return allMembers;
+      return members;
    }
 
 
