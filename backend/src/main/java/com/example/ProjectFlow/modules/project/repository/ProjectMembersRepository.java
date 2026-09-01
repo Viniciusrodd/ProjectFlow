@@ -16,7 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 // import DTOs
-import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersCompleteResponseDTO;
+import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.MemberByProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersResponseDTO;
@@ -59,7 +59,7 @@ public class ProjectMembersRepository {
 
 
    // get all project members
-   public List<ProjectMembersCompleteResponseDTO> getAllMembersByProjectId(UUID projectId) {
+   public List<MemberByProjectResponseDTO> getAllMembersByProjectId(UUID projectId) {
       List<ProjectMembersEntity> members = this.entityManager
          .createQuery(
             "SELECT m FROM ProjectMembersEntity m " +
@@ -71,10 +71,10 @@ public class ProjectMembersRepository {
          .setParameter("projectId", projectId)
          .getResultList();
 
-      List<ProjectMembersCompleteResponseDTO> allMembers = new ArrayList<>();
+      List<MemberByProjectResponseDTO> allMembers = new ArrayList<>();
 
       for(ProjectMembersEntity member : members) {
-         allMembers.add(ProjectMembersCompleteResponseDTO.get(member));
+         allMembers.add(MemberByProjectResponseDTO.get(member));
       }
 
       return allMembers;
@@ -82,7 +82,7 @@ public class ProjectMembersRepository {
 
 
    // get all members by role
-   public List<ProjectMembersCompleteResponseDTO> getAllMembersByRole(
+   public List<MemberByProjectResponseDTO> getAllMembersByRole(
       UUID projectId,
       RoleEnum role
    ) {
@@ -99,10 +99,10 @@ public class ProjectMembersRepository {
          .setParameter("role", role)
          .getResultList();
 
-      List<ProjectMembersCompleteResponseDTO> allMembers = new ArrayList<>();
+      List<MemberByProjectResponseDTO> allMembers = new ArrayList<>();
 
       for(ProjectMembersEntity member : members) {
-         allMembers.add(ProjectMembersCompleteResponseDTO.get(member));
+         allMembers.add(MemberByProjectResponseDTO.get(member));
       }
 
       return allMembers;

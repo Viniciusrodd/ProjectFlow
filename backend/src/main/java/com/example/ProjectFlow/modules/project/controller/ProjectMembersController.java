@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import com.example.ProjectFlow.common.constants.ApiConstants;
 
 // import DTOs
-import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersCompleteResponseDTO;
+import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.MemberByProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersResponseDTO;
@@ -78,12 +78,12 @@ public class ProjectMembersController {
    // get all project members
    @GetMapping(value = "/project/{projectId}/members")
    @Operation(summary = "Get all members of an project")
-   public ResponseEntity<ApiResponse<List<ProjectMembersCompleteResponseDTO>>> getAllMembers(
+   public ResponseEntity<ApiResponse<List<MemberByProjectResponseDTO>>> getAllMembers(
       @PathVariable UUID projectId
    ) {
-      List<ProjectMembersCompleteResponseDTO> members = this.projectMemberService.getAllMembersByProjectId(projectId);
+      List<MemberByProjectResponseDTO> members = this.projectMemberService.getAllMembersByProjectId(projectId);
 
-      ApiResponse<List<ProjectMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<ProjectMembersCompleteResponseDTO>>()
+      ApiResponse<List<MemberByProjectResponseDTO>> response = new ApiResponse.Builder<List<MemberByProjectResponseDTO>>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
@@ -97,13 +97,13 @@ public class ProjectMembersController {
    // get project members by role
    @GetMapping(value = "/project/{projectId}/members/role")
    @Operation(summary = "Get all members of an project by role")
-   public ResponseEntity<ApiResponse<List<ProjectMembersCompleteResponseDTO>>> getAllMembersByRole(
+   public ResponseEntity<ApiResponse<List<MemberByProjectResponseDTO>>> getAllMembersByRole(
       @PathVariable UUID projectId,
       @RequestParam String r
    ) {
-      List<ProjectMembersCompleteResponseDTO> members = this.projectMemberService.getAllMembersByRole(projectId, r);
+      List<MemberByProjectResponseDTO> members = this.projectMemberService.getAllMembersByRole(projectId, r);
 
-      ApiResponse<List<ProjectMembersCompleteResponseDTO>> response = new ApiResponse.Builder<List<ProjectMembersCompleteResponseDTO>>()
+      ApiResponse<List<MemberByProjectResponseDTO>> response = new ApiResponse.Builder<List<MemberByProjectResponseDTO>>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
