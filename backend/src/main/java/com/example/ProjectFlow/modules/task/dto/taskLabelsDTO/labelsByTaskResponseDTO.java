@@ -12,15 +12,15 @@ import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
 
 
-public record labelsByTaskResponseDTO (
+public record LabelsByTaskResponseDTO (
 
    UUID id,
    LabelsResponseDTO label
 
 ) {
 
-   public static labelsByTaskResponseDTO get(TaskLabelsEntity document) {
-      return new labelsByTaskResponseDTO(
+   public static LabelsByTaskResponseDTO get(TaskLabelsEntity document) {
+      return new LabelsByTaskResponseDTO(
          document.getId(),
          LabelsResponseDTO.get(document.getLabel())
       );
