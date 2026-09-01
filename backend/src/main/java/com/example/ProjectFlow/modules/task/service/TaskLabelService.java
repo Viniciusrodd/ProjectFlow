@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.NoResultException;
 // jakarta imports
 import jakarta.transaction.Transactional;
 
@@ -23,7 +24,7 @@ import com.example.ProjectFlow.modules.labels.service.LabelService;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
-
+import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;
@@ -58,7 +59,7 @@ public class TaskLabelService {
    }
 
 
-   // creating labels for tasks
+   // creating task label relation
    @Transactional
    public TaskLabelsResponseDTO create(UUID taskId, UUID labelId) {
       this.taskLabelsValidator.taskIdValidate(taskId);
@@ -114,6 +115,22 @@ public class TaskLabelService {
       }
 
       return tasks;
+   }
+
+
+   // get entity by id
+   public TaskLabelsEntity getEntityById(UUID id) {
+      this.taskLabelsValidator.idValidate(id);
+
+      try {
+         return this.taskLabelsRepository.getEntityById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }

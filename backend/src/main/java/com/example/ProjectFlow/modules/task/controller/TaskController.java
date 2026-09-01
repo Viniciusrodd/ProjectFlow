@@ -244,9 +244,9 @@ public class TaskController {
    //// task labels
 
 
-   // creating labels for tasks
+   // creating task label relation
    @PostMapping(value = "/task/{taskId}/label/{labelId}")
-   @Operation(summary = "Creating labels for tasks")
+   @Operation(summary = "Creating task label relation")
    public ResponseEntity<ApiResponse<TaskLabelsResponseDTO>> createTaskLabel(
       @PathVariable UUID taskId,
       @PathVariable UUID labelId
