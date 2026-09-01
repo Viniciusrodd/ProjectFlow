@@ -16,7 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 // import DTOs
-import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MembersByOrganizationResponseDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MemberByOrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
@@ -59,15 +59,15 @@ public class OrganizationMembersRepository {
 
 
    // get all organization members
-   public List<OrganizationMembersResponseDTO> getAllOrganizationMembers() {
+   public List<MemberByOrganizationResponseDTO> getAllOrganizationMembers() {
       List<OrganizationMembersEntity> membersDocument = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m ORDER BY m.joinedAt DESC", OrganizationMembersEntity.class)
          .getResultList();
 
-      List<OrganizationMembersResponseDTO> members = new ArrayList<>();
+      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
 
       for(OrganizationMembersEntity memberDocument : membersDocument) {
-         members.add(OrganizationMembersResponseDTO.get(memberDocument));
+         members.add(MemberByOrganizationResponseDTO.get(memberDocument));
       }
 
       return members;
@@ -75,18 +75,18 @@ public class OrganizationMembersRepository {
 
 
    // get organization member by id
-   public OrganizationMembersResponseDTO getOrganizationMemberById(UUID id) throws NoResultException {
+   public MemberByOrganizationResponseDTO getOrganizationMemberById(UUID id) throws NoResultException {
       OrganizationMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return OrganizationMembersResponseDTO.get(member);
+      return MemberByOrganizationResponseDTO.get(member);
    }
 
 
    // get all members by organization
-   public List<MembersByOrganizationResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
+   public List<MemberByOrganizationResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
       List<OrganizationMembersEntity> membersDocument = this.entityManager
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
@@ -98,10 +98,10 @@ public class OrganizationMembersRepository {
          .setParameter("organizationId", organizationId)
          .getResultList();
 
-      List<MembersByOrganizationResponseDTO> members = new ArrayList<>();
+      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
       
       for(OrganizationMembersEntity memberDocument : membersDocument) {
-         members.add(MembersByOrganizationResponseDTO.get(memberDocument));
+         members.add(MemberByOrganizationResponseDTO.get(memberDocument));
       }
 
       return members;
@@ -109,7 +109,7 @@ public class OrganizationMembersRepository {
 
 
    // get all members by role
-   public List<MembersByOrganizationResponseDTO> getAllMembersByRole(
+   public List<MemberByOrganizationResponseDTO> getAllMembersByRole(
       UUID organizationId,
       RoleEnum role
    ) {
@@ -126,10 +126,10 @@ public class OrganizationMembersRepository {
          .setParameter("role", role)
          .getResultList();
 
-      List<MembersByOrganizationResponseDTO> members = new ArrayList<>();
+      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
       
       for(OrganizationMembersEntity memberDocument : membersDocument) {
-         members.add(MembersByOrganizationResponseDTO.get(memberDocument));
+         members.add(MemberByOrganizationResponseDTO.get(memberDocument));
       }
 
       return members;
