@@ -74,6 +74,17 @@ public class OrganizationMembersRepository {
    }
 
 
+   // get organization member by id
+   public OrganizationMembersResponseDTO getOrganizationMemberById(UUID id) throws NoResultException {
+      OrganizationMembersEntity member = this.entityManager
+         .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return OrganizationMembersResponseDTO.get(member);
+   }
+
+
    // get all members by organization
    public List<MembersByOrganizationResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
       List<OrganizationMembersEntity> membersDocument = this.entityManager
