@@ -26,15 +26,19 @@ import io.swagger.v3.oas.annotations.Operation;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ApiConstants;
+
+// import DTOs
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersCompleteResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
+
 // import services
 import com.example.ProjectFlow.modules.organization.service.OrganizationMemberService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
+
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
@@ -130,19 +134,19 @@ public class OrganizationMembersController {
    }
 
 
-   // delete member participation
+   // remove member participation
    @DeleteMapping(value = "/organization/member/{id}")
    @Operation(summary = "Remove a member's participation")
-   public ResponseEntity<ApiResponse<OrganizationMembersDeletedDTO>> deleteMemberParticipation(
+   public ResponseEntity<ApiResponse<OrganizationMembersDeletedDTO>> removeMemberParticipation(
       @PathVariable UUID id
    ) {
-      OrganizationMembersDeletedDTO participationDeleted = this.organizationMemberService.delete(id);
+      OrganizationMembersDeletedDTO participationRemoved = this.organizationMemberService.removeParticipation(id);
 
       ApiResponse<OrganizationMembersDeletedDTO> response = new ApiResponse.Builder<OrganizationMembersDeletedDTO>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.DELETED)
-         .data(participationDeleted)
+         .data(participationRemoved)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);

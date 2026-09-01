@@ -224,9 +224,9 @@ public class OrganizationMemberService {
    }
 
 
-   // delete member participation
+   // remove member participation
    @Transactional
-   public OrganizationMembersDeletedDTO delete(UUID id) {
+   public OrganizationMembersDeletedDTO removeParticipation(UUID id) {
       this.organizationMembersValidator.idValidate(id);
 
       try {
@@ -236,7 +236,7 @@ public class OrganizationMemberService {
             this.validateLastAdmin(member.getOrganization().getId());
          }
 
-         return this.organizationMembersRepository.delete(id);
+         return this.organizationMembersRepository.removeParticipation(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(

@@ -180,9 +180,9 @@ public class OrganizationMembersRepository {
    }
 
 
-   // delete member participation
+   // remove member participation
    @Transactional
-   public OrganizationMembersDeletedDTO delete(UUID id) throws NoResultException {
+   public OrganizationMembersDeletedDTO removeParticipation(UUID id) throws NoResultException {
       OrganizationMembersEntity participation = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
          .setParameter("id", id)
