@@ -76,8 +76,8 @@ public class OrganizationMembersController {
 
 
    // get all members
-   @GetMapping(value = "/organization/members")
-   @Operation(summary = "Get all organization members data")
+   @GetMapping(value = "/organizations/members")
+   @Operation(summary = "Get all organizations members data")
    public ResponseEntity<ApiResponse<List<MemberByOrganizationResponseDTO>>> getAllOrganizationMembers() {
       List<MemberByOrganizationResponseDTO> members = this.organizationMemberService.getAllOrganizationMembers();
 

@@ -82,6 +82,21 @@ public class ProjectMemberService {
    }
 
 
+   // get all members
+   public List<MemberByProjectResponseDTO> getAllProjectMembers() {
+      List<MemberByProjectResponseDTO> members = this.projectMembersRepository.getAllProjectMembers();
+
+      if(members.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membros não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return members;
+   }
+
+
    // get member by relation id
    public MemberByProjectResponseDTO getProjectMemberById(UUID id) {
       this.projectMembersValidator.idValidate(id);
