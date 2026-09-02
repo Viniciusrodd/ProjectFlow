@@ -75,6 +75,23 @@ public class ProjectMembersController {
    }
 
 
+   // get all members
+   @GetMapping(value = "/projects/members")
+   @Operation(summary = "Get all projects members data")
+   public ResponseEntity<ApiResponse<List<MemberByProjectResponseDTO>>> getAllProjectMembers() {
+      List<MemberByProjectResponseDTO> members = this.projectMemberService.getAllProjectMembers();
+
+      ApiResponse<List<MemberByProjectResponseDTO>> response = new ApiResponse.Builder<List<MemberByProjectResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(members)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
    // get member by relation id
    @GetMapping(value = "/project/member/{id}")
    @Operation(summary = "Get project member data by id")
