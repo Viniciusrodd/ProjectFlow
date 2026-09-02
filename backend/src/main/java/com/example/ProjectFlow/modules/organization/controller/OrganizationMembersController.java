@@ -75,7 +75,7 @@ public class OrganizationMembersController {
    }
 
 
-   // get all organization members
+   // get all members
    @GetMapping(value = "/organization/members")
    @Operation(summary = "Get all organization members data")
    public ResponseEntity<ApiResponse<List<MemberByOrganizationResponseDTO>>> getAllOrganizationMembers() {
@@ -92,7 +92,7 @@ public class OrganizationMembersController {
    }
 
 
-   // get organization member by id
+   // get member by relation id
    @GetMapping(value = "/organization/member/{id}")
    @Operation(summary = "Get organization member data by id")
    public ResponseEntity<ApiResponse<MemberByOrganizationResponseDTO>> getOrganizationMember(
