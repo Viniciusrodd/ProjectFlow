@@ -58,6 +58,27 @@ public class ProjectMembersRepository {
    }
 
 
+   // get all members
+   public List<MemberByProjectResponseDTO> getAllProjectMembers() {
+      List<ProjectMembersEntity> membersDocument = this.entityManager
+         .createQuery(
+            "SELECT m FROM ProjectMembersEntity m " +
+            "JOIN FETCH m.user " +
+            "ORDER BY m.joinedAt DESC ", 
+            ProjectMembersEntity.class
+         )
+         .getResultList();
+
+      List<MemberByProjectResponseDTO> members = new ArrayList<>();
+
+      for(ProjectMembersEntity memberDocument : membersDocument) {
+         members.add(MemberByProjectResponseDTO.get(memberDocument));
+      }
+
+      return members;
+   }
+
+
    // get member by relation id
    public MemberByProjectResponseDTO getProjectMemberById(UUID id) throws NoResultException {
       ProjectMembersEntity member = this.entityManager
@@ -71,7 +92,7 @@ public class ProjectMembersRepository {
 
    // get all members by project
    public List<MemberByProjectResponseDTO> getAllMembersByProjectId(UUID projectId) {
-      List<ProjectMembersEntity> members = this.entityManager
+      List<ProjectMembersEntity> membersDocument = this.entityManager
          .createQuery(
             "SELECT m FROM ProjectMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -82,13 +103,13 @@ public class ProjectMembersRepository {
          .setParameter("projectId", projectId)
          .getResultList();
 
-      List<MemberByProjectResponseDTO> allMembers = new ArrayList<>();
+      List<MemberByProjectResponseDTO> members = new ArrayList<>();
 
-      for(ProjectMembersEntity member : members) {
-         allMembers.add(MemberByProjectResponseDTO.get(member));
+      for(ProjectMembersEntity memberDocument : membersDocument) {
+         members.add(MemberByProjectResponseDTO.get(memberDocument));
       }
 
-      return allMembers;
+      return members;
    }
 
 
@@ -97,7 +118,7 @@ public class ProjectMembersRepository {
       UUID projectId,
       RoleEnum role
    ) {
-      List<ProjectMembersEntity> members = this.entityManager
+      List<ProjectMembersEntity> membersDocument = this.entityManager
          .createQuery(
             "SELECT m FROM ProjectMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -110,13 +131,13 @@ public class ProjectMembersRepository {
          .setParameter("role", role)
          .getResultList();
 
-      List<MemberByProjectResponseDTO> allMembers = new ArrayList<>();
+      List<MemberByProjectResponseDTO> members = new ArrayList<>();
 
-      for(ProjectMembersEntity member : members) {
-         allMembers.add(MemberByProjectResponseDTO.get(member));
+      for(ProjectMembersEntity memberDocument : membersDocument) {
+         members.add(MemberByProjectResponseDTO.get(memberDocument));
       }
 
-      return allMembers;
+      return members;
    }
 
 

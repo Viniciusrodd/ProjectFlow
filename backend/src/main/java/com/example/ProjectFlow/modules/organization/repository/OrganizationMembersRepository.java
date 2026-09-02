@@ -61,7 +61,12 @@ public class OrganizationMembersRepository {
    // get all members
    public List<MemberByOrganizationResponseDTO> getAllOrganizationMembers() {
       List<OrganizationMembersEntity> membersDocument = this.entityManager
-         .createQuery("SELECT m FROM OrganizationMembersEntity m ORDER BY m.joinedAt DESC", OrganizationMembersEntity.class)
+         .createQuery(
+            "SELECT m FROM OrganizationMembersEntity m " + 
+            "JOIN FETCH m.user " +
+            "ORDER BY m.joinedAt DESC ", 
+            OrganizationMembersEntity.class
+         )
          .getResultList();
 
       List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
