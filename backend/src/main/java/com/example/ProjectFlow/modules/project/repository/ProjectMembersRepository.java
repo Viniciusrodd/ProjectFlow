@@ -58,7 +58,18 @@ public class ProjectMembersRepository {
    }
 
 
-   // get all project members
+   // get member by relation id
+   public MemberByProjectResponseDTO getProjectMemberById(UUID id) throws NoResultException {
+      ProjectMembersEntity member = this.entityManager
+         .createQuery("SELECT m FROM ProjectMembersEntity m WHERE m.id = :id", ProjectMembersEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return MemberByProjectResponseDTO.get(member);
+   }
+
+
+   // get all members by project
    public List<MemberByProjectResponseDTO> getAllMembersByProjectId(UUID projectId) {
       List<ProjectMembersEntity> members = this.entityManager
          .createQuery(

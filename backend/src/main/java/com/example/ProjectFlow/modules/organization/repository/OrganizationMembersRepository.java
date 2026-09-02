@@ -58,7 +58,7 @@ public class OrganizationMembersRepository {
    }
 
 
-   // get all organization members
+   // get all members
    public List<MemberByOrganizationResponseDTO> getAllOrganizationMembers() {
       List<OrganizationMembersEntity> membersDocument = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m ORDER BY m.joinedAt DESC", OrganizationMembersEntity.class)
@@ -74,7 +74,7 @@ public class OrganizationMembersRepository {
    }
 
 
-   // get organization member by id
+   // get member by relation id
    public MemberByOrganizationResponseDTO getOrganizationMemberById(UUID id) throws NoResultException {
       OrganizationMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
