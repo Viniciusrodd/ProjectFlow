@@ -80,7 +80,7 @@ public class OrganizationMemberService {
    }
 
 
-   // get all organization members
+   // get all members
    public List<MemberByOrganizationResponseDTO> getAllOrganizationMembers() {
       List<MemberByOrganizationResponseDTO> members = this.organizationMembersRepository.getAllOrganizationMembers();
 
@@ -95,7 +95,7 @@ public class OrganizationMemberService {
    }
 
 
-   // get organization member by id
+   // get member by relation id
    public MemberByOrganizationResponseDTO getOrganizationMemberById(UUID id) {
       this.organizationMembersValidator.idValidate(id);
 

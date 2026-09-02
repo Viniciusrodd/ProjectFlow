@@ -82,7 +82,23 @@ public class ProjectMemberService {
    }
 
 
-   // get all project members
+   // get member by relation id
+   public MemberByProjectResponseDTO getProjectMemberById(UUID id) {
+      this.projectMembersValidator.idValidate(id);
+
+      try {
+         return this.projectMembersRepository.getProjectMemberById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membro não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // get all members by project
    public List<MemberByProjectResponseDTO> getAllMembersByProjectId(UUID projectId) {
       this.projectMembersValidator.projectIdValidate(projectId);
 
