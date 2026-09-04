@@ -186,6 +186,23 @@ public class ProjectMemberService {
    }
 
 
+   // exists by project and member id
+   public boolean existsByProjectIdAndMemberId(UUID projectId, UUID memberId) {
+      this.projectMembersValidator.projectIdValidate(projectId);
+      this.projectMembersValidator.userIdValidate(memberId);
+
+      boolean exist = this.projectMembersRepository.existsByProjectIdAndMemberId(projectId, memberId);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membro não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
+
    // check if user is a membership
    public boolean checkUserMembership(UUID userId, UUID projectId) {
       this.projectMembersValidator.userIdValidate(userId);
