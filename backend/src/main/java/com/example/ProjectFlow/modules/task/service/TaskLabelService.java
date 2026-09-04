@@ -152,6 +152,23 @@ public class TaskLabelService {
    }
 
 
+   // exists by task and label id
+   public boolean existsByTaskIdAndLabelId(UUID taskId, UUID labelId) {
+      this.taskLabelsValidator.taskIdValidate(taskId);
+      this.taskLabelsValidator.labelIdValidate(labelId);
+
+      boolean exist = this.taskLabelsRepository.existsByTaskIdAndLabelId(taskId, labelId);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Etiqueta de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
+
    // remove task label relation
    @Transactional
    public TaskLabelsDeletedDTO removeRelation(UUID id) {

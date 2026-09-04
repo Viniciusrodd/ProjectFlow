@@ -2,8 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.task.repository;
 
-import java.time.LocalDateTime;
 // imports
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -111,6 +111,23 @@ public class TaskLabelsRepository {
       Long count = this.entityManager
          .createQuery("SELECT COUNT(tl) FROM TaskLabelsEntity tl WHERE tl.id = :id", Long.class)
          .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
+
+   // exists by task and label id
+   public boolean existsByTaskIdAndLabelId(UUID taskId, UUID labelId) {
+      Long count = this.entityManager
+         .createQuery(
+            "SELECT COUNT(tl) FROM TaskLabelsEntity tl " +
+            "WHERE tl.task.id = :taskId " +
+            "AND tl.label.id = :labeld ",
+            Long.class
+         )
+         .setParameter("taskId", taskId)
+         .setParameter("labelId", labelId)
          .getSingleResult();
 
       return count > 0;
