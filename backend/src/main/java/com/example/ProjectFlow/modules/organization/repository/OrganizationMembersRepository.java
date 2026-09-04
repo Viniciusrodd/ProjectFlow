@@ -163,6 +163,23 @@ public class OrganizationMembersRepository {
    }
 
 
+   // exists by organization and member id
+   public boolean existsByOrganizationIdAndMemberId(UUID organizationId, UUID memberId) {
+      Long count = this.entityManager
+         .createQuery(
+            "SELECT COUNT(m) FROM OrganizationMembersEntity m " +
+            "WHERE m.organization.id = :organizationId " +
+            "AND m.user.id = :memberId ",
+            Long.class
+         )
+         .setParameter("organizationId", organizationId)
+         .setParameter("memberId", memberId)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
+
    // check if user is a membership
    public boolean checkUserMembership(UUID userId, UUID organizationId) {
       Long count = this.entityManager

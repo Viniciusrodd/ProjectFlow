@@ -187,6 +187,23 @@ public class OrganizationMemberService {
    }
 
 
+   // exists by organization and member id
+   public boolean existsByOrganizationIdAndMemberId(UUID organizationId, UUID memberId) {
+      this.organizationMembersValidator.organizationIdValidate(organizationId);
+      this.organizationMembersValidator.userIdValidate(memberId);
+
+      boolean exist = this.organizationMembersRepository.existsByOrganizationIdAndMemberId(organizationId, memberId);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membro não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
+
    // check if user is a membership
    public boolean checkUserMembership(UUID userId, UUID organizationId) {
       this.organizationMembersValidator.userIdValidate(userId);
