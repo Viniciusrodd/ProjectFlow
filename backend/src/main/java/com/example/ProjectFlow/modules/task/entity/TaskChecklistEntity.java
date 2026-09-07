@@ -55,7 +55,7 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
    private int position;
 
    @CreationTimestamp
-   @Column(name = "created_at", updatable = false)
+   @Column(name = "created_at")
    private LocalDateTime createdAt;
 
    @UpdateTimestamp
@@ -66,13 +66,23 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
-   protected TaskChecklistEntity() {}
+   // constructor - empty
+   public TaskChecklistEntity() {}
+
+
+   // constructor - builder
+   public TaskChecklistEntity(Builder builder) {
+      setTask(builder.task);
+      setDescription(builder.description);
+      setCompleted(builder.completed);
+      setPosition(builder.position);
+   }
 
 
    // getters
    public UUID getId() { return this.id; }
    public TasksEntity getTask() { return this.task; }
+   public UUID getTaskId() { return this.task.getId(); }
    public String getDescription() { return this.description; }
    public boolean getCompleted() { return this.completed; }
    public int getPosition() { return this.position; }
@@ -83,6 +93,7 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
 
    // setters
    public void setId(UUID id) { this.id = id; }
+   public void setTask(TasksEntity task) { this.task = task; }
    public void setDescription(String description) { this.description = description; }
    public void setCompleted(boolean completed) { this.completed = completed; }
    public void setPosition(int position) { this.position = position; }
@@ -93,5 +104,40 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private TasksEntity task;
+      private String description;
+      private boolean completed;
+      private int position;
+
+      public Builder task(TasksEntity task) {
+         this.task = task;
+         return this;
+      }
+
+      public Builder description(String description) {
+         this.description = description;
+         return this;
+      }
+
+      public Builder completed(boolean completed) {
+         this.completed = completed;
+         return this;
+      }
+
+      public Builder position(int position) {
+         this.position = position;
+         return this;
+      }
+
+      public TaskChecklistEntity build() {
+         return new TaskChecklistEntity(this);
+      }
+   }
 
 }
