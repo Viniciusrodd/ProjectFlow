@@ -14,7 +14,7 @@ public record TaskChecklistResponseDTO (
    UUID id,
    UUID taskId,
    String description,
-   Boolean completed,
+   boolean completed,
    Integer position
 
 ) {
