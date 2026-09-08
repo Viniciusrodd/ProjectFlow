@@ -9,6 +9,7 @@ import java.util.UUID;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
+import jakarta.persistence.NoResultException;
 
 // import repository
 import com.example.ProjectFlow.modules.task.repository.TaskChecklistRepository;
@@ -61,18 +62,18 @@ public class TaskChecklistService {
       TasksEntity task = this.taskService.getEntityById(taskId);
       
       // check column position existence
-      this.checkColumnPositionExistence(data.position());
+      this.checkPositionExistence(data.position());
 
       return this.taskChecklistRepository.create(task, data);
    }
 
 
-   // check if column position already exist
-   public void checkColumnPositionExistence(int position) {
-      boolean exist = this.taskChecklistRepository.checkColumnPositionExistence(position);
+   // check if position already exist
+   public void checkPositionExistence(int position) {
+      boolean exist = this.taskChecklistRepository.checkPositionExistence(position);
       if(exist) {
          throw MultiExceptions.invalid(String.format(
-            "%s: A coluna de posição '%s' já existe",
+            "%s: A posição '%s' já existe",
             ResponseMessages.INVALID_DATA,
             position
          ));
@@ -97,6 +98,22 @@ public class TaskChecklistService {
       }
 
       return items;
+   }
+
+
+   // get checklist item by id
+   public TaskChecklistResponseDTO getItemById(UUID id) {
+      this.taskChecklistValidator.idValidate(id);
+
+      try {
+         return this.taskChecklistRepository.getItemById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Item de checklist da tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
