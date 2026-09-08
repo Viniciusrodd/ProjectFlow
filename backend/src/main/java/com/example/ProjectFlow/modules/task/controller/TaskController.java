@@ -38,7 +38,7 @@ import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponse
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
-
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
 // import services
 import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.modules.task.service.TaskLabelService;
@@ -394,6 +394,26 @@ public class TaskController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(items)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update task checklist item
+   @PutMapping(value = "/task/checklist/item/{id}")
+   @Operation(summary = "Update task checklist item")
+   public ResponseEntity<ApiResponse<TaskChecklistResponseDTO>> updateChecklistItem(
+      @PathVariable UUID id,
+      @RequestBody TaskChecklistUpdateDTO data
+   ) {
+      TaskChecklistResponseDTO updatedItem = this.taskChecklistService.update(id, data);
+
+      ApiResponse<TaskChecklistResponseDTO> response = new ApiResponse.Builder<TaskChecklistResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedItem)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
