@@ -218,4 +218,20 @@ public class TaskChecklistService {
       }
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) {
+      this.taskChecklistValidator.idValidate(id);
+
+      try {
+         return this.taskChecklistRepository.isDeleted(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Item de checklist da tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }

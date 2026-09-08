@@ -191,4 +191,15 @@ public class TaskChecklistRepository {
       return TaskChecklistDeletedDTO.get(item);
    }
 
+
+   // is deleted
+   public boolean isDeleted(UUID id) throws NoResultException {
+      TaskChecklistEntity item = this.entityManager
+         .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return item.isDeleted();
+   }
+
 }
