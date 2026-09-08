@@ -20,8 +20,10 @@ import com.example.ProjectFlow.modules.task.validator.TaskChecklistValidator;
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
-import com.example.ProjectFlow.modules.task.entity.TaskChecklistEntity;
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
+
 // import entity
+import com.example.ProjectFlow.modules.task.entity.TaskChecklistEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import exceptions
@@ -161,6 +163,24 @@ public class TaskChecklistService {
       }
 
       return exist;
+   }
+
+
+   // update task checklist item
+   @Transactional
+   public TaskChecklistResponseDTO update(UUID id, TaskChecklistUpdateDTO data) {
+      this.taskChecklistValidator.idValidate(id);
+      this.taskChecklistValidator.updateValidations(data);
+
+      try {
+         return this.taskChecklistRepository.update(id, data);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Item de checklist da tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
