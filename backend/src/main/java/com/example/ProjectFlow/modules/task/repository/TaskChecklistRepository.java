@@ -51,10 +51,16 @@ public class TaskChecklistRepository {
 
 
    // check if position already exist
-   public boolean checkPositionExistence(int position) {
+   public boolean checkPositionExistence(int position, UUID taskId) {
       Long count = this.entityManager
-         .createQuery("SELECT COUNT(c) FROM TaskChecklistEntity c WHERE c.position = :position", Long.class)
+         .createQuery(
+            "SELECT COUNT(c) FROM TaskChecklistEntity c " + 
+            "WHERE c.position = :position " +
+            "AND c.task.id = :taskId ",
+            Long.class
+         )
          .setParameter("position", position)
+         .setParameter("taskId", taskId)
          .getSingleResult();
 
       return count > 0;
@@ -67,7 +73,7 @@ public class TaskChecklistRepository {
          .createQuery(
             "SELECT i FROM TaskChecklistEntity i " +
             "WHERE i.task.id = :taskId " +
-            "ORDER BY i.createdAt",
+            "ORDER BY i.createdAt ASC",
             TaskChecklistEntity.class
          )
          .setParameter("taskId", taskId)
@@ -84,13 +90,33 @@ public class TaskChecklistRepository {
 
 
    // get checklist item by id
-   public TaskChecklistResponseDTO getItemById(UUID id) throws NoResultException {
+   public TaskChecklistResponseDTO getById(UUID id) throws NoResultException {
       TaskChecklistEntity item = this.entityManager
          .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
       return TaskChecklistResponseDTO.get(item);
+   }
+
+
+   // get all checklist items
+   public List<TaskChecklistResponseDTO> getAll() {
+      List<TaskChecklistEntity> itemsDocument = this.entityManager
+         .createQuery(
+            "SELECT i FROM TaskChecklistEntity i " +
+            "ORDER BY i.createdAt ASC ", 
+            TaskChecklistEntity.class
+         )
+         .getResultList();
+      
+      List<TaskChecklistResponseDTO> items = new ArrayList<>();
+
+      for(TaskChecklistEntity item : itemsDocument) {
+         items.add(TaskChecklistResponseDTO.get(item));
+      }
+
+      return items;
    }
 
 }
