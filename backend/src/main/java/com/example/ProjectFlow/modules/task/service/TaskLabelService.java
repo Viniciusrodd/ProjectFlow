@@ -6,10 +6,10 @@ package com.example.ProjectFlow.modules.task.service;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
-import jakarta.persistence.NoResultException;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
+import jakarta.persistence.NoResultException;
 
 // import repository
 import com.example.ProjectFlow.modules.task.repository.TaskLabelsRepository;
