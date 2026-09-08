@@ -19,6 +19,7 @@ import com.example.ProjectFlow.modules.task.validator.TaskChecklistValidator;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
 
@@ -191,6 +192,23 @@ public class TaskChecklistService {
 
       try {
          return this.taskChecklistRepository.setCompleted(id, completed);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Item de checklist da tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // delete task checklist item
+   @Transactional 
+   public TaskChecklistDeletedDTO delete(UUID id) {
+      this.taskChecklistValidator.idValidate(id);
+
+      try {
+         return this.taskChecklistRepository.delete(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
