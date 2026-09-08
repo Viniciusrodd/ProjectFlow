@@ -4,11 +4,13 @@ package com.example.ProjectFlow.modules.task.validator;
 
 // imports
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 import java.util.UUID;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
-
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.common.constants.ValidationConstants;
@@ -76,6 +78,32 @@ public class TaskChecklistValidator {
             ResponseMessages.INVALID_DATA
          ));
       }
+   }
+
+
+   // update validations
+   public void updateValidations(TaskChecklistUpdateDTO data) {
+      // description validate
+      Optional.ofNullable(data.description()).ifPresent(description -> {
+         if(description.length() > ValidationConstants.MAX_CHECKLIST_DESC_LENGTH) {
+            throw MultiExceptions.invalid(String.format(
+               "%s: Descrição deve ser no máximo %d caracteres",
+               ResponseMessages.INVALID_DATA,
+               ValidationConstants.MAX_CHECKLIST_DESC_LENGTH
+            ));
+         }
+      });
+
+
+      // position validate
+      Optional.ofNullable(data.position()).ifPresent(position -> {
+         if(position <= 0) {
+            throw MultiExceptions.invalid(String.format(
+               "%s: Posição deve ser maior que 0",
+               ResponseMessages.INVALID_DATA
+            ));
+         }
+      });
    }
 
 }
