@@ -59,8 +59,24 @@ public class TaskChecklistService {
 
       // get task data
       TasksEntity task = this.taskService.getEntityById(taskId);
+      
+      // check column position existence
+      this.checkColumnPositionExistence(data.position());
 
       return this.taskChecklistRepository.create(task, data);
+   }
+
+
+   // check if column position already exist
+   public void checkColumnPositionExistence(int position) {
+      boolean exist = this.taskChecklistRepository.checkColumnPositionExistence(position);
+      if(exist) {
+         throw MultiExceptions.invalid(String.format(
+            "%s: A coluna de posição '%s' já existe",
+            ResponseMessages.INVALID_DATA,
+            position
+         ));
+      }
    }
 
 

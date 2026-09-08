@@ -49,6 +49,17 @@ public class TaskChecklistRepository {
    }
 
 
+   // check if column position already exist
+   public boolean checkColumnPositionExistence(int position) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(c) FROM TaskChecklistEntity c WHERE c.position = :position", Long.class)
+         .setParameter("position", position)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
+
    // get all checklist items by task id
    public List<TaskChecklistResponseDTO> getAllByTaskId(UUID taskId) {
       List<TaskChecklistEntity> itemsDocument = this.entityManager
