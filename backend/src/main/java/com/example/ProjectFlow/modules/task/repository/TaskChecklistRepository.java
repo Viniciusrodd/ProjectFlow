@@ -4,6 +4,9 @@ package com.example.ProjectFlow.modules.task.repository;
 
 // imports
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 // jakarta imports
 import jakarta.persistence.PersistenceContext;
@@ -43,6 +46,28 @@ public class TaskChecklistRepository {
       this.entityManager.persist(taskChecklist);
 
       return TaskChecklistResponseDTO.get(taskChecklist);
+   }
+
+
+   // get all checklist items by task id
+   public List<TaskChecklistResponseDTO> getAllByTaskId(UUID taskId) {
+      List<TaskChecklistEntity> itemsDocument = this.entityManager
+         .createQuery(
+            "SELECT i FROM TaskChecklistEntity i " +
+            "WHERE i.task.id = :taskId " +
+            "ORDER BY i.createdAt",
+            TaskChecklistEntity.class
+         )
+         .setParameter("taskId", taskId)
+         .getResultList();
+      
+      List<TaskChecklistResponseDTO> items = new ArrayList<>();
+
+      for(TaskChecklistEntity item : itemsDocument) {
+         items.add(TaskChecklistResponseDTO.get(item));
+      }
+
+      return items;
    }
 
 }
