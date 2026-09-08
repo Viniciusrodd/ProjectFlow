@@ -183,4 +183,21 @@ public class TaskChecklistService {
       }
    }
 
+
+   // update completed field of task checklist item
+   @Transactional
+   public TaskChecklistResponseDTO setCompleted(UUID id, boolean completed) {
+      this.taskChecklistValidator.idValidate(id);
+
+      try {
+         return this.taskChecklistRepository.setCompleted(id, completed);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Item de checklist da tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
 }
