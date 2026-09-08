@@ -9,6 +9,7 @@ import java.util.UUID;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -408,6 +409,26 @@ public class TaskController {
       @RequestBody TaskChecklistUpdateDTO data
    ) {
       TaskChecklistResponseDTO updatedItem = this.taskChecklistService.update(id, data);
+
+      ApiResponse<TaskChecklistResponseDTO> response = new ApiResponse.Builder<TaskChecklistResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.UPDATED)
+         .data(updatedItem)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // update completed field of task checklist item
+   @PutMapping(value = "/task/checklist/item/{id}/completed")
+   @Operation(summary = "Update completed field of task checklist item")
+   public ResponseEntity<ApiResponse<TaskChecklistResponseDTO>> setChecklistItemCompleted(
+      @PathVariable UUID id,
+      @RequestParam boolean c
+   ) {
+      TaskChecklistResponseDTO updatedItem = this.taskChecklistService.setCompleted(id, c);
 
       ApiResponse<TaskChecklistResponseDTO> response = new ApiResponse.Builder<TaskChecklistResponseDTO>()
          .success(true)
