@@ -38,8 +38,10 @@ import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsDeletedD
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
+
 // import services
 import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.modules.task.service.TaskLabelService;
@@ -435,6 +437,23 @@ public class TaskController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.UPDATED)
          .data(updatedItem)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete task checklist item
+   @DeleteMapping(value = "/task/checklist/item/{id}")
+   @Operation(summary = "Delete task checklist item")
+   public ResponseEntity<ApiResponse<TaskChecklistDeletedDTO>> deleteChecklistItem(@PathVariable UUID id) {
+      TaskChecklistDeletedDTO deletedItem = this.taskChecklistService.delete(id);
+
+      ApiResponse<TaskChecklistDeletedDTO> response = new ApiResponse.Builder<TaskChecklistDeletedDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .data(deletedItem)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
