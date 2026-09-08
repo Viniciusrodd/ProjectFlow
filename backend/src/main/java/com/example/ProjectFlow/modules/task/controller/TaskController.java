@@ -370,13 +370,30 @@ public class TaskController {
    public ResponseEntity<ApiResponse<TaskChecklistResponseDTO>> getChecklistItemById(
       @PathVariable UUID id
    ) {
-      TaskChecklistResponseDTO item = this.taskChecklistService.getItemById(id);
+      TaskChecklistResponseDTO item = this.taskChecklistService.getById(id);
 
       ApiResponse<TaskChecklistResponseDTO> response = new ApiResponse.Builder<TaskChecklistResponseDTO>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(item)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get all checklist items
+   @GetMapping(value = "/task/checklist/items")
+   @Operation(summary = "Get all checklist items")
+   public ResponseEntity<ApiResponse<List<TaskChecklistResponseDTO>>> getAllChecklistItems() {
+      List<TaskChecklistResponseDTO> items = this.taskChecklistService.getAll();
+
+      ApiResponse<List<TaskChecklistResponseDTO>> response = new ApiResponse.Builder<List<TaskChecklistResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(items)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
