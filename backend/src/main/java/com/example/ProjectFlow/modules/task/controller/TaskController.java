@@ -36,10 +36,13 @@ import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskRespon
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
 
 // import services
 import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.modules.task.service.TaskLabelService;
+import com.example.ProjectFlow.modules.task.service.TaskChecklistService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
@@ -55,14 +58,17 @@ public class TaskController {
    // properties
    private final TaskService taskService;
    private final TaskLabelService taskLabelService;
+   private final TaskChecklistService taskChecklistService;
 
    // constructor - dependency injection
    public TaskController(
       TaskService taskService,
-      TaskLabelService taskLabelService
+      TaskLabelService taskLabelService,
+      TaskChecklistService taskChecklistService
    ) {
       this.taskService = taskService;
       this.taskLabelService = taskLabelService;
+      this.taskChecklistService = taskChecklistService;
    }
 
 
@@ -313,6 +319,29 @@ public class TaskController {
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   //// task checklist
+
+
+   // creating task checklist item
+   @PostMapping(value = "/task/{taskId}/checklist")
+   @Operation(summary = "Creating task checklist item")
+   public ResponseEntity<ApiResponse<TaskChecklistResponseDTO>> createTaskChecklist(
+      @PathVariable UUID taskId,
+      @RequestBody TaskChecklistDTO data
+   ) {
+      TaskChecklistResponseDTO taskChecklist = this.taskChecklistService.create(taskId, data);
+
+      ApiResponse<TaskChecklistResponseDTO> response = new ApiResponse.Builder<TaskChecklistResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.CREATED.value())
+         .message(ResponseMessages.CREATED)
+         .data(taskChecklist)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
    }
 
 }
