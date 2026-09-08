@@ -161,5 +161,17 @@ public class TaskChecklistRepository {
 
 
    // update completed field of task checklist item
+   @Transactional 
+   public TaskChecklistResponseDTO setCompleted(UUID id, boolean completed) throws NoResultException {
+      TaskChecklistEntity item = this.entityManager
+         .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      item.setCompleted(completed);
+
+      return TaskChecklistResponseDTO.get(item);
+   }
 
 }
