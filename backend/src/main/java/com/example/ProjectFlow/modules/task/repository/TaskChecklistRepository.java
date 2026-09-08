@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.repository;
 
 // imports
 import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
 
@@ -172,6 +174,21 @@ public class TaskChecklistRepository {
       item.setCompleted(completed);
 
       return TaskChecklistResponseDTO.get(item);
+   }
+
+
+   // delete task checklist item
+   @Transactional 
+   public TaskChecklistDeletedDTO delete(UUID id) throws NoResultException {
+      TaskChecklistEntity item = this.entityManager
+         .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // delete
+      item.setDeletedAt(LocalDateTime.now());
+
+      return TaskChecklistDeletedDTO.get(item);
    }
 
 }
