@@ -119,4 +119,15 @@ public class TaskChecklistRepository {
       return items;
    }
 
+
+   // get entity by id
+   public TaskChecklistEntity getEntityById(UUID id) throws NoResultException {
+      TaskChecklistEntity item = this.entityManager
+         .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return item;
+   }
+
 }

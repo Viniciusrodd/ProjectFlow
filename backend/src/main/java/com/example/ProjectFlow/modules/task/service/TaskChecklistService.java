@@ -20,7 +20,7 @@ import com.example.ProjectFlow.modules.task.validator.TaskChecklistValidator;
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
-
+import com.example.ProjectFlow.modules.task.entity.TaskChecklistEntity;
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
@@ -129,6 +129,22 @@ public class TaskChecklistService {
       }
 
       return items;
+   }
+
+
+   // get entity by id
+   public TaskChecklistEntity getEntityById(UUID id) {
+      this.taskChecklistValidator.idValidate(id);
+
+      try {
+         return this.taskChecklistRepository.getEntityById(id);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Item de checklist da tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
    }
 
 }
