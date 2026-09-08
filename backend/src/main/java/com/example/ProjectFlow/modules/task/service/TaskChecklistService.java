@@ -62,18 +62,18 @@ public class TaskChecklistService {
       TasksEntity task = this.taskService.getEntityById(taskId);
       
       // check column position existence
-      this.checkPositionExistence(data.position());
+      this.checkPositionExistence(data.position(), taskId);
 
       return this.taskChecklistRepository.create(task, data);
    }
 
 
    // check if position already exist
-   public void checkPositionExistence(int position) {
-      boolean exist = this.taskChecklistRepository.checkPositionExistence(position);
+   public void checkPositionExistence(int position, UUID taskId) {
+      boolean exist = this.taskChecklistRepository.checkPositionExistence(position, taskId);
       if(exist) {
          throw MultiExceptions.invalid(String.format(
-            "%s: A posição '%s' já existe",
+            "%s: A posição '%s' já existe na tarefa",
             ResponseMessages.INVALID_DATA,
             position
          ));
@@ -102,11 +102,11 @@ public class TaskChecklistService {
 
 
    // get checklist item by id
-   public TaskChecklistResponseDTO getItemById(UUID id) {
+   public TaskChecklistResponseDTO getById(UUID id) {
       this.taskChecklistValidator.idValidate(id);
 
       try {
-         return this.taskChecklistRepository.getItemById(id);
+         return this.taskChecklistRepository.getById(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -114,6 +114,21 @@ public class TaskChecklistService {
             ResponseMessages.NOT_FOUND
          ));
       }
+   }
+
+
+   // get all checklist items
+   public List<TaskChecklistResponseDTO> getAll() {
+      List<TaskChecklistResponseDTO> items = this.taskChecklistRepository.getAll();
+
+      if(items.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Items de checklist da tarefa não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return items;
    }
 
 }
