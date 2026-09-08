@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.UUID;
 
 // jakarta imports
@@ -15,8 +16,6 @@ import com.example.ProjectFlow.modules.task.repository.TaskChecklistRepository;
 // import validator
 import com.example.ProjectFlow.modules.task.validator.TaskChecklistValidator;
 
-// import service
-
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
@@ -25,8 +24,10 @@ import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistRe
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import exceptions
+import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
+import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Service
@@ -60,6 +61,26 @@ public class TaskChecklistService {
       TasksEntity task = this.taskService.getEntityById(taskId);
 
       return this.taskChecklistRepository.create(task, data);
+   }
+
+
+   // get all checklist items by task id
+   public List<TaskChecklistResponseDTO> getAllByTaskId(UUID taskId) {
+      this.taskChecklistValidator.taskIdValidate(taskId);
+
+      // task existence - check
+      this.taskService.existsById(taskId);
+
+      List<TaskChecklistResponseDTO> items = this.taskChecklistRepository.getAllByTaskId(taskId);
+
+      if(items.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Items de checklist da tarefa não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return items;
    }
 
 }
