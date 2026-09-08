@@ -6,6 +6,7 @@ package com.example.ProjectFlow.modules.task.repository;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 // jakarta imports
@@ -17,6 +18,7 @@ import jakarta.persistence.NoResultException;
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
+import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TaskChecklistEntity;
@@ -140,5 +142,24 @@ public class TaskChecklistRepository {
 
       return count > 0;
    }
+
+
+   // update task checklist item
+   @Transactional
+   public TaskChecklistResponseDTO update(UUID id, TaskChecklistUpdateDTO data) throws NoResultException {
+      TaskChecklistEntity item = this.entityManager
+         .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      // update
+      Optional.ofNullable(data.description()).ifPresent(description -> item.setDescription(description));
+      Optional.ofNullable(data.position()).ifPresent(position -> item.setPosition(position));
+
+      return TaskChecklistResponseDTO.get(item);
+   }
+
+
+   // update completed field of task checklist item
 
 }
