@@ -12,6 +12,7 @@ import java.util.UUID;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
@@ -49,8 +50,8 @@ public class TaskChecklistRepository {
    }
 
 
-   // check if column position already exist
-   public boolean checkColumnPositionExistence(int position) {
+   // check if position already exist
+   public boolean checkPositionExistence(int position) {
       Long count = this.entityManager
          .createQuery("SELECT COUNT(c) FROM TaskChecklistEntity c WHERE c.position = :position", Long.class)
          .setParameter("position", position)
@@ -79,6 +80,17 @@ public class TaskChecklistRepository {
       }
 
       return items;
+   }
+
+
+   // get checklist item by id
+   public TaskChecklistResponseDTO getItemById(UUID id) throws NoResultException {
+      TaskChecklistEntity item = this.entityManager
+         .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return TaskChecklistResponseDTO.get(item);
    }
 
 }
