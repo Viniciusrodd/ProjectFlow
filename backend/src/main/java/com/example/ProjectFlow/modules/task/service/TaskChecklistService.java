@@ -147,4 +147,20 @@ public class TaskChecklistService {
       }
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      this.taskChecklistValidator.idValidate(id);
+
+      boolean exist = this.taskChecklistRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Item de checklist da tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
 }

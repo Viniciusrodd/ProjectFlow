@@ -130,4 +130,15 @@ public class TaskChecklistRepository {
       return item;
    }
 
+
+   // exists by id
+   public boolean existsById(UUID id) {
+      Long count = this.entityManager
+         .createQuery("SELECT COUNT(i) FROM TaskChecklistEntity i WHERE i.id = :id", Long.class)
+         .setParameter("id", id)
+         .getSingleResult();
+
+      return count > 0;
+   }
+
 }
