@@ -3,6 +3,7 @@
 package com.example.ProjectFlow.modules.project.service;
 
 // imports
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ import com.example.ProjectFlow.modules.project.repository.ProjectRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectValidator;
+
+// import DTOs
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
@@ -40,6 +43,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.project.mapper.ProjectMapper;
+
 
 @Service
 public class ProjectService {
@@ -50,6 +56,7 @@ public class ProjectService {
    private final UserService userService;
    private final OrganizationService organizationService;
    private final ProjectMemberService projectMemberService;
+   private final ProjectMapper projectMapper;
 
 
    // constructor - dependency injection
@@ -58,13 +65,15 @@ public class ProjectService {
       ProjectValidator projectValidator,
       UserService userService,
       OrganizationService organizationService,
-      ProjectMemberService projectMemberService
+      ProjectMemberService projectMemberService,
+      ProjectMapper projectMapper
    ) {
       this.projectRepository = projectRepository;
       this.projectValidator = projectValidator;
       this.userService = userService;
       this.organizationService = organizationService;
       this.projectMemberService = projectMemberService;
+      this.projectMapper = projectMapper;
    }
 
 
@@ -83,29 +92,38 @@ public class ProjectService {
       OrganizationEntity organization = this.organizationService.getEntityById(data.organizationId());
 
       // project creation
-      ProjectResponseDTO projectCreated = this.projectRepository.create(data, organization, owner);
+      ProjectEntity projectEntity = this.projectRepository.create(data, organization, owner);
+
+      // mapping
+      ProjectResponseDTO project = this.projectMapper.toProjectResponseDTO(projectEntity);
 
       // set project member - admin
       ProjectMembersDTO projectMembersData = new ProjectMembersDTO(
-         projectCreated.id(),
+         project.id(),
          owner.getId(),
          RoleEnum.ADMIN.toString()
       );
       this.projectMemberService.createMemberParticipation(projectMembersData);
 
-      return projectCreated;
+      return project;
    }
 
 
    // get all 
    public List<ProjectResponseDTO> getAll() {
-      List<ProjectResponseDTO> projects = this.projectRepository.getAll();
+      List<ProjectEntity> projectsEntity = this.projectRepository.getAll();
 
-      if(projects.isEmpty()) {
+      if(projectsEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Projetos não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<ProjectResponseDTO> projects = new ArrayList<>();
+      for(ProjectEntity project : projectsEntity) {
+         projects.add(this.projectMapper.toProjectResponseDTO(project));
       }
 
       return projects;
@@ -117,7 +135,9 @@ public class ProjectService {
       this.projectValidator.idValidate(id);
 
       try {
-         return this.projectRepository.getById(id);
+         ProjectEntity projectEntity = this.projectRepository.getById(id);
+
+         return this.projectMapper.toProjectResponseDTO(projectEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -143,41 +163,7 @@ public class ProjectService {
       }
    }
 
-
-   // get all by organization id
-   public List<ProjectResponseDTO> getByOrganizationId(UUID organizationId) {
-      this.projectValidator.organizationIdValidate(organizationId);
-
-      List<ProjectResponseDTO> projects = this.projectRepository.getByOrganizationId(organizationId);
-
-      if(projects.isEmpty()) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Projetos não existem",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-
-      return projects;
-   }  
-
-
-   // get all by owner id
-   public List<ProjectResponseDTO> getByOwnerId(UUID ownerId) {
-      this.projectValidator.ownerIdValidate(ownerId);
-
-      List<ProjectResponseDTO> projects = this.projectRepository.getByOwnerId(ownerId);
-
-      if(projects.isEmpty()) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Projetos não existem",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-
-      return projects;
-   }
-
-
+   
    // exists by id
    public boolean existsById(UUID id) {
       this.projectValidator.idValidate(id);
@@ -191,6 +177,52 @@ public class ProjectService {
       }
 
       return exist;
+   }
+
+
+   // get all by organization id
+   public List<ProjectResponseDTO> getByOrganizationId(UUID organizationId) {
+      this.projectValidator.organizationIdValidate(organizationId);
+
+      List<ProjectEntity> projectsEntity = this.projectRepository.getByOrganizationId(organizationId);
+
+      if(projectsEntity.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projetos não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<ProjectResponseDTO> projects = new ArrayList<>();
+      for(ProjectEntity project : projectsEntity) {
+         projects.add(this.projectMapper.toProjectResponseDTO(project));
+      }
+
+      return projects;
+   }  
+
+
+   // get all by owner id
+   public List<ProjectResponseDTO> getByOwnerId(UUID ownerId) {
+      this.projectValidator.ownerIdValidate(ownerId);
+
+      List<ProjectEntity> projectsEntity = this.projectRepository.getByOwnerId(ownerId);
+
+      if(projectsEntity.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Projetos não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<ProjectResponseDTO> projects = new ArrayList<>();
+      for(ProjectEntity project : projectsEntity) {
+         projects.add(this.projectMapper.toProjectResponseDTO(project));
+      }
+
+      return projects;
    }
 
 
@@ -236,7 +268,9 @@ public class ProjectService {
       projectValidator.updateValidations(data);
 
       try {
-         return this.projectRepository.update(id, data);
+         ProjectEntity projectEntity = this.projectRepository.update(id, data);
+
+         return this.projectMapper.toProjectResponseDTO(projectEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -253,7 +287,9 @@ public class ProjectService {
       projectValidator.idValidate(id);
 
       try {
-         return this.projectRepository.delete(id);
+         ProjectEntity projectEntity = this.projectRepository.delete(id);
+
+         return this.projectMapper.toProjectDeletedDTO(projectEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
