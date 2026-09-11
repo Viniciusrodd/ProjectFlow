@@ -5,7 +5,6 @@ package com.example.ProjectFlow.modules.user.repository;
 // imports
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,9 +16,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 // import DTOs
-import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
-import com.example.ProjectFlow.modules.user.dto.userDTO.UserDeletedDTO;
-import com.example.ProjectFlow.modules.user.dto.userDTO.UserProfileDTO;
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserUpdateDTO;
 
 // import entity
@@ -35,29 +31,34 @@ public class UserRepository {
 
 
    // get all
-   public List<UserProfileDTO> getAll() {
-      List<UserEntity> usersDocument = this.entityManager
+   public List<UserEntity> getAll() {
+      List<UserEntity> usersEntity = this.entityManager
          .createQuery("SELECT u FROM UserEntity u ORDER BY u.createdAt ASC", UserEntity.class)
          .getResultList();
       
-      List<UserProfileDTO> users = new ArrayList<>();
-      
-      for(UserEntity user : usersDocument) {
-         users.add(UserProfileDTO.get(user));
-      }
-
-      return users;
+      return usersEntity;
    }
 
 
    // get by id
-   public UserProfileDTO getById(UUID id) throws NoResultException {
+   public UserEntity getById(UUID id) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :id", UserEntity.class)
          .setParameter("id", id)
          .getSingleResult();
       
-      return UserProfileDTO.get(user);
+      return user;
+   }
+
+   
+   // get by email
+   public UserEntity getByEmail(String email) throws NoResultException {
+      UserEntity user = this.entityManager
+         .createQuery("SELECT u FROM UserEntity u WHERE u.email = :email", UserEntity.class)
+         .setParameter("email", email)
+         .getSingleResult();
+      
+      return user;
    }
 
 
@@ -70,19 +71,8 @@ public class UserRepository {
 
       return user;
    }
-
    
-   // get by email
-   public UserDTO getByEmail(String email) throws NoResultException {
-      UserEntity user = this.entityManager
-         .createQuery("SELECT u FROM UserEntity u WHERE u.email = :email", UserEntity.class)
-         .setParameter("email", email)
-         .getSingleResult();
-      
-      return UserDTO.get(user);
-   }
 
-   
    // exists by id
    public boolean existsById(UUID id) {
       Long count = this.entityManager
@@ -137,7 +127,7 @@ public class UserRepository {
 
    // update user
    @Transactional
-   public UserProfileDTO update(UUID userId, UserUpdateDTO data) throws NoResultException {
+   public UserEntity update(UUID userId, UserUpdateDTO data) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
@@ -148,13 +138,13 @@ public class UserRepository {
       Optional.ofNullable(data.email()).ifPresent(email -> user.setEmail(email));
       Optional.ofNullable(data.password()).ifPresent(password -> user.setPassword(password));
 
-      return UserProfileDTO.get(user);
+      return user;
    }
 
 
    // delete user
    @Transactional
-   public UserDeletedDTO delete(UUID userId) throws NoResultException {
+   public UserEntity delete(UUID userId) throws NoResultException {
       UserEntity user = this.entityManager
          .createQuery("SELECT u FROM UserEntity u WHERE u.id = :userId", UserEntity.class)
          .setParameter("userId", userId)
@@ -162,7 +152,7 @@ public class UserRepository {
 
       user.setDeletedAt(LocalDateTime.now());
 
-      return UserDeletedDTO.get(user);
+      return user;
    }
 
 
