@@ -18,6 +18,7 @@ import com.example.ProjectFlow.modules.organization.repository.OrganizationImage
 
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationImageValidator;
+
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -28,6 +29,9 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
 import com.example.ProjectFlow.modules.organization.dto.organizationImageDTO.OrganizationImageResponseDTO;
 
+// import mapper
+import com.example.ProjectFlow.modules.organization.mapper.OrganizationImageMapper;
+
 
 @Service
 public class OrganizationImageService {
@@ -36,17 +40,20 @@ public class OrganizationImageService {
    private final OrganizationImageRepository organizationImageRepository;
    private final OrganizationService organizationService;
    private final OrganizationImageValidator organizationImageValidator;
+   private final OrganizationImageMapper organizationImageMapper;
    
    
    // constructor - dependency injection
    public OrganizationImageService(
       OrganizationImageRepository organizationImageRepository,
       OrganizationService organizationService,
-      OrganizationImageValidator organizationImageValidator
+      OrganizationImageValidator organizationImageValidator,
+      OrganizationImageMapper organizationImageMapper
    ) {
       this.organizationImageRepository = organizationImageRepository;
       this.organizationService = organizationService;
       this.organizationImageValidator = organizationImageValidator;
+      this.organizationImageMapper = organizationImageMapper;
    }
 
 
@@ -79,7 +86,7 @@ public class OrganizationImageService {
          this.organizationService.updateLogoImageId(organizationId, savedDocument.getId());
 
          // return saved document
-         return OrganizationImageResponseDTO.get(savedDocument);
+         return this.organizationImageMapper.toOrganizationImageResponseDTO(savedDocument);
       }
       catch (IOException error) {
          throw MultiExceptions.internal(String.format(
