@@ -71,8 +71,15 @@ public class BoardEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
+   // constructor - empty
    public BoardEntity() {}
+
+
+   // constructor - builder
+   public BoardEntity(Builder builder) {
+      setProject(builder.project);
+      setName(builder.name);
+   }
 
 
    // getters
@@ -98,5 +105,28 @@ public class BoardEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private ProjectEntity project;
+      private String name;
+
+      public Builder project(ProjectEntity project) {
+         this.project = project;
+         return this;
+      }
+
+      public Builder name(String name) {
+         this.name = name;
+         return this;
+      }
+
+      public BoardEntity build() {
+         return new BoardEntity(this);
+      }
+   } 
 
 }
