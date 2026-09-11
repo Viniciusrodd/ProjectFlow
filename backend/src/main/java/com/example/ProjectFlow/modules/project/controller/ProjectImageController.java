@@ -32,26 +32,38 @@ import com.example.ProjectFlow.modules.project.service.ProjectImageService;
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
+
+// import DTOs
 import com.example.ProjectFlow.modules.project.dto.projectImageDTO.ProjectImageResponseDTO;
+
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.project.mapper.ProjectImageMapper;
+
 
 @RestController
-@RequestMapping(ApiConstants.BASE_API_PATH + "/project/logo-image")
+@RequestMapping(ApiConstants.BASE_API_PATH + "/project/logo-image/{projectId}")
 public class ProjectImageController {
  
    // properties
    private final ProjectImageService projectImageService;
+   private final ProjectImageMapper projectImageMapper;
+
    
    // constructor - dependency injection
-   public ProjectImageController(ProjectImageService projectImageService) {
+   public ProjectImageController(
+      ProjectImageService projectImageService,
+      ProjectImageMapper projectImageMapper
+   ) {
       this.projectImageService = projectImageService;
+      this.projectImageMapper = projectImageMapper;
    }
 
 
    // upload project image
-   @PostMapping(value = "/{projectId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload project image")
    public ResponseEntity<ApiResponse<ProjectImageResponseDTO>> uploadProjectImage(
       @PathVariable UUID projectId,
@@ -71,13 +83,13 @@ public class ProjectImageController {
 
 
    // get project image - infos
-   @GetMapping(value = "/{projectId}")
+   @GetMapping()
    @Operation(summary = "Get project image data information")
    public ResponseEntity<ApiResponse<ProjectImageResponseDTO>> getProjectImage(
       @PathVariable UUID projectId
    ) {
       ProjectImageDocument projectImageDocument = this.projectImageService.getProjectImage(projectId);
-      ProjectImageResponseDTO projectImage = ProjectImageResponseDTO.get(projectImageDocument);
+      ProjectImageResponseDTO projectImage = this.projectImageMapper.toProjectImageResponseDTO(projectImageDocument);
 
       ApiResponse<ProjectImageResponseDTO> response = new ApiResponse.Builder<ProjectImageResponseDTO>()
          .success(true)
@@ -92,7 +104,7 @@ public class ProjectImageController {
 
    // get project image - download
    @GetMapping(
-      value = "/{projectId}/download",
+      value = "/download",
       produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp", "image/jpg" }
    )
    @Operation(summary = "Download project image")
@@ -108,7 +120,7 @@ public class ProjectImageController {
 
 
    // delete project image
-   @DeleteMapping(value = "/{projectId}")
+   @DeleteMapping()
    @Operation(summary = "Delete project image")
    public ResponseEntity<ApiResponse<Void>> deleteProjectImage(@PathVariable UUID projectId) {
       this.projectImageService.deleteProjectImage(projectId);
