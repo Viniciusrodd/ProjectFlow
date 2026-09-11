@@ -29,6 +29,7 @@ public class OrganizationMembersValidator {
       }
    }
 
+
    // organization id validate
    public void organizationIdValidate(UUID organizationId) {
       if(organizationId == null) {
@@ -38,6 +39,7 @@ public class OrganizationMembersValidator {
          ));
       }
    }
+
 
    // user id validate
    public void userIdValidate(UUID userId) {
@@ -49,6 +51,7 @@ public class OrganizationMembersValidator {
       }
    }
 
+   
    // role validations
    public void roleValidate(String role) {
       if(role == null || role.trim().isEmpty()) {
