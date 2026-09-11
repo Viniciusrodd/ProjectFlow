@@ -16,8 +16,6 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
-import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
-import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
