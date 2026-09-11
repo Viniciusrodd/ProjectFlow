@@ -82,8 +82,16 @@ public class OrganizationEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
+   // constructor - empty
    public OrganizationEntity() {}
+
+
+   // constructor - builder
+   public OrganizationEntity(Builder builder) {
+      setOwner(builder.owner);
+      setName(builder.name);
+      setDescription(builder.description);
+   }
 
 
    // getters
@@ -115,5 +123,34 @@ public class OrganizationEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private UserEntity owner;
+      private String name;
+      private String description;
+
+      public Builder owner(UserEntity owner) {
+         this.owner = owner;
+         return this;
+      }
+
+      public Builder name(String name) {
+         this.name = name;
+         return this;
+      }
+
+      public Builder description(String description) {
+         this.description = description;
+         return this;
+      }
+
+      public OrganizationEntity build() {
+         return new OrganizationEntity(this);
+      }
+   }
 
 }
