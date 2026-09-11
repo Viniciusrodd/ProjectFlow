@@ -5,7 +5,6 @@ package com.example.ProjectFlow.modules.organization.repository;
 // imports
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +15,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 // import DTOs
-import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MemberByOrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
@@ -40,7 +38,7 @@ public class OrganizationMembersRepository {
 
    // create member participation
    @Transactional
-   public OrganizationMembersResponseDTO createMemberParticipation(
+   public OrganizationMembersEntity createMemberParticipation(
       OrganizationMembersDTO data,
       UserEntity user,
       OrganizationEntity organization
@@ -54,13 +52,13 @@ public class OrganizationMembersRepository {
 
       this.entityManager.persist(organizationMembers);
 
-      return OrganizationMembersResponseDTO.get(organizationMembers);
+      return organizationMembers;
    }
 
 
    // get all members
-   public List<MemberByOrganizationResponseDTO> getAllOrganizationMembers() {
-      List<OrganizationMembersEntity> membersDocument = this.entityManager
+   public List<OrganizationMembersEntity> getAllOrganizationMembers() {
+      List<OrganizationMembersEntity> membersEntity = this.entityManager
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " + 
             "JOIN FETCH m.user " +
@@ -69,30 +67,24 @@ public class OrganizationMembersRepository {
          )
          .getResultList();
 
-      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
-
-      for(OrganizationMembersEntity memberDocument : membersDocument) {
-         members.add(MemberByOrganizationResponseDTO.get(memberDocument));
-      }
-
-      return members;
+      return membersEntity;
    }
 
 
    // get member by relation id
-   public MemberByOrganizationResponseDTO getOrganizationMemberById(UUID id) throws NoResultException {
+   public OrganizationMembersEntity getOrganizationMemberById(UUID id) throws NoResultException {
       OrganizationMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return MemberByOrganizationResponseDTO.get(member);
+      return member;
    }
 
 
    // get all members by organization
-   public List<MemberByOrganizationResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
-      List<OrganizationMembersEntity> membersDocument = this.entityManager
+   public List<OrganizationMembersEntity> getAllMembersByOrganizationId(UUID organizationId) {
+      List<OrganizationMembersEntity> membersEntity = this.entityManager
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -103,22 +95,16 @@ public class OrganizationMembersRepository {
          .setParameter("organizationId", organizationId)
          .getResultList();
 
-      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
-      
-      for(OrganizationMembersEntity memberDocument : membersDocument) {
-         members.add(MemberByOrganizationResponseDTO.get(memberDocument));
-      }
-
-      return members;
+      return membersEntity;
    }
 
 
    // get all members by role
-   public List<MemberByOrganizationResponseDTO> getAllMembersByRole(
+   public List<OrganizationMembersEntity> getAllMembersByRole(
       UUID organizationId,
       RoleEnum role
    ) {
-      List<OrganizationMembersEntity> membersDocument = this.entityManager
+      List<OrganizationMembersEntity> membersEntity = this.entityManager
          .createQuery(
             "SELECT m FROM OrganizationMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -131,13 +117,7 @@ public class OrganizationMembersRepository {
          .setParameter("role", role)
          .getResultList();
 
-      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
-      
-      for(OrganizationMembersEntity memberDocument : membersDocument) {
-         members.add(MemberByOrganizationResponseDTO.get(memberDocument));
-      }
-
-      return members;
+      return membersEntity;
    }
 
 
@@ -216,7 +196,7 @@ public class OrganizationMembersRepository {
 
    // update member role
    @Transactional
-   public OrganizationMembersResponseDTO updateMemberRole(UUID id, RoleEnum role) throws NoResultException {
+   public OrganizationMembersEntity updateMemberRole(UUID id, RoleEnum role) throws NoResultException {
       OrganizationMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
          .setParameter("id", id)
@@ -225,13 +205,13 @@ public class OrganizationMembersRepository {
       // update
       member.setRole(role);
 
-      return OrganizationMembersResponseDTO.get(member);
+      return member;
    }
 
 
    // remove member participation
    @Transactional
-   public OrganizationMembersDeletedDTO removeParticipation(UUID id) throws NoResultException {
+   public OrganizationMembersEntity removeParticipation(UUID id) throws NoResultException {
       OrganizationMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM OrganizationMembersEntity m WHERE m.id = :id", OrganizationMembersEntity.class)
          .setParameter("id", id)
@@ -240,7 +220,7 @@ public class OrganizationMembersRepository {
       // delete
       member.setDeletedAt(LocalDateTime.now());
 
-      return OrganizationMembersDeletedDTO.get(member);
+      return member;
    }
 
 
