@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.board.service;
 
+import java.util.ArrayList;
 // imports
 import java.util.List;
 import java.util.UUID;
@@ -16,11 +17,15 @@ import com.example.ProjectFlow.modules.board.repository.BoardRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.board.validator.BoardValidator;
+
 // import service
 import com.example.ProjectFlow.modules.project.service.ProjectService;
+
+// import DTOs
 import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardDTO;
 import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardDeletedDTO;
 import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardResponseDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -31,6 +36,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.board.mapper.BoardMapper;
+
 
 @Service
 public class BoardService {
@@ -39,17 +47,20 @@ public class BoardService {
    private final BoardRepository boardRepository;
    private final BoardValidator boardValidator;
    private final ProjectService projectService;
+   private final BoardMapper boardMapper;
 
 
    // constructor - dependency injection
    public BoardService(
       BoardRepository boardRepository,
       BoardValidator boardValidator,
-      ProjectService projectService
+      ProjectService projectService,
+      BoardMapper boardMapper
    ) {
       this.boardRepository = boardRepository;
       this.boardValidator = boardValidator;
       this.projectService = projectService;
+      this.boardMapper = boardMapper;
    }
 
 
@@ -62,19 +73,28 @@ public class BoardService {
       // get project data
       ProjectEntity project = this.projectService.getEntityById(data.projectId());
 
-      return this.boardRepository.create(data, project);
+      // creation
+      BoardEntity boardEntity = this.boardRepository.create(data, project);
+
+      return this.boardMapper.toBoardResponseDTO(boardEntity);
    }
 
 
    // get all
    public List<BoardResponseDTO> getAll() {
-      List<BoardResponseDTO> boards = this.boardRepository.getAll();
-
-      if(boards.isEmpty()) {
+      List<BoardEntity> boardsEntity = this.boardRepository.getAll();
+      
+      if(boardsEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Quadros Kanban não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<BoardResponseDTO> boards = new ArrayList<>();
+      for(BoardEntity board : boardsEntity) {
+         boards.add(this.boardMapper.toBoardResponseDTO(board));
       }
 
       return boards;
@@ -86,7 +106,9 @@ public class BoardService {
       this.boardValidator.idValidate(id);
 
       try {
-         return this.boardRepository.getById(id);
+         BoardEntity boardEntity = this.boardRepository.getById(id);
+
+         return this.boardMapper.toBoardResponseDTO(boardEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -113,22 +135,6 @@ public class BoardService {
    }
 
 
-   // get board by project id
-   public BoardResponseDTO getByProjectId(UUID projectId) {
-      this.boardValidator.projectIdValidate(projectId);
-
-      try {
-         return this.boardRepository.getByProjectId(projectId);
-      }
-      catch (NoResultException error) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Quadro Kanban não existe",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-   }
-
-
    // exists by id
    public boolean existsById(UUID id) {
       this.boardValidator.idValidate(id);
@@ -145,6 +151,24 @@ public class BoardService {
    }
 
 
+   // get board by project id
+   public BoardResponseDTO getByProjectId(UUID projectId) {
+      this.boardValidator.projectIdValidate(projectId);
+
+      try {
+         BoardEntity boardEntity = this.boardRepository.getByProjectId(projectId);
+
+         return this.boardMapper.toBoardResponseDTO(boardEntity);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Quadro Kanban não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
    // update board name
    @Transactional
    public BoardResponseDTO updateName(UUID id, String name) {
@@ -152,7 +176,9 @@ public class BoardService {
       this.boardValidator.nameValidate(name);
 
       try {
-         return this.boardRepository.updateName(id, name);
+         BoardEntity boardEntity = this.boardRepository.updateName(id, name);
+
+         return this.boardMapper.toBoardResponseDTO(boardEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -169,7 +195,9 @@ public class BoardService {
       this.boardValidator.idValidate(id);
 
       try {
-         return this.boardRepository.delete(id);
+         BoardEntity boardEntity = this.boardRepository.delete(id);
+
+         return this.boardMapper.toBoardDeletedDTO(boardEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
