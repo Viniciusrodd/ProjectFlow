@@ -32,26 +32,38 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationImageSer
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
+
+// import DTOs
 import com.example.ProjectFlow.modules.organization.dto.organizationImageDTO.OrganizationImageResponseDTO;
+
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.organization.mapper.OrganizationImageMapper;
+
 
 @RestController
-@RequestMapping(ApiConstants.BASE_API_PATH + "/organization/logo-image")
+@RequestMapping(ApiConstants.BASE_API_PATH + "/organization/logo-image/{organizationId}")
 public class OrganizationImageController {
  
    // properties
    private final OrganizationImageService organizationImageService;
+   private final OrganizationImageMapper organizationImageMapper;
+
 
    // constructor - dependency injection
-   public OrganizationImageController(OrganizationImageService organizationImageService) {
+   public OrganizationImageController(
+      OrganizationImageService organizationImageService,
+      OrganizationImageMapper organizationImageMapper
+   ) {
       this.organizationImageService = organizationImageService;
+      this.organizationImageMapper = organizationImageMapper;
    }
 
 
    // upload organization image
-   @PostMapping(value = "/{organizationId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload organization image")
    public ResponseEntity<ApiResponse<OrganizationImageResponseDTO>> uploadOrganizationImage(
       @PathVariable UUID organizationId, 
@@ -71,13 +83,13 @@ public class OrganizationImageController {
 
    
    // get organization image - infos
-   @GetMapping(value = "/{organizationId}")
+   @GetMapping()
    @Operation(summary = "Get organization image data informations")
    public ResponseEntity<ApiResponse<OrganizationImageResponseDTO>> getOrganizationImage(
       @PathVariable UUID organizationId
    ) {
       OrganizationImageDocument organizationImageDocument = this.organizationImageService.getOrganizationImage(organizationId);
-      OrganizationImageResponseDTO organizationImage = OrganizationImageResponseDTO.get(organizationImageDocument);
+      OrganizationImageResponseDTO organizationImage = this.organizationImageMapper.toOrganizationImageResponseDTO(organizationImageDocument);
 
       ApiResponse<OrganizationImageResponseDTO> response = new ApiResponse.Builder<OrganizationImageResponseDTO>()
          .success(true)
@@ -92,7 +104,7 @@ public class OrganizationImageController {
 
    // get organization image - download
    @GetMapping(
-      value = "/{organizationId}/download",
+      value = "/download",
       produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp", "image/jpg" }
    )
    @Operation(summary = "Download organization image")
@@ -108,7 +120,7 @@ public class OrganizationImageController {
 
 
    // delete organization image
-   @DeleteMapping(value = "{organizationId}")
+   @DeleteMapping()
    @Operation(summary = "Organization image delete")
    public ResponseEntity<ApiResponse<Void>> deleteOrganizationImage(@PathVariable UUID organizationId) {
       this.organizationImageService.deleteOrganizationImage(organizationId);
