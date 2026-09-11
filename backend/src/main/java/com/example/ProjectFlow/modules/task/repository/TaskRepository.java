@@ -5,7 +5,6 @@ package com.example.ProjectFlow.modules.task.repository;
 // imports
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,10 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 // import DTOs
-import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksCompleteResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDTO;
-import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
-import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
 
 // import entity
@@ -43,7 +39,7 @@ public class TaskRepository {
 
    // task creation
    @Transactional
-   public TasksResponseDTO create(
+   public TasksEntity create(
       TasksDTO data,
       ProjectEntity projectEntity,
       BoardColumnsEntity boardColumnsEntity,
@@ -61,34 +57,28 @@ public class TaskRepository {
 
       this.entityManager.persist(task);
 
-      return TasksResponseDTO.get(task);
+      return task;
    }
 
 
    // get all
-   public List<TasksCompleteResponseDTO> getAll() {
-      List<TasksEntity> tasksEntities = this.entityManager
+   public List<TasksEntity> getAll() {
+      List<TasksEntity> tasksEntity = this.entityManager
          .createQuery("SELECT t FROM TasksEntity t ORDER BY t.createdAt ASC", TasksEntity.class)
          .getResultList();
       
-      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
-
-      for(TasksEntity task : tasksEntities) {
-         tasks.add(TasksCompleteResponseDTO.get(task));
-      }
-
-      return tasks;
+      return tasksEntity;
    }
 
 
    // get by id
-   public TasksCompleteResponseDTO getById(UUID id) throws NoResultException {
+   public TasksEntity getById(UUID id) throws NoResultException {
       TasksEntity task = this.entityManager
          .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id", TasksEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return TasksCompleteResponseDTO.get(task);
+      return task;
    }
 
 
@@ -103,72 +93,6 @@ public class TaskRepository {
    }
 
 
-   // get tasks by project id
-   public List<TasksCompleteResponseDTO> getByProjectId(UUID projectId) {
-      List<TasksEntity> tasksEntities = this.entityManager
-         .createQuery(
-            "SELECT t FROM TasksEntity t " + 
-            "WHERE t.project.id = :projectId " + 
-            "ORDER BY t.createdAt ASC ", 
-            TasksEntity.class
-         )
-         .setParameter("projectId", projectId)
-         .getResultList();
-
-      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
-
-      for(TasksEntity task : tasksEntities) {
-         tasks.add(TasksCompleteResponseDTO.get(task));
-      }
-
-      return tasks;
-   }
-
-
-   // get tasks by board column id
-   public List<TasksCompleteResponseDTO> getByColumnId(UUID columnId) {
-      List<TasksEntity> tasksEntities = this.entityManager
-         .createQuery(
-            "SELECT t FROM TasksEntity t " + 
-            "WHERE t.boardColumn.id = :columnId " + 
-            "ORDER BY t.createdAt ASC ", 
-            TasksEntity.class
-         )
-         .setParameter("columnId", columnId)
-         .getResultList();
-
-      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
-
-      for(TasksEntity task : tasksEntities) {
-         tasks.add(TasksCompleteResponseDTO.get(task));
-      }
-
-      return tasks;
-   }
-
-
-   // get tasks by owner id
-   public List<TasksCompleteResponseDTO> getByOwnerId(UUID ownerId) {
-      List<TasksEntity> tasksEntities = this.entityManager
-         .createQuery(
-            "SELECT t FROM TasksEntity t " + 
-            "WHERE t.owner.id = :ownerId " + 
-            "ORDER BY t.createdAt ASC ", 
-            TasksEntity.class
-         )
-         .setParameter("ownerId", ownerId)
-         .getResultList();
-
-      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
-
-      for(TasksEntity task : tasksEntities) {
-         tasks.add(TasksCompleteResponseDTO.get(task));
-      }
-
-      return tasks;
-   }
-
-
    // exists by id
    public boolean existsById(UUID id) {
       Long count = this.entityManager
@@ -180,9 +104,57 @@ public class TaskRepository {
    }
 
 
+   // get tasks by project id
+   public List<TasksEntity> getByProjectId(UUID projectId) {
+      List<TasksEntity> tasksEntity = this.entityManager
+         .createQuery(
+            "SELECT t FROM TasksEntity t " + 
+            "WHERE t.project.id = :projectId " + 
+            "ORDER BY t.createdAt ASC ", 
+            TasksEntity.class
+         )
+         .setParameter("projectId", projectId)
+         .getResultList();
+
+      return tasksEntity;         
+   }
+
+
+   // get tasks by board column id
+   public List<TasksEntity> getByColumnId(UUID columnId) {
+      List<TasksEntity> tasksEntity = this.entityManager
+         .createQuery(
+            "SELECT t FROM TasksEntity t " + 
+            "WHERE t.boardColumn.id = :columnId " + 
+            "ORDER BY t.createdAt ASC ", 
+            TasksEntity.class
+         )
+         .setParameter("columnId", columnId)
+         .getResultList();
+
+      return tasksEntity;
+   }
+
+
+   // get tasks by owner id
+   public List<TasksEntity> getByOwnerId(UUID ownerId) {
+      List<TasksEntity> tasksEntity = this.entityManager
+         .createQuery(
+            "SELECT t FROM TasksEntity t " + 
+            "WHERE t.owner.id = :ownerId " + 
+            "ORDER BY t.createdAt ASC ", 
+            TasksEntity.class
+         )
+         .setParameter("ownerId", ownerId)
+         .getResultList();
+
+      return tasksEntity;
+   }
+
+
    // update column id - task position
    @Transactional
-   public TasksCompleteResponseDTO updateColumn(UUID id, BoardColumnsEntity boardColumnEntity) throws NoResultException {
+   public TasksEntity updateColumn(UUID id, BoardColumnsEntity boardColumnEntity) throws NoResultException {
       TasksEntity task = this.entityManager
          .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id ", TasksEntity.class)
          .setParameter("id", id)
@@ -191,13 +163,13 @@ public class TaskRepository {
       // update
       task.setBoardColumn(boardColumnEntity);
 
-      return TasksCompleteResponseDTO.get(task);
+      return task;
    }
 
 
    // update task
    @Transactional
-   public TasksCompleteResponseDTO update(UUID id, TasksUpdateDTO data) throws NoResultException {
+   public TasksEntity update(UUID id, TasksUpdateDTO data) throws NoResultException {
       TasksEntity task = this.entityManager
          .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id ", TasksEntity.class)
          .setParameter("id", id)
@@ -211,13 +183,13 @@ public class TaskRepository {
       );
       Optional.ofNullable(data.dueDate()).ifPresent(dueDate -> task.setDueDate(dueDate));
 
-      return TasksCompleteResponseDTO.get(task);
+      return task;
    }
 
 
    // set task complete
    @Transactional
-   public TasksCompleteResponseDTO taskComplete(UUID id) throws NoResultException {
+   public TasksEntity taskComplete(UUID id) throws NoResultException {
       TasksEntity task = this.entityManager
          .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id ", TasksEntity.class)
          .setParameter("id", id)
@@ -226,13 +198,13 @@ public class TaskRepository {
       // complete
       task.setCompletedAt(LocalDateTime.now());
 
-      return TasksCompleteResponseDTO.get(task);
+      return task;
    }
 
 
    // delete task
    @Transactional
-   public TasksDeletedDTO delete(UUID id) throws NoResultException {
+   public TasksEntity delete(UUID id) throws NoResultException {
       TasksEntity task = this.entityManager
          .createQuery("SELECT t FROM TasksEntity t WHERE t.id = :id ", TasksEntity.class)
          .setParameter("id", id)
@@ -241,7 +213,7 @@ public class TaskRepository {
       // delete
       task.setDeletedAt(LocalDateTime.now());
 
-      return TasksDeletedDTO.get(task);
+      return task;
    }
 
 
