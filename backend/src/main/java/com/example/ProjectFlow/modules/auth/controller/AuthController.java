@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+// swagger imports
+import io.swagger.v3.oas.annotations.Operation;
+
 // import constants
 import com.example.ProjectFlow.common.constants.ApiConstants;
 import com.example.ProjectFlow.common.constants.ResponseMessages;
@@ -19,10 +22,10 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 // import services
 import com.example.ProjectFlow.modules.auth.service.AuthService;
 
-import io.swagger.v3.oas.annotations.Operation;
-
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
+
+// import DTOs
 import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginDTO;
 import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginResponseDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
