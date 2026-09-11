@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.comment.service;
 
+import java.util.ArrayList;
 // imports
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +38,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.comment.mapper.CommentMapper;
+
 
 @Service
 public class CommentService {
@@ -46,6 +50,7 @@ public class CommentService {
    private final CommentValidator commentValidator;
    private final TaskService taskService;
    private final UserService userService;
+   private final CommentMapper commentMapper;
 
 
    // constructor - dependency injection
@@ -53,12 +58,14 @@ public class CommentService {
       CommentRepository commentRepository,
       CommentValidator commentValidator,
       TaskService taskService,
-      UserService userService
+      UserService userService,
+      CommentMapper commentMapper
    ) {
       this.commentRepository = commentRepository;
       this.commentValidator = commentValidator;
       this.taskService = taskService;
       this.userService = userService;
+      this.commentMapper = commentMapper;
    }
 
 
@@ -75,19 +82,28 @@ public class CommentService {
       // get author data
       UserEntity user = this.userService.getEntityById(data.authorId());
 
-      return this.commentRepository.create(data, task, user);
+      // creation
+      CommentEntity commentEntity = this.commentRepository.create(data, task, user);
+
+      return this.commentMapper.toCommentResponseDTO(commentEntity);
    }
 
 
    // get all
    public List<CommentResponseDTO> getAll() {
-      List<CommentResponseDTO> comments = this.commentRepository.getAll();
+      List<CommentEntity> commentsEntity = this.commentRepository.getAll();
 
-      if(comments.isEmpty()) {
+      if(commentsEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Comentários não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<CommentResponseDTO> comments = new ArrayList<>();
+      for(CommentEntity comment : commentsEntity) {
+         comments.add(CommentResponseDTO.get(comment));
       }
 
       return comments;
@@ -99,7 +115,9 @@ public class CommentService {
       this.commentValidator.idValidate(id);
 
       try {
-         return this.commentRepository.getById(id);
+         CommentEntity commentEntity = this.commentRepository.getById(id);
+
+         return this.commentMapper.toCommentResponseDTO(commentEntity);
       }
       catch(NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -126,40 +144,6 @@ public class CommentService {
    }
 
 
-   // get comments by task id
-   public List<CommentResponseDTO> getByTaskId(UUID taskId) {
-      this.commentValidator.taskIdValidate(taskId);
-
-      List<CommentResponseDTO> comments = this.commentRepository.getByTaskId(taskId);
-
-      if(comments.isEmpty()) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Comentários não existem",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-
-      return comments;
-   }
-
-
-   // get comments by author id
-   public List<CommentResponseDTO> getByAuthorId(UUID authorId) {
-      this.commentValidator.authorIdValidate(authorId);
-
-      List<CommentResponseDTO> comments = this.commentRepository.getByAuthorId(authorId);
-
-      if(comments.isEmpty()) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Comentários não existem",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-
-      return comments;
-   }
-
-
    // exists by id
    public boolean existsById(UUID id) {
       this.commentValidator.idValidate(id);
@@ -176,6 +160,52 @@ public class CommentService {
    }
 
 
+   // get comments by task id
+   public List<CommentResponseDTO> getByTaskId(UUID taskId) {
+      this.commentValidator.taskIdValidate(taskId);
+
+      List<CommentEntity> commentsEntity = this.commentRepository.getByTaskId(taskId);
+
+      if(commentsEntity.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentários não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<CommentResponseDTO> comments = new ArrayList<>();
+      for(CommentEntity comment : commentsEntity) {
+         comments.add(CommentResponseDTO.get(comment));
+      }
+
+      return comments;
+   }
+
+
+   // get comments by author id
+   public List<CommentResponseDTO> getByAuthorId(UUID authorId) {
+      this.commentValidator.authorIdValidate(authorId);
+
+      List<CommentEntity> commentsEntity = this.commentRepository.getByAuthorId(authorId);
+
+      if(commentsEntity.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Comentários não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<CommentResponseDTO> comments = new ArrayList<>();
+      for(CommentEntity comment : commentsEntity) {
+         comments.add(CommentResponseDTO.get(comment));
+      }
+
+      return comments;
+   }
+
+
    // update comment content
    @Transactional
    public CommentResponseDTO updateContent(UUID id, String content) {
@@ -183,7 +213,9 @@ public class CommentService {
       this.commentValidator.contentValidate(content);
 
       try {
-         return this.commentRepository.updateContent(id, content);
+         CommentEntity commentEntity = this.commentRepository.updateContent(id, content);
+
+         return this.commentMapper.toCommentResponseDTO(commentEntity);
       }
       catch(NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -200,7 +232,9 @@ public class CommentService {
       this.commentValidator.idValidate(id);
 
       try {
-         return this.commentRepository.delete(id);
+         CommentEntity commentEntity = this.commentRepository.delete(id);
+
+         return this.commentMapper.toCommentDeleteDTO(commentEntity);
       }
       catch(NoResultException error) {
          throw MultiExceptions.notFound(String.format(

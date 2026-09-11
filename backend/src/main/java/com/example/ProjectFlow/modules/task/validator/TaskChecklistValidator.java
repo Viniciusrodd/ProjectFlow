@@ -4,13 +4,15 @@ package com.example.ProjectFlow.modules.task.validator;
 
 // imports
 import org.springframework.stereotype.Component;
-
 import java.util.Optional;
 import java.util.UUID;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
+
+// import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
+
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.common.constants.ValidationConstants;
