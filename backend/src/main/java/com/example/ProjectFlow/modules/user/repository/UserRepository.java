@@ -16,10 +16,12 @@ import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+// import DTOs
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserDeletedDTO;
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserProfileDTO;
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserUpdateDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
@@ -141,6 +143,7 @@ public class UserRepository {
          .setParameter("userId", userId)
          .getSingleResult();
 
+      // update
       Optional.ofNullable(data.name()).ifPresent(name -> user.setName(name));
       Optional.ofNullable(data.email()).ifPresent(email -> user.setEmail(email));
       Optional.ofNullable(data.password()).ifPresent(password -> user.setPassword(password));

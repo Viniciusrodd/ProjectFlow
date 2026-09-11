@@ -18,11 +18,16 @@ import com.example.ProjectFlow.modules.user.repository.UserRepository;
 // import validator
 import com.example.ProjectFlow.modules.user.validator.UserValidator;
 import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
+
+// import DTOs
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserDeletedDTO;
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserProfileDTO;
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserUpdateDTO;
+
+// import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
+
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -85,22 +90,6 @@ public class UserService {
          ));
       }
    }
-
-
-   // get entity by id
-   public UserEntity getEntityById(UUID id) {
-      this.userValidator.idValidate(id);
-
-      try {
-         return this.userRepository.getEntityById(id);
-      }
-      catch (NoResultException error) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Usuário não existe",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-   }
    
    
    // get by email
@@ -109,6 +98,22 @@ public class UserService {
 
       try {
          return this.userRepository.getByEmail(email);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Usuário não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // get entity by id
+   public UserEntity getEntityById(UUID id) {
+      this.userValidator.idValidate(id);
+
+      try {
+         return this.userRepository.getEntityById(id);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
