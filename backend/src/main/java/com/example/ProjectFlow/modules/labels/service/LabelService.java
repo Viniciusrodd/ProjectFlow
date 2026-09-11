@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.labels.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import jakarta.persistence.NoResultException;
@@ -36,6 +37,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.labels.mapper.LabelsMapper;
+
 
 @Service
 public class LabelService {
@@ -44,16 +48,19 @@ public class LabelService {
    private final LabelsRepository labelsRepository;
    private final LabelsValidator labelsValidator;
    private final ProjectService projectService;
+   private final LabelsMapper labelsMapper;
 
    // constructor - dependency injection
    public LabelService(
       LabelsRepository labelsRepository,
       LabelsValidator labelsValidator,
-      ProjectService projectService
+      ProjectService projectService,
+      LabelsMapper labelsMapper
    ) {
       this.labelsRepository = labelsRepository;
       this.labelsValidator = labelsValidator;
       this.projectService = projectService;
+      this.labelsMapper = labelsMapper;
    }
 
 
@@ -67,7 +74,10 @@ public class LabelService {
       // get project data
       ProjectEntity project = this.projectService.getEntityById(data.projectId());
 
-      return this.labelsRepository.create(data, project);
+      // creation
+      LabelsEntity labelsEntity = this.labelsRepository.create(data, project);
+
+      return this.labelsMapper.toLabelsResponseDTO(labelsEntity);
    }
 
 
@@ -75,13 +85,19 @@ public class LabelService {
    public List<LabelsResponseDTO> getAllByProjectId(UUID projectId) {
       this.labelsValidator.projectIdValidate(projectId);
 
-      List<LabelsResponseDTO> labels = this.labelsRepository.getAllByProjectId(projectId);
+      List<LabelsEntity> labelsEntity = this.labelsRepository.getAllByProjectId(projectId);
 
-      if(labels.isEmpty()) {
+      if(labelsEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Etiquetas do projeto não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<LabelsResponseDTO> labels = new ArrayList<>();
+      for(LabelsEntity label : labelsEntity) {
+         labels.add(LabelsResponseDTO.get(label));
       }
 
       return labels;
@@ -93,7 +109,9 @@ public class LabelService {
       this.labelsValidator.idValidate(id);
 
       try {
-         return this.labelsRepository.getById(id);
+         LabelsEntity labelsEntity = this.labelsRepository.getById(id);
+
+         return this.labelsMapper.toLabelsResponseDTO(labelsEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -143,7 +161,9 @@ public class LabelService {
       this.labelsValidator.updateValidation(data);
 
       try {
-         return this.labelsRepository.update(id, data);
+         LabelsEntity labelEntity = this.labelsRepository.update(id, data);
+
+         return this.labelsMapper.toLabelsResponseDTO(labelEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -160,7 +180,9 @@ public class LabelService {
       this.labelsValidator.idValidate(id);
 
       try {
-         return this.labelsRepository.delete(id);
+         LabelsEntity labelEntity = this.labelsRepository.delete(id);
+
+         return this.labelsMapper.toLabelsDeletedDTO(labelEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
