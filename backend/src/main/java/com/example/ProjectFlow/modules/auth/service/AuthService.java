@@ -15,18 +15,28 @@ import com.example.ProjectFlow.modules.auth.validator.LoginValidator;
 
 // import security
 import com.example.ProjectFlow.security.JWT.JwtService;
+
+// import DTOs
 import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginDTO;
 import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginResponseDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterResponseDTO;
+import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
+
+// import entity
+import com.example.ProjectFlow.modules.user.entity.UserEntity;
+
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
-import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
+
 // import services
 import com.example.ProjectFlow.modules.user.service.UserService;
+
+// import mapper
+import com.example.ProjectFlow.modules.auth.mapper.AuthMapper;
 
 
 @Service
@@ -39,6 +49,7 @@ public class AuthService {
    private final LoginValidator loginValidator;
    private final JwtService jwtService;
    private final UserService userService;
+   private final AuthMapper authMapper;
 
    // constructor - dependency injection
    public AuthService(
@@ -47,7 +58,8 @@ public class AuthService {
       RegisterValidator registerValidator,
       LoginValidator loginValidator,
       JwtService jwtService,
-      UserService userService
+      UserService userService,
+      AuthMapper authMapper
    ) {
       this.authRepository = authRepository;
       this.passwordService = passwordService;
@@ -55,6 +67,7 @@ public class AuthService {
       this.loginValidator = loginValidator;
       this.jwtService = jwtService;
       this.userService = userService;
+      this.authMapper = authMapper;
    }
 
 
@@ -77,7 +90,10 @@ public class AuthService {
          encryptedPassword
       );
 
-      return this.authRepository.register(userData);
+      // register
+      UserEntity userEntity = this.authRepository.register(userData);
+
+      return this.authMapper.toRegisterResponseDTO(userEntity);
    }
 
 
@@ -100,7 +116,7 @@ public class AuthService {
       // JWT token - generation
       String token = this.jwtService.generateToken(user);
 
-      return LoginResponseDTO.get(user, token);
+      return this.authMapper.toLoginResponseDTO(user, token);
    }
 
 }
