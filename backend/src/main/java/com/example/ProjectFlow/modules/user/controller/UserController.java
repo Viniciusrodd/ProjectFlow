@@ -45,7 +45,7 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 public class UserController {
  
    // properties
-   private UserService userService;
+   private final UserService userService;
 
    // constructor - dependency injection
    public UserController(UserService userService) {

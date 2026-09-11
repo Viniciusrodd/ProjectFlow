@@ -34,26 +34,37 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 
 // import document
 import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
+
+// import DTOs
 import com.example.ProjectFlow.modules.user.dto.profileImageDTO.ProfileImageResponseDTO;
+
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.user.mapper.ProfileImageMapper;
+
 
 @RestController
-@RequestMapping(ApiConstants.BASE_API_PATH + "/users/profile-image")
+@RequestMapping(ApiConstants.BASE_API_PATH + "/users/profile-image/{userId}")
 public class ProfileImageController {
  
    // properties
-   private ProfileImageService profileImageService;
+   private final ProfileImageService profileImageService;
+   private final ProfileImageMapper profileImageMapper;
 
    // constructor - dependency injection
-   public ProfileImageController(ProfileImageService profileImageService) {
+   public ProfileImageController(
+      ProfileImageService profileImageService,
+      ProfileImageMapper profileImageMapper
+   ) {
       this.profileImageService = profileImageService;
+      this.profileImageMapper = profileImageMapper;
    }
 
 
    // upload profile image
-   @PostMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload profile image")
    public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> uploadProfileImage(
       @PathVariable UUID userId, 
@@ -73,11 +84,11 @@ public class ProfileImageController {
 
 
    // get profile image - infos
-   @GetMapping(value = "/{userId}")
+   @GetMapping()
    @Operation(summary = "Get profile image data informations")
    public ResponseEntity<ApiResponse<ProfileImageResponseDTO>> getProfileImage(@PathVariable UUID userId) {
       ProfileImageDocument profileImageDocument = this.profileImageService.getProfileImage(userId);
-      ProfileImageResponseDTO profileImage = ProfileImageResponseDTO.get(profileImageDocument);
+      ProfileImageResponseDTO profileImage = this.profileImageMapper.toProfileImageResponseDTO(profileImageDocument);
 
       ApiResponse<ProfileImageResponseDTO> response = new ApiResponse.Builder<ProfileImageResponseDTO>()
          .success(true)
@@ -92,7 +103,7 @@ public class ProfileImageController {
 
    // get profile image - download
    @GetMapping(
-      value = "/{userId}/download", 
+      value = "/download", 
       produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp", "image/jpg" }
    )
    @Operation(summary = "Download profile image")
@@ -108,7 +119,7 @@ public class ProfileImageController {
 
 
    // delete profile image
-   @DeleteMapping(value = "/{userId}")
+   @DeleteMapping()
    @Operation(summary = "Profile image delete")
    public ResponseEntity<ApiResponse<Void>> deleteProfileImage(@PathVariable UUID userId) {
       this.profileImageService.deleteProfileImage(userId);
