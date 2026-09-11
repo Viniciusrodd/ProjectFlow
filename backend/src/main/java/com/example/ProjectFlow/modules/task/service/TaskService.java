@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.task.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +42,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.task.mapper.TaskMapper;
+
 
 @Service
 public class TaskService {
@@ -51,6 +55,7 @@ public class TaskService {
    private final ProjectService projectService;
    private final BoardColumnService boardColumnService;
    private final UserService userService;
+   private final TaskMapper taskMapper;
 
 
    // constructor - dependency injection
@@ -59,13 +64,15 @@ public class TaskService {
       TasksValidator tasksValidator,
       ProjectService projectService,
       BoardColumnService boardColumnService,
-      UserService userService
+      UserService userService,
+      TaskMapper taskMapper
    ) {
       this.taskRepository = taskRepository;
       this.tasksValidator = tasksValidator;
       this.projectService = projectService;
       this.boardColumnService = boardColumnService;
       this.userService = userService;
+      this.taskMapper = taskMapper;
    }
 
 
@@ -89,19 +96,28 @@ public class TaskService {
       // get owner data
       UserEntity owner = this.userService.getEntityById(data.ownerId());
 
-      return this.taskRepository.create(data, project, column, owner);
+      // creation
+      TasksEntity tasksEntity = this.taskRepository.create(data, project, column, owner);
+
+      return this.taskMapper.toTasksResponseDTO(tasksEntity);
    }
 
 
    // get all
    public List<TasksCompleteResponseDTO> getAll() {
-      List<TasksCompleteResponseDTO> tasks = this.taskRepository.getAll();
+      List<TasksEntity> tasksEntity = this.taskRepository.getAll();
 
-      if(tasks.isEmpty()) {
+      if(tasksEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Tarefas não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
+      for(TasksEntity task : tasksEntity) {
+         tasks.add(this.taskMapper.toTasksCompleteResponseDTO(task));
       }
 
       return tasks;
@@ -113,7 +129,9 @@ public class TaskService {
       this.tasksValidator.idValidate(id);
 
       try {
-         return this.taskRepository.getById(id);
+         TasksEntity tasksEntity = this.taskRepository.getById(id);
+
+         return this.taskMapper.toTasksCompleteResponseDTO(tasksEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -140,57 +158,6 @@ public class TaskService {
    }
 
 
-   // get tasks by project id
-   public List<TasksCompleteResponseDTO> getByProjectId(UUID projectId) {
-      this.tasksValidator.projectIdValidate(projectId);
-
-      List<TasksCompleteResponseDTO> tasks = this.taskRepository.getByProjectId(projectId);
-
-      if(tasks.isEmpty()) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Tarefas não existem",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-
-      return tasks;     
-   }
-
-
-   // get tasks by board column id
-   public List<TasksCompleteResponseDTO> getByColumnId(UUID columnId) {
-      this.tasksValidator.columnIdValidate(columnId);
-
-      List<TasksCompleteResponseDTO> tasks = this.taskRepository.getByColumnId(columnId);
-
-      if(tasks.isEmpty()) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Tarefas não existem",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-
-      return tasks;     
-   }
-
-
-   // get tasks by owner id
-   public List<TasksCompleteResponseDTO> getByOwnerId(UUID ownerId) {
-      this.tasksValidator.ownerIdValidate(ownerId);
-
-      List<TasksCompleteResponseDTO> tasks = this.taskRepository.getByOwnerId(ownerId);
-
-      if(tasks.isEmpty()) {
-         throw MultiExceptions.notFound(String.format(
-            "%s: Tarefas não existem",
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-
-      return tasks;     
-   }
-
-
    // exists by id
    public boolean existsById(UUID id) {
       this.tasksValidator.idValidate(id);
@@ -207,6 +174,75 @@ public class TaskService {
    }
 
 
+   // get tasks by project id
+   public List<TasksCompleteResponseDTO> getByProjectId(UUID projectId) {
+      this.tasksValidator.projectIdValidate(projectId);
+
+      List<TasksEntity> tasksEntity = this.taskRepository.getByProjectId(projectId);
+
+      if(tasksEntity.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefas não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
+      for(TasksEntity task : tasksEntity) {
+         tasks.add(this.taskMapper.toTasksCompleteResponseDTO(task));
+      }
+
+      return tasks;     
+   }
+
+
+   // get tasks by board column id
+   public List<TasksCompleteResponseDTO> getByColumnId(UUID columnId) {
+      this.tasksValidator.columnIdValidate(columnId);
+
+      List<TasksEntity> tasksEntity = this.taskRepository.getByColumnId(columnId);
+
+      if(tasksEntity.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefas não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
+      for(TasksEntity task : tasksEntity) {
+         tasks.add(this.taskMapper.toTasksCompleteResponseDTO(task));
+      }
+
+      return tasks;     
+   }
+
+
+   // get tasks by owner id
+   public List<TasksCompleteResponseDTO> getByOwnerId(UUID ownerId) {
+      this.tasksValidator.ownerIdValidate(ownerId);
+
+      List<TasksEntity> tasksEntity = this.taskRepository.getByOwnerId(ownerId);
+
+      if(tasksEntity.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Tarefas não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
+      for(TasksEntity task : tasksEntity) {
+         tasks.add(TasksCompleteResponseDTO.get(task));
+      }
+
+      return tasks;     
+   }
+
+
    // update column id - task position
    @Transactional
    public TasksCompleteResponseDTO updateColumn(UUID id, UUID columnId) {
@@ -217,7 +253,9 @@ public class TaskService {
       BoardColumnsEntity boardColumnEntity = this.boardColumnService.getEntityById(columnId);
 
       try {
-         return this.taskRepository.updateColumn(id, boardColumnEntity);
+         TasksEntity taskEntity = this.taskRepository.updateColumn(id, boardColumnEntity);
+
+         return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -235,7 +273,9 @@ public class TaskService {
       this.tasksValidator.updateValidations(data);
 
       try {
-         return this.taskRepository.update(id, data);
+         TasksEntity taskEntity = this.taskRepository.update(id, data);
+
+         return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -252,7 +292,9 @@ public class TaskService {
       this.tasksValidator.idValidate(id);
 
       try {
-         return this.taskRepository.taskComplete(id);
+         TasksEntity taskEntity = this.taskRepository.taskComplete(id);
+
+         return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -269,7 +311,9 @@ public class TaskService {
       this.tasksValidator.idValidate(id);
 
       try {
-         return this.taskRepository.delete(id);
+         TasksEntity taskEntity = this.taskRepository.delete(id);
+
+         return this.taskMapper.toTasksDeletedDTO(taskEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
