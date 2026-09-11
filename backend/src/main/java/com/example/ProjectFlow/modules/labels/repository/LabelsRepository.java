@@ -2,9 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.labels.repository;
 
-import java.time.LocalDateTime;
 // imports
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,9 +17,7 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDTO;
-import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsResponseDTO;
 import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsUpdateDTO;
-import com.example.ProjectFlow.modules.labels.dto.labelsDTO.LabelsDeletedDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -37,25 +34,25 @@ public class LabelsRepository {
    
    // task labels creation
    @Transactional
-   public LabelsResponseDTO create(
+   public LabelsEntity create(
       LabelsDTO data, 
       ProjectEntity projectEntity
    ) {
-      LabelsEntity labels = new LabelsEntity.Builder()
+      LabelsEntity labelEntity = new LabelsEntity.Builder()
          .project(projectEntity)
          .name(data.name())
          .color(data.color())
          .build();
 
-      this.entityManager.persist(labels);
+      this.entityManager.persist(labelEntity);
 
-      return LabelsResponseDTO.get(labels);
+      return labelEntity;
    }
 
 
    // get all task labels by project id
-   public List<LabelsResponseDTO> getAllByProjectId(UUID projectId) throws NoResultException {
-      List<LabelsEntity> labelsDocument = this.entityManager
+   public List<LabelsEntity> getAllByProjectId(UUID projectId) throws NoResultException {
+      List<LabelsEntity> labelsEntity = this.entityManager
          .createQuery(
             "SELECT l FROM LabelsEntity l " + 
             "WHERE l.project.id = :projectId " +
@@ -65,24 +62,18 @@ public class LabelsRepository {
          .setParameter("projectId", projectId)
          .getResultList();
 
-      List<LabelsResponseDTO> labels = new ArrayList<>();
-
-      for(LabelsEntity label : labelsDocument) {
-         labels.add(LabelsResponseDTO.get(label));
-      }
-
-      return labels;
+      return labelsEntity;
    }
 
 
    // get label by id
-   public LabelsResponseDTO getById(UUID id) throws NoResultException {
-      LabelsEntity label = this.entityManager
+   public LabelsEntity getById(UUID id) throws NoResultException {
+      LabelsEntity labelEntity = this.entityManager
          .createQuery("SELECT l FROM LabelsEntity l WHERE l.id = :id", LabelsEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return LabelsResponseDTO.get(label);
+      return labelEntity;
    }
 
 
@@ -110,32 +101,32 @@ public class LabelsRepository {
 
    // update label
    @Transactional
-   public LabelsResponseDTO update(UUID id, LabelsUpdateDTO data) throws NoResultException {
-      LabelsEntity label = this.entityManager
+   public LabelsEntity update(UUID id, LabelsUpdateDTO data) throws NoResultException {
+      LabelsEntity labelEntity = this.entityManager
          .createQuery("SELECT l FROM LabelsEntity l WHERE l.id = :id", LabelsEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
       // update
-      Optional.ofNullable(data.name()).ifPresent(name -> label.setName(name));
-      Optional.ofNullable(data.color()).ifPresent(color -> label.setColor(color));
+      Optional.ofNullable(data.name()).ifPresent(name -> labelEntity.setName(name));
+      Optional.ofNullable(data.color()).ifPresent(color -> labelEntity.setColor(color));
 
-      return LabelsResponseDTO.get(label);
+      return labelEntity;
    }
 
 
    // delete label
    @Transactional
-   public LabelsDeletedDTO delete(UUID id) throws NoResultException {
-      LabelsEntity label = this.entityManager
+   public LabelsEntity delete(UUID id) throws NoResultException {
+      LabelsEntity labelEntity = this.entityManager
          .createQuery("SELECT l FROM LabelsEntity l WHERE l.id = :id", LabelsEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
       // delete
-      label.setDeletedAt(LocalDateTime.now());
+      labelEntity.setDeletedAt(LocalDateTime.now());
 
-      return LabelsDeletedDTO.get(label);
+      return labelEntity;
    }
 
 
