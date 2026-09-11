@@ -79,8 +79,8 @@ public class UserService {
          ));
       }
 
+      // mapping
       List<UserProfileDTO> users = new ArrayList<>();
-      
       for(UserEntity user : usersEntity) {
          users.add(this.userMapper.toUserProfileDTO(user));
       }
