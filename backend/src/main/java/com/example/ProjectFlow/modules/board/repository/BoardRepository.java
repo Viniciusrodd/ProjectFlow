@@ -4,7 +4,6 @@ package com.example.ProjectFlow.modules.board.repository;
 
 // imports
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
@@ -15,9 +14,9 @@ import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+// import DTOs
 import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardDTO;
-import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardDeletedDTO;
-import com.example.ProjectFlow.modules.board.dto.boardDTO.BoardResponseDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.board.entity.BoardEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -33,42 +32,36 @@ public class BoardRepository {
 
    // board creation
    @Transactional
-   public BoardResponseDTO create(BoardDTO data, ProjectEntity projectEntity) {
-      BoardEntity board = new BoardEntity();
+   public BoardEntity create(BoardDTO data, ProjectEntity projectEntity) {
+      BoardEntity board = new BoardEntity.Builder()
+         .project(projectEntity)
+         .name(data.name())
+         .build();
 
-      // creation
-      board.setProject(projectEntity);
-      board.setName(data.name());
       this.entityManager.persist(board);
 
-      return BoardResponseDTO.get(board);
+      return board;
    }
 
 
    // get all
-   public List<BoardResponseDTO> getAll() {
-      List<BoardEntity> boardsDocument = this.entityManager
+   public List<BoardEntity> getAll() {
+      List<BoardEntity> boardsEntity = this.entityManager
          .createQuery("SELECT b FROM BoardEntity b ORDER BY b.createdAt ASC", BoardEntity.class)
          .getResultList();
 
-      List<BoardResponseDTO> boards = new ArrayList<>();
-
-      for(BoardEntity board : boardsDocument) {
-         boards.add(BoardResponseDTO.get(board));
-      }
-
-      return boards;
+      return boardsEntity;
    }
 
 
    // get by id
-   public BoardResponseDTO getById(UUID id) throws NoResultException {
+   public BoardEntity getById(UUID id) throws NoResultException {
       BoardEntity board = this.entityManager
          .createQuery("SELECT b FROM BoardEntity b WHERE b.id = :id", BoardEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return BoardResponseDTO.get(board);
+      return board;
    }
 
 
@@ -83,17 +76,6 @@ public class BoardRepository {
    }
 
 
-   // get board by project id
-   public BoardResponseDTO getByProjectId(UUID projectId) {
-      BoardEntity boards = this.entityManager
-         .createQuery("SELECT b FROM BoardEntity b WHERE b.project.id = :projectId", BoardEntity.class)
-         .setParameter("projectId", projectId)
-         .getSingleResult();
-
-      return BoardResponseDTO.get(boards);
-   }
-
-
    // exists by id
    public boolean existsById(UUID id) {
       Long count = this.entityManager
@@ -105,9 +87,20 @@ public class BoardRepository {
    }
 
 
+   // get board by project id
+   public BoardEntity getByProjectId(UUID projectId) {
+      BoardEntity board = this.entityManager
+         .createQuery("SELECT b FROM BoardEntity b WHERE b.project.id = :projectId", BoardEntity.class)
+         .setParameter("projectId", projectId)
+         .getSingleResult();
+
+      return board;
+   }
+
+
    // update board name
    @Transactional
-   public BoardResponseDTO updateName(UUID id, String name) {
+   public BoardEntity updateName(UUID id, String name) {
       BoardEntity board = this.entityManager
          .createQuery("SELECT b FROM BoardEntity b WHERE b.id = :id", BoardEntity.class)
          .setParameter("id", id)
@@ -116,13 +109,13 @@ public class BoardRepository {
       // update
       board.setName(name);
 
-      return BoardResponseDTO.get(board);
+      return board;
    }
 
 
    // delete board
    @Transactional
-   public BoardDeletedDTO delete(UUID id) throws NoResultException {
+   public BoardEntity delete(UUID id) throws NoResultException {
       BoardEntity board = this.entityManager
          .createQuery("SELECT b FROM BoardEntity b WHERE b.id = :id", BoardEntity.class)
          .setParameter("id", id)
@@ -131,7 +124,7 @@ public class BoardRepository {
       // delete
       board.setDeletedAt(LocalDateTime.now());
 
-      return BoardDeletedDTO.get(board);
+      return board;
    }
 
 
