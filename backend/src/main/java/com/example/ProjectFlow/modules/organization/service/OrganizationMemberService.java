@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.organization.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.context.annotation.Lazy;
@@ -18,8 +19,10 @@ import com.example.ProjectFlow.modules.organization.repository.OrganizationMembe
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationMembersValidator;
 
-// import DTOs
+// import service
 import com.example.ProjectFlow.modules.user.service.UserService;
+
+// import DTOs
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MemberByOrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
@@ -39,6 +42,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.organization.mapper.OrganizationMembersMapper;
+
 
 @Service
 public class OrganizationMemberService {
@@ -48,18 +54,22 @@ public class OrganizationMemberService {
    private final OrganizationMembersValidator organizationMembersValidator;
    private final UserService userService;
    private final OrganizationService organizationService;
+   private final OrganizationMembersMapper organizationMembersMapper;
    
+
    // constructor - dependency injection
    public OrganizationMemberService(
       OrganizationMembersRepository organizationMembersRepository,
       OrganizationMembersValidator organizationMembersValidator,
       UserService userService,
-      @Lazy OrganizationService organizationService // intentional cycle of circular dependency - (OrganizationService) needs to create "members", (OrganizationMemberService) needs to get "organizations".
+      @Lazy OrganizationService organizationService, // intentional cycle of circular dependency - (OrganizationService) needs to create "members", (OrganizationMemberService) needs to get "organizations".
+      OrganizationMembersMapper organizationMembersMapper
    ) {
       this.organizationMembersRepository = organizationMembersRepository;
       this.organizationMembersValidator = organizationMembersValidator;
       this.userService = userService;
       this.organizationService = organizationService;
+      this.organizationMembersMapper = organizationMembersMapper;
    }
 
 
@@ -76,19 +86,28 @@ public class OrganizationMemberService {
       // get organization data
       OrganizationEntity organization = this.organizationService.getEntityById(data.organizationId());
 
-      return this.organizationMembersRepository.createMemberParticipation(data, user, organization);
+      // creation
+      OrganizationMembersEntity organizationMembersEntity = this.organizationMembersRepository.createMemberParticipation(data, user, organization);
+   
+      return this.organizationMembersMapper.toOrganizationMembersResponseDTO(organizationMembersEntity);
    }
 
 
    // get all members
    public List<MemberByOrganizationResponseDTO> getAllOrganizationMembers() {
-      List<MemberByOrganizationResponseDTO> members = this.organizationMembersRepository.getAllOrganizationMembers();
+      List<OrganizationMembersEntity> membersEntity = this.organizationMembersRepository.getAllOrganizationMembers();
 
-      if(members.isEmpty()) {
+      if(membersEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Membros não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
+      for(OrganizationMembersEntity member : membersEntity) {
+         members.add(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(member));
       }
 
       return members;
@@ -100,7 +119,9 @@ public class OrganizationMemberService {
       this.organizationMembersValidator.idValidate(id);
 
       try {
-         return this.organizationMembersRepository.getOrganizationMemberById(id);
+         OrganizationMembersEntity organizationMembersEntity = this.organizationMembersRepository.getOrganizationMemberById(id);
+      
+         return this.organizationMembersMapper.toMemberByOrganizationResponseDTO(organizationMembersEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -118,13 +139,20 @@ public class OrganizationMemberService {
       // organization existence - check
       this.organizationService.existsById(organizationId);
 
-      List<MemberByOrganizationResponseDTO> members = this.organizationMembersRepository.getAllMembersByOrganizationId(organizationId);
+      // get members
+      List<OrganizationMembersEntity> membersEntity = this.organizationMembersRepository.getAllMembersByOrganizationId(organizationId);
 
-      if(members.isEmpty()) {
+      if(membersEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Membros não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
+      for(OrganizationMembersEntity member : membersEntity) {
+         members.add(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(member));
       }
 
       return members;
@@ -142,13 +170,20 @@ public class OrganizationMemberService {
       // organization existence - check
       this.organizationService.existsById(organizationId);
 
-      List<MemberByOrganizationResponseDTO> members = this.organizationMembersRepository.getAllMembersByRole(organizationId, RoleEnum.valueOf(role.toUpperCase()));
+      // get members
+      List<OrganizationMembersEntity> membersEntity = this.organizationMembersRepository.getAllMembersByRole(organizationId, RoleEnum.valueOf(role.toUpperCase()));
 
-      if(members.isEmpty()) {
+      if(membersEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Membros não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<MemberByOrganizationResponseDTO> members = new ArrayList<>();
+      for(OrganizationMembersEntity member : membersEntity) {
+         members.add(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(member));
       }
 
       return members;
@@ -261,7 +296,10 @@ public class OrganizationMemberService {
             this.validateLastAdmin(member.getOrganization().getId());
          }
 
-         return this.organizationMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
+         // update
+         OrganizationMembersEntity memberEntity = this.organizationMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
+         
+         return this.organizationMembersMapper.toOrganizationMembersResponseDTO(memberEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -284,7 +322,10 @@ public class OrganizationMemberService {
             this.validateLastAdmin(member.getOrganization().getId());
          }
 
-         return this.organizationMembersRepository.removeParticipation(id);
+         // remove
+         OrganizationMembersEntity memberEntity = this.organizationMembersRepository.removeParticipation(id);
+      
+         return this.organizationMembersMapper.toOrganizationMembersDeletedDTO(memberEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
