@@ -16,10 +16,12 @@ import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+// import DTOs
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -39,7 +41,7 @@ public class ProjectRepository {
 
    // project creation
    @Transactional
-   public ProjectResponseDTO create(ProjectDTO data, OrganizationEntity organizationEntity, UserEntity ownerEntity) {
+   public ProjectEntity create(ProjectDTO data, OrganizationEntity organizationEntity, UserEntity ownerEntity) {
       ProjectEntity project = new ProjectEntity.Builder()
          .organization(organizationEntity)
          .owner(ownerEntity)
@@ -50,34 +52,28 @@ public class ProjectRepository {
          
       this.entityManager.persist(project);
 
-      return ProjectResponseDTO.get(project);
+      return project;
    }
 
 
    // get all 
-   public List<ProjectResponseDTO> getAll() {
-      List<ProjectEntity> projectsDocument = this.entityManager
+   public List<ProjectEntity> getAll() {
+      List<ProjectEntity> projectsEntity = this.entityManager
          .createQuery("SELECT p FROM ProjectEntity p ORDER BY p.createdAt ASC", ProjectEntity.class)
          .getResultList();
 
-      List<ProjectResponseDTO> projects = new ArrayList<>();
-
-      for(ProjectEntity project : projectsDocument) {
-         projects.add(ProjectResponseDTO.get(project));
-      }
-
-      return projects;
+      return projectsEntity;
    }
 
 
    // get by id
-   public ProjectResponseDTO getById(UUID id) throws NoResultException {
+   public ProjectEntity getById(UUID id) throws NoResultException {
       ProjectEntity project = this.entityManager
          .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return ProjectResponseDTO.get(project);
+      return project;
    }
 
 
@@ -92,40 +88,6 @@ public class ProjectRepository {
    }
 
 
-   // get all by organization id
-   public List<ProjectResponseDTO> getByOrganizationId(UUID organizationId) {
-      List<ProjectEntity> projectsDocument = this.entityManager
-         .createQuery("SELECT p FROM ProjectEntity p WHERE p.organization.id = :organizationId ORDER BY p.createdAt ASC", ProjectEntity.class)
-         .setParameter("organizationId", organizationId)
-         .getResultList();
-
-      List<ProjectResponseDTO> projects = new ArrayList<>();
-
-      for(ProjectEntity project : projectsDocument) {
-         projects.add(ProjectResponseDTO.get(project));
-      }
-
-      return projects;
-   }
-
-
-   // get all by owner id
-   public List<ProjectResponseDTO> getByOwnerId(UUID ownerId) {
-      List<ProjectEntity> projectsDocument = this.entityManager
-         .createQuery("SELECT p FROM ProjectEntity p WHERE p.owner.id = :ownerId ORDER BY p.createdAt ASC", ProjectEntity.class)
-         .setParameter("ownerId", ownerId)
-         .getResultList();
-
-      List<ProjectResponseDTO> projects = new ArrayList<>();
-
-      for(ProjectEntity project : projectsDocument) {
-         projects.add(ProjectResponseDTO.get(project));
-      }
-
-      return projects;
-   }
-
-
    // exists by id
    public boolean existsById(UUID id) {
       Long count = this.entityManager
@@ -134,6 +96,28 @@ public class ProjectRepository {
          .getSingleResult();
 
       return count > 0;
+   }
+
+
+   // get all by organization id
+   public List<ProjectEntity> getByOrganizationId(UUID organizationId) {
+      List<ProjectEntity> projectsEntity = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.organization.id = :organizationId ORDER BY p.createdAt ASC", ProjectEntity.class)
+         .setParameter("organizationId", organizationId)
+         .getResultList();
+
+      return projectsEntity;
+   }
+
+
+   // get all by owner id
+   public List<ProjectEntity> getByOwnerId(UUID ownerId) {
+      List<ProjectEntity> projectsEntity = this.entityManager
+         .createQuery("SELECT p FROM ProjectEntity p WHERE p.owner.id = :ownerId ORDER BY p.createdAt ASC", ProjectEntity.class)
+         .setParameter("ownerId", ownerId)
+         .getResultList();
+
+      return projectsEntity;
    }
 
 
@@ -165,7 +149,7 @@ public class ProjectRepository {
 
    // update project
    @Transactional
-   public ProjectResponseDTO update(UUID id, ProjectUpdateDTO data) throws NoResultException {
+   public ProjectEntity update(UUID id, ProjectUpdateDTO data) throws NoResultException {
       ProjectEntity project = this.entityManager
          .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
          .setParameter("id", id)
@@ -178,13 +162,13 @@ public class ProjectRepository {
          project.setStatus(StatusEnum.valueOf(status.toUpperCase()))
       );
 
-      return ProjectResponseDTO.get(project);
+      return project;
    }
 
 
    // delete project
    @Transactional
-   public ProjectDeletedDTO delete(UUID id) throws NoResultException {
+   public ProjectEntity delete(UUID id) throws NoResultException {
       ProjectEntity project = this.entityManager
          .createQuery("SELECT p FROM ProjectEntity p WHERE p.id = :id", ProjectEntity.class)
          .setParameter("id", id)
@@ -193,7 +177,7 @@ public class ProjectRepository {
       // delete
       project.setDeletedAt(LocalDateTime.now());
 
-      return ProjectDeletedDTO.get(project);
+      return project;
    }
 
 
