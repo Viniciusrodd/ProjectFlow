@@ -5,6 +5,7 @@ package com.example.ProjectFlow.modules.project.service;
 // imports
 import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +42,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.project.mapper.ProjectMembersMapper;
+
 
 @Service
 public class ProjectMemberService {
@@ -50,18 +54,22 @@ public class ProjectMemberService {
    private final ProjectMembersValidator projectMembersValidator;
    private final ProjectService projectService;
    private final UserService userService;
+   private final ProjectMembersMapper projectMembersMapper;
+
 
    // constructor - dependency injection
    public ProjectMemberService(
       ProjectMembersRepository projectMembersRepository,
       ProjectMembersValidator projectMembersValidator,
       UserService userService,
-      @Lazy ProjectService projectService
+      @Lazy ProjectService projectService,
+      ProjectMembersMapper projectMembersMapper
    ) {
       this.projectMembersRepository = projectMembersRepository;
       this.projectMembersValidator = projectMembersValidator;
       this.userService = userService;
       this.projectService = projectService;
+      this.projectMembersMapper = projectMembersMapper;
    }
 
 
@@ -78,19 +86,28 @@ public class ProjectMemberService {
       // get project data
       ProjectEntity project = this.projectService.getEntityById(data.projectId());
 
-      return this.projectMembersRepository.createMemberParticipation(data, user, project);
+      // creation
+      ProjectMembersEntity projectMembersEntity = this.projectMembersRepository.createMemberParticipation(data, user, project);
+   
+      return this.projectMembersMapper.toProjectMembersResponseDTO(projectMembersEntity);
    }
 
 
    // get all members
    public List<MemberByProjectResponseDTO> getAllProjectMembers() {
-      List<MemberByProjectResponseDTO> members = this.projectMembersRepository.getAllProjectMembers();
+      List<ProjectMembersEntity> membersEntity = this.projectMembersRepository.getAllProjectMembers();
 
-      if(members.isEmpty()) {
+      if(membersEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Membros não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<MemberByProjectResponseDTO> members = new ArrayList<>();
+      for(ProjectMembersEntity member : membersEntity) {
+         members.add(this.projectMembersMapper.toMemberByProjectResponseDTO(member));
       }
 
       return members;
@@ -102,7 +119,9 @@ public class ProjectMemberService {
       this.projectMembersValidator.idValidate(id);
 
       try {
-         return this.projectMembersRepository.getProjectMemberById(id);
+         ProjectMembersEntity projectMembersEntity = this.projectMembersRepository.getProjectMemberById(id);
+
+         return this.projectMembersMapper.toMemberByProjectResponseDTO(projectMembersEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -120,13 +139,19 @@ public class ProjectMemberService {
       // project existence - check
       this.projectService.existsById(projectId);
 
-      List<MemberByProjectResponseDTO> members = this.projectMembersRepository.getAllMembersByProjectId(projectId);
-      
-      if(members.isEmpty()) {
+      // get members
+      List<ProjectMembersEntity> membersEntity = this.projectMembersRepository.getAllMembersByProjectId(projectId);
+      if(membersEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Membros não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<MemberByProjectResponseDTO> members = new ArrayList<>();
+      for(ProjectMembersEntity member : membersEntity) {
+         members.add(this.projectMembersMapper.toMemberByProjectResponseDTO(member));
       }
 
       return members;
@@ -141,13 +166,20 @@ public class ProjectMemberService {
       // project existence - check
       this.projectService.existsById(projectId);
 
-      List<MemberByProjectResponseDTO> members = this.projectMembersRepository.getAllMembersByRole(projectId, RoleEnum.valueOf(role.toUpperCase()));
+      // get members
+      List<ProjectMembersEntity> membersEntity = this.projectMembersRepository.getAllMembersByRole(projectId, RoleEnum.valueOf(role.toUpperCase()));
       
-      if(members.isEmpty()) {
+      if(membersEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Membros não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<MemberByProjectResponseDTO> members = new ArrayList<>();
+      for(ProjectMembersEntity member : membersEntity) {
+         members.add(this.projectMembersMapper.toMemberByProjectResponseDTO(member));
       }
 
       return members;
@@ -260,7 +292,10 @@ public class ProjectMemberService {
             this.validateLastAdmin(member.getProject().getId());
          }
 
-         return this.projectMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
+         // update
+         ProjectMembersEntity memberEntity = this.projectMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
+
+         return this.projectMembersMapper.toProjectMembersResponseDTO(memberEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -283,7 +318,10 @@ public class ProjectMemberService {
             this.validateLastAdmin(member.getProject().getId());
          }
 
-         return this.projectMembersRepository.removeParticipation(id);
+         // remove
+         ProjectMembersEntity memberEntity = this.projectMembersRepository.removeParticipation(id);
+
+         return this.projectMembersMapper.toProjectMembersDeletedDTO(memberEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
