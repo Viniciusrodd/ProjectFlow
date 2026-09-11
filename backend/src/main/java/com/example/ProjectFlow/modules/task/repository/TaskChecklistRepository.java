@@ -5,7 +5,6 @@ package com.example.ProjectFlow.modules.task.repository;
 // imports
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,8 +17,6 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDTO;
-import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDeletedDTO;
-import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
 
 // import entity
@@ -37,7 +34,7 @@ public class TaskChecklistRepository {
 
    // creating task checklist item
    @Transactional
-   public TaskChecklistResponseDTO create(
+   public TaskChecklistEntity create(
       TasksEntity tasksEntity,
       TaskChecklistDTO data
    ) {
@@ -50,7 +47,7 @@ public class TaskChecklistRepository {
 
       this.entityManager.persist(taskChecklist);
 
-      return TaskChecklistResponseDTO.get(taskChecklist);
+      return taskChecklist;
    }
 
 
@@ -72,8 +69,8 @@ public class TaskChecklistRepository {
 
 
    // get all checklist items by task id
-   public List<TaskChecklistResponseDTO> getAllByTaskId(UUID taskId) {
-      List<TaskChecklistEntity> itemsDocument = this.entityManager
+   public List<TaskChecklistEntity> getAllByTaskId(UUID taskId) {
+      List<TaskChecklistEntity> itemsEntity = this.entityManager
          .createQuery(
             "SELECT i FROM TaskChecklistEntity i " +
             "WHERE i.task.id = :taskId " +
@@ -83,55 +80,43 @@ public class TaskChecklistRepository {
          .setParameter("taskId", taskId)
          .getResultList();
       
-      List<TaskChecklistResponseDTO> items = new ArrayList<>();
-
-      for(TaskChecklistEntity item : itemsDocument) {
-         items.add(TaskChecklistResponseDTO.get(item));
-      }
-
-      return items;
+      return itemsEntity;
    }
 
 
    // get checklist item by id
-   public TaskChecklistResponseDTO getById(UUID id) throws NoResultException {
-      TaskChecklistEntity item = this.entityManager
+   public TaskChecklistEntity getById(UUID id) throws NoResultException {
+      TaskChecklistEntity itemEntity = this.entityManager
          .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return TaskChecklistResponseDTO.get(item);
+      return itemEntity;
    }
 
 
    // get all checklist items
-   public List<TaskChecklistResponseDTO> getAll() {
-      List<TaskChecklistEntity> itemsDocument = this.entityManager
+   public List<TaskChecklistEntity> getAll() {
+      List<TaskChecklistEntity> itemsEntity = this.entityManager
          .createQuery(
             "SELECT i FROM TaskChecklistEntity i " +
             "ORDER BY i.createdAt ASC ", 
             TaskChecklistEntity.class
          )
          .getResultList();
-      
-      List<TaskChecklistResponseDTO> items = new ArrayList<>();
 
-      for(TaskChecklistEntity item : itemsDocument) {
-         items.add(TaskChecklistResponseDTO.get(item));
-      }
-
-      return items;
+      return itemsEntity;      
    }
 
 
    // get entity by id
    public TaskChecklistEntity getEntityById(UUID id) throws NoResultException {
-      TaskChecklistEntity item = this.entityManager
+      TaskChecklistEntity itemEntity = this.entityManager
          .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return item;
+      return itemEntity;
    }
 
 
@@ -148,47 +133,47 @@ public class TaskChecklistRepository {
 
    // update task checklist item
    @Transactional
-   public TaskChecklistResponseDTO update(UUID id, TaskChecklistUpdateDTO data) throws NoResultException {
-      TaskChecklistEntity item = this.entityManager
+   public TaskChecklistEntity update(UUID id, TaskChecklistUpdateDTO data) throws NoResultException {
+      TaskChecklistEntity itemEntity = this.entityManager
          .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
       // update
-      Optional.ofNullable(data.description()).ifPresent(description -> item.setDescription(description));
-      Optional.ofNullable(data.position()).ifPresent(position -> item.setPosition(position));
+      Optional.ofNullable(data.description()).ifPresent(description -> itemEntity.setDescription(description));
+      Optional.ofNullable(data.position()).ifPresent(position -> itemEntity.setPosition(position));
 
-      return TaskChecklistResponseDTO.get(item);
+      return itemEntity;
    }
 
 
    // update completed field of task checklist item
    @Transactional 
-   public TaskChecklistResponseDTO setCompleted(UUID id, boolean completed) throws NoResultException {
-      TaskChecklistEntity item = this.entityManager
+   public TaskChecklistEntity setCompleted(UUID id, boolean completed) throws NoResultException {
+      TaskChecklistEntity itemEntity = this.entityManager
          .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
       // update
-      item.setCompleted(completed);
+      itemEntity.setCompleted(completed);
 
-      return TaskChecklistResponseDTO.get(item);
+      return itemEntity;
    }
 
 
    // delete task checklist item
    @Transactional 
-   public TaskChecklistDeletedDTO delete(UUID id) throws NoResultException {
-      TaskChecklistEntity item = this.entityManager
+   public TaskChecklistEntity delete(UUID id) throws NoResultException {
+      TaskChecklistEntity itemEntity = this.entityManager
          .createQuery("SELECT i FROM TaskChecklistEntity i WHERE i.id = :id", TaskChecklistEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
       // delete
-      item.setDeletedAt(LocalDateTime.now());
+      itemEntity.setDeletedAt(LocalDateTime.now());
 
-      return TaskChecklistDeletedDTO.get(item);
+      return itemEntity;
    }
 
 
