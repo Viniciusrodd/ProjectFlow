@@ -4,7 +4,6 @@ package com.example.ProjectFlow.modules.task.repository;
 
 // imports
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
@@ -14,12 +13,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-
-// import DTOs
-import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
-import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
-import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
-import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsDeletedDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
@@ -37,7 +30,7 @@ public class TaskLabelsRepository {
 
    // creating task label relation
    @Transactional
-   public TaskLabelsResponseDTO create(TasksEntity tasksEntity, LabelsEntity labelsEntity) {
+   public TaskLabelsEntity create(TasksEntity tasksEntity, LabelsEntity labelsEntity) {
       TaskLabelsEntity taskLabel = new TaskLabelsEntity.Builder()
          .task(tasksEntity)
          .label(labelsEntity)
@@ -45,13 +38,13 @@ public class TaskLabelsRepository {
 
       this.entityManager.persist(taskLabel);
 
-      return TaskLabelsResponseDTO.get(taskLabel);
+      return taskLabel;
    }
 
 
    // get all labels by task id
-   public List<LabelsByTaskResponseDTO> getAllByTaskId(UUID taskId) {
-      List<TaskLabelsEntity> taskLabelsDocument = this.entityManager
+   public List<TaskLabelsEntity> getAllByTaskId(UUID taskId) {
+      List<TaskLabelsEntity> taskLabelsEntity = this.entityManager
          .createQuery(
             "SELECT tl FROM TaskLabelsEntity tl " +
             "JOIN FETCH tl.label " +
@@ -61,20 +54,14 @@ public class TaskLabelsRepository {
          )
          .setParameter("taskId", taskId)
          .getResultList();
-         
-      List<LabelsByTaskResponseDTO> labels = new ArrayList<>();
 
-      for(TaskLabelsEntity taskLabel : taskLabelsDocument) {
-         labels.add(LabelsByTaskResponseDTO.get(taskLabel));
-      }
-
-      return labels;
+      return taskLabelsEntity;         
    }
 
 
    // get all tasks by label id
-   public List<TasksByLabelResponseDTO> getAllByLabelId(UUID labelId) {
-      List<TaskLabelsEntity> taskLabelsDocument = this.entityManager
+   public List<TaskLabelsEntity> getAllByLabelId(UUID labelId) {
+      List<TaskLabelsEntity> taskLabelsEntity = this.entityManager
          .createQuery(
             "SELECT tl FROM TaskLabelsEntity tl " +
             "JOIN FETCH tl.task " +
@@ -84,14 +71,8 @@ public class TaskLabelsRepository {
          )
          .setParameter("labelId", labelId)
          .getResultList();
-         
-      List<TasksByLabelResponseDTO> tasks = new ArrayList<>();
 
-      for(TaskLabelsEntity taskLabel : taskLabelsDocument) {
-         tasks.add(TasksByLabelResponseDTO.get(taskLabel));
-      }
-
-      return tasks;
+      return taskLabelsEntity;         
    }
 
 
@@ -136,7 +117,7 @@ public class TaskLabelsRepository {
 
    // remove task label relation
    @Transactional
-   public TaskLabelsDeletedDTO removeRelation(UUID id) throws NoResultException {
+   public TaskLabelsEntity removeRelation(UUID id) throws NoResultException {
       TaskLabelsEntity taskLabel = this.entityManager
          .createQuery("SELECT tl FROM TaskLabelsEntity tl WHERE tl.id = :id", TaskLabelsEntity.class)
          .setParameter("id", id)
@@ -145,7 +126,7 @@ public class TaskLabelsRepository {
       // delete
       taskLabel.setDeletedAt(LocalDateTime.now());
 
-      return TaskLabelsDeletedDTO.get(taskLabel);
+      return taskLabel;
    }
 
 }
