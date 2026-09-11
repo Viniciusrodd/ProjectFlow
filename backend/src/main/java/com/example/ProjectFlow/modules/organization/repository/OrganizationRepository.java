@@ -5,7 +5,6 @@ package com.example.ProjectFlow.modules.organization.repository;
 // imports
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,10 +15,10 @@ import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+// import DTOs
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationDTO;
-import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationDeletedDTO;
-import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationUpdateDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
@@ -35,43 +34,48 @@ public class OrganizationRepository {
 
    // create organization
    @Transactional
-   public OrganizationResponseDTO create(OrganizationDTO data, UserEntity ownerEntity) {
-      OrganizationEntity organization = new OrganizationEntity();
-
-      organization.setName(data.name());
-      organization.setDescription(data.description());
-      organization.setOwner(ownerEntity);
+   public OrganizationEntity create(OrganizationDTO data, UserEntity ownerEntity) {
+      OrganizationEntity organization = new OrganizationEntity.Builder()
+         .owner(ownerEntity)
+         .name(data.name())
+         .description(data.description())
+         .build();
 
       this.entityManager.persist(organization);
 
-      return OrganizationResponseDTO.get(organization);
+      return organization;
    }
 
 
    // get all
-   public List<OrganizationResponseDTO> getAll() {
-      List<OrganizationEntity> organizationsDocument = this.entityManager
+   public List<OrganizationEntity> getAll() {
+      List<OrganizationEntity> organizationsEntity = this.entityManager
          .createQuery("SELECT o FROM OrganizationEntity o ORDER BY o.createdAt ASC", OrganizationEntity.class)
          .getResultList();
 
-      List<OrganizationResponseDTO> organizations = new ArrayList<>();
-
-      for(OrganizationEntity organization : organizationsDocument) {
-         organizations.add(OrganizationResponseDTO.get(organization));
-      }
-
-      return organizations;
+      return organizationsEntity;
    }
 
 
    // get by id
-   public OrganizationResponseDTO getById(UUID id) throws NoResultException {
+   public OrganizationEntity getById(UUID id) throws NoResultException {
       OrganizationEntity organization = this.entityManager
          .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return OrganizationResponseDTO.get(organization);
+      return organization;
+   }
+
+
+   // get all by owner id
+   public List<OrganizationEntity> getByOwnerId(UUID ownerId) {
+      List<OrganizationEntity> organizationsEntity = this.entityManager
+         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.owner.id = :ownerId ORDER BY o.createdAt ASC", OrganizationEntity.class)
+         .setParameter("ownerId", ownerId)
+         .getResultList();
+
+      return organizationsEntity;
    }
 
 
@@ -83,23 +87,6 @@ public class OrganizationRepository {
          .getSingleResult();
 
       return organization;
-   }
-
-
-   // get all by owner id
-   public List<OrganizationResponseDTO> getByOwnerId(UUID ownerId) {
-      List<OrganizationEntity> organizationsDocument = this.entityManager
-         .createQuery("SELECT o FROM OrganizationEntity o WHERE o.owner.id = :ownerId ORDER BY o.createdAt ASC", OrganizationEntity.class)
-         .setParameter("ownerId", ownerId)
-         .getResultList();
-
-      List<OrganizationResponseDTO> organizations = new ArrayList<>();
-
-      for(OrganizationEntity organization : organizationsDocument) {
-         organizations.add(OrganizationResponseDTO.get(organization));
-      }
-
-      return organizations;
    }
 
 
@@ -142,7 +129,7 @@ public class OrganizationRepository {
 
    // update organization
    @Transactional
-   public OrganizationResponseDTO update(
+   public OrganizationEntity update(
       UUID id, 
       OrganizationUpdateDTO data
    ) throws NoResultException {
@@ -155,13 +142,13 @@ public class OrganizationRepository {
       Optional.ofNullable(data.name()).ifPresent(name -> organization.setName(name));
       Optional.ofNullable(data.description()).ifPresent(description -> organization.setDescription(description));
    
-      return OrganizationResponseDTO.get(organization);
+      return organization;
    }
 
 
    // delete organization
    @Transactional
-   public OrganizationDeletedDTO delete(UUID id) throws NoResultException {
+   public OrganizationEntity delete(UUID id) throws NoResultException {
       OrganizationEntity organization = this.entityManager
          .createQuery("SELECT o FROM OrganizationEntity o WHERE o.id = :id", OrganizationEntity.class)
          .setParameter("id", id)
@@ -170,7 +157,7 @@ public class OrganizationRepository {
       // delete
       organization.setDeletedAt(LocalDateTime.now());
 
-      return OrganizationDeletedDTO.get(organization);
+      return organization;
    }
 
 

@@ -12,7 +12,6 @@ import jakarta.persistence.EntityManager;
 
 // import DTOs
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
-import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
