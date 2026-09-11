@@ -18,6 +18,7 @@ import com.example.ProjectFlow.modules.user.repository.ProfileImageRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.user.validator.ProfileImageValidator;
+
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -28,6 +29,9 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.modules.user.document.ProfileImageDocument;
 import com.example.ProjectFlow.modules.user.dto.profileImageDTO.ProfileImageResponseDTO;
 
+// import mapper
+import com.example.ProjectFlow.modules.user.mapper.ProfileImageMapper;
+
 
 @Service
 public class ProfileImageService {
@@ -36,17 +40,20 @@ public class ProfileImageService {
    private final ProfileImageRepository profileImageRepository;
    private final UserService userService;
    private final ProfileImageValidator profileImageValidator;
+   private final ProfileImageMapper profileImageMapper;
 
    
    // constructor - dependency injection
    public ProfileImageService(
       ProfileImageRepository profileImageRepository,
       UserService userService,
-      ProfileImageValidator profileImageValidator
+      ProfileImageValidator profileImageValidator,
+      ProfileImageMapper profileImageMapper
    ) {
       this.profileImageRepository = profileImageRepository;
       this.userService = userService;
       this.profileImageValidator = profileImageValidator;
+      this.profileImageMapper = profileImageMapper;
    }
 
 
@@ -79,7 +86,7 @@ public class ProfileImageService {
          this.userService.updateProfileImageId(userId, savedDocument.getId());
 
          // return saved document
-         return ProfileImageResponseDTO.get(savedDocument);
+         return this.profileImageMapper.toProfileImageResponseDTO(savedDocument);
       }
       catch (IOException error) {
          throw MultiExceptions.internal(String.format(
