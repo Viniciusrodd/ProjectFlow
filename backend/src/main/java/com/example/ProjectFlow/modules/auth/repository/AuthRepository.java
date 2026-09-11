@@ -10,8 +10,10 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 
+// import DTOs
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterResponseDTO;
+
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
@@ -25,7 +27,7 @@ public class AuthRepository {
    
    // register
    @Transactional
-   public RegisterResponseDTO register(RegisterDTO data) {
+   public UserEntity register(RegisterDTO data) {
       UserEntity user = new UserEntity();
         
       user.setName(data.name());
@@ -34,7 +36,7 @@ public class AuthRepository {
       
       this.entityManager.persist(user);
       
-      return RegisterResponseDTO.get(user);
+      return user;
    }
 
 }
