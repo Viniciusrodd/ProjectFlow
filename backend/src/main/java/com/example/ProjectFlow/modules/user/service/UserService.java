@@ -4,6 +4,7 @@ package com.example.ProjectFlow.modules.user.service;
 
 // imports
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
@@ -37,6 +38,9 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 // import services
 import com.example.ProjectFlow.modules.auth.service.PasswordService;
 
+// import mapper
+import com.example.ProjectFlow.modules.user.mapper.UserMapper;
+
 
 @Service
 public class UserService {
@@ -46,30 +50,39 @@ public class UserService {
    private final UserValidator userValidator;
    private final ProfileImageValidator profileImageValidator;
    private final PasswordService passwordService;
+   private final UserMapper userMapper;
 
    // constructor - dependency injection
    public UserService(
       UserRepository userRepository,
       UserValidator userValidator,
       ProfileImageValidator profileImageValidator,
-      PasswordService passwordService
+      PasswordService passwordService,
+      UserMapper userMapper
    ) {
       this.userRepository = userRepository;
       this.userValidator = userValidator;
       this.profileImageValidator = profileImageValidator;
       this.passwordService = passwordService;
+      this.userMapper = userMapper;
    }
 
 
    // get all users
    public List<UserProfileDTO> getAll() {
-      List<UserProfileDTO> users = this.userRepository.getAll();
+      List<UserEntity> usersEntity = this.userRepository.getAll();
 
-      if(users.isEmpty()) {
+      if(usersEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Usuários não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      List<UserProfileDTO> users = new ArrayList<>();
+      
+      for(UserEntity user : usersEntity) {
+         users.add(this.userMapper.toUserProfileDTO(user));
       }
 
       return users;
@@ -81,7 +94,9 @@ public class UserService {
       this.userValidator.idValidate(id);
 
       try {
-         return this.userRepository.getById(id);
+         UserEntity userEntity = this.userRepository.getById(id);
+
+         return this.userMapper.toUserProfileDTO(userEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -97,7 +112,9 @@ public class UserService {
       this.userValidator.emailValidate(email);
 
       try {
-         return this.userRepository.getByEmail(email);
+         UserEntity userEntity = this.userRepository.getByEmail(email);
+
+         return this.userMapper.toUserDTO(userEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -140,7 +157,7 @@ public class UserService {
    }
 
 
-   // user is already register
+   // user is already register - by email
    public void isRegister(String email) {
       this.userValidator.emailValidate(email);
 
@@ -211,7 +228,10 @@ public class UserService {
             finalData = data.withEncryptedPassword(encryptedPassword);
          }
 
-         return this.userRepository.update(userId, finalData);
+         // update
+         UserEntity userEntity = this.userRepository.update(userId, finalData);
+
+         return this.userMapper.toUserProfileDTO(userEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -228,7 +248,10 @@ public class UserService {
       this.userValidator.idValidate(userId);
 
       try {
-         return this.userRepository.delete(userId);
+         // delete
+         UserEntity userEntity = this.userRepository.delete(userId);
+
+         return this.userMapper.toUserDeletedDTO(userEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
