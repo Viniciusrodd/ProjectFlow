@@ -4,6 +4,8 @@ package com.example.ProjectFlow.modules.task.service;
 
 // imports
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.task.mapper.TaskChecklistMapper;
+
 
 @Service
 public class TaskChecklistService {
@@ -41,16 +46,19 @@ public class TaskChecklistService {
    private final TaskChecklistRepository taskChecklistRepository;
    private final TaskChecklistValidator taskChecklistValidator;
    private final TaskService taskService;
+   private final TaskChecklistMapper taskChecklistMapper;
    
    // constructor - dependency injection
    public TaskChecklistService(
       TaskChecklistRepository taskChecklistRepository,
       TaskChecklistValidator taskChecklistValidator,
-      TaskService taskService
+      TaskService taskService,
+      TaskChecklistMapper taskChecklistMapper
    ) {
       this.taskChecklistRepository = taskChecklistRepository;
       this.taskChecklistValidator = taskChecklistValidator;
       this.taskService = taskService;
+      this.taskChecklistMapper = taskChecklistMapper;
    }
 
 
@@ -67,7 +75,10 @@ public class TaskChecklistService {
       // check column position existence
       this.checkPositionExistence(data.position(), taskId);
 
-      return this.taskChecklistRepository.create(task, data);
+      // creation
+      TaskChecklistEntity taskChecklistEntity = this.taskChecklistRepository.create(task, data);
+
+      return this.taskChecklistMapper.toTaskChecklistResponseDTO(taskChecklistEntity);
    }
 
 
@@ -91,13 +102,19 @@ public class TaskChecklistService {
       // task existence - check
       this.taskService.existsById(taskId);
 
-      List<TaskChecklistResponseDTO> items = this.taskChecklistRepository.getAllByTaskId(taskId);
+      List<TaskChecklistEntity> itemsEntity = this.taskChecklistRepository.getAllByTaskId(taskId);
 
-      if(items.isEmpty()) {
+      if(itemsEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Items de checklist da tarefa não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<TaskChecklistResponseDTO> items = new ArrayList<>();
+      for(TaskChecklistEntity item : itemsEntity) {
+         items.add(this.taskChecklistMapper.toTaskChecklistResponseDTO(item));
       }
 
       return items;
@@ -109,7 +126,9 @@ public class TaskChecklistService {
       this.taskChecklistValidator.idValidate(id);
 
       try {
-         return this.taskChecklistRepository.getById(id);
+         TaskChecklistEntity itemEntity = this.taskChecklistRepository.getById(id);
+
+         return this.taskChecklistMapper.toTaskChecklistResponseDTO(itemEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -122,13 +141,19 @@ public class TaskChecklistService {
 
    // get all checklist items
    public List<TaskChecklistResponseDTO> getAll() {
-      List<TaskChecklistResponseDTO> items = this.taskChecklistRepository.getAll();
+      List<TaskChecklistEntity> itemsEntity = this.taskChecklistRepository.getAll();
 
-      if(items.isEmpty()) {
+      if(itemsEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Items de checklist da tarefa não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<TaskChecklistResponseDTO> items = new ArrayList<>();
+      for(TaskChecklistEntity item : itemsEntity) {
+         items.add(TaskChecklistResponseDTO.get(item));
       }
 
       return items;
@@ -174,7 +199,9 @@ public class TaskChecklistService {
       this.taskChecklistValidator.updateValidations(data);
 
       try {
-         return this.taskChecklistRepository.update(id, data);
+         TaskChecklistEntity itemEntity = this.taskChecklistRepository.update(id, data);
+
+         return this.taskChecklistMapper.toTaskChecklistResponseDTO(itemEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -191,7 +218,9 @@ public class TaskChecklistService {
       this.taskChecklistValidator.idValidate(id);
 
       try {
-         return this.taskChecklistRepository.setCompleted(id, completed);
+         TaskChecklistEntity itemEntity = this.taskChecklistRepository.setCompleted(id, completed);
+
+         return this.taskChecklistMapper.toTaskChecklistResponseDTO(itemEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -208,7 +237,9 @@ public class TaskChecklistService {
       this.taskChecklistValidator.idValidate(id);
 
       try {
-         return this.taskChecklistRepository.delete(id);
+         TaskChecklistEntity itemEntity = this.taskChecklistRepository.delete(id);
+
+         return this.taskChecklistMapper.toTaskChecklistDeletedDTO(itemEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
