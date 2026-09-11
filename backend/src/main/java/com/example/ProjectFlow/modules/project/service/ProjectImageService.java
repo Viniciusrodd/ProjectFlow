@@ -18,6 +18,7 @@ import com.example.ProjectFlow.modules.project.repository.ProjectImageRepository
 
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectImageValidator;
+
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -26,7 +27,12 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import document
 import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
+
+// import DTO
 import com.example.ProjectFlow.modules.project.dto.projectImageDTO.ProjectImageResponseDTO;
+
+// import mapper
+import com.example.ProjectFlow.modules.project.mapper.ProjectImageMapper;
 
 
 @Service
@@ -36,17 +42,20 @@ public class ProjectImageService {
    private final ProjectService projectService;
    private final ProjectImageRepository projectImageRepository;
    private final ProjectImageValidator projectImageValidator;
+   private final ProjectImageMapper projectImageMapper;
 
 
    // constructor - dependency injection
    public ProjectImageService(
       ProjectService projectService,
       ProjectImageRepository projectImageRepository,
-      ProjectImageValidator projectImageValidator
+      ProjectImageValidator projectImageValidator,
+      ProjectImageMapper projectImageMapper
    ) {
       this.projectService = projectService;
       this.projectImageRepository = projectImageRepository;
       this.projectImageValidator = projectImageValidator;
+      this.projectImageMapper = projectImageMapper;
    }
 
 
@@ -79,7 +88,7 @@ public class ProjectImageService {
          this.projectService.updateLogoImageId(projectId, savedDocument.getId());
 
          // return saved document
-         return ProjectImageResponseDTO.get(savedDocument);
+         return this.projectImageMapper.toProjectImageResponseDTO(savedDocument);
       }
       catch (IOException error) {
          throw MultiExceptions.internal(String.format(
