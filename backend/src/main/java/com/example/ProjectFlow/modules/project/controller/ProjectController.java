@@ -31,6 +31,8 @@ import com.example.ProjectFlow.modules.project.service.ProjectService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
+
+// import DTOs
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
