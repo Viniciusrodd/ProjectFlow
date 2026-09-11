@@ -4,7 +4,6 @@ package com.example.ProjectFlow.modules.project.repository;
 
 // imports
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,8 +17,6 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDTO;
-import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
-import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
 
 // import entity

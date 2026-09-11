@@ -5,7 +5,6 @@ package com.example.ProjectFlow.modules.project.repository;
 // imports
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,10 +15,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
 // import DTOs
-import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.MemberByProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDTO;
-import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDeletedDTO;
-import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -40,7 +36,7 @@ public class ProjectMembersRepository {
 
    // create member participation
    @Transactional
-   public ProjectMembersResponseDTO createMemberParticipation(
+   public ProjectMembersEntity createMemberParticipation(
       ProjectMembersDTO data,
       UserEntity userEntity,
       ProjectEntity projectEntity
@@ -54,13 +50,13 @@ public class ProjectMembersRepository {
 
       this.entityManager.persist(projectMembers);
 
-      return ProjectMembersResponseDTO.get(projectMembers);
+      return projectMembers;
    }
 
 
    // get all members
-   public List<MemberByProjectResponseDTO> getAllProjectMembers() {
-      List<ProjectMembersEntity> membersDocument = this.entityManager
+   public List<ProjectMembersEntity> getAllProjectMembers() {
+      List<ProjectMembersEntity> membersEntity = this.entityManager
          .createQuery(
             "SELECT m FROM ProjectMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -68,31 +64,25 @@ public class ProjectMembersRepository {
             ProjectMembersEntity.class
          )
          .getResultList();
-
-      List<MemberByProjectResponseDTO> members = new ArrayList<>();
-
-      for(ProjectMembersEntity memberDocument : membersDocument) {
-         members.add(MemberByProjectResponseDTO.get(memberDocument));
-      }
-
-      return members;
+         
+      return membersEntity;
    }
 
 
    // get member by relation id
-   public MemberByProjectResponseDTO getProjectMemberById(UUID id) throws NoResultException {
+   public ProjectMembersEntity getProjectMemberById(UUID id) throws NoResultException {
       ProjectMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM ProjectMembersEntity m WHERE m.id = :id", ProjectMembersEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return MemberByProjectResponseDTO.get(member);
+      return member;
    }
 
 
    // get all members by project
-   public List<MemberByProjectResponseDTO> getAllMembersByProjectId(UUID projectId) {
-      List<ProjectMembersEntity> membersDocument = this.entityManager
+   public List<ProjectMembersEntity> getAllMembersByProjectId(UUID projectId) {
+      List<ProjectMembersEntity> membersEntity = this.entityManager
          .createQuery(
             "SELECT m FROM ProjectMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -103,22 +93,16 @@ public class ProjectMembersRepository {
          .setParameter("projectId", projectId)
          .getResultList();
 
-      List<MemberByProjectResponseDTO> members = new ArrayList<>();
-
-      for(ProjectMembersEntity memberDocument : membersDocument) {
-         members.add(MemberByProjectResponseDTO.get(memberDocument));
-      }
-
-      return members;
+      return membersEntity;
    }
 
 
    // get all members by role
-   public List<MemberByProjectResponseDTO> getAllMembersByRole(
+   public List<ProjectMembersEntity> getAllMembersByRole(
       UUID projectId,
       RoleEnum role
    ) {
-      List<ProjectMembersEntity> membersDocument = this.entityManager
+      List<ProjectMembersEntity> membersEntity = this.entityManager
          .createQuery(
             "SELECT m FROM ProjectMembersEntity m " +
             "JOIN FETCH m.user " +
@@ -130,14 +114,8 @@ public class ProjectMembersRepository {
          .setParameter("projectId", projectId)
          .setParameter("role", role)
          .getResultList();
-
-      List<MemberByProjectResponseDTO> members = new ArrayList<>();
-
-      for(ProjectMembersEntity memberDocument : membersDocument) {
-         members.add(MemberByProjectResponseDTO.get(memberDocument));
-      }
-
-      return members;
+         
+      return membersEntity;
    }
 
 
@@ -216,7 +194,7 @@ public class ProjectMembersRepository {
 
    // update member role
    @Transactional
-   public ProjectMembersResponseDTO updateMemberRole(UUID id, RoleEnum role) throws NoResultException {
+   public ProjectMembersEntity updateMemberRole(UUID id, RoleEnum role) throws NoResultException {
       ProjectMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM ProjectMembersEntity m WHERE m.id = :id", ProjectMembersEntity.class)
          .setParameter("id", id)
@@ -225,13 +203,13 @@ public class ProjectMembersRepository {
       // update
       member.setRole(role);
 
-      return ProjectMembersResponseDTO.get(member);
+      return member;
    }
 
 
    // remove member participation
    @Transactional
-   public ProjectMembersDeletedDTO removeParticipation(UUID id) throws NoResultException {
+   public ProjectMembersEntity removeParticipation(UUID id) throws NoResultException {
       ProjectMembersEntity member = this.entityManager
          .createQuery("SELECT m FROM ProjectMembersEntity m WHERE m.id = :id", ProjectMembersEntity.class)
          .setParameter("id", id)
@@ -240,7 +218,7 @@ public class ProjectMembersRepository {
       // delete
       member.setDeletedAt(LocalDateTime.now());
 
-      return ProjectMembersDeletedDTO.get(member);
+      return member;
    }
 
 
