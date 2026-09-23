@@ -153,7 +153,7 @@ public class TaskChecklistService {
       // mapping
       List<TaskChecklistResponseDTO> items = new ArrayList<>();
       for(TaskChecklistEntity item : itemsEntity) {
-         items.add(TaskChecklistResponseDTO.get(item));
+         items.add(this.taskChecklistMapper.toTaskChecklistResponseDTO(item));
       }
 
       return items;

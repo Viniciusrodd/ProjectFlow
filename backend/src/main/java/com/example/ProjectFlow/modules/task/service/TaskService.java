@@ -236,7 +236,7 @@ public class TaskService {
       // mapping
       List<TasksCompleteResponseDTO> tasks = new ArrayList<>();
       for(TasksEntity task : tasksEntity) {
-         tasks.add(TasksCompleteResponseDTO.get(task));
+         tasks.add(this.taskMapper.toTasksCompleteResponseDTO(task));
       }
 
       return tasks;     

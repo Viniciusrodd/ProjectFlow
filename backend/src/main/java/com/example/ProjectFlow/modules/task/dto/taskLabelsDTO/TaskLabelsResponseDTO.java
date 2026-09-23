@@ -6,9 +6,6 @@ package com.example.ProjectFlow.modules.task.dto.taskLabelsDTO;
 import java.util.UUID;
 import java.time.LocalDateTime;
 
-// import entity
-import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
-
 
 public record TaskLabelsResponseDTO (
 
@@ -17,15 +14,4 @@ public record TaskLabelsResponseDTO (
    UUID labelId,
    LocalDateTime createdAt
 
-) {
-
-   public static TaskLabelsResponseDTO get(TaskLabelsEntity document) {
-      return new TaskLabelsResponseDTO(
-         document.getId(),
-         document.getTask().getId(),
-         document.getLabel().getId(),
-         document.getCreatedAt()
-      );
-   }
-
-}
+) {}

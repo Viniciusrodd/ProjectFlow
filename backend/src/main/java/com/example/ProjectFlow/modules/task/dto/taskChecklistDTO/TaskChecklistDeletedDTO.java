@@ -6,9 +6,6 @@ package com.example.ProjectFlow.modules.task.dto.taskChecklistDTO;
 import java.util.UUID;
 import java.time.LocalDateTime;
 
-// import entity
-import com.example.ProjectFlow.modules.task.entity.TaskChecklistEntity;
-
 
 public record TaskChecklistDeletedDTO (
 
@@ -19,17 +16,4 @@ public record TaskChecklistDeletedDTO (
    Integer position,
    LocalDateTime deletedAt
 
-) {
-
-   public static TaskChecklistDeletedDTO get(TaskChecklistEntity document) {
-      return new TaskChecklistDeletedDTO(
-         document.getId(),
-         document.getTaskId(),
-         document.getDescription(),
-         document.getCompleted(),
-         document.getPosition(),
-         document.getDeletedAt()
-      );
-   }
-
-}
+) {}
