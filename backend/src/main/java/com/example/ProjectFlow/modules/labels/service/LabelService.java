@@ -97,7 +97,7 @@ public class LabelService {
       // mapping
       List<LabelsResponseDTO> labels = new ArrayList<>();
       for(LabelsEntity label : labelsEntity) {
-         labels.add(LabelsResponseDTO.get(label));
+         labels.add(this.labelsMapper.toLabelsResponseDTO(label));
       }
 
       return labels;
