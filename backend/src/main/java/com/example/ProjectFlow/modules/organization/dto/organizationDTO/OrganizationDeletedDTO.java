@@ -6,9 +6,6 @@ package com.example.ProjectFlow.modules.organization.dto.organizationDTO;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-// import entity
-import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
-
 
 public record OrganizationDeletedDTO (
 
@@ -18,16 +15,4 @@ public record OrganizationDeletedDTO (
    String description,
    LocalDateTime deletedAt
 
-) {
-
-   public static OrganizationDeletedDTO get(OrganizationEntity document) {
-      return new OrganizationDeletedDTO(
-         document.getId(),
-         document.getOwnerId(),
-         document.getName(),
-         document.getDescription(),
-         document.getDeletedAt()
-      );
-   }
-
-}
+) {}
