@@ -5,9 +5,6 @@ package com.example.ProjectFlow.modules.auth.dto.loginDTO;
 // imports
 import java.util.UUID;
 
-// import DTOs
-import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
-
 
 public record LoginResponseDTO (
 

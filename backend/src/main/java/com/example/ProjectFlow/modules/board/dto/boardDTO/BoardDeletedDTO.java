@@ -6,9 +6,6 @@ package com.example.ProjectFlow.modules.board.dto.boardDTO;
 import java.util.UUID;
 import java.time.LocalDateTime;
 
-// import entity
-import com.example.ProjectFlow.modules.board.entity.BoardEntity;
-
 
 public record BoardDeletedDTO (
 
@@ -17,15 +14,4 @@ public record BoardDeletedDTO (
    String name,
    LocalDateTime deletedAt
 
-) {
-
-   public static BoardDeletedDTO get(BoardEntity document) {
-      return new BoardDeletedDTO(
-         document.getId(),
-         document.getProjectId(),
-         document.getName(),
-         document.getDeletedAt()
-      );
-   }
-
-}
+) {}
