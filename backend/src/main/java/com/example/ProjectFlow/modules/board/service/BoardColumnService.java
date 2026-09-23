@@ -4,6 +4,8 @@ package com.example.ProjectFlow.modules.board.service;
 
 // imports
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,9 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
+// import mapper
+import com.example.ProjectFlow.modules.board.mapper.BoardColumnsMapper;
+
 
 @Service
 public class BoardColumnService {
@@ -41,16 +46,20 @@ public class BoardColumnService {
    private final BoardColumnsRepository boardColumnsRepository;
    private final BoardColumnsValidator boardColumnsValidator;
    private final BoardService boardService;
+   private final BoardColumnsMapper boardColumnsMapper;
+
    
    // constructor - dependency injection  
    public BoardColumnService( 
       BoardColumnsRepository boardColumnsRepository,
       BoardColumnsValidator boardColumnsValidator,
-      BoardService boardService
+      BoardService boardService,
+      BoardColumnsMapper boardColumnsMapper
    ) {
       this.boardColumnsRepository = boardColumnsRepository;
       this.boardColumnsValidator = boardColumnsValidator;
       this.boardService = boardService;
+      this.boardColumnsMapper = boardColumnsMapper;
    }
 
 
@@ -71,7 +80,10 @@ public class BoardColumnService {
       // get board data
       BoardEntity board = this.boardService.getEntityById(data.boardId());
 
-      return this.boardColumnsRepository.create(data, board);
+      // creation
+      BoardColumnsEntity boardColumnsEntity = this.boardColumnsRepository.create(data, board);
+
+      return this.boardColumnsMapper.toBoardColumnsResponseDTO(boardColumnsEntity);
    }
 
 
@@ -108,13 +120,19 @@ public class BoardColumnService {
       // board existence - check
       this.boardService.existsById(boardId);
 
-      List<BoardColumnsResponseDTO> columns = this.boardColumnsRepository.getAllColumnsByBoardId(boardId);
-
-      if(columns.isEmpty()) {
+      // get columns
+      List<BoardColumnsEntity> columnsEntity = this.boardColumnsRepository.getAllColumnsByBoardId(boardId);
+      if(columnsEntity.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Colunas não existem",
             ResponseMessages.NOT_FOUND
          ));
+      }
+
+      // mapping
+      List<BoardColumnsResponseDTO> columns = new ArrayList<>();
+      for(BoardColumnsEntity column : columnsEntity) {
+         columns.add(this.boardColumnsMapper.toBoardColumnsResponseDTO(column));
       }
 
       return columns;
@@ -126,7 +144,9 @@ public class BoardColumnService {
       this.boardColumnsValidator.idValidate(id);
 
       try {
-         return this.boardColumnsRepository.getColumnById(id);
+         BoardColumnsEntity boardColumnsEntity = this.boardColumnsRepository.getColumnById(id);
+
+         return this.boardColumnsMapper.toBoardColumnsResponseDTO(boardColumnsEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -182,7 +202,9 @@ public class BoardColumnService {
       if(data.position() != null) this.checkColumnPositionExistence(data.position()); 
 
       try {
-         return this.boardColumnsRepository.update(id, data);
+         BoardColumnsEntity boardColumnsEntity = this.boardColumnsRepository.update(id, data);
+
+         return this.boardColumnsMapper.toBoardColumnsResponseDTO(boardColumnsEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(
@@ -199,7 +221,9 @@ public class BoardColumnService {
       this.boardColumnsValidator.idValidate(id);
 
       try {
-         return this.boardColumnsRepository.delete(id);
+         BoardColumnsEntity boardColumnsEntity = this.boardColumnsRepository.delete(id);
+
+         return this.boardColumnsMapper.toBoardColumnsDeletedDTO(boardColumnsEntity);
       }
       catch (NoResultException error) {
          throw MultiExceptions.notFound(String.format(

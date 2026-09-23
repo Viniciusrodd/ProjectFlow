@@ -42,8 +42,8 @@ import com.example.ProjectFlow.common.responses.ApiResponse;
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
-@RestController
-@RequestMapping(ApiConstants.BASE_API_PATH)
+@RestController()
+@RequestMapping(ApiConstants.BASE_API_PATH + "/board")
 public class BoardColumnsController {
  
    // properties
@@ -56,7 +56,7 @@ public class BoardColumnsController {
 
 
    // create board column
-   @PostMapping("/board/column")
+   @PostMapping("/column")
    @Operation(summary = "Create a board column")
    public ResponseEntity<ApiResponse<BoardColumnsResponseDTO>> createBoardColumn(@RequestBody BoardColumnsDTO data) {
       BoardColumnsResponseDTO boardColumns = this.boardColumnService.create(data);
@@ -73,7 +73,7 @@ public class BoardColumnsController {
 
 
    // get all board columns by board id
-   @GetMapping(value = "/board/{boardId}/columns")
+   @GetMapping(value = "/{boardId}/columns")
    @Operation(summary = "Get all board columns")
    public ResponseEntity<ApiResponse<List<BoardColumnsResponseDTO>>> getAllBoardColumns(@PathVariable UUID boardId) {
       List<BoardColumnsResponseDTO> boardColumns = this.boardColumnService.getAllColumnsByBoardId(boardId);
@@ -90,7 +90,7 @@ public class BoardColumnsController {
 
 
    // get board column by id
-   @GetMapping(value = "/board/column/{id}")
+   @GetMapping(value = "/column/{id}")
    @Operation(summary = "Get board column by id")
    public ResponseEntity<ApiResponse<BoardColumnsResponseDTO>> getBoardColumnById(@PathVariable UUID id) {
       BoardColumnsResponseDTO boardColumn = this.boardColumnService.getColumnById(id);
@@ -107,7 +107,7 @@ public class BoardColumnsController {
 
 
    // update board column
-   @PutMapping(value = "/board/column/{id}")
+   @PutMapping(value = "/column/{id}")
    @Operation(summary = "Update board column")
    public ResponseEntity<ApiResponse<BoardColumnsResponseDTO>> updateColumn(
       @PathVariable UUID id,
@@ -127,7 +127,7 @@ public class BoardColumnsController {
 
 
    // delete board column
-   @DeleteMapping(value = "/board/column/{id}")
+   @DeleteMapping(value = "/column/{id}")
    @Operation(summary = "Delete board column")
    public ResponseEntity<ApiResponse<BoardColumnsDeletedDTO>> deleteColumn(@PathVariable UUID id) {
       BoardColumnsDeletedDTO deletedColumn = this.boardColumnService.delete(id);
