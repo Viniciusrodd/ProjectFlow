@@ -41,8 +41,19 @@ public class AttachmentDocument {
 
 
    // constructor
-   protected AttachmentDocument() {}
+   public AttachmentDocument() {}
 
+
+   // constructor - builder
+   public AttachmentDocument(Builder builder) {
+      setTaskId(builder.taskId);
+      setUploadedBy(builder.uploadedBy);
+      setFileName(builder.fileName);
+      setMimeType(builder.mimeType);
+      setSize(builder.size);
+      setUploadDate(builder.uploadDate);
+      setBinary(builder.binary);
+   }
 
    // getters
    public String getId() { return this.id; }
@@ -64,5 +75,58 @@ public class AttachmentDocument {
    public void setSize(Long size) { this.size = size; }
    public void setUploadDate(LocalDateTime uploadDate) { this.uploadDate = uploadDate; }
    public void setBinary(byte[] binary) { this.binary = binary; }   
+
+
+   //// builder
+
+
+   public static class Builder {
+      private UUID taskId;
+      private UUID uploadedBy;
+      private String fileName;
+      private String mimeType;
+      private Long size;
+      private LocalDateTime uploadDate;
+      private byte[] binary;
+
+      public Builder taskId(UUID taskId) {
+         this.taskId = taskId;
+         return this;
+      }
+
+      public Builder uploadedBy(UUID uploadedBy) {
+         this.uploadedBy = uploadedBy;
+         return this;
+      }
+
+      public Builder fileName(String fileName) {
+         this.fileName = fileName;
+         return this;
+      }
+
+      public Builder mimeType(String mimeType) {
+         this.mimeType = mimeType;
+         return this;
+      }
+
+      public Builder size(Long size) {
+         this.size = size;
+         return this;
+      }
+
+      public Builder uploadDate(LocalDateTime uploadDate) {
+         this.uploadDate = uploadDate;
+         return this;
+      }
+
+      public Builder binary(byte[] binary) {
+         this.binary = binary;
+         return this;
+      }
+
+      public AttachmentDocument build() {
+         return new AttachmentDocument(this);
+      }
+   }
 
 }
