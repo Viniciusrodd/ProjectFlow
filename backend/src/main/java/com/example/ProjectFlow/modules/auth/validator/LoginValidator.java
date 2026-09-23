@@ -7,33 +7,33 @@ import org.springframework.stereotype.Component;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
-import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginDTO;
+
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @Component
 public class LoginValidator {
- 
-   // validate
-   public void validate(LoginDTO data) {
 
-      // email
-      if(data.email() == null || data.email().trim().isEmpty()) {
+   // email validate
+   public void emailValidate(String email) {
+      if(email == null || email.trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Email é obrigatório",
             ResponseMessages.BAD_REQUEST
          ));
       }
+   }
 
-      // password
-      if(data.password() == null || data.password().trim().isEmpty()) {
+
+   // password validate
+   public void passwordValidate(String password) {
+      if(password == null || password.trim().isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Senha é obrigatório",
             ResponseMessages.BAD_REQUEST
          ));
       }
-
    }
 
 }

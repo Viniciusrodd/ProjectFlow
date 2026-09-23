@@ -51,6 +51,7 @@ public class AuthService {
    private final UserService userService;
    private final AuthMapper authMapper;
 
+
    // constructor - dependency injection
    public AuthService(
       AuthRepository authRepository,
@@ -74,8 +75,9 @@ public class AuthService {
    // register
    @Transactional
    public RegisterResponseDTO register(RegisterDTO data) {
-      // validation
-      this.registerValidator.validate(data);
+      this.registerValidator.nameValidate(data.name());
+      this.registerValidator.emailValidate(data.email());
+      this.registerValidator.passwordValidate(data.password());
 
       // user is already register - check
       this.userService.isRegister(data.email());
@@ -99,8 +101,8 @@ public class AuthService {
 
    // login
    public LoginResponseDTO login(LoginDTO data) {
-      // validation
-      this.loginValidator.validate(data);
+      this.loginValidator.emailValidate(data.email());
+      this.loginValidator.passwordValidate(data.password());
 
       // find user by email
       UserDTO user = this.userService.getByEmail(data.email());
