@@ -4,7 +4,6 @@ package com.example.ProjectFlow.modules.project.service;
 
 // imports
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -62,7 +61,7 @@ public class ProjectMemberService {
       ProjectMembersRepository projectMembersRepository,
       ProjectMembersValidator projectMembersValidator,
       UserService userService,
-      @Lazy ProjectService projectService,
+      ProjectService projectService,
       ProjectMembersMapper projectMembersMapper
    ) {
       this.projectMembersRepository = projectMembersRepository;
@@ -76,8 +75,8 @@ public class ProjectMemberService {
    // create member participation
    @Transactional
    public ProjectMembersResponseDTO createMemberParticipation(ProjectMembersDTO data) {
-      this.projectMembersValidator.userIdValidate(data.userId());
       this.projectMembersValidator.projectIdValidate(data.projectId());
+      this.projectMembersValidator.userIdValidate(data.userId());
       this.projectMembersValidator.roleValidate(data.role());
 
       // get user data

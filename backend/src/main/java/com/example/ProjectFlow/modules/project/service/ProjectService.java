@@ -23,7 +23,6 @@ import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
-import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
@@ -33,9 +32,6 @@ import com.example.ProjectFlow.modules.organization.service.OrganizationService;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
-
-// import enums
-import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -55,7 +51,6 @@ public class ProjectService {
    private final ProjectValidator projectValidator;
    private final UserService userService;
    private final OrganizationService organizationService;
-   private final ProjectMemberService projectMemberService;
    private final ProjectMapper projectMapper;
 
 
@@ -65,14 +60,12 @@ public class ProjectService {
       ProjectValidator projectValidator,
       UserService userService,
       OrganizationService organizationService,
-      ProjectMemberService projectMemberService,
       ProjectMapper projectMapper
    ) {
       this.projectRepository = projectRepository;
       this.projectValidator = projectValidator;
       this.userService = userService;
       this.organizationService = organizationService;
-      this.projectMemberService = projectMemberService;
       this.projectMapper = projectMapper;
    }
 
@@ -95,17 +88,7 @@ public class ProjectService {
       ProjectEntity projectEntity = this.projectRepository.create(data, organization, owner);
 
       // mapping
-      ProjectResponseDTO project = this.projectMapper.toProjectResponseDTO(projectEntity);
-
-      // set project member - admin
-      ProjectMembersDTO projectMembersData = new ProjectMembersDTO(
-         project.id(),
-         owner.getId(),
-         RoleEnum.ADMIN.toString()
-      );
-      this.projectMemberService.createMemberParticipation(projectMembersData);
-
-      return project;
+      return this.projectMapper.toProjectResponseDTO(projectEntity);
    }
 
 
