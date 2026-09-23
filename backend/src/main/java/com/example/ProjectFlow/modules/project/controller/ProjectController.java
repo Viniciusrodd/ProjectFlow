@@ -28,6 +28,7 @@ import com.example.ProjectFlow.common.constants.ApiConstants;
 
 // import services
 import com.example.ProjectFlow.modules.project.service.ProjectService;
+import com.example.ProjectFlow.modules.project.service.ProjectCreationService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
@@ -48,10 +49,15 @@ public class ProjectController {
    
    // properties
    private final ProjectService projectService;
+   private final ProjectCreationService projectCreationService;
 
    // constructor - dependency injection
-   public ProjectController(ProjectService projectService) {
+   public ProjectController(
+      ProjectService projectService,
+      ProjectCreationService projectCreationService
+   ) {
       this.projectService = projectService;
+      this.projectCreationService = projectCreationService;
    }
 
 
@@ -59,7 +65,7 @@ public class ProjectController {
    @PostMapping("/project")
    @Operation(summary = "Create a project")
    public ResponseEntity<ApiResponse<ProjectResponseDTO>> createProject(@RequestBody ProjectDTO data) {
-      ProjectResponseDTO project = this.projectService.create(data);
+      ProjectResponseDTO project = this.projectCreationService.create(data);
 
       ApiResponse<ProjectResponseDTO> response = new ApiResponse.Builder<ProjectResponseDTO>()
          .success(true)

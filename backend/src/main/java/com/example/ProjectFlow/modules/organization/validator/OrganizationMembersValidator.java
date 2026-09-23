@@ -5,6 +5,7 @@ package com.example.ProjectFlow.modules.organization.validator;
 // imports
 import org.springframework.stereotype.Component;
 import java.util.UUID;
+import java.util.Arrays;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -65,9 +66,7 @@ public class OrganizationMembersValidator {
          throw MultiExceptions.badRequest(String.format(
             "%s: Papel de usuário inválido. Valores permitidos: %s, %s, %s",
             ResponseMessages.BAD_REQUEST,
-            RoleEnum.OWNER,
-            RoleEnum.ADMIN,
-            RoleEnum.MEMBER
+            Arrays.toString(RoleEnum.values())
          ));
       }
    }
