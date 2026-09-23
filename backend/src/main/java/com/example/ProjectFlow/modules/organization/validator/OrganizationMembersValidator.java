@@ -61,10 +61,11 @@ public class OrganizationMembersValidator {
          ));
       }
 
-      if(!RoleEnum.isValid(role) || RoleEnum.OWNER.getType().equalsIgnoreCase(role)) {
+      if(!RoleEnum.isValid(role)) {
          throw MultiExceptions.badRequest(String.format(
-            "%s: Papel de usuário inválido. Valores permitidos: %s, %s",
+            "%s: Papel de usuário inválido. Valores permitidos: %s, %s, %s",
             ResponseMessages.BAD_REQUEST,
+            RoleEnum.OWNER,
             RoleEnum.ADMIN,
             RoleEnum.MEMBER
          ));

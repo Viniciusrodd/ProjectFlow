@@ -28,6 +28,7 @@ import com.example.ProjectFlow.common.constants.ApiConstants;
 
 // import services
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
+import com.example.ProjectFlow.modules.organization.service.OrganizationCreationService;
 
 // import responses
 import com.example.ProjectFlow.common.responses.ApiResponse;
@@ -48,10 +49,15 @@ public class OrganizationController {
  
    // properties
    private OrganizationService organizationService;
+   private OrganizationCreationService organizationCreationService;
 
    // constructor - dependency injection
-   public OrganizationController(OrganizationService organizationService) {
+   public OrganizationController(
+      OrganizationService organizationService,
+      OrganizationCreationService organizationCreationService
+   ) {
       this.organizationService = organizationService;
+      this.organizationCreationService = organizationCreationService;
    }
 
 
@@ -61,7 +67,7 @@ public class OrganizationController {
    public ResponseEntity<ApiResponse<OrganizationResponseDTO>> createOrganization(
       @RequestBody OrganizationDTO data
    ) {
-      OrganizationResponseDTO organization = this.organizationService.create(data);
+      OrganizationResponseDTO organization = this.organizationCreationService.create(data);
 
       ApiResponse<OrganizationResponseDTO> response = new ApiResponse.Builder<OrganizationResponseDTO>()
          .success(true)
