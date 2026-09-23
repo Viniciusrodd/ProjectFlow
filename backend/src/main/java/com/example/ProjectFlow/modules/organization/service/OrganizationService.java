@@ -23,7 +23,6 @@ import com.example.ProjectFlow.modules.organization.dto.organizationDTO.Organiza
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationUpdateDTO;
-import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
@@ -38,9 +37,6 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
-// import enum
-import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
-
 // import mapper
 import com.example.ProjectFlow.modules.organization.mapper.OrganizationMapper;
 
@@ -52,7 +48,6 @@ public class OrganizationService {
    private final OrganizationRepository organizationRepository;
    private final OrganizationValidator organizationValidator;
    private final UserService userService;
-   private final OrganizationMemberService organizationMemberService;
    private final OrganizationMapper organizationMapper;
 
 
@@ -61,13 +56,11 @@ public class OrganizationService {
       OrganizationRepository organizationRepository,
       OrganizationValidator organizationValidator,
       UserService userService,
-      OrganizationMemberService organizationMemberService,
       OrganizationMapper organizationMapper
    ) {
       this.organizationRepository = organizationRepository;
       this.organizationValidator = organizationValidator;
       this.userService = userService; 
-      this.organizationMemberService = organizationMemberService;
       this.organizationMapper = organizationMapper;
    }
 
@@ -85,18 +78,7 @@ public class OrganizationService {
       // creation
       OrganizationEntity organizationEntity = this.organizationRepository.create(data, owner);
 
-      // mapping
-      OrganizationResponseDTO organization = this.organizationMapper.toOrganizationResponseDTO(organizationEntity);
-
-      // set organization member - owner
-      OrganizationMembersDTO organizationMembersData = new OrganizationMembersDTO(
-         organization.id(),
-         owner.getId(),
-         RoleEnum.OWNER.toString()
-      );
-      this.organizationMemberService.createMemberParticipation(organizationMembersData);
-
-      return organization;
+      return this.organizationMapper.toOrganizationResponseDTO(organizationEntity);
    }
 
 

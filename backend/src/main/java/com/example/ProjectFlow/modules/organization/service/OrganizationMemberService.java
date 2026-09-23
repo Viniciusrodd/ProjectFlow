@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.context.annotation.Lazy;
 
 // jakarta imports
 import jakarta.transaction.Transactional;
@@ -62,7 +61,7 @@ public class OrganizationMemberService {
       OrganizationMembersRepository organizationMembersRepository,
       OrganizationMembersValidator organizationMembersValidator,
       UserService userService,
-      @Lazy OrganizationService organizationService, // intentional cycle of circular dependency - (OrganizationService) needs to create "members", (OrganizationMemberService) needs to get "organizations".
+      OrganizationService organizationService,
       OrganizationMembersMapper organizationMembersMapper
    ) {
       this.organizationMembersRepository = organizationMembersRepository;
