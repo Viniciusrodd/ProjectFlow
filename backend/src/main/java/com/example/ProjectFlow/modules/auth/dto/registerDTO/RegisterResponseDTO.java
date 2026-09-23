@@ -17,15 +17,4 @@ public record RegisterResponseDTO (
    String email,
    LocalDateTime createdAt
 
-) {
-
-   public static RegisterResponseDTO get(UserEntity document) {
-      return new RegisterResponseDTO(
-         document.getId(),
-         document.getName(),
-         document.getEmail(),
-         document.getCreatedAt()
-      );
-   }
-
-}
+) {}
