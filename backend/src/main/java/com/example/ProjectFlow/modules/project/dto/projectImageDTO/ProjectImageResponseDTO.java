@@ -6,9 +6,6 @@ package com.example.ProjectFlow.modules.project.dto.projectImageDTO;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-// import document
-import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
-
 
 public record ProjectImageResponseDTO (
 
@@ -19,17 +16,4 @@ public record ProjectImageResponseDTO (
    Long size,
    LocalDateTime uploadDate   
 
-) {
-
-   public static ProjectImageResponseDTO get(ProjectImageDocument document) {
-      return new ProjectImageResponseDTO(
-         document.getId(),
-         document.getProjectId(),
-         document.getFileName(),
-         document.getMimeType(),
-         document.getSize(),
-         document.getUploadDate()
-      );
-   }
-
-}
+) {}

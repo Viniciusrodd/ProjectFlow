@@ -9,9 +9,6 @@ import java.time.LocalDateTime;
 // import enum
 import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 
-// import entity
-import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
-
 
 public record ProjectMembersResponseDTO (
 
@@ -20,15 +17,4 @@ public record ProjectMembersResponseDTO (
    RoleEnum role,
    LocalDateTime joinedAt
 
-) {
-
-   public static ProjectMembersResponseDTO get(ProjectMembersEntity document) {
-      return new ProjectMembersResponseDTO(
-         document.getProjectId(),
-         document.getUserId(),
-         document.getRole(),
-         document.getJoinedAt()
-      );
-   }
-
-}
+) {}
