@@ -5,7 +5,6 @@ package com.example.ProjectFlow.modules.board.repository;
 // imports
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,8 +17,6 @@ import jakarta.persistence.NoResultException;
 
 // import DTOs
 import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsDTO;
-import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsDeletedDTO;
-import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsResponseDTO;
 import com.example.ProjectFlow.modules.board.dto.boardColumnsDTO.BoardColumnsUpdateDTO;
 
 // import entity
@@ -40,7 +37,7 @@ public class BoardColumnsRepository {
 
    // create board column
    @Transactional
-   public BoardColumnsResponseDTO create(
+   public BoardColumnsEntity create(
       BoardColumnsDTO data,
       BoardEntity boardeEntity
    ) {
@@ -53,7 +50,7 @@ public class BoardColumnsRepository {
 
       this.entityManager.persist(boardColumns);
 
-      return BoardColumnsResponseDTO.get(boardColumns);
+      return boardColumns;
    }
 
 
@@ -80,8 +77,8 @@ public class BoardColumnsRepository {
 
 
    // get all board columns by board id
-   public List<BoardColumnsResponseDTO> getAllColumnsByBoardId(UUID boardId) {
-      List<BoardColumnsEntity> columnsDocument = this.entityManager
+   public List<BoardColumnsEntity> getAllColumnsByBoardId(UUID boardId) {
+      List<BoardColumnsEntity> columnsEntity = this.entityManager
          .createQuery(
             "SELECT c FROM BoardColumnsEntity c " + 
             "WHERE c.board.id = :boardId " +
@@ -91,24 +88,18 @@ public class BoardColumnsRepository {
          .setParameter("boardId", boardId)
          .getResultList();
 
-      List<BoardColumnsResponseDTO> columns = new ArrayList<>();
-
-      for(BoardColumnsEntity column : columnsDocument) {
-         columns.add(BoardColumnsResponseDTO.get(column));
-      }
-
-      return columns;
+      return columnsEntity;
    }
 
 
    // get board column by id
-   public BoardColumnsResponseDTO getColumnById(UUID id) throws NoResultException {
+   public BoardColumnsEntity getColumnById(UUID id) throws NoResultException {
       BoardColumnsEntity column = this.entityManager
          .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
          .setParameter("id", id)
          .getSingleResult();
 
-      return BoardColumnsResponseDTO.get(column);
+      return column;
    }
 
 
@@ -136,7 +127,7 @@ public class BoardColumnsRepository {
 
    // update board column
    @Transactional
-   public BoardColumnsResponseDTO update(UUID id, BoardColumnsUpdateDTO data) throws NoResultException {
+   public BoardColumnsEntity update(UUID id, BoardColumnsUpdateDTO data) throws NoResultException {
       BoardColumnsEntity column = this.entityManager
          .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
          .setParameter("id", id)
@@ -149,13 +140,13 @@ public class BoardColumnsRepository {
       Optional.ofNullable(data.position()).ifPresent(position -> column.setPosition(position));
       Optional.ofNullable(data.color()).ifPresent(color -> column.setColor(color));
 
-      return BoardColumnsResponseDTO.get(column);
+      return column;
    }
 
 
    // delete board column
    @Transactional
-   public BoardColumnsDeletedDTO delete(UUID id) throws NoResultException {
+   public BoardColumnsEntity delete(UUID id) throws NoResultException {
       BoardColumnsEntity column = this.entityManager
          .createQuery("SELECT c FROM BoardColumnsEntity c WHERE c.id = :id", BoardColumnsEntity.class)
          .setParameter("id", id)
@@ -164,7 +155,7 @@ public class BoardColumnsRepository {
       // delete
       column.setDeletedAt(LocalDateTime.now());
 
-      return BoardColumnsDeletedDTO.get(column);
+      return column;
    }
 
 
