@@ -5,9 +5,6 @@ package com.example.ProjectFlow.modules.user.dto.userDTO;
 // imports
 import java.util.UUID;
 
-// import entity
-import com.example.ProjectFlow.modules.user.entity.UserEntity;
-
 
 public record UserDTO (
    
@@ -16,15 +13,4 @@ public record UserDTO (
    String name,
    String password
 
-) {
-
-   public static UserDTO get(UserEntity document) {
-      return new UserDTO(
-         document.getId(),
-         document.getEmail(),
-         document.getName(),
-         document.getPassword()
-      );
-   }
-
-}
+) {}

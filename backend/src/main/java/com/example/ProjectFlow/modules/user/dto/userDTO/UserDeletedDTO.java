@@ -6,9 +6,6 @@ package com.example.ProjectFlow.modules.user.dto.userDTO;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-// import entity
-import com.example.ProjectFlow.modules.user.entity.UserEntity;
-
 
 public record UserDeletedDTO (
 
@@ -17,15 +14,4 @@ public record UserDeletedDTO (
    String email,
    LocalDateTime deletedAt
 
-) {
-
-   public static UserDeletedDTO get(UserEntity document) {
-      return new UserDeletedDTO(
-         document.getId(),
-         document.getName(),
-         document.getEmail(),
-         document.getDeletedAt()
-      );
-   }
-
-}
+) {}
