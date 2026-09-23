@@ -103,7 +103,7 @@ public class CommentService {
       // mapping
       List<CommentResponseDTO> comments = new ArrayList<>();
       for(CommentEntity comment : commentsEntity) {
-         comments.add(CommentResponseDTO.get(comment));
+         comments.add(this.commentMapper.toCommentResponseDTO(comment));
       }
 
       return comments;
@@ -176,7 +176,7 @@ public class CommentService {
       // mapping
       List<CommentResponseDTO> comments = new ArrayList<>();
       for(CommentEntity comment : commentsEntity) {
-         comments.add(CommentResponseDTO.get(comment));
+         comments.add(this.commentMapper.toCommentResponseDTO(comment));
       }
 
       return comments;
@@ -199,7 +199,7 @@ public class CommentService {
       // mapping
       List<CommentResponseDTO> comments = new ArrayList<>();
       for(CommentEntity comment : commentsEntity) {
-         comments.add(CommentResponseDTO.get(comment));
+         comments.add(this.commentMapper.toCommentResponseDTO(comment));
       }
 
       return comments;

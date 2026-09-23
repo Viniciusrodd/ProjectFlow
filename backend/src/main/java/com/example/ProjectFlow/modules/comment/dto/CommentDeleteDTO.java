@@ -6,9 +6,6 @@ package com.example.ProjectFlow.modules.comment.dto;
 import java.util.UUID;
 import java.time.LocalDateTime;
 
-// import entity
-import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
-
 
 public record CommentDeleteDTO (
 
@@ -18,16 +15,4 @@ public record CommentDeleteDTO (
    String content,
    LocalDateTime deletedAt
 
-) {
-   
-   public static CommentDeleteDTO get(CommentEntity document) {
-      return new CommentDeleteDTO(
-         document.getId(),
-         document.getTask().getId(),
-         document.getAuthor().getId(),
-         document.getContent(),
-         document.getDeletedAt()
-      );
-   }
-
-}
+) {}
