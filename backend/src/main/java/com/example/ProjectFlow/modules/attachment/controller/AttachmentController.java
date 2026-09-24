@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.attachment.controller;
 
+import java.util.List;
 // imports
 import java.util.UUID;
 
@@ -114,6 +115,25 @@ public class AttachmentController {
          .contentType(MediaType.parseMediaType(document.getMimeType()))
          .header("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"")
          .body(document.getBinary());
+   }
+
+
+   // get all task attachments
+   @GetMapping("/task/{taskId}/attachments")
+   @Operation(summary = "Get all task attachments data")
+   public ResponseEntity<ApiResponse<List<AttachmentResponseDTO>>> getAllTaskAttachments(
+      @PathVariable UUID taskId
+   ) {
+      List<AttachmentResponseDTO> attachments = this.attachmentService.getAllTaskAttachments(taskId);
+
+      ApiResponse<List<AttachmentResponseDTO>> response = new ApiResponse.Builder<List<AttachmentResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(attachments)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
