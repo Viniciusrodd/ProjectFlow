@@ -45,7 +45,7 @@ import com.example.ProjectFlow.modules.attachment.mapper.AttachmentMapper;
 
 
 @RestController
-@RequestMapping(ApiConstants.BASE_API_PATH + "/task/{taskId}/attachment")
+@RequestMapping(ApiConstants.BASE_API_PATH)
 public class AttachmentController {
  
    // properties
@@ -63,7 +63,7 @@ public class AttachmentController {
 
 
    // task attachment upload
-   @PostMapping(value = "/{uploadedBy}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @PostMapping(value = "/task/{taskId}/attachment/{uploadedBy}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload task attachment")
    public ResponseEntity<ApiResponse<AttachmentResponseDTO>> uploadTaskAttachment(
       @PathVariable UUID taskId,
@@ -84,12 +84,12 @@ public class AttachmentController {
 
 
    // get task attachment - infos
-   @GetMapping()
+   @GetMapping("/task/attachment/{id}")
    @Operation(summary = "Get task attachment data")
    public ResponseEntity<ApiResponse<AttachmentResponseDTO>> getTaskAttachment(
-      @PathVariable UUID taskId
+      @PathVariable String id
    ) {
-      AttachmentDocument attachmentDocument = this.attachmentService.getTaskAttachment(taskId);
+      AttachmentDocument attachmentDocument = this.attachmentService.getTaskAttachmentById(id);
       AttachmentResponseDTO attachmentData = this.attachmentMapper.toAttachmentResponseDTO(attachmentDocument);
 
       ApiResponse<AttachmentResponseDTO> response = new ApiResponse.Builder<AttachmentResponseDTO>()
@@ -104,10 +104,10 @@ public class AttachmentController {
 
 
    // get task attachment - download
-   @GetMapping(value = "/download")
+   @GetMapping(value = "/task/attachment/{id}/download")
    @Operation(summary = "Download task attachment")
-   public ResponseEntity<byte[]> getTaskAttachmentData(@PathVariable UUID taskId) {
-      AttachmentDocument document = this.attachmentService.getTaskAttachment(taskId);
+   public ResponseEntity<byte[]> getTaskAttachmentData(@PathVariable String id) {
+      AttachmentDocument document = this.attachmentService.getTaskAttachmentById(id);
 
       return ResponseEntity
          .ok()

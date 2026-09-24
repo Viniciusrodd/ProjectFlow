@@ -99,11 +99,11 @@ public class AttachmentService {
    }
 
 
-   // get task attachment
-   public AttachmentDocument getTaskAttachment(UUID taskId) {
-      this.taskService.existsById(taskId);
+   // get task attachment by id
+   public AttachmentDocument getTaskAttachmentById(String id) {
+      this.attachmentValidator.idValidate(id);
 
-      AttachmentDocument attachment = this.attachmentRepository.findByTaskId(taskId);
+      AttachmentDocument attachment = this.attachmentRepository.findById(id).orElse(null);
       if(attachment == null) {
          throw MultiExceptions.notFound(String.format(
             "%s: Anexo de tarefa não existe",
