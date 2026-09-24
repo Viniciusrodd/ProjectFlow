@@ -64,7 +64,7 @@ public class OrganizationMembersValidator {
 
       if(!RoleEnum.isValid(role)) {
          throw MultiExceptions.badRequest(String.format(
-            "%s: Papel de usuário inválido. Valores permitidos: %s, %s, %s",
+            "%s: Papel de usuário inválido. Valores permitidos: %s",
             ResponseMessages.BAD_REQUEST,
             Arrays.toString(RoleEnum.values())
          ));

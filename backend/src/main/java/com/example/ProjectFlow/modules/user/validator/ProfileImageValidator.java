@@ -21,7 +21,7 @@ public class ProfileImageValidator {
    
    // id validation
    public void idValidate(String id) {
-      if(id == null) {
+      if(id == null || id.isEmpty()) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Id da imagem é obrigatório",
             ResponseMessages.BAD_REQUEST
@@ -46,6 +46,14 @@ public class ProfileImageValidator {
          ));
       }
 
+      // filename
+      if(file.getOriginalFilename() == null || file.getOriginalFilename().isEmpty()) {
+         throw MultiExceptions.badRequest(String.format(
+            "%s: Nome de arquivo é obrigatório", 
+            ResponseMessages.BAD_REQUEST
+         ));
+      }
+
       // size
       if(file.getSize() > ValidationConstants.MAX_IMAGE_SIZE) {
          throw MultiExceptions.badRequest(String.format(
@@ -58,20 +66,22 @@ public class ProfileImageValidator {
       String mimeType = file.getContentType();
       if(mimeType == null || !Arrays.asList(ValidationConstants.ALLOWED_IMAGE_TYPES).contains(mimeType)) {
          throw MultiExceptions.badRequest(String.format(
-            "%s: Formato de imagem não suportado. Use: JPG, JPEG, PNG ou WEBP", 
-            ResponseMessages.INVALID_DATA
+            "%s: Formato de imagem não suportado. Use: %s", 
+            ResponseMessages.INVALID_DATA,
+            Arrays.toString(ValidationConstants.ALLOWED_IMAGE_TYPES)
          ));
       }
 
       // extension
       String fileName = file.getOriginalFilename();
       String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-      List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "webp");
+      List<String> allowedExtensions = Arrays.asList(ValidationConstants.ALLOWED_IMAGE_EXTENSIONS);
       
       if(!allowedExtensions.contains(extension)) {
          throw MultiExceptions.badRequest(String.format(
-            "%s: Extensão de arquivo não suportada", 
-            ResponseMessages.INVALID_DATA
+            "%s: Extensão de arquivo não suportada. Use: %s", 
+            ResponseMessages.INVALID_DATA,
+            Arrays.toString(ValidationConstants.ALLOWED_IMAGE_EXTENSIONS)
          ));
       }
    }
