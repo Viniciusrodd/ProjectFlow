@@ -98,4 +98,20 @@ public class AttachmentService {
       }
    }
 
+
+   // get task attachment
+   public AttachmentDocument getTaskAttachment(UUID taskId) {
+      this.taskService.existsById(taskId);
+
+      AttachmentDocument attachment = this.attachmentRepository.findByTaskId(taskId);
+      if(attachment == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Anexo de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return attachment;
+   }
+
 }
