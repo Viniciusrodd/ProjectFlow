@@ -2,15 +2,16 @@
 // packages
 package com.example.ProjectFlow.modules.attachment.controller;
 
-import java.util.List;
 // imports
 import java.util.UUID;
+import java.util.List;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +47,7 @@ import com.example.ProjectFlow.modules.attachment.mapper.AttachmentMapper;
 
 
 @RestController
-@RequestMapping(ApiConstants.BASE_API_PATH)
+@RequestMapping(ApiConstants.BASE_API_PATH + "/task")
 public class AttachmentController {
  
    // properties
@@ -64,7 +65,7 @@ public class AttachmentController {
 
 
    // task attachment upload
-   @PostMapping(value = "/task/{taskId}/attachment/{uploadedBy}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @PostMapping(value = "/{taskId}/attachment/{uploadedBy}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload task attachment")
    public ResponseEntity<ApiResponse<AttachmentResponseDTO>> uploadTaskAttachment(
       @PathVariable UUID taskId,
@@ -85,7 +86,7 @@ public class AttachmentController {
 
 
    // get task attachment - infos
-   @GetMapping("/task/attachment/{id}")
+   @GetMapping("/attachment/{id}")
    @Operation(summary = "Get task attachment data")
    public ResponseEntity<ApiResponse<AttachmentResponseDTO>> getTaskAttachment(
       @PathVariable String id
@@ -105,7 +106,7 @@ public class AttachmentController {
 
 
    // get task attachment - download
-   @GetMapping(value = "/task/attachment/{id}/download")
+   @GetMapping(value = "/attachment/{id}/download")
    @Operation(summary = "Download task attachment")
    public ResponseEntity<byte[]> getTaskAttachmentData(@PathVariable String id) {
       AttachmentDocument document = this.attachmentService.getTaskAttachmentById(id);
@@ -119,7 +120,7 @@ public class AttachmentController {
 
 
    // get all task attachments
-   @GetMapping("/task/{taskId}/attachments")
+   @GetMapping("/{taskId}/attachments")
    @Operation(summary = "Get all task attachments data")
    public ResponseEntity<ApiResponse<List<AttachmentResponseDTO>>> getAllTaskAttachments(
       @PathVariable UUID taskId
@@ -131,6 +132,22 @@ public class AttachmentController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(attachments)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete task attachment
+   @DeleteMapping("/attachment/{id}")
+   @Operation(summary = "Delete task attachment")
+   public ResponseEntity<ApiResponse<Void>> deleteTaskAttachment(@PathVariable String id) {
+      this.attachmentService.deleteTaskAttachment(id);
+
+      ApiResponse<Void> response = new ApiResponse.Builder<Void>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
          .build();
       
       return ResponseEntity.status(HttpStatus.OK).body(response);
