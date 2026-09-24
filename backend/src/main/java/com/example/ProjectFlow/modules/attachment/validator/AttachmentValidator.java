@@ -37,28 +37,6 @@ public class AttachmentValidator {
    }
 
 
-   // task id validation
-   public void taskIdValidate(String taskId) {
-      if(taskId == null) {
-         throw MultiExceptions.badRequest(String.format(
-            "%s: Id da tarefa é obrigatório",
-            ResponseMessages.BAD_REQUEST
-         ));
-      }
-   }
-
-
-   // uploadBy id validation
-   public void uploadedbyIdValidate(String uploadedbyId) {
-      if(uploadedbyId == null) {
-         throw MultiExceptions.badRequest(String.format(
-            "%s: Id do responsável pelo upload é obrigatório",
-            ResponseMessages.BAD_REQUEST
-         ));
-      }
-   }
-
-
    public void validate(MultipartFile file) {
       // file
       if(file == null || file.isEmpty()) {
