@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -31,6 +32,7 @@ import com.example.ProjectFlow.modules.attachment.service.AttachmentService;
 import com.example.ProjectFlow.common.responses.ApiResponse;
 
 // import document
+import com.example.ProjectFlow.modules.attachment.document.AttachmentDocument;
 
 // import DTOs
 import com.example.ProjectFlow.modules.attachment.dto.AttachmentResponseDTO;
@@ -39,23 +41,29 @@ import com.example.ProjectFlow.modules.attachment.dto.AttachmentResponseDTO;
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import mapper
+import com.example.ProjectFlow.modules.attachment.mapper.AttachmentMapper;
 
 
 @RestController
-@RequestMapping(ApiConstants.BASE_API_PATH + "/task/{taskId}/attachment/{uploadedBy}")
+@RequestMapping(ApiConstants.BASE_API_PATH + "/task/{taskId}/attachment")
 public class AttachmentController {
  
    // properties
    private final AttachmentService attachmentService;
+   private final AttachmentMapper attachmentMapper;
 
    // constructor - dependency injection
-   public AttachmentController(AttachmentService attachmentService) {
+   public AttachmentController(
+      AttachmentService attachmentService,
+      AttachmentMapper attachmentMapper
+   ) {
       this.attachmentService = attachmentService;
+      this.attachmentMapper = attachmentMapper;
    }
 
 
    // task attachment upload
-   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @PostMapping(value = "/{uploadedBy}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload task attachment")
    public ResponseEntity<ApiResponse<AttachmentResponseDTO>> uploadTaskAttachment(
       @PathVariable UUID taskId,
@@ -72,6 +80,26 @@ public class AttachmentController {
          .build();
       
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get task attachment - infos
+   @GetMapping()
+   @Operation(summary = "Get task attachment data")
+   public ResponseEntity<ApiResponse<AttachmentResponseDTO>> getTaskAttachment(
+      @PathVariable UUID taskId
+   ) {
+      AttachmentDocument attachmentDocument = this.attachmentService.getTaskAttachment(taskId);
+      AttachmentResponseDTO attachmentData = this.attachmentMapper.toAttachmentResponseDTO(attachmentDocument);
+
+      ApiResponse<AttachmentResponseDTO> response = new ApiResponse.Builder<AttachmentResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(attachmentData)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }
