@@ -138,4 +138,21 @@ public class AttachmentService {
       return attachments;
    }
 
+
+   // delete task attachment
+   public void deleteTaskAttachment(String id) {
+      this.attachmentValidator.idValidate(id);
+
+      // task attachment - validation
+      if(this.attachmentRepository.findById(id) == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Anexo de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // remove
+      this.attachmentRepository.deleteById(id);
+   }
+
 }
