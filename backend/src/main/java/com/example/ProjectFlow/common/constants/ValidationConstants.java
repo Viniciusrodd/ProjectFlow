@@ -37,6 +37,11 @@ public class ValidationConstants {
       "image/jpg", "image/jpeg", "image/png", "image/webp"
    };
 
+   // image extensions
+   public static final String[] ALLOWED_IMAGE_EXTENSIONS = {
+      "jpg", "jpeg", "png", "webp"
+   };
+
    // attachment MIME types
    public static final String[] ALLOWED_ATTACHMENT_TYPES = {
       "application/pdf", 
@@ -46,6 +51,12 @@ public class ValidationConstants {
       "application/vnd.ms-excel",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "text/plain"
+   };
+
+   // attachment extensions
+   public static final String[] ALLOWED_ATTACHMENT_EXTENSIONS = {
+      "pdf", "jpg", "jpeg", "png", "webp", 
+      "doc", "docx", "xls", "xlsx", "txt"   
    };
 
 }
