@@ -103,10 +103,7 @@ public class OrganizationImageController {
 
 
    // get organization image - download
-   @GetMapping(
-      value = "/download",
-      produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp", "image/jpg" }
-   )
+   @GetMapping(value = "/download")
    @Operation(summary = "Download organization image")
    public ResponseEntity<byte[]> getOrganizationImageData(@PathVariable UUID organizationId) {
       OrganizationImageDocument document = this.organizationImageService.getOrganizationImage(organizationId);

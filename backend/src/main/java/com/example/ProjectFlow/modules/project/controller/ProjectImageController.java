@@ -103,10 +103,7 @@ public class ProjectImageController {
 
 
    // get project image - download
-   @GetMapping(
-      value = "/download",
-      produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, "image/webp", "image/jpg" }
-   )
+   @GetMapping(value = "/download")
    @Operation(summary = "Download project image")
    public ResponseEntity<byte[]> getProjectImageData(@PathVariable UUID projectId) {
       ProjectImageDocument document = this.projectImageService.getProjectImage(projectId);
