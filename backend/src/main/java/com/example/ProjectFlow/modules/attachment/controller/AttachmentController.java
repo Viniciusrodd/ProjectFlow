@@ -102,4 +102,18 @@ public class AttachmentController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // get task attachment - download
+   @GetMapping(value = "/download")
+   @Operation(summary = "Download task attachment")
+   public ResponseEntity<byte[]> getTaskAttachmentData(@PathVariable UUID taskId) {
+      AttachmentDocument document = this.attachmentService.getTaskAttachment(taskId);
+
+      return ResponseEntity
+         .ok()
+         .contentType(MediaType.parseMediaType(document.getMimeType()))
+         .header("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"")
+         .body(document.getBinary());
+   }
+
 }
