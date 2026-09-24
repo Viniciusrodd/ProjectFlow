@@ -2,6 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.attachment.service;
 
+import java.util.ArrayList;
+import java.util.List;
 // imports
 import java.util.UUID;
 import java.io.IOException;
@@ -112,6 +114,28 @@ public class AttachmentService {
       }
 
       return attachment;
+   }
+
+
+   // get all task attachments
+   public List<AttachmentResponseDTO> getAllTaskAttachments(UUID taskId) {
+      this.taskService.existsById(taskId);
+
+      List<AttachmentDocument> attachmentsDocument = this.attachmentRepository.findAll();
+      if(attachmentsDocument.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Anexos de tarefa não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<AttachmentResponseDTO> attachments = new ArrayList<>();
+      for(AttachmentDocument attachment : attachmentsDocument) {
+         attachments.add(this.attachmentMapper.toAttachmentResponseDTO(attachment));
+      }
+
+      return attachments;
    }
 
 }
