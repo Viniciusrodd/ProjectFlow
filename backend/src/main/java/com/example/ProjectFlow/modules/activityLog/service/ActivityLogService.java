@@ -33,7 +33,7 @@ import com.example.ProjectFlow.modules.activityLog.document.ActivityLogDocument;
 // import DTO
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogResponseDTO;
-import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+
 // import mapper
 import com.example.ProjectFlow.modules.activityLog.mapper.ActivityLogMapper;
 
@@ -103,6 +103,22 @@ public class ActivityLogService {
             error.getMessage()
          ));
       }
+   }
+
+
+   // get activity log by id
+   public ActivityLogResponseDTO getById(String id) {
+      this.activityLogValidator.idValidate(id);
+
+      ActivityLogDocument document = this.activityLogRepository.findById(id).orElse(null);
+      if(document == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Anexo de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return this.activityLogMapper.toActivityLogResponseDTO(document);
    }
 
 }
