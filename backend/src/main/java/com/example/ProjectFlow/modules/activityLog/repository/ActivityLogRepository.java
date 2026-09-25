@@ -29,29 +29,29 @@ public interface ActivityLogRepository extends MongoRepository<ActivityLogDocume
    ////
 
    // exists by organization id
-   ActivityLogDocument existsByOrganizationId(UUID organizationId);
+   Boolean existsByOrganizationId(UUID organizationId);
 
    // exists by project id
-   ActivityLogDocument existsByProjectId(UUID projectId);
+   Boolean existsByProjectId(UUID projectId);
 
    // exists by task id
-   ActivityLogDocument existsByTaskId(UUID taskId);
+   Boolean existsByTaskId(UUID taskId);
 
    // exists by user id
-   ActivityLogDocument existsByUserId(UUID userId);
+   Boolean existsByUserId(UUID userId);
 
    ////
 
    // delete all by organization id
-   ActivityLogDocument deleteAllByOrganizationId(UUID organizationId);
+   void deleteAllByOrganizationId(UUID organizationId);
 
    // delete all by project id
-   ActivityLogDocument deleteAllByProjectId(UUID projectId);
+   void deleteAllByProjectId(UUID projectId);
 
    // delete all by task id
-   ActivityLogDocument deleteAllByTaskId(UUID taskId);
+   void deleteAllByTaskId(UUID taskId);
 
    // delete all by user id
-   ActivityLogDocument deleteAllByUserId(UUID userId);
+   void deleteAllByUserId(UUID userId);
 
 }
