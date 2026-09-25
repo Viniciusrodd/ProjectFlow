@@ -3,6 +3,9 @@
 package com.example.ProjectFlow.modules.activityLog.service;
 
 // imports
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -74,6 +77,9 @@ public class ActivityLogService {
    // activity log creation
    @Transactional
    public ActivityLogResponseDTO create(ActivityLogDTO data) {
+      if(data.organizationId() != null) this.organizationService.existsById(data.organizationId());
+      if(data.projectId() != null) this.projectService.existsById(data.organizationId());
+      if(data.taskId() != null) this.taskService.existsById(data.organizationId());
       this.userService.existsById(data.userId());
       this.activityLogValidator.actionValidate(data.action().toString());
       if(data.description() != null && !data.description().isEmpty()) {
@@ -113,7 +119,7 @@ public class ActivityLogService {
       ActivityLogDocument document = this.activityLogRepository.findById(id).orElse(null);
       if(document == null) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Anexo de tarefa não existe",
+            "%s: Registro de atividade não existe",
             ResponseMessages.NOT_FOUND
          ));
       }
@@ -129,7 +135,7 @@ public class ActivityLogService {
       ActivityLogDocument document = this.activityLogRepository.findById(id).orElse(null);
       if(document == null) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Anexo de tarefa não existe",
+            "%s: Registro de atividade não existe",
             ResponseMessages.NOT_FOUND
          ));
       }
@@ -145,12 +151,60 @@ public class ActivityLogService {
       boolean exist = this.activityLogRepository.existsById(id);
       if(!exist) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Anexo de tarefa não existe",
+            "%s: Registro de atividade não existe",
             ResponseMessages.NOT_FOUND
          ));
       }
 
       return exist;
+   }
+
+
+   // get all activities log by document id
+   public List<ActivityLogResponseDTO> getAllByDocumentId(UUID documentId, String document) {
+      List<ActivityLogDocument> activitiesDocument;
+
+      switch(document) {
+         // organization
+         case "o" -> { 
+            organizationService.existsById(documentId);
+            activitiesDocument = activityLogRepository.findByOrganizationId(documentId); 
+         }
+         // project
+         case "p" -> { 
+            projectService.existsById(documentId);
+            activitiesDocument = activityLogRepository.findByProjectId(documentId); 
+         }
+         // task
+         case "t" -> { 
+            taskService.existsById(documentId);
+            activitiesDocument = activityLogRepository.findByTaskId(documentId); 
+         }
+         // user
+         case "u" -> { 
+            userService.existsById(documentId);
+            activitiesDocument = activityLogRepository.findByUserId(documentId); 
+         }
+         default -> throw MultiExceptions.badRequest(
+            ResponseMessages.BAD_REQUEST + ": Tipo de documento inválido"
+         );
+      }
+
+      // empty document
+      if(activitiesDocument.isEmpty()) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Registros de atividade não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<ActivityLogResponseDTO> activities = new ArrayList<>();
+      for(ActivityLogDocument activity : activitiesDocument) {
+         activities.add(this.activityLogMapper.toActivityLogResponseDTO(activity));
+      }
+
+      return activities;
    }
 
 }
