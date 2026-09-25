@@ -2,6 +2,10 @@
 // packages
 package com.example.ProjectFlow.modules.activityLog.enums;
 
+// imports
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 
 public enum ActivityActionEnum {
    
@@ -49,6 +53,7 @@ public enum ActivityActionEnum {
    ATTACHMENT_DELETED("attachment_deleted");
 
 
+   @JsonValue
    private final String type;
 
 
@@ -60,6 +65,21 @@ public enum ActivityActionEnum {
 
    // getters
    public String getType() { return type; }
+
+
+   // convert json for enum
+   @JsonCreator
+   public static ActivityActionEnum fromType(String type) {
+      for(ActivityActionEnum action : ActivityActionEnum.values()) {
+         if(action.type.equalsIgnoreCase(type)) {
+            return action;
+         }
+      }
+
+      throw new IllegalArgumentException(
+         "Ação de atividade inválida: " + type
+      );
+   }
 
 
    // is valid
