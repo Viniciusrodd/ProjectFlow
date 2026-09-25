@@ -7,6 +7,8 @@ package com.example.ProjectFlow.modules.activityLog.controller;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -61,6 +63,23 @@ public class ActivityLogController {
          .build();
       
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+   }
+
+
+   // get activity log by id
+   @GetMapping(value = "/{id}")
+   @Operation(summary = "Get activity log")
+   public ResponseEntity<ApiResponse<ActivityLogResponseDTO>> getActivityById(@PathVariable String id) {
+      ActivityLogResponseDTO activityData = this.activityLogService.getById(id);
+
+      ApiResponse<ActivityLogResponseDTO> response = new ApiResponse.Builder<ActivityLogResponseDTO>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(activityData)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
 }

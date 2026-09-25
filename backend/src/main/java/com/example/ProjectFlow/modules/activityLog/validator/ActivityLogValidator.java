@@ -22,7 +22,7 @@ import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 public class ActivityLogValidator {
  
    // id validate
-   public void idValidate(UUID id) {
+   public void idValidate(String id) {
       if(id == null) {
          throw MultiExceptions.badRequest(String.format(
             "%s: Id é obrigatório",
