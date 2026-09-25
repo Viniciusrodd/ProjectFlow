@@ -11,6 +11,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+// import enums
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+
 
 @Document(collection = "activity_logs")
 public class ActivityLogDocument {
@@ -31,7 +34,7 @@ public class ActivityLogDocument {
    private UUID userId; // mysql ref.
 
    @Field("action")
-   private String action;
+   private ActivityActionEnum action;
 
    @Field("description")
    private String description;
@@ -40,8 +43,19 @@ public class ActivityLogDocument {
    private LocalDateTime createdAt;
 
 
-   // constructor
-   protected ActivityLogDocument() {}
+   // constructor - empty
+   public ActivityLogDocument() {}
+
+
+   // constructor - builder
+   public ActivityLogDocument(Builder builder) {
+      setOrganizationId(builder.organizationId);
+      setProjectId(builder.projectId);
+      setTaskId(builder.taskId);
+      setUserId(builder.userId);
+      setAction(builder.action);
+      setDescription(builder.description);
+   }
 
    
    // getters
@@ -50,7 +64,7 @@ public class ActivityLogDocument {
    public UUID getProjectId() { return this.projectId; }
    public UUID getTaskId() { return this.taskId; }
    public UUID getUserId() { return this.userId; }
-   public String getAction() { return this.action; }
+   public ActivityActionEnum getAction() { return this.action; }
    public String getDescription() { return this.description; }
    public LocalDateTime getCreatedAt() { return this.createdAt; }
 
@@ -61,8 +75,55 @@ public class ActivityLogDocument {
    public void setProjectId(UUID projectId) { this.projectId = projectId; }
    public void setTaskId(UUID taskId) { this.taskId = taskId; }
    public void setUserId(UUID userId) { this.userId = userId; }
-   public void setAction(String action) { this.action = action; }
+   public void setAction(ActivityActionEnum action) { this.action = action; }
    public void setDescription(String description) { this.description = description; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private UUID organizationId;
+      private UUID projectId;
+      private UUID taskId;
+      private UUID userId;
+      private ActivityActionEnum action;
+      private String description;
+
+      public Builder organizationId(UUID organizationId) {
+         this.organizationId = organizationId;
+         return this;
+      }
+
+      public Builder projectId(UUID projectId) {
+         this.projectId = projectId;
+         return this;
+      }
+
+      public Builder taskId(UUID taskId) {
+         this.taskId = taskId;
+         return this;
+      }
+
+      public Builder userId(UUID userId) {
+         this.userId = userId;
+         return this;
+      }
+
+      public Builder action(ActivityActionEnum action) {
+         this.action = action;
+         return this;
+      }
+
+      public Builder description(String description) {
+         this.description = description;
+         return this;
+      }
+
+      public ActivityLogDocument build() {
+         return new ActivityLogDocument(this);
+      }
+   }
 
 }
