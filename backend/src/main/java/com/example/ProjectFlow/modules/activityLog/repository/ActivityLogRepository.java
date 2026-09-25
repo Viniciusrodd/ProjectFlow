@@ -3,6 +3,7 @@
 package com.example.ProjectFlow.modules.activityLog.repository;
 
 // imports
+import java.util.List;
 import java.util.UUID;
 
 // mongo imports
@@ -15,16 +16,16 @@ import com.example.ProjectFlow.modules.activityLog.document.ActivityLogDocument;
 public interface ActivityLogRepository extends MongoRepository<ActivityLogDocument, String> {
  
    // find activity log by organization id
-   ActivityLogDocument findByOrganizationId(UUID organizationId);
+   List<ActivityLogDocument> findByOrganizationId(UUID organizationId);
 
    // find activity log by project id
-   ActivityLogDocument findByProjectId(UUID projectId);
+   List<ActivityLogDocument> findByProjectId(UUID projectId);
 
    // find activity log by task id
-   ActivityLogDocument findByTaskId(UUID taskId);
+   List<ActivityLogDocument> findByTaskId(UUID taskId);
 
    // find activity log by user id
-   ActivityLogDocument findByUserId(UUID userId);
+   List<ActivityLogDocument> findByUserId(UUID userId);
 
    ////
 
