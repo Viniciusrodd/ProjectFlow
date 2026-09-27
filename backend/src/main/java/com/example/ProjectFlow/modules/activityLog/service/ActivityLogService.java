@@ -78,8 +78,8 @@ public class ActivityLogService {
    @Transactional
    public ActivityLogResponseDTO create(ActivityLogDTO data) {
       if(data.organizationId() != null) this.organizationService.existsById(data.organizationId());
-      if(data.projectId() != null) this.projectService.existsById(data.organizationId());
-      if(data.taskId() != null) this.taskService.existsById(data.organizationId());
+      if(data.projectId() != null) this.projectService.existsById(data.projectId());
+      if(data.taskId() != null) this.taskService.existsById(data.taskId());
       this.userService.existsById(data.userId());
       this.activityLogValidator.actionValidate(data.action().toString());
       if(data.description() != null && !data.description().isEmpty()) {
@@ -205,6 +205,47 @@ public class ActivityLogService {
       }
 
       return activities;
+   }
+
+
+   // activities log exists by document id
+   public boolean existsByDocumentId(UUID documentId, String document) {
+      boolean exist;
+
+      switch(document) {
+         // organization
+         case "o" -> { 
+            organizationService.existsById(documentId);
+            exist = activityLogRepository.existsByOrganizationId(documentId); 
+         }
+         // project
+         case "p" -> { 
+            projectService.existsById(documentId);
+            exist = activityLogRepository.existsByProjectId(documentId); 
+         }
+         // task
+         case "t" -> { 
+            taskService.existsById(documentId);
+            exist = activityLogRepository.existsByTaskId(documentId); 
+         }
+         // user
+         case "u" -> { 
+            userService.existsById(documentId);
+            exist = activityLogRepository.existsByUserId(documentId); 
+         }
+         default -> throw MultiExceptions.badRequest(
+            ResponseMessages.BAD_REQUEST + ": Tipo de documento inválido"
+         );
+      }
+
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Registros de atividade não existem",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
    }
 
 }
