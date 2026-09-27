@@ -278,4 +278,21 @@ public class ActivityLogService {
       }
    }
 
+
+   // delete activity log
+   public void deleteActivityLog(String id) {
+      this.activityLogValidator.idValidate(id);
+
+      // activity log - validation
+      if(this.activityLogRepository.findById(id) == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Registro de atividade não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // delete
+      this.activityLogRepository.deleteById(id);
+   }
+
 }
