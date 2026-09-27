@@ -138,6 +138,22 @@ public class AttachmentController {
    }
 
 
+   // delete all attachments by task
+   @DeleteMapping("/{taskId}/attachments")
+   @Operation(summary = "Delete all attachments by task")
+   public ResponseEntity<ApiResponse<Void>> deleteAttachmentsByTaskId(@PathVariable UUID taskId) {
+      this.attachmentService.deleteByTaskId(taskId);
+
+      ApiResponse<Void> response = new ApiResponse.Builder<Void>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
    // delete task attachment
    @DeleteMapping("/attachment/{id}")
    @Operation(summary = "Delete task attachment")
