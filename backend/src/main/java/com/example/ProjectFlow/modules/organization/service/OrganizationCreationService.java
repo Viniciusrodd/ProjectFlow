@@ -10,9 +10,20 @@ import jakarta.transaction.Transactional;
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+
+// import entity
+import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
+
+// import services
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import enums
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+
+// import mapper
+import com.example.ProjectFlow.modules.organization.mapper.OrganizationMapper;
 
 
 @Service 
@@ -21,15 +32,21 @@ public class OrganizationCreationService {
    // properties
    private final OrganizationService organizationService;
    private final OrganizationMemberService organizationMemberService;
+   private final ActivityLogService activityLogService;
+   private final OrganizationMapper organizationMapper;
 
 
    // constructor - dependency injection
    public OrganizationCreationService(
       OrganizationService organizationService,
-      OrganizationMemberService organizationMemberService
+      OrganizationMemberService organizationMemberService,
+      ActivityLogService activityLogService,
+      OrganizationMapper organizationMapper
    ) {
       this.organizationService = organizationService;
       this.organizationMemberService = organizationMemberService;
+      this.activityLogService = activityLogService;
+      this.organizationMapper = organizationMapper;
    }
 
 
@@ -37,18 +54,29 @@ public class OrganizationCreationService {
    @Transactional 
    public OrganizationResponseDTO create(OrganizationDTO data) {
       // organization
-      OrganizationResponseDTO organization = this.organizationService.create(data);
+      OrganizationEntity organization = this.organizationService.create(data);
 
       // organization member - owner
       this.organizationMemberService.createMemberParticipation(
          new OrganizationMembersDTO(
-            organization.id(),
-            data.ownerId(),
+            organization.getId(),
+            organization.getOwnerId(),
             RoleEnum.OWNER.toString()
          )
       );
 
-      return organization;
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         organization.getId(),
+         null,
+         null,
+         organization.getOwnerId(),
+         ActivityActionEnum.ORGANIZATION_CREATED,
+         "Organização " + data.name() + " criada por " + organization.getOwner().getName()
+      );
+      this.activityLogService.create(activityLog);
+
+      return this.organizationMapper.toOrganizationResponseDTO(organization);
    }
 
 }

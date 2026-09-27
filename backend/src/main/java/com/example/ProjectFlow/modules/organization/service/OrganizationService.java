@@ -23,9 +23,11 @@ import com.example.ProjectFlow.modules.organization.dto.organizationDTO.Organiza
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationUpdateDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -40,6 +42,9 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 // import mapper
 import com.example.ProjectFlow.modules.organization.mapper.OrganizationMapper;
 
+// import enums
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+
 
 @Service
 public class OrganizationService {
@@ -48,6 +53,7 @@ public class OrganizationService {
    private final OrganizationRepository organizationRepository;
    private final OrganizationValidator organizationValidator;
    private final UserService userService;
+   private final ActivityLogService activityLogService;
    private final OrganizationMapper organizationMapper;
 
 
@@ -56,18 +62,20 @@ public class OrganizationService {
       OrganizationRepository organizationRepository,
       OrganizationValidator organizationValidator,
       UserService userService,
+      ActivityLogService activityLogService,
       OrganizationMapper organizationMapper
    ) {
       this.organizationRepository = organizationRepository;
       this.organizationValidator = organizationValidator;
-      this.userService = userService; 
+      this.userService = userService;
+      this.activityLogService = activityLogService;
       this.organizationMapper = organizationMapper;
    }
 
 
    // create organization
    @Transactional
-   public OrganizationResponseDTO create(OrganizationDTO data) {
+   public OrganizationEntity create(OrganizationDTO data) {
       this.organizationValidator.idValidate(data.ownerId());
       this.organizationValidator.nameValidate(data.name());
       if(!data.description().trim().isEmpty()) this.organizationValidator.descriptionValidate(data.description());
@@ -78,7 +86,7 @@ public class OrganizationService {
       // creation
       OrganizationEntity organizationEntity = this.organizationRepository.create(data, owner);
 
-      return this.organizationMapper.toOrganizationResponseDTO(organizationEntity);
+      return organizationEntity;
    }
 
 
