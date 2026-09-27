@@ -155,6 +155,23 @@ public class AttachmentService {
    }
 
 
+   // delete all attachments by task
+   public void deleteByTaskId(UUID taskId) {
+      this.taskService.existsById(taskId);
+
+      // task attachment - validation
+      if(this.attachmentRepository.findByTaskId(taskId) == null) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Anexo de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // remove
+      this.attachmentRepository.deleteAllByTaskId(taskId);
+   }
+
+
    // delete task attachment
    public void deleteTaskAttachment(String id) {
       this.attachmentValidator.idValidate(id);

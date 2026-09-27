@@ -21,4 +21,7 @@ public interface AttachmentRepository extends MongoRepository<AttachmentDocument
    // exists by task id   
    boolean existsByTaskId(UUID taskId);
 
+   // delete by task id
+   void deleteAllByTaskId(UUID taskId);
+
 }
