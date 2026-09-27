@@ -248,4 +248,34 @@ public class ActivityLogService {
       return exist;
    }
 
+
+   // delete all activities log by document id
+   public void deleteByDocumentId(UUID documentId, String document) {
+      switch(document) {
+         // organization
+         case "o" -> { 
+            organizationService.existsById(documentId);
+            activityLogRepository.deleteAllByOrganizationId(documentId); 
+         }
+         // project
+         case "p" -> { 
+            projectService.existsById(documentId);
+            activityLogRepository.deleteAllByProjectId(documentId); 
+         }
+         // task
+         case "t" -> { 
+            taskService.existsById(documentId);
+            activityLogRepository.deleteAllByTaskId(documentId); 
+         }
+         // user
+         case "u" -> { 
+            userService.existsById(documentId);
+            activityLogRepository.deleteAllByUserId(documentId); 
+         }
+         default -> throw MultiExceptions.badRequest(
+            ResponseMessages.BAD_REQUEST + ": Tipo de documento inválido"
+         );
+      }
+   }
+
 }
