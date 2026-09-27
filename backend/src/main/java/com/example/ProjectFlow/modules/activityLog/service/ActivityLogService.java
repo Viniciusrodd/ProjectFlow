@@ -3,6 +3,7 @@
 package com.example.ProjectFlow.modules.activityLog.service;
 
 // imports
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,12 +15,6 @@ import jakarta.transaction.Transactional;
 
 // import repository
 import com.example.ProjectFlow.modules.activityLog.repository.ActivityLogRepository;
-
-// import services
-import com.example.ProjectFlow.modules.organization.service.OrganizationService;
-import com.example.ProjectFlow.modules.project.service.ProjectService;
-import com.example.ProjectFlow.modules.task.service.TaskService;
-import com.example.ProjectFlow.modules.user.service.UserService;
 
 // import validator
 import com.example.ProjectFlow.modules.activityLog.validator.ActivityLogValidator;
@@ -45,10 +40,6 @@ import com.example.ProjectFlow.modules.activityLog.mapper.ActivityLogMapper;
 public class ActivityLogService {
  
    // properties
-   private final OrganizationService organizationService;
-   private final ProjectService projectService;
-   private final TaskService taskService;
-   private final UserService userService;
    private final ActivityLogRepository activityLogRepository;
    private final ActivityLogValidator activityLogValidator;
    private final ActivityLogMapper activityLogMapper;
@@ -56,18 +47,10 @@ public class ActivityLogService {
 
    // constructor - dependency injection
    public ActivityLogService(
-      OrganizationService organizationService,
-      ProjectService projectService,
-      TaskService taskService,
-      UserService userService,
       ActivityLogRepository activityLogRepository,
       ActivityLogValidator activityLogValidator,
       ActivityLogMapper activityLogMapper
    ) {
-      this.organizationService = organizationService;
-      this.projectService = projectService;
-      this.taskService = taskService;
-      this.userService = userService;
       this.activityLogRepository = activityLogRepository;
       this.activityLogValidator = activityLogValidator;
       this.activityLogMapper = activityLogMapper;
@@ -77,10 +60,6 @@ public class ActivityLogService {
    // activity log creation
    @Transactional
    public ActivityLogResponseDTO create(ActivityLogDTO data) {
-      if(data.organizationId() != null) this.organizationService.existsById(data.organizationId());
-      if(data.projectId() != null) this.projectService.existsById(data.projectId());
-      if(data.taskId() != null) this.taskService.existsById(data.taskId());
-      this.userService.existsById(data.userId());
       this.activityLogValidator.actionValidate(data.action().toString());
       if(data.description() != null && !data.description().isEmpty()) {
          this.activityLogValidator.descriptionValidate(data.description());
@@ -95,6 +74,7 @@ public class ActivityLogService {
             .userId(data.userId())
             .action(data.action())
             .description(data.description())
+            .createdAt(LocalDateTime.now())
             .build();
    
          // save document - mongodb
@@ -166,25 +146,17 @@ public class ActivityLogService {
 
       switch(document) {
          // organization
-         case "o" -> { 
-            organizationService.existsById(documentId);
-            activitiesDocument = activityLogRepository.findByOrganizationId(documentId); 
-         }
+         case "o" -> activitiesDocument = activityLogRepository.findByOrganizationId(documentId);
+         
          // project
-         case "p" -> { 
-            projectService.existsById(documentId);
-            activitiesDocument = activityLogRepository.findByProjectId(documentId); 
-         }
+         case "p" -> activitiesDocument = activityLogRepository.findByProjectId(documentId);
+         
          // task
-         case "t" -> { 
-            taskService.existsById(documentId);
-            activitiesDocument = activityLogRepository.findByTaskId(documentId); 
-         }
+         case "t" -> activitiesDocument = activityLogRepository.findByTaskId(documentId);
+         
          // user
-         case "u" -> { 
-            userService.existsById(documentId);
-            activitiesDocument = activityLogRepository.findByUserId(documentId); 
-         }
+         case "u" -> activitiesDocument = activityLogRepository.findByUserId(documentId);
+
          default -> throw MultiExceptions.badRequest(
             ResponseMessages.BAD_REQUEST + ": Tipo de documento inválido"
          );
@@ -214,25 +186,17 @@ public class ActivityLogService {
 
       switch(document) {
          // organization
-         case "o" -> { 
-            organizationService.existsById(documentId);
-            exist = activityLogRepository.existsByOrganizationId(documentId); 
-         }
+         case "o" -> exist = activityLogRepository.existsByOrganizationId(documentId);
+         
          // project
-         case "p" -> { 
-            projectService.existsById(documentId);
-            exist = activityLogRepository.existsByProjectId(documentId); 
-         }
+         case "p" -> exist = activityLogRepository.existsByProjectId(documentId);
+         
          // task
-         case "t" -> { 
-            taskService.existsById(documentId);
-            exist = activityLogRepository.existsByTaskId(documentId); 
-         }
+         case "t" -> exist = activityLogRepository.existsByTaskId(documentId);
+         
          // user
-         case "u" -> { 
-            userService.existsById(documentId);
-            exist = activityLogRepository.existsByUserId(documentId); 
-         }
+         case "u" -> exist = activityLogRepository.existsByUserId(documentId);
+
          default -> throw MultiExceptions.badRequest(
             ResponseMessages.BAD_REQUEST + ": Tipo de documento inválido"
          );
@@ -253,25 +217,17 @@ public class ActivityLogService {
    public void deleteByDocumentId(UUID documentId, String document) {
       switch(document) {
          // organization
-         case "o" -> { 
-            organizationService.existsById(documentId);
-            activityLogRepository.deleteAllByOrganizationId(documentId); 
-         }
+         case "o" -> activityLogRepository.deleteAllByOrganizationId(documentId);
+         
          // project
-         case "p" -> { 
-            projectService.existsById(documentId);
-            activityLogRepository.deleteAllByProjectId(documentId); 
-         }
+         case "p" -> activityLogRepository.deleteAllByProjectId(documentId);
+         
          // task
-         case "t" -> { 
-            taskService.existsById(documentId);
-            activityLogRepository.deleteAllByTaskId(documentId); 
-         }
+         case "t" -> activityLogRepository.deleteAllByTaskId(documentId);
+         
          // user
-         case "u" -> { 
-            userService.existsById(documentId);
-            activityLogRepository.deleteAllByUserId(documentId); 
-         }
+         case "u" -> activityLogRepository.deleteAllByUserId(documentId);
+
          default -> throw MultiExceptions.badRequest(
             ResponseMessages.BAD_REQUEST + ": Tipo de documento inválido"
          );
