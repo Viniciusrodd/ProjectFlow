@@ -55,6 +55,7 @@ public class ActivityLogDocument {
       setUserId(builder.userId);
       setAction(builder.action);
       setDescription(builder.description);
+      setCreatedAt(builder.createdAt);
    }
 
    
@@ -90,6 +91,7 @@ public class ActivityLogDocument {
       private UUID userId;
       private ActivityActionEnum action;
       private String description;
+      private LocalDateTime createdAt;
 
       public Builder organizationId(UUID organizationId) {
          this.organizationId = organizationId;
@@ -118,6 +120,11 @@ public class ActivityLogDocument {
 
       public Builder description(String description) {
          this.description = description;
+         return this;
+      }
+
+      public Builder createdAt(LocalDateTime createdAt) {
+         this.createdAt = createdAt;
          return this;
       }
 
