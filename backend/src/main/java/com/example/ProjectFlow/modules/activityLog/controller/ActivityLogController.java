@@ -125,4 +125,20 @@ public class ActivityLogController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // delete activity log
+   @DeleteMapping(value = "/{id}")
+   @Operation(summary = "Delete activity log by id")
+   public ResponseEntity<ApiResponse<Void>> deleteActivityById(@PathVariable String id) {
+      this.activityLogService.deleteActivityLog(id);
+
+      ApiResponse<Void> response = new ApiResponse.Builder<Void>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
