@@ -3,6 +3,7 @@
 package com.example.ProjectFlow.modules.attachment.repository;
 
 // imports
+import java.util.List;
 import java.util.UUID;
 
 // mongo imports
@@ -15,7 +16,7 @@ import com.example.ProjectFlow.modules.attachment.document.AttachmentDocument;
 public interface AttachmentRepository extends MongoRepository<AttachmentDocument, String> {
  
    // find attachment by task id
-   AttachmentDocument findByTaskId(UUID taskId);
+   List<AttachmentDocument> findByTaskId(UUID taskId);
 
    // exists by task id   
    boolean existsByTaskId(UUID taskId);

@@ -117,11 +117,27 @@ public class AttachmentService {
    }
 
 
+   // exist task attachments
+   public boolean existsTaskAttachment(String id) {
+      this.attachmentValidator.idValidate(id);
+
+      boolean exist = this.attachmentRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Anexo de tarefa não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
+
    // get all task attachments
    public List<AttachmentResponseDTO> getAllTaskAttachments(UUID taskId) {
       this.taskService.existsById(taskId);
 
-      List<AttachmentDocument> attachmentsDocument = this.attachmentRepository.findAll();
+      List<AttachmentDocument> attachmentsDocument = this.attachmentRepository.findByTaskId(taskId);
       if(attachmentsDocument.isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Anexos de tarefa não existem",
