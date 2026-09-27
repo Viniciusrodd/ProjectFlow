@@ -3,18 +3,18 @@
 package com.example.ProjectFlow.modules.activityLog.controller;
 
 // imports
+import java.util.List;
+import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
-import java.util.UUID;
 
 // http imports
 import org.springframework.http.HttpStatus;
@@ -101,6 +101,25 @@ public class ActivityLogController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(activitiesData)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete all activities log by document id
+   @DeleteMapping(value = "/{documentId}/document")
+   @Operation(summary = "Delete all activities log by document id")
+   public ResponseEntity<ApiResponse<Void>> deleteActivitiesByDocumentId(
+      @PathVariable UUID documentId,
+      @RequestParam String doc
+   ) {
+      this.activityLogService.deleteByDocumentId(documentId, doc);
+
+      ApiResponse<Void> response = new ApiResponse.Builder<Void>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
          .build();
       
       return ResponseEntity.status(HttpStatus.OK).body(response);
