@@ -20,12 +20,14 @@ import com.example.ProjectFlow.modules.project.validator.ProjectMembersValidator
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.MemberByProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersResponseDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -34,6 +36,7 @@ import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import enums
 import com.example.ProjectFlow.modules.project.enums.RoleEnum;
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -53,6 +56,7 @@ public class ProjectMemberService {
    private final ProjectMembersValidator projectMembersValidator;
    private final ProjectService projectService;
    private final UserService userService;
+   private final ActivityLogService activityLogService;
    private final ProjectMembersMapper projectMembersMapper;
 
 
@@ -62,12 +66,14 @@ public class ProjectMemberService {
       ProjectMembersValidator projectMembersValidator,
       UserService userService,
       ProjectService projectService,
+      ActivityLogService activityLogService,
       ProjectMembersMapper projectMembersMapper
    ) {
       this.projectMembersRepository = projectMembersRepository;
       this.projectMembersValidator = projectMembersValidator;
       this.userService = userService;
       this.projectService = projectService;
+      this.activityLogService = activityLogService;
       this.projectMembersMapper = projectMembersMapper;
    }
 
@@ -88,6 +94,17 @@ public class ProjectMemberService {
       // creation
       ProjectMembersEntity projectMembersEntity = this.projectMembersRepository.createMemberParticipation(data, user, project);
    
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         null,
+         projectMembersEntity.getProjectId(), 
+         null, 
+         user.getId(),
+         ActivityActionEnum.PROJECT_MEMBER_ADDED,
+         "Participação do usuário: " + projectMembersEntity.getUser().getName() + ", adicionada ao projeto: " + projectMembersEntity.getProject().getName() + ", como: " + projectMembersEntity.getRole()
+      );
+      this.activityLogService.create(activityLog);
+
       return this.projectMembersMapper.toProjectMembersResponseDTO(projectMembersEntity);
    }
 
@@ -294,6 +311,17 @@ public class ProjectMemberService {
          // update
          ProjectMembersEntity memberEntity = this.projectMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
 
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null,
+            memberEntity.getProjectId(), 
+            null, 
+            memberEntity.getUserId(),
+            ActivityActionEnum.PROJECT_MEMBER_ROLE_UPDATED,
+            "Papel do usuário: " + memberEntity.getUser().getName() + ", do projeto: " + memberEntity.getProject().getName() + ", atualizado para: " + memberEntity.getRole()
+         );
+         this.activityLogService.create(activityLog);
+         
          return this.projectMembersMapper.toProjectMembersResponseDTO(memberEntity);
       }
       catch (NoResultException error) {
@@ -319,6 +347,17 @@ public class ProjectMemberService {
 
          // remove
          ProjectMembersEntity memberEntity = this.projectMembersRepository.removeParticipation(id);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null,
+            memberEntity.getProjectId(), 
+            null, 
+            memberEntity.getUserId(),
+            ActivityActionEnum.PROJECT_MEMBER_REMOVED,
+            "Participação do usuário: " + memberEntity.getUser().getName() + ", removida do projeto: " + memberEntity.getProject().getName()
+         );
+         this.activityLogService.create(activityLog);
 
          return this.projectMembersMapper.toProjectMembersDeletedDTO(memberEntity);
       }

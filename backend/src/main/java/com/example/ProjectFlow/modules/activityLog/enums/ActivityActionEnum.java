@@ -16,8 +16,8 @@ public enum ActivityActionEnum {
    ORGANIZATION_LOGO_UPDATED("organization_logo_updated"),
    ORGANIZATION_LOGO_REMOVED("organization_logo_removed"),
    ORGANIZATION_MEMBER_ADDED("organization_member_added"),
-   ORGANIZATION_MEMBER_REMOVED("organization_member_removed"),
    ORGANIZATION_MEMBER_ROLE_UPDATED("organization_member_role_updated"),
+   ORGANIZATION_MEMBER_REMOVED("organization_member_removed"),
 
    // project
    PROJECT_CREATED("project_created"),
@@ -26,6 +26,7 @@ public enum ActivityActionEnum {
    PROJECT_LOGO_UPDATED("project_logo_updated"),
    PROJECT_LOGO_REMOVED("project_logo_removed"),
    PROJECT_MEMBER_ADDED("project_member_added"),
+   PROJECT_MEMBER_ROLE_UPDATED("project_member_role_updated"),
    PROJECT_MEMBER_REMOVED("project_member_removed"),
 
    // task
