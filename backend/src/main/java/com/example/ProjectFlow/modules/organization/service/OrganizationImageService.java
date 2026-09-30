@@ -34,7 +34,10 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 // import document
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
 import com.example.ProjectFlow.modules.organization.dto.organizationImageDTO.OrganizationImageResponseDTO;
+
+// import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
+
 // import mapper
 import com.example.ProjectFlow.modules.organization.mapper.OrganizationImageMapper;
 
@@ -104,7 +107,7 @@ public class OrganizationImageService {
             organizationEntity.getId(),
             null, null, null,
             ActivityActionEnum.ORGANIZATION_LOGO_UPDATED,
-            "Logo da organização: " + organizationEntity.getName() + " - atualizada"
+            "Logo da organização: " + organizationEntity.getName() + ", atualizada"
          );
          this.activityLogService.create(activityLog);
 
@@ -175,7 +178,7 @@ public class OrganizationImageService {
          organizationEntity.getId(),
          null, null, null,
          ActivityActionEnum.ORGANIZATION_LOGO_REMOVED,
-         "Logo da organização: " + organizationEntity.getName() + " - removida"
+         "Logo da organização: " + organizationEntity.getName() + ", removida"
       );
       this.activityLogService.create(activityLog);
    }

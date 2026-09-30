@@ -233,7 +233,7 @@ public class OrganizationService {
             organizationEntity.getId(),
             null, null, null,
             ActivityActionEnum.ORGANIZATION_UPDATED,
-            "Organização: " + organizationEntity.getName() + " - atualizada"
+            "Organização: " + organizationEntity.getName() + ", atualizada"
          );
          this.activityLogService.create(activityLog);
 
@@ -261,7 +261,7 @@ public class OrganizationService {
             organizationEntity.getId(),
             null, null, null,
             ActivityActionEnum.ORGANIZATION_DELETED,
-            "Organização: " + organizationEntity.getName() + " - deletada"
+            "Organização: " + organizationEntity.getName() + ", deletada"
          );
          this.activityLogService.create(activityLog);
 

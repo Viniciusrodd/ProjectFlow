@@ -20,12 +20,14 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationMember
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MemberByOrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -34,6 +36,7 @@ import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import enums
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -53,6 +56,7 @@ public class OrganizationMemberService {
    private final OrganizationMembersValidator organizationMembersValidator;
    private final UserService userService;
    private final OrganizationService organizationService;
+   private final ActivityLogService activityLogService;
    private final OrganizationMembersMapper organizationMembersMapper;
    
 
@@ -62,12 +66,14 @@ public class OrganizationMemberService {
       OrganizationMembersValidator organizationMembersValidator,
       UserService userService,
       OrganizationService organizationService,
+      ActivityLogService activityLogService,
       OrganizationMembersMapper organizationMembersMapper
    ) {
       this.organizationMembersRepository = organizationMembersRepository;
       this.organizationMembersValidator = organizationMembersValidator;
       this.userService = userService;
       this.organizationService = organizationService;
+      this.activityLogService = activityLogService;
       this.organizationMembersMapper = organizationMembersMapper;
    }
 
@@ -88,6 +94,16 @@ public class OrganizationMemberService {
       // creation
       OrganizationMembersEntity organizationMembersEntity = this.organizationMembersRepository.createMemberParticipation(data, user, organization);
    
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         organizationMembersEntity.getOrganizationId(),
+         null, null, 
+         user.getId(),
+         ActivityActionEnum.ORGANIZATION_MEMBER_ADDED,
+         "Participação do usuário: " + organizationMembersEntity.getUser().getName() + ", adicionada á organização: " + organizationMembersEntity.getOrganization().getName() + ", como: " + organizationMembersEntity.getRole()
+      );
+      this.activityLogService.create(activityLog);
+
       return this.organizationMembersMapper.toOrganizationMembersResponseDTO(organizationMembersEntity);
    }
 
@@ -298,6 +314,16 @@ public class OrganizationMemberService {
          // update
          OrganizationMembersEntity memberEntity = this.organizationMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
          
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            memberEntity.getOrganizationId(),
+            null, null, 
+            memberEntity.getUserId(),
+            ActivityActionEnum.ORGANIZATION_MEMBER_ROLE_UPDATED,
+            "Papel do usuário: " + memberEntity.getUser().getName() + ", da organização: " + memberEntity.getOrganization().getName() + ", atualizado para: " + memberEntity.getRole()
+         );
+         this.activityLogService.create(activityLog);
+         
          return this.organizationMembersMapper.toOrganizationMembersResponseDTO(memberEntity);
       }
       catch (NoResultException error) {
@@ -323,6 +349,16 @@ public class OrganizationMemberService {
 
          // remove
          OrganizationMembersEntity memberEntity = this.organizationMembersRepository.removeParticipation(id);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            memberEntity.getOrganizationId(),
+            null, null, 
+            memberEntity.getUserId(),
+            ActivityActionEnum.ORGANIZATION_MEMBER_REMOVED,
+            "Participação do usuário: " + memberEntity.getUser().getName() + ", removida da organização: " + memberEntity.getOrganization().getName()
+         );
+         this.activityLogService.create(activityLog);
       
          return this.organizationMembersMapper.toOrganizationMembersDeletedDTO(memberEntity);
       }
