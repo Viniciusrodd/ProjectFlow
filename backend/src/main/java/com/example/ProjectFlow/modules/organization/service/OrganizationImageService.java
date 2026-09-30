@@ -19,6 +19,12 @@ import com.example.ProjectFlow.modules.organization.repository.OrganizationImage
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationImageValidator;
 
+// import DTOs
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+
+// import services
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
+
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -28,9 +34,12 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 // import document
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
 import com.example.ProjectFlow.modules.organization.dto.organizationImageDTO.OrganizationImageResponseDTO;
-
+import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 // import mapper
 import com.example.ProjectFlow.modules.organization.mapper.OrganizationImageMapper;
+
+// import enums
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 
 @Service
@@ -39,6 +48,7 @@ public class OrganizationImageService {
    // properties
    private final OrganizationImageRepository organizationImageRepository;
    private final OrganizationService organizationService;
+   private final ActivityLogService activityLogService;
    private final OrganizationImageValidator organizationImageValidator;
    private final OrganizationImageMapper organizationImageMapper;
    
@@ -47,11 +57,13 @@ public class OrganizationImageService {
    public OrganizationImageService(
       OrganizationImageRepository organizationImageRepository,
       OrganizationService organizationService,
+      ActivityLogService activityLogService,
       OrganizationImageValidator organizationImageValidator,
       OrganizationImageMapper organizationImageMapper
    ) {
       this.organizationImageRepository = organizationImageRepository;
       this.organizationService = organizationService;
+      this.activityLogService = activityLogService;
       this.organizationImageValidator = organizationImageValidator;
       this.organizationImageMapper = organizationImageMapper;
    }
@@ -60,7 +72,6 @@ public class OrganizationImageService {
    // organization image upload
    @Transactional
    public OrganizationImageResponseDTO uploadOrganizationImage(UUID organizationId, MultipartFile file) {
-      this.organizationService.existsById(organizationId);
       this.organizationImageValidator.validate(file);
 
       try {
@@ -84,6 +95,18 @@ public class OrganizationImageService {
          
          // update organization image id - mysql
          this.organizationService.updateLogoImageId(organizationId, savedDocument.getId());
+
+         // get organization
+         OrganizationEntity organizationEntity = this.organizationService.getEntityById(organizationId);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            organizationEntity.getId(),
+            null, null, null,
+            ActivityActionEnum.ORGANIZATION_LOGO_UPDATED,
+            "Logo da organização: " + organizationEntity.getName() + " - atualizada"
+         );
+         this.activityLogService.create(activityLog);
 
          // return saved document
          return this.organizationImageMapper.toOrganizationImageResponseDTO(savedDocument);
@@ -130,8 +153,6 @@ public class OrganizationImageService {
 
    // delete organization image
    public void deleteOrganizationImage(UUID organizationId) {
-      this.organizationService.existsById(organizationId);
-
       // organization image existence - validation
       if(this.organizationImageRepository.findByOrganizationId(organizationId) == null) {
          throw MultiExceptions.notFound(String.format(
@@ -145,6 +166,18 @@ public class OrganizationImageService {
 
       // delete organization image - mongodb
       this.organizationImageRepository.deleteByOrganizationId(organizationId);
+
+      // get organization
+      OrganizationEntity organizationEntity = this.organizationService.getEntityById(organizationId);
+
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         organizationEntity.getId(),
+         null, null, null,
+         ActivityActionEnum.ORGANIZATION_LOGO_REMOVED,
+         "Logo da organização: " + organizationEntity.getName() + " - removida"
+      );
+      this.activityLogService.create(activityLog);
    }
 
 }
