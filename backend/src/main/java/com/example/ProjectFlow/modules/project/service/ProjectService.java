@@ -267,7 +267,7 @@ public class ProjectService {
             projectEntity.getId(), 
             null, null,
             ActivityActionEnum.PROJECT_UPDATED,
-            "Projeto: " + projectEntity.getName() + " atualizada"
+            "Projeto: " + projectEntity.getName() + " atualizado"
          );
          this.activityLogService.create(activityLog);
 
@@ -296,7 +296,7 @@ public class ProjectService {
             projectEntity.getId(), 
             null, null,
             ActivityActionEnum.PROJECT_DELETED,
-            "Projeto: " + projectEntity.getName() + " deletada"
+            "Projeto: " + projectEntity.getName() + " deletado"
          );
          this.activityLogService.create(activityLog);
 

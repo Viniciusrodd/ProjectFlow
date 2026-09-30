@@ -22,6 +22,7 @@ import com.example.ProjectFlow.modules.task.validator.TasksValidator;
 import com.example.ProjectFlow.modules.project.service.ProjectService;
 import com.example.ProjectFlow.modules.board.service.BoardColumnService;
 import com.example.ProjectFlow.modules.user.service.UserService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -35,6 +36,7 @@ import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -44,6 +46,9 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import mapper
 import com.example.ProjectFlow.modules.task.mapper.TaskMapper;
+
+// import enums
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 
 @Service
@@ -55,6 +60,7 @@ public class TaskService {
    private final ProjectService projectService;
    private final BoardColumnService boardColumnService;
    private final UserService userService;
+   private final ActivityLogService activityLogService;
    private final TaskMapper taskMapper;
 
 
@@ -65,6 +71,7 @@ public class TaskService {
       ProjectService projectService,
       BoardColumnService boardColumnService,
       UserService userService,
+      ActivityLogService activityLogService,
       TaskMapper taskMapper
    ) {
       this.taskRepository = taskRepository;
@@ -72,6 +79,7 @@ public class TaskService {
       this.projectService = projectService;
       this.boardColumnService = boardColumnService;
       this.userService = userService;
+      this.activityLogService = activityLogService;
       this.taskMapper = taskMapper;
    }
 
@@ -97,9 +105,20 @@ public class TaskService {
       UserEntity owner = this.userService.getEntityById(data.ownerId());
 
       // creation
-      TasksEntity tasksEntity = this.taskRepository.create(data, project, column, owner);
+      TasksEntity taskEntity = this.taskRepository.create(data, project, column, owner);
 
-      return this.taskMapper.toTasksResponseDTO(tasksEntity);
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         null, 
+         null, 
+         taskEntity.getId(),
+         taskEntity.getOwner().getId(),
+         ActivityActionEnum.TASK_CREATED,
+         "Tarefa do projeto: " + taskEntity.getProject().getName() + ", criada por: " + project.getOwner().getName()
+      );
+      this.activityLogService.create(activityLog);
+
+      return this.taskMapper.toTasksResponseDTO(taskEntity);
    }
 
 
@@ -255,6 +274,17 @@ public class TaskService {
       try {
          TasksEntity taskEntity = this.taskRepository.updateColumn(id, boardColumnEntity);
 
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, 
+            null, 
+            taskEntity.getId(),
+            taskEntity.getOwner().getId(),
+            ActivityActionEnum.TASK_POSITION_UPDATED,
+            "Posição da tarefa atualizada para: " + taskEntity.getBoardColumn().getPosition() + ", por: " + taskEntity.getOwner().getName()
+         );
+         this.activityLogService.create(activityLog);
+
          return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
       }
       catch (NoResultException error) {
@@ -275,6 +305,17 @@ public class TaskService {
       try {
          TasksEntity taskEntity = this.taskRepository.update(id, data);
 
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, 
+            null, 
+            taskEntity.getId(),
+            null,
+            ActivityActionEnum.TASK_UPDATED,
+            "Tarefa atualizada"
+         );
+         this.activityLogService.create(activityLog);
+
          return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
       }
       catch (NoResultException error) {
@@ -294,6 +335,17 @@ public class TaskService {
       try {
          TasksEntity taskEntity = this.taskRepository.taskComplete(id);
 
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, 
+            null, 
+            taskEntity.getId(),
+            null,
+            ActivityActionEnum.TASK_COMPLETED,
+            "Tarefa completada"
+         );
+         this.activityLogService.create(activityLog);
+
          return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
       }
       catch (NoResultException error) {
@@ -312,6 +364,17 @@ public class TaskService {
 
       try {
          TasksEntity taskEntity = this.taskRepository.delete(id);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, 
+            null, 
+            taskEntity.getId(),
+            null,
+            ActivityActionEnum.TASK_DELETED,
+            "Tarefa deletada"
+         );
+         this.activityLogService.create(activityLog);
 
          return this.taskMapper.toTasksDeletedDTO(taskEntity);
       }

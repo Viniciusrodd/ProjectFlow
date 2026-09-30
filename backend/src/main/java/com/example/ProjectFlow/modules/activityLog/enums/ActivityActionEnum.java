@@ -31,7 +31,9 @@ public enum ActivityActionEnum {
 
    // task
    TASK_CREATED("task_created"),
+   TASK_POSITION_UPDATED("task_position_updated"),
    TASK_UPDATED("task_updated"),
+   TASK_COMPLETED("task_completed"),
    TASK_DELETED("task_deleted"),
    
    // task label
@@ -41,8 +43,6 @@ public enum ActivityActionEnum {
    // task checklist
    TASK_CHECKLIST_CREATED("task_checklist_created"),
    TASK_CHECKLIST_UPDATED("task_checklist_updated"),
-   TASK_POSITION_UPDATED("task_position_updated"),
-   TASK_COMPLETED("task_completed"),
    
    // comment
    COMMENT_CREATED("comment_created"),
