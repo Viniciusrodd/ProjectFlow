@@ -23,10 +23,12 @@ import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -42,6 +44,9 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 // import mapper
 import com.example.ProjectFlow.modules.project.mapper.ProjectMapper;
 
+// import enum
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+
 
 @Service
 public class ProjectService {
@@ -51,6 +56,7 @@ public class ProjectService {
    private final ProjectValidator projectValidator;
    private final UserService userService;
    private final OrganizationService organizationService;
+   private final ActivityLogService activityLogService;
    private final ProjectMapper projectMapper;
 
 
@@ -60,19 +66,21 @@ public class ProjectService {
       ProjectValidator projectValidator,
       UserService userService,
       OrganizationService organizationService,
+      ActivityLogService activityLogService,
       ProjectMapper projectMapper
    ) {
       this.projectRepository = projectRepository;
       this.projectValidator = projectValidator;
       this.userService = userService;
       this.organizationService = organizationService;
+      this.activityLogService = activityLogService;
       this.projectMapper = projectMapper;
    }
 
 
    // project creation
    @Transactional
-   public ProjectResponseDTO create(ProjectDTO data) {
+   public ProjectEntity create(ProjectDTO data) {
       this.projectValidator.ownerIdValidate(data.ownerId());
       this.projectValidator.organizationIdValidate(data.organizationId());
       this.projectValidator.nameValidate(data.name());
@@ -88,7 +96,7 @@ public class ProjectService {
       ProjectEntity projectEntity = this.projectRepository.create(data, organization, owner);
 
       // mapping
-      return this.projectMapper.toProjectResponseDTO(projectEntity);
+      return projectEntity;
    }
 
 
@@ -253,6 +261,16 @@ public class ProjectService {
       try {
          ProjectEntity projectEntity = this.projectRepository.update(id, data);
 
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, 
+            projectEntity.getId(), 
+            null, null,
+            ActivityActionEnum.PROJECT_UPDATED,
+            "Projeto: " + projectEntity.getName() + " atualizada"
+         );
+         this.activityLogService.create(activityLog);
+
          return this.projectMapper.toProjectResponseDTO(projectEntity);
       }
       catch (NoResultException error) {
@@ -271,6 +289,16 @@ public class ProjectService {
 
       try {
          ProjectEntity projectEntity = this.projectRepository.delete(id);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, 
+            projectEntity.getId(), 
+            null, null,
+            ActivityActionEnum.PROJECT_DELETED,
+            "Projeto: " + projectEntity.getName() + " deletada"
+         );
+         this.activityLogService.create(activityLog);
 
          return this.projectMapper.toProjectDeletedDTO(projectEntity);
       }
