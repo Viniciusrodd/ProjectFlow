@@ -228,6 +228,15 @@ public class OrganizationService {
       try {
          OrganizationEntity organizationEntity = this.organizationRepository.update(id, data);
 
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            organizationEntity.getId(),
+            null, null, null,
+            ActivityActionEnum.ORGANIZATION_UPDATED,
+            "Organização " + organizationEntity.getName() + " atualizada"
+         );
+         this.activityLogService.create(activityLog);
+
          return this.organizationMapper.toOrganizationResponseDTO(organizationEntity);
       }
       catch (NoResultException error) {
@@ -246,6 +255,15 @@ public class OrganizationService {
 
       try {
          OrganizationEntity organizationEntity = this.organizationRepository.delete(id);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            organizationEntity.getId(),
+            null, null, null,
+            ActivityActionEnum.ORGANIZATION_DELETED,
+            "Organização " + organizationEntity.getName() + " deletada"
+         );
+         this.activityLogService.create(activityLog);
 
          return this.organizationMapper.toOrganizationDeletedDTO(organizationEntity);
       }

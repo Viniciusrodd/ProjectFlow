@@ -68,8 +68,7 @@ public class OrganizationCreationService {
       // activity log - registering
       ActivityLogDTO activityLog = new ActivityLogDTO(
          organization.getId(),
-         null,
-         null,
+         null, null,
          organization.getOwnerId(),
          ActivityActionEnum.ORGANIZATION_CREATED,
          "Organização " + data.name() + " criada por " + organization.getOwner().getName()
