@@ -107,7 +107,7 @@ public class OrganizationImageService {
             organizationEntity.getId(),
             null, null, null,
             ActivityActionEnum.ORGANIZATION_LOGO_UPDATED,
-            "Logo da organização: " + organizationEntity.getName() + ", atualizada"
+            "Imagem da organização: " + organizationEntity.getName() + ", atualizada"
          );
          this.activityLogService.create(activityLog);
 
@@ -178,7 +178,7 @@ public class OrganizationImageService {
          organizationEntity.getId(),
          null, null, null,
          ActivityActionEnum.ORGANIZATION_LOGO_REMOVED,
-         "Logo da organização: " + organizationEntity.getName() + ", removida"
+         "Imagem da organização: " + organizationEntity.getName() + ", removida"
       );
       this.activityLogService.create(activityLog);
    }

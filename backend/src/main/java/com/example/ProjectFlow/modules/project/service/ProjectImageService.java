@@ -16,6 +16,9 @@ import jakarta.transaction.Transactional;
 // import repository
 import com.example.ProjectFlow.modules.project.repository.ProjectImageRepository;
 
+// import services
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
+
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectImageValidator;
 
@@ -30,9 +33,16 @@ import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
 
 // import DTO
 import com.example.ProjectFlow.modules.project.dto.projectImageDTO.ProjectImageResponseDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+
+// import entity
+import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 
 // import mapper
 import com.example.ProjectFlow.modules.project.mapper.ProjectImageMapper;
+
+// import enums
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 
 @Service
@@ -40,6 +50,7 @@ public class ProjectImageService {
  
    // properties
    private final ProjectService projectService;
+   private final ActivityLogService activityLogService;
    private final ProjectImageRepository projectImageRepository;
    private final ProjectImageValidator projectImageValidator;
    private final ProjectImageMapper projectImageMapper;
@@ -48,11 +59,13 @@ public class ProjectImageService {
    // constructor - dependency injection
    public ProjectImageService(
       ProjectService projectService,
+      ActivityLogService activityLogService,
       ProjectImageRepository projectImageRepository,
       ProjectImageValidator projectImageValidator,
       ProjectImageMapper projectImageMapper
    ) {
       this.projectService = projectService;
+      this.activityLogService = activityLogService;
       this.projectImageRepository = projectImageRepository;
       this.projectImageValidator = projectImageValidator;
       this.projectImageMapper = projectImageMapper;
@@ -62,7 +75,6 @@ public class ProjectImageService {
    // project image upload
    @Transactional
    public ProjectImageResponseDTO uploadProjectImage(UUID projectId, MultipartFile file) {
-      this.projectService.existsById(projectId);
       this.projectImageValidator.validate(file);
 
       try {
@@ -86,6 +98,18 @@ public class ProjectImageService {
 
          // update project image id - mysql
          this.projectService.updateLogoImageId(projectId, savedDocument.getId());
+
+         // get project
+         ProjectEntity projectEntity = this.projectService.getEntityById(projectId);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            projectEntity.getId(),
+            null, null, null,
+            ActivityActionEnum.PROJECT_LOGO_UPDATED,
+            "Imagem do projeto: " + projectEntity.getName() + ", atualizada"
+         );
+         this.activityLogService.create(activityLog);
 
          // return saved document
          return this.projectImageMapper.toProjectImageResponseDTO(savedDocument);
@@ -132,8 +156,6 @@ public class ProjectImageService {
 
    // delete project image
    public void deleteProjectImage(UUID projectId) {
-      this.projectService.existsById(projectId);
-      
       // project image existence - validation
       if(this.projectImageRepository.findByProjectId(projectId) == null) {
          throw MultiExceptions.notFound(String.format(
@@ -147,6 +169,18 @@ public class ProjectImageService {
 
       // delete project image - mongodb
       this.projectImageRepository.deleteByProjectId(projectId);
+
+      // get project
+      ProjectEntity projectEntity = this.projectService.getEntityById(projectId);
+
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         projectEntity.getId(),
+         null, null, null,
+         ActivityActionEnum.PROJECT_LOGO_REMOVED,
+         "Imagem do projeto: " + projectEntity.getName() + ", removida"
+      );
+      this.activityLogService.create(activityLog);
    }
 
 }
