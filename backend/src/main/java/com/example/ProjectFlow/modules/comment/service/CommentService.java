@@ -2,8 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.comment.service;
 
-import java.util.ArrayList;
 // imports
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -21,11 +21,13 @@ import com.example.ProjectFlow.modules.comment.validator.CommentValidator;
 // import service
 import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.modules.user.service.UserService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.comment.dto.CommentDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentDeleteDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentResponseDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
@@ -41,6 +43,9 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 // import mapper
 import com.example.ProjectFlow.modules.comment.mapper.CommentMapper;
 
+// import enums
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+
 
 @Service
 public class CommentService {
@@ -50,6 +55,7 @@ public class CommentService {
    private final CommentValidator commentValidator;
    private final TaskService taskService;
    private final UserService userService;
+   private final ActivityLogService activityLogService;
    private final CommentMapper commentMapper;
 
 
@@ -59,12 +65,14 @@ public class CommentService {
       CommentValidator commentValidator,
       TaskService taskService,
       UserService userService,
+      ActivityLogService activityLogService,
       CommentMapper commentMapper
    ) {
       this.commentRepository = commentRepository;
       this.commentValidator = commentValidator;
       this.taskService = taskService;
       this.userService = userService;
+      this.activityLogService = activityLogService;
       this.commentMapper = commentMapper;
    }
 
@@ -84,6 +92,17 @@ public class CommentService {
 
       // creation
       CommentEntity commentEntity = this.commentRepository.create(data, task, user);
+
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         null, null, null,
+         commentEntity.getId(), 
+         null,
+         commentEntity.getAuthor().getId(),
+         ActivityActionEnum.COMMENT_CREATED,
+         "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", criado por: " + commentEntity.getAuthor().getName()
+      );
+      this.activityLogService.create(activityLog);
 
       return this.commentMapper.toCommentResponseDTO(commentEntity);
    }
@@ -215,6 +234,17 @@ public class CommentService {
       try {
          CommentEntity commentEntity = this.commentRepository.updateContent(id, content);
 
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, null, null,
+            commentEntity.getId(), 
+            null,
+            commentEntity.getAuthor().getId(),
+            ActivityActionEnum.COMMENT_UPDATED,
+            "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", atualizado por: " + commentEntity.getAuthor().getName()
+         );
+         this.activityLogService.create(activityLog);
+
          return this.commentMapper.toCommentResponseDTO(commentEntity);
       }
       catch(NoResultException error) {
@@ -233,6 +263,17 @@ public class CommentService {
 
       try {
          CommentEntity commentEntity = this.commentRepository.delete(id);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, null, null,
+            commentEntity.getId(), 
+            null,
+            commentEntity.getAuthor().getId(),
+            ActivityActionEnum.COMMENT_DELETED,
+            "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", deletado por: " + commentEntity.getAuthor().getName()
+         );
+         this.activityLogService.create(activityLog);
 
          return this.commentMapper.toCommentDeleteDTO(commentEntity);
       }
