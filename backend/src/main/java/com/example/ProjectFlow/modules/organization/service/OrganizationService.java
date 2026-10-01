@@ -231,7 +231,7 @@ public class OrganizationService {
          // activity log - registering
          ActivityLogDTO activityLog = new ActivityLogDTO(
             organizationEntity.getId(),
-            null, null, null,
+            null, null, null, null, null,
             ActivityActionEnum.ORGANIZATION_UPDATED,
             "Organização: " + organizationEntity.getName() + " atualizada"
          );
@@ -259,7 +259,7 @@ public class OrganizationService {
          // activity log - registering
          ActivityLogDTO activityLog = new ActivityLogDTO(
             organizationEntity.getId(),
-            null, null, null,
+            null, null, null, null, null,
             ActivityActionEnum.ORGANIZATION_DELETED,
             "Organização: " + organizationEntity.getName() + " deletada"
          );

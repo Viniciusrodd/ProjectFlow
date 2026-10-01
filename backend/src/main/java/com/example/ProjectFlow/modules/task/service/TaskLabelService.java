@@ -20,12 +20,14 @@ import com.example.ProjectFlow.modules.task.validator.TaskLabelsValidator;
 
 // import service
 import com.example.ProjectFlow.modules.labels.service.LabelService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsDeletedDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
@@ -41,6 +43,9 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 // import mapper
 import com.example.ProjectFlow.modules.task.mapper.TaskLabelsMapper;
 
+// import enums
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+
 
 @Service
 public class TaskLabelService {
@@ -50,6 +55,7 @@ public class TaskLabelService {
    private final TaskLabelsValidator taskLabelsValidator;
    private final TaskService taskService;
    private final LabelService labelService;
+   private final ActivityLogService activityLogService;
    private final TaskLabelsMapper taskLabelsMapper;
 
 
@@ -59,12 +65,14 @@ public class TaskLabelService {
       TaskLabelsValidator taskLabelsValidator,
       TaskService taskService,
       LabelService labelService,
+      ActivityLogService activityLogService,
       TaskLabelsMapper taskLabelsMapper
    ) {
       this.taskLabelsRepository = taskLabelsRepository;
       this.taskLabelsValidator = taskLabelsValidator;
       this.taskService = taskService;
       this.labelService = labelService;
+      this.activityLogService = activityLogService;
       this.taskLabelsMapper = taskLabelsMapper;
    }
 
@@ -86,6 +94,16 @@ public class TaskLabelService {
 
       // creation
       TaskLabelsEntity taskLabelsEntity = this.taskLabelsRepository.create(task, label);
+
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         null, null, 
+         taskLabelsEntity.getTask().getId(),
+         null, null, null,
+         ActivityActionEnum.TASK_LABEL_ADDED,
+         "Etiqueta de tarefa: " + taskLabelsEntity.getLabel().getName() + ", criada"
+      );
+      this.activityLogService.create(activityLog);
 
       return this.taskLabelsMapper.toTaskLabelsResponseDTO(taskLabelsEntity);
    }
@@ -199,6 +217,16 @@ public class TaskLabelService {
 
       try {
          TaskLabelsEntity taskLabelsEntity = this.taskLabelsRepository.removeRelation(id);
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, null, 
+            taskLabelsEntity.getTask().getId(),
+            null, null, null,
+            ActivityActionEnum.TASK_LABEL_REMOVED,
+            "Etiqueta de tarefa: " + taskLabelsEntity.getLabel().getName() + ", removida"
+         );
+         this.activityLogService.create(activityLog);
 
          return this.taskLabelsMapper.toTaskLabelsDeletedDTO(taskLabelsEntity);
       }

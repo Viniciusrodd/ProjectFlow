@@ -97,7 +97,7 @@ public class OrganizationMemberService {
       // activity log - registering
       ActivityLogDTO activityLog = new ActivityLogDTO(
          organizationMembersEntity.getOrganizationId(),
-         null, null, 
+         null, null, null, null,
          user.getId(),
          ActivityActionEnum.ORGANIZATION_MEMBER_ADDED,
          "Participação do usuário: " + organizationMembersEntity.getUser().getName() + ", adicionada á organização: " + organizationMembersEntity.getOrganization().getName() + ", como: " + organizationMembersEntity.getRole()
@@ -317,7 +317,7 @@ public class OrganizationMemberService {
          // activity log - registering
          ActivityLogDTO activityLog = new ActivityLogDTO(
             memberEntity.getOrganizationId(),
-            null, null, 
+            null, null, null, null,
             memberEntity.getUserId(),
             ActivityActionEnum.ORGANIZATION_MEMBER_ROLE_UPDATED,
             "Papel do usuário: " + memberEntity.getUser().getName() + ", da organização: " + memberEntity.getOrganization().getName() + ", atualizado para: " + memberEntity.getRole()
@@ -353,7 +353,7 @@ public class OrganizationMemberService {
          // activity log - registering
          ActivityLogDTO activityLog = new ActivityLogDTO(
             memberEntity.getOrganizationId(),
-            null, null, 
+            null, null, null, null,
             memberEntity.getUserId(),
             ActivityActionEnum.ORGANIZATION_MEMBER_REMOVED,
             "Participação do usuário: " + memberEntity.getUser().getName() + ", removida da organização: " + memberEntity.getOrganization().getName()

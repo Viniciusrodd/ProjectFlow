@@ -105,7 +105,7 @@ public class OrganizationImageService {
          // activity log - registering
          ActivityLogDTO activityLog = new ActivityLogDTO(
             organizationEntity.getId(),
-            null, null, null,
+            null, null, null, null, null,
             ActivityActionEnum.ORGANIZATION_LOGO_UPDATED,
             "Imagem da organização: " + organizationEntity.getName() + ", atualizada"
          );
@@ -176,7 +176,7 @@ public class OrganizationImageService {
       // activity log - registering
       ActivityLogDTO activityLog = new ActivityLogDTO(
          organizationEntity.getId(),
-         null, null, null,
+         null, null, null, null, null,
          ActivityActionEnum.ORGANIZATION_LOGO_REMOVED,
          "Imagem da organização: " + organizationEntity.getName() + ", removida"
       );

@@ -69,7 +69,7 @@ public class ProjectCreationService {
       ActivityLogDTO activityLog = new ActivityLogDTO(
          null, 
          project.getId(), 
-         null,
+         null, null, null,
          project.getOwnerId(),
          ActivityActionEnum.PROJECT_CREATED,
          "Projeto: " + project.getName() + ", criado por: " + project.getOwner().getName()

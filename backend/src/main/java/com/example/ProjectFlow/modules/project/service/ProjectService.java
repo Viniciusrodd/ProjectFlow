@@ -265,7 +265,7 @@ public class ProjectService {
          ActivityLogDTO activityLog = new ActivityLogDTO(
             null, 
             projectEntity.getId(), 
-            null, null,
+            null, null, null, null,
             ActivityActionEnum.PROJECT_UPDATED,
             "Projeto: " + projectEntity.getName() + " atualizado"
          );
@@ -294,7 +294,7 @@ public class ProjectService {
          ActivityLogDTO activityLog = new ActivityLogDTO(
             null, 
             projectEntity.getId(), 
-            null, null,
+            null, null, null, null,
             ActivityActionEnum.PROJECT_DELETED,
             "Projeto: " + projectEntity.getName() + " deletado"
          );

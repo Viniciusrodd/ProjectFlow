@@ -106,7 +106,7 @@ public class ProjectImageService {
          ActivityLogDTO activityLog = new ActivityLogDTO(
             null,
             projectEntity.getId(), 
-            null, null,
+            null, null, null, null,
             ActivityActionEnum.PROJECT_LOGO_UPDATED,
             "Imagem do projeto: " + projectEntity.getName() + ", atualizada"
          );
@@ -178,7 +178,7 @@ public class ProjectImageService {
       ActivityLogDTO activityLog = new ActivityLogDTO(
          null,
          projectEntity.getId(), 
-         null, null,
+         null, null, null, null,
          ActivityActionEnum.PROJECT_LOGO_REMOVED,
          "Imagem do projeto: " + projectEntity.getName() + ", removida"
       );

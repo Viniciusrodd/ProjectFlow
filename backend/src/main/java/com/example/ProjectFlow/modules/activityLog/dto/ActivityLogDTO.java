@@ -14,6 +14,8 @@ public record ActivityLogDTO (
    UUID organizationId,
    UUID projectId,
    UUID taskId,
+   UUID commentId,
+   UUID attachmentId,
    UUID userId,
    ActivityActionEnum action,
    String description

@@ -98,7 +98,7 @@ public class ProjectMemberService {
       ActivityLogDTO activityLog = new ActivityLogDTO(
          null,
          projectMembersEntity.getProjectId(), 
-         null, 
+         null, null, null,
          user.getId(),
          ActivityActionEnum.PROJECT_MEMBER_ADDED,
          "Participação do usuário: " + projectMembersEntity.getUser().getName() + ", adicionada ao projeto: " + projectMembersEntity.getProject().getName() + ", como: " + projectMembersEntity.getRole()
@@ -315,7 +315,7 @@ public class ProjectMemberService {
          ActivityLogDTO activityLog = new ActivityLogDTO(
             null,
             memberEntity.getProjectId(), 
-            null, 
+            null, null, null,
             memberEntity.getUserId(),
             ActivityActionEnum.PROJECT_MEMBER_ROLE_UPDATED,
             "Papel do usuário: " + memberEntity.getUser().getName() + ", do projeto: " + memberEntity.getProject().getName() + ", atualizado para: " + memberEntity.getRole()
@@ -352,7 +352,7 @@ public class ProjectMemberService {
          ActivityLogDTO activityLog = new ActivityLogDTO(
             null,
             memberEntity.getProjectId(), 
-            null, 
+            null, null, null,
             memberEntity.getUserId(),
             ActivityActionEnum.PROJECT_MEMBER_REMOVED,
             "Participação do usuário: " + memberEntity.getUser().getName() + ", removida do projeto: " + memberEntity.getProject().getName()
