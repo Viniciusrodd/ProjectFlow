@@ -109,13 +109,12 @@ public class TaskService {
 
       // activity log - registering
       ActivityLogDTO activityLog = new ActivityLogDTO(
-         null, 
-         null, 
+         null, null, 
          taskEntity.getId(),
          null, null,
          taskEntity.getOwner().getId(),
          ActivityActionEnum.TASK_CREATED,
-         "Tarefa do projeto: " + taskEntity.getProject().getName() + ", criada por: " + project.getOwner().getName()
+         "Tarefa: " + taskEntity.getTitle() + ", do projeto: " + taskEntity.getProject().getName() + ", criada por: " + project.getOwner().getName()
       );
       this.activityLogService.create(activityLog);
 
@@ -282,7 +281,7 @@ public class TaskService {
             null, null,
             taskEntity.getOwner().getId(),
             ActivityActionEnum.TASK_POSITION_UPDATED,
-            "Posição da tarefa atualizada para: " + taskEntity.getBoardColumn().getPosition() + ", por: " + taskEntity.getOwner().getName()
+            "Posição da tarefa: " + taskEntity.getTitle() + ", atualizada para: " + taskEntity.getBoardColumn().getPosition() + ", por: " + taskEntity.getOwner().getName()
          );
          this.activityLogService.create(activityLog);
 
@@ -312,7 +311,7 @@ public class TaskService {
             taskEntity.getId(),
             null, null, null,
             ActivityActionEnum.TASK_UPDATED,
-            "Tarefa atualizada"
+            "Tarefa: " + taskEntity.getTitle() + ", atualizada"
          );
          this.activityLogService.create(activityLog);
 
@@ -341,7 +340,7 @@ public class TaskService {
             taskEntity.getId(),
             null, null, null,
             ActivityActionEnum.TASK_COMPLETED,
-            "Tarefa completada"
+            "Tarefa: " + taskEntity.getTitle() + ", completada"
          );
          this.activityLogService.create(activityLog);
 
@@ -370,7 +369,7 @@ public class TaskService {
             taskEntity.getId(),
             null, null, null,
             ActivityActionEnum.TASK_DELETED,
-            "Tarefa deletada"
+            "Tarefa: " + taskEntity.getTitle() + ", deletada"
          );
          this.activityLogService.create(activityLog);
 

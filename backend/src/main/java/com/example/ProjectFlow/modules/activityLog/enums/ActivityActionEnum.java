@@ -43,6 +43,7 @@ public enum ActivityActionEnum {
    // task checklist
    TASK_CHECKLIST_CREATED("task_checklist_created"),
    TASK_CHECKLIST_UPDATED("task_checklist_updated"),
+   TASK_CHECKLIST_REMOVED("task_checklist_removed"),
    
    // comment
    COMMENT_CREATED("comment_created"),
