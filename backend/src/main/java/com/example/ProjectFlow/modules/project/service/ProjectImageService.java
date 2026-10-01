@@ -108,7 +108,7 @@ public class ProjectImageService {
             projectEntity.getId(), 
             null, null, null, null,
             ActivityActionEnum.PROJECT_LOGO_UPDATED,
-            "Imagem do projeto: " + projectEntity.getName() + ", atualizada"
+            "Imagem do projeto: " + projectEntity.getName() + ", criada"
          );
          this.activityLogService.create(activityLog);
 

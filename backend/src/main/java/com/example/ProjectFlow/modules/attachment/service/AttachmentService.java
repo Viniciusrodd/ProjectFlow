@@ -20,6 +20,10 @@ import com.example.ProjectFlow.modules.attachment.repository.AttachmentRepositor
 // import services
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.task.service.TaskService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
+
+// import entity
+import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import validator
 import com.example.ProjectFlow.modules.attachment.validator.AttachmentValidator;
@@ -35,9 +39,13 @@ import com.example.ProjectFlow.modules.attachment.document.AttachmentDocument;
 
 // import DTO
 import com.example.ProjectFlow.modules.attachment.dto.AttachmentResponseDTO;
+import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import mapper
 import com.example.ProjectFlow.modules.attachment.mapper.AttachmentMapper;
+
+// import enums
+import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 
 @Service 
@@ -46,6 +54,7 @@ public class AttachmentService {
    // properties
    private final UserService userService;
    private final TaskService taskService;
+   private final ActivityLogService activityLogService;
    private final AttachmentRepository attachmentRepository;
    private final AttachmentValidator attachmentValidator;
    private final AttachmentMapper attachmentMapper;
@@ -55,12 +64,14 @@ public class AttachmentService {
    public AttachmentService(
       UserService userService,
       TaskService taskService,
+      ActivityLogService activityLogService,
       AttachmentRepository attachmentRepository,
       AttachmentValidator attachmentValidator,
       AttachmentMapper attachmentMapper
    ) {
       this.userService = userService;
       this.taskService = taskService;
+      this.activityLogService = activityLogService;
       this.attachmentRepository = attachmentRepository;
       this.attachmentValidator = attachmentValidator;
       this.attachmentMapper = attachmentMapper;
@@ -70,7 +81,6 @@ public class AttachmentService {
    // task attachment upload
    @Transactional 
    public AttachmentResponseDTO uploadAttachment(UUID taskId, UUID uploadedBy, MultipartFile file) {
-      this.taskService.existsById(taskId);
       this.userService.existsById(uploadedBy);
       this.attachmentValidator.validate(file);
 
@@ -88,6 +98,21 @@ public class AttachmentService {
 
          // save document - mongodb
          AttachmentDocument savedDocument = this.attachmentRepository.save(document);
+
+         // get task
+         TasksEntity taskEntity = this.taskService.getEntityById(taskId); 
+
+         // activity log - registering
+         ActivityLogDTO activityLog = new ActivityLogDTO(
+            null, null, 
+            taskEntity.getId(), 
+            null,
+            UUID.fromString(savedDocument.getId()), 
+            null,
+            ActivityActionEnum.ATTACHMENT_UPLOADED,
+            "Anexo da tarefa: " + taskEntity.getTitle() + ", criado"
+         );
+         this.activityLogService.create(activityLog);
 
          return this.attachmentMapper.toAttachmentResponseDTO(savedDocument);
       }
@@ -157,18 +182,29 @@ public class AttachmentService {
 
    // delete all attachments by task
    public void deleteByTaskId(UUID taskId) {
-      this.taskService.existsById(taskId);
-
       // task attachment - validation
-      if(this.attachmentRepository.findByTaskId(taskId) == null) {
+      if(this.attachmentRepository.findByTaskId(taskId).isEmpty()) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Anexo de tarefa não existe",
+            "%s: Anexos de tarefa não existe",
             ResponseMessages.NOT_FOUND
          ));
       }
 
       // remove
       this.attachmentRepository.deleteAllByTaskId(taskId);
+
+      // get task
+      TasksEntity taskEntity = this.taskService.getEntityById(taskId); 
+
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         null, null, 
+         taskEntity.getId(), 
+         null, null, null,
+         ActivityActionEnum.ATTACHMENT_DELETED,
+         "Anexos da tarefa: " + taskEntity.getTitle() + ", deletados"
+      );
+      this.activityLogService.create(activityLog);
    }
 
 
@@ -186,6 +222,22 @@ public class AttachmentService {
 
       // remove
       this.attachmentRepository.deleteById(id);
+
+      // get task
+      UUID taskId = this.getTaskAttachmentById(id).getTaskId();
+      TasksEntity taskEntity = this.taskService.getEntityById(taskId);
+
+      // activity log - registering
+      ActivityLogDTO activityLog = new ActivityLogDTO(
+         null, null, 
+         taskId, 
+         null, 
+         UUID.fromString(id), 
+         null,
+         ActivityActionEnum.ATTACHMENT_DELETED,
+         "Anexo da tarefa: " + taskEntity.getTitle() + ", deletado"
+      );
+      this.activityLogService.create(activityLog);
    }
 
 }
