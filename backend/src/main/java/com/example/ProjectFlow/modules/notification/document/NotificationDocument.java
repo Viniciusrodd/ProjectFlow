@@ -34,8 +34,18 @@ public class NotificationDocument {
    private LocalDateTime createdAt;
 
 
-   // constructor
-   protected NotificationDocument() {}
+   // constructor - empty
+   public NotificationDocument() {}
+
+
+   // constructor - builder
+   public NotificationDocument(Builder builder) {
+      setUserId(builder.userId);
+      setTitle(builder.title);
+      setMessage(builder.message);
+      setRead(builder.read);
+      setCreatedAt(builder.createdAt);
+   }
 
 
    // getters
@@ -49,9 +59,50 @@ public class NotificationDocument {
    // setters
    public void setId(String id) { this.id = id; }
    public void setUserId(UUID userId) { this.userId = userId; }
-   public void setTitleId(String title) { this.title = title; }
-   public void setMessageId(String message) { this.message = message; }
+   public void setTitle(String title) { this.title = title; }
+   public void setMessage(String message) { this.message = message; }
    public void setRead(boolean read) { this.read = read; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+
+   // builder
+
+
+   public static class Builder {
+      private UUID userId;
+      private String title;
+      private String message;
+      private boolean read;
+      private LocalDateTime createdAt;
+
+      public Builder userId(UUID userId) {
+         this.userId = userId;
+         return this;
+      }
+
+      public Builder title(String title) {
+         this.title = title;
+         return this;
+      }
+
+      public Builder message(String message) {
+         this.message = message;
+         return this;
+      }
+
+      public Builder read(boolean read) {
+         this.read = read;
+         return this;
+      }
+
+      public Builder createdAt(LocalDateTime createdAt) {
+         this.createdAt = createdAt;
+         return this;
+      }
+
+      public NotificationDocument build() {
+         return new NotificationDocument(this);
+      }
+   }
 
 }
