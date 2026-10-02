@@ -9,41 +9,35 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum NotificationTitleEnum {
  
-   // organization
-   ORGANIZATION_MEMBER_ADDED("membro_adicionado_a_organizacao"),
-   ORGANIZATION_MEMBER_ROLE_UPDATED("permissao_do_membro_da_organizacao_atualizada"),
-   ORGANIZATION_MEMBER_REMOVED("membro_removido_da_organizacao"),
+   // organização
+   MEMBRO_ADICIONADO_A_ORGANIZACAO("membro_adicionado_a_organizacao"),
+   PERMISSAO_DO_MEMBRO_DA_ORGANIZACAO_ATUALIZADA("permissao_do_membro_da_organizacao_atualizada"),
+   MEMBRO_REMOVIDO_DA_ORGANIZACAO("membro_removido_da_organizacao"),
 
+   // projeto
+   MEMBRO_ADICIONADO_AO_PROJETO("membro_adicionado_ao_projeto"),
+   PERMISSAO_DO_MEMBRO_DO_PROJETO_ATUALIZADA("permissao_do_membro_do_projeto_atualizada"),
+   MEMBRO_REMOVIDO_DO_PROJETO("membro_removido_do_projeto"),
 
-   // project
-   PROJECT_MEMBER_ADDED("membro_adicionado_ao_projeto"),
-   PROJECT_MEMBER_ROLE_UPDATED("permissao_do_membro_do_projeto_atualizada"),
-   PROJECT_MEMBER_REMOVED("membro_removido_do_projeto"),
+   // tarefa
+   TAREFA_ATRIBUIDA("tarefa_atribuida"),
+   STATUS_DA_TAREFA_ATUALIZADO("status_da_tarefa_atualizado"),
+   TAREFA_CONCLUIDA("tarefa_concluida"),
+   TAREFA_EXCLUIDA("tarefa_excluida"),
 
+   // etiqueta da tarefa
+   ETIQUETA_DA_TAREFA_ADICIONADA("etiqueta_da_tarefa_adicionada"),
+   ETIQUETA_DA_TAREFA_REMOVIDA("etiqueta_da_tarefa_removida"),
 
-   // task
-   TASK_ASSIGNED("tarefa_atribuida"),
-   TASK_STATUS_UPDATED("status_da_tarefa_atualizado"),
-   TASK_COMPLETED("tarefa_concluida"),
-   TASK_DELETED("tarefa_excluida"),
+   // checklist da tarefa
+   CHECKLIST_DA_TAREFA_ATUALIZADO("checklist_da_tarefa_atualizado"),
 
+   // comentário
+   COMENTARIO_ADICIONADO_A_TAREFA("comentario_adicionado_a_tarefa"),
 
-   // task label
-   TASK_LABEL_ADDED("etiqueta_da_tarefa_adicionada"),
-   TASK_LABEL_REMOVED("etiqueta_da_tarefa_removida"),
-
-
-   // task checklist
-   TASK_CHECKLIST_UPDATED("checklist_da_tarefa_atualizado"),
-
-
-   // comment
-   TASK_COMMENT_CREATED("comentario_adicionado_a_tarefa"),
-
-
-   // attachment
-   TASK_ATTACHMENT_UPLOADED("comentario_adicionado_a_tarefa"),
-   TASK_ATTACHMENT_DELETED("anexo_removido_da_tarefa");
+   // anexo
+   ANEXO_ADICIONADO_A_TAREFA("anexo_adicionado_a_tarefa"),
+   ANEXO_REMOVIDO_DA_TAREFA("anexo_removido_da_tarefa");
 
 
    @JsonValue
