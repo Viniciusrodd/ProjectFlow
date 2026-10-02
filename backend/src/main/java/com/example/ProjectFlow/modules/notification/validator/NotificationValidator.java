@@ -47,15 +47,6 @@ public class NotificationValidator {
             ResponseMessages.BAD_REQUEST
          ));
       }
-
-      if(title.length() < ValidationConstants.MIN_TITLE_LENGTH || title.length() > ValidationConstants.MAX_TITLE_LENGTH) {
-         throw MultiExceptions.invalid(String.format(
-            "%s: Título deve estar entre %d e %d caracteres",
-            ResponseMessages.INVALID_DATA,
-            ValidationConstants.MIN_TITLE_LENGTH,
-            ValidationConstants.MAX_TITLE_LENGTH
-         ));
-      }
    }
 
 

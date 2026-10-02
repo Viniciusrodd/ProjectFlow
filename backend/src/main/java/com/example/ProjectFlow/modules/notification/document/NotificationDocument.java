@@ -11,6 +11,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+// import enums
+import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
+
 
 @Document(collection = "notifications")
 public class NotificationDocument {
@@ -22,7 +25,7 @@ public class NotificationDocument {
    private UUID userId; // mysql ref.
 
    @Field("title")
-   private String title;
+   private NotificationTitleEnum title;
 
    @Field("message")
    private String message;
@@ -51,7 +54,7 @@ public class NotificationDocument {
    // getters
    public String getId() { return this.id; }
    public UUID getUserId() { return this.userId; }
-   public String getTitle() { return this.title; }
+   public NotificationTitleEnum getTitle() { return this.title; }
    public String getMessage() { return this.message; }
    public boolean getRead() { return this.read; }
    public LocalDateTime getCreatedAt() { return this.createdAt; }
@@ -59,7 +62,7 @@ public class NotificationDocument {
    // setters
    public void setId(String id) { this.id = id; }
    public void setUserId(UUID userId) { this.userId = userId; }
-   public void setTitle(String title) { this.title = title; }
+   public void setTitle(NotificationTitleEnum title) { this.title = title; }
    public void setMessage(String message) { this.message = message; }
    public void setRead(boolean read) { this.read = read; }
    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
@@ -70,7 +73,7 @@ public class NotificationDocument {
 
    public static class Builder {
       private UUID userId;
-      private String title;
+      private NotificationTitleEnum title;
       private String message;
       private boolean read;
       private LocalDateTime createdAt;
@@ -80,7 +83,7 @@ public class NotificationDocument {
          return this;
       }
 
-      public Builder title(String title) {
+      public Builder title(NotificationTitleEnum title) {
          this.title = title;
          return this;
       }
