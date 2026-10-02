@@ -99,7 +99,7 @@ public class CommentService {
          commentEntity.getId(), 
          null,
          commentEntity.getAuthor().getId(),
-         ActivityActionEnum.COMMENT_CREATED,
+         ActivityActionEnum.COMENTARIO_DA_TAREFA_CRIADO,
          "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", criado por: " + commentEntity.getAuthor().getName()
       );
       this.activityLogService.create(activityLog);
@@ -240,7 +240,7 @@ public class CommentService {
             commentEntity.getId(), 
             null,
             commentEntity.getAuthor().getId(),
-            ActivityActionEnum.COMMENT_UPDATED,
+            ActivityActionEnum.COMENTARIO_DA_TAREFA_ATUALIZADO,
             "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", atualizado por: " + commentEntity.getAuthor().getName()
          );
          this.activityLogService.create(activityLog);
@@ -270,7 +270,7 @@ public class CommentService {
             commentEntity.getId(), 
             null,
             commentEntity.getAuthor().getId(),
-            ActivityActionEnum.COMMENT_DELETED,
+            ActivityActionEnum.COMENTARIO_DA_TAREFA_REMOVIDO,
             "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", deletado por: " + commentEntity.getAuthor().getName()
          );
          this.activityLogService.create(activityLog);

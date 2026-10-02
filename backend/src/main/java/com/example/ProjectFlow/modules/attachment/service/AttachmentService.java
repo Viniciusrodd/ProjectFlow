@@ -109,7 +109,7 @@ public class AttachmentService {
             null,
             UUID.fromString(savedDocument.getId()), 
             null,
-            ActivityActionEnum.ATTACHMENT_UPLOADED,
+            ActivityActionEnum.ANEXO_DA_TAREFA_ADICIONADO,
             "Anexo da tarefa: " + taskEntity.getTitle() + ", criado"
          );
          this.activityLogService.create(activityLog);
@@ -201,7 +201,7 @@ public class AttachmentService {
          null, null, 
          taskEntity.getId(), 
          null, null, null,
-         ActivityActionEnum.ATTACHMENT_DELETED,
+         ActivityActionEnum.ANEXO_DA_TAREFA_REMOVIDO,
          "Anexos da tarefa: " + taskEntity.getTitle() + ", deletados"
       );
       this.activityLogService.create(activityLog);
@@ -234,7 +234,7 @@ public class AttachmentService {
          null, 
          UUID.fromString(id), 
          null,
-         ActivityActionEnum.ATTACHMENT_DELETED,
+         ActivityActionEnum.ANEXO_DA_TAREFA_REMOVIDO,
          "Anexo da tarefa: " + taskEntity.getTitle() + ", deletado"
       );
       this.activityLogService.create(activityLog);

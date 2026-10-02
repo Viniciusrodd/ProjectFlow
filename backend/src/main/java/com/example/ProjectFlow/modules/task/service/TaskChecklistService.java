@@ -93,7 +93,7 @@ public class TaskChecklistService {
          null, null, 
          taskChecklistEntity.getTask().getId(),
          null, null, null,
-         ActivityActionEnum.TASK_CHECKLIST_CREATED,
+         ActivityActionEnum.CHECKLIST_DA_TAREFA_CRIADO,
          "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", criado na posição: " + taskChecklistEntity.getPosition()
       );
       this.activityLogService.create(activityLog);
@@ -226,7 +226,7 @@ public class TaskChecklistService {
             null, null, 
             taskChecklistEntity.getTask().getId(),
             null, null, null,
-            ActivityActionEnum.TASK_CHECKLIST_UPDATED,
+            ActivityActionEnum.CHECKLIST_DA_TAREFA_ATUALIZADO,
             "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", atualizado"
          );
          this.activityLogService.create(activityLog);
@@ -255,7 +255,7 @@ public class TaskChecklistService {
             null, null, 
             taskChecklistEntity.getTask().getId(),
             null, null, null,
-            ActivityActionEnum.TASK_CHECKLIST_UPDATED,
+            ActivityActionEnum.CHECKLIST_DA_TAREFA_ATUALIZADO,
             "Campo 'completed' do item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", atualizado"
          );
          this.activityLogService.create(activityLog);
@@ -284,7 +284,7 @@ public class TaskChecklistService {
             null, null, 
             taskChecklistEntity.getTask().getId(),
             null, null, null,
-            ActivityActionEnum.TASK_CHECKLIST_REMOVED,
+            ActivityActionEnum.CHECKLIST_DA_TAREFA_REMOVIDO,
             "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", removido"
          );
          this.activityLogService.create(activityLog);

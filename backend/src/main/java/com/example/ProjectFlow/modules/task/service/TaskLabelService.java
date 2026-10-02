@@ -100,7 +100,7 @@ public class TaskLabelService {
          null, null, 
          taskLabelsEntity.getTask().getId(),
          null, null, null,
-         ActivityActionEnum.TASK_LABEL_ADDED,
+         ActivityActionEnum.ETIQUETA_DA_TAREFA_ADICIONADA,
          "Etiqueta: " + taskLabelsEntity.getLabel().getName() + ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + ", criada"
       );
       this.activityLogService.create(activityLog);
@@ -223,7 +223,7 @@ public class TaskLabelService {
             null, null, 
             taskLabelsEntity.getTask().getId(),
             null, null, null,
-            ActivityActionEnum.TASK_LABEL_REMOVED,
+            ActivityActionEnum.ETIQUETA_DA_TAREFA_REMOVIDA,
             "Etiqueta: " + taskLabelsEntity.getLabel().getName() + ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + ", removida"
          );
          this.activityLogService.create(activityLog);

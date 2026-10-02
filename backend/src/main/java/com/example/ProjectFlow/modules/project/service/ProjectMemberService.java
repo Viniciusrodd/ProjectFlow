@@ -100,7 +100,7 @@ public class ProjectMemberService {
          projectMembersEntity.getProjectId(), 
          null, null, null,
          user.getId(),
-         ActivityActionEnum.PROJECT_MEMBER_ADDED,
+         ActivityActionEnum.MEMBRO_ADICIONADO_AO_PROJETO,
          "Participação do usuário: " + projectMembersEntity.getUser().getName() + ", adicionada ao projeto: " + projectMembersEntity.getProject().getName() + ", como: " + projectMembersEntity.getRole()
       );
       this.activityLogService.create(activityLog);
@@ -317,7 +317,7 @@ public class ProjectMemberService {
             memberEntity.getProjectId(), 
             null, null, null,
             memberEntity.getUserId(),
-            ActivityActionEnum.PROJECT_MEMBER_ROLE_UPDATED,
+            ActivityActionEnum.PAPEL_DO_MEMBRO_DO_PROJETO_ATUALIZADA,
             "Papel do usuário: " + memberEntity.getUser().getName() + ", do projeto: " + memberEntity.getProject().getName() + ", atualizado para: " + memberEntity.getRole()
          );
          this.activityLogService.create(activityLog);
@@ -354,7 +354,7 @@ public class ProjectMemberService {
             memberEntity.getProjectId(), 
             null, null, null,
             memberEntity.getUserId(),
-            ActivityActionEnum.PROJECT_MEMBER_REMOVED,
+            ActivityActionEnum.MEMBRO_REMOVIDO_DO_PROJETO,
             "Participação do usuário: " + memberEntity.getUser().getName() + ", removida do projeto: " + memberEntity.getProject().getName()
          );
          this.activityLogService.create(activityLog);

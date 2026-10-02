@@ -107,7 +107,7 @@ public class ProjectImageService {
             null,
             projectEntity.getId(), 
             null, null, null, null,
-            ActivityActionEnum.PROJECT_LOGO_UPDATED,
+            ActivityActionEnum.LOGO_DO_PROJETO_ATUALIZADO,
             "Imagem do projeto: " + projectEntity.getName() + ", criada"
          );
          this.activityLogService.create(activityLog);
@@ -179,7 +179,7 @@ public class ProjectImageService {
          null,
          projectEntity.getId(), 
          null, null, null, null,
-         ActivityActionEnum.PROJECT_LOGO_REMOVED,
+         ActivityActionEnum.LOGO_DO_PROJETO_REMOVIDO,
          "Imagem do projeto: " + projectEntity.getName() + ", removida"
       );
       this.activityLogService.create(activityLog);

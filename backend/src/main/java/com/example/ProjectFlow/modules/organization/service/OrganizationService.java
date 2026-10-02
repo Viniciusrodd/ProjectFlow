@@ -232,7 +232,7 @@ public class OrganizationService {
          ActivityLogDTO activityLog = new ActivityLogDTO(
             organizationEntity.getId(),
             null, null, null, null, null,
-            ActivityActionEnum.ORGANIZATION_UPDATED,
+            ActivityActionEnum.ORGANIZACAO_ATUALIZADA,
             "Organização: " + organizationEntity.getName() + " atualizada"
          );
          this.activityLogService.create(activityLog);
@@ -260,7 +260,7 @@ public class OrganizationService {
          ActivityLogDTO activityLog = new ActivityLogDTO(
             organizationEntity.getId(),
             null, null, null, null, null,
-            ActivityActionEnum.ORGANIZATION_DELETED,
+            ActivityActionEnum.ORGANIZACAO_DELETADA,
             "Organização: " + organizationEntity.getName() + " deletada"
          );
          this.activityLogService.create(activityLog);

@@ -70,7 +70,7 @@ public class OrganizationCreationService {
          organization.getId(),
          null, null, null, null,
          organization.getOwnerId(),
-         ActivityActionEnum.ORGANIZATION_CREATED,
+         ActivityActionEnum.ORGANIZACAO_CRIADA,
          "Organização: " + organization.getName() + ", criada por: " + organization.getOwner().getName()
       );
       this.activityLogService.create(activityLog);

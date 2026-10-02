@@ -71,7 +71,7 @@ public class ProjectCreationService {
          project.getId(), 
          null, null, null,
          project.getOwnerId(),
-         ActivityActionEnum.PROJECT_CREATED,
+         ActivityActionEnum.PROJETO_CRIADO,
          "Projeto: " + project.getName() + ", criado por: " + project.getOwner().getName()
       );
       this.activityLogService.create(activityLog);

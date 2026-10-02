@@ -99,7 +99,7 @@ public class OrganizationMemberService {
          organizationMembersEntity.getOrganizationId(),
          null, null, null, null,
          user.getId(),
-         ActivityActionEnum.ORGANIZATION_MEMBER_ADDED,
+         ActivityActionEnum.MEMBRO_ADICIONADO_A_ORGANIZACAO,
          "Participação do usuário: " + organizationMembersEntity.getUser().getName() + ", adicionada á organização: " + organizationMembersEntity.getOrganization().getName() + ", como: " + organizationMembersEntity.getRole()
       );
       this.activityLogService.create(activityLog);
@@ -319,7 +319,7 @@ public class OrganizationMemberService {
             memberEntity.getOrganizationId(),
             null, null, null, null,
             memberEntity.getUserId(),
-            ActivityActionEnum.ORGANIZATION_MEMBER_ROLE_UPDATED,
+            ActivityActionEnum.PAPEL_DO_MEMBRO_DA_ORGANIZACAO_ATUALIZADA,
             "Papel do usuário: " + memberEntity.getUser().getName() + ", da organização: " + memberEntity.getOrganization().getName() + ", atualizado para: " + memberEntity.getRole()
          );
          this.activityLogService.create(activityLog);
@@ -355,7 +355,7 @@ public class OrganizationMemberService {
             memberEntity.getOrganizationId(),
             null, null, null, null,
             memberEntity.getUserId(),
-            ActivityActionEnum.ORGANIZATION_MEMBER_REMOVED,
+            ActivityActionEnum.MEMBRO_REMOVIDO_DA_ORGANIZACAO,
             "Participação do usuário: " + memberEntity.getUser().getName() + ", removida da organização: " + memberEntity.getOrganization().getName()
          );
          this.activityLogService.create(activityLog);

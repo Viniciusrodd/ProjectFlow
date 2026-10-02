@@ -106,7 +106,7 @@ public class OrganizationImageService {
          ActivityLogDTO activityLog = new ActivityLogDTO(
             organizationEntity.getId(),
             null, null, null, null, null,
-            ActivityActionEnum.ORGANIZATION_LOGO_UPDATED,
+            ActivityActionEnum.LOGO_DA_ORGANIZACAO_ATUALIZADO,
             "Imagem da organização: " + organizationEntity.getName() + ", criada"
          );
          this.activityLogService.create(activityLog);
@@ -177,7 +177,7 @@ public class OrganizationImageService {
       ActivityLogDTO activityLog = new ActivityLogDTO(
          organizationEntity.getId(),
          null, null, null, null, null,
-         ActivityActionEnum.ORGANIZATION_LOGO_REMOVED,
+         ActivityActionEnum.LOGO_DA_ORGANIZACAO_REMOVIDO,
          "Imagem da organização: " + organizationEntity.getName() + ", removida"
       );
       this.activityLogService.create(activityLog);

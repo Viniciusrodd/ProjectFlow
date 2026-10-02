@@ -113,7 +113,7 @@ public class TaskService {
          taskEntity.getId(),
          null, null,
          taskEntity.getOwner().getId(),
-         ActivityActionEnum.TASK_CREATED,
+         ActivityActionEnum.TAREFA_CRIADA,
          "Tarefa: " + taskEntity.getTitle() + ", do projeto: " + taskEntity.getProject().getName() + ", criada por: " + project.getOwner().getName()
       );
       this.activityLogService.create(activityLog);
@@ -280,7 +280,7 @@ public class TaskService {
             taskEntity.getId(),
             null, null,
             taskEntity.getOwner().getId(),
-            ActivityActionEnum.TASK_POSITION_UPDATED,
+            ActivityActionEnum.POSICAO_DA_TAREFA_ATUALIZADA,
             "Posição da tarefa: " + taskEntity.getTitle() + ", atualizada para: " + taskEntity.getBoardColumn().getPosition() + ", por: " + taskEntity.getOwner().getName()
          );
          this.activityLogService.create(activityLog);
@@ -310,7 +310,7 @@ public class TaskService {
             null, null, 
             taskEntity.getId(),
             null, null, null,
-            ActivityActionEnum.TASK_UPDATED,
+            ActivityActionEnum.TAREFA_ATUALIZADA,
             "Tarefa: " + taskEntity.getTitle() + ", atualizada"
          );
          this.activityLogService.create(activityLog);
@@ -339,7 +339,7 @@ public class TaskService {
             null, null, 
             taskEntity.getId(),
             null, null, null,
-            ActivityActionEnum.TASK_COMPLETED,
+            ActivityActionEnum.TAREFA_CONCLUIDA,
             "Tarefa: " + taskEntity.getTitle() + ", completada"
          );
          this.activityLogService.create(activityLog);
@@ -368,7 +368,7 @@ public class TaskService {
             null, null, 
             taskEntity.getId(),
             null, null, null,
-            ActivityActionEnum.TASK_DELETED,
+            ActivityActionEnum.TAREFA_DELETADA,
             "Tarefa: " + taskEntity.getTitle() + ", deletada"
          );
          this.activityLogService.create(activityLog);
