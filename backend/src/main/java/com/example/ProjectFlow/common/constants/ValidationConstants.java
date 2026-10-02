@@ -25,6 +25,7 @@ public class ValidationConstants {
    public static final int MAX_ORGANIZATION_NAME_LENGTH = 120;
    public static final int MAX_PROJECT_NAME_LENGTH = 120;
    public static final int MAX_BOARD_NAME_LENGTH = 80;
+   public static final int MAX_MESSAGE_LENGTH = 255;
 
    // file limits
    public static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
