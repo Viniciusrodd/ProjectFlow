@@ -17,9 +17,6 @@ public interface NotificationRepository extends MongoRepository<NotificationDocu
  
    // find all notifications by user id
    List<NotificationDocument> findAllByUserId(UUID userId);
-
-   // find all notifications by user id not readed
-   List<NotificationDocument> findAllByUserNotReaded(UUID userId, boolean read);
    
    // find all notifications by read field
    List<NotificationDocument> findAllByRead(boolean read);
