@@ -10,49 +10,55 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum ActivityActionEnum {
    
    // organization
-   ORGANIZATION_CREATED("organization_created"),
-   ORGANIZATION_UPDATED("organization_updated"),
-   ORGANIZATION_DELETED("organization_deleted"),
-   ORGANIZATION_LOGO_UPDATED("organization_logo_updated"),
-   ORGANIZATION_LOGO_REMOVED("organization_logo_removed"),
-   ORGANIZATION_MEMBER_ADDED("organization_member_added"),
-   ORGANIZATION_MEMBER_ROLE_UPDATED("organization_member_role_updated"),
-   ORGANIZATION_MEMBER_REMOVED("organization_member_removed"),
+   ORGANIZATION_CREATED("organizacao_criada"),
+   ORGANIZATION_UPDATED("organizacao_atualizada"),
+   ORGANIZATION_DELETED("organizacao_excluida"),
+   ORGANIZATION_LOGO_UPDATED("logo_da_organizacao_atualizado"),
+   ORGANIZATION_LOGO_REMOVED("logo_da_organizacao_removido"),
+   ORGANIZATION_MEMBER_ADDED("membro_adicionado_a_organizacao"),
+   ORGANIZATION_MEMBER_ROLE_UPDATED("permissao_do_membro_da_organizacao_atualizada"),
+   ORGANIZATION_MEMBER_REMOVED("membro_removido_da_organizacao"),
+
 
    // project
-   PROJECT_CREATED("project_created"),
-   PROJECT_UPDATED("project_updated"),
-   PROJECT_DELETED("project_deleted"),
-   PROJECT_LOGO_UPDATED("project_logo_updated"),
-   PROJECT_LOGO_REMOVED("project_logo_removed"),
-   PROJECT_MEMBER_ADDED("project_member_added"),
-   PROJECT_MEMBER_ROLE_UPDATED("project_member_role_updated"),
-   PROJECT_MEMBER_REMOVED("project_member_removed"),
+   PROJECT_CREATED("projeto_criado"),
+   PROJECT_UPDATED("projeto_atualizado"),
+   PROJECT_DELETED("projeto_excluido"),
+   PROJECT_LOGO_UPDATED("logo_do_projeto_atualizado"),
+   PROJECT_LOGO_REMOVED("logo_do_projeto_removido"),
+   PROJECT_MEMBER_ADDED("membro_adicionado_ao_projeto"),
+   PROJECT_MEMBER_ROLE_UPDATED("permissao_do_membro_do_projeto_atualizada"),
+   PROJECT_MEMBER_REMOVED("membro_removido_do_projeto"),
+
 
    // task
-   TASK_CREATED("task_created"),
-   TASK_POSITION_UPDATED("task_position_updated"),
-   TASK_UPDATED("task_updated"),
-   TASK_COMPLETED("task_completed"),
-   TASK_DELETED("task_deleted"),
-   
+   TASK_CREATED("tarefa_criada"),
+   TASK_POSITION_UPDATED("posicao_da_tarefa_atualizada"),
+   TASK_UPDATED("tarefa_atualizada"),
+   TASK_COMPLETED("tarefa_concluida"),
+   TASK_DELETED("tarefa_excluida"),
+
+
    // task label
-   TASK_LABEL_ADDED("label_added"),
-   TASK_LABEL_REMOVED("label_removed"),
-   
+   TASK_LABEL_ADDED("etiqueta_da_tarefa_adicionada"),
+   TASK_LABEL_REMOVED("etiqueta_da_tarefa_removida"),
+
+
    // task checklist
-   TASK_CHECKLIST_CREATED("task_checklist_created"),
-   TASK_CHECKLIST_UPDATED("task_checklist_updated"),
-   TASK_CHECKLIST_REMOVED("task_checklist_removed"),
-   
+   TASK_CHECKLIST_CREATED("checklist_da_tarefa_criado"),
+   TASK_CHECKLIST_UPDATED("checklist_da_tarefa_atualizado"),
+   TASK_CHECKLIST_REMOVED("checklist_da_tarefa_removido"),
+
+
    // comment
-   COMMENT_CREATED("comment_created"),
-   COMMENT_UPDATED("comment_updated"),
-   COMMENT_DELETED("comment_deleted"),
+   COMMENT_CREATED("comentario_da_tarefa_criado"),
+   COMMENT_UPDATED("comentario_da_tarefa_atualizado"),
+   COMMENT_DELETED("comentario_da_tarefa_excluido"),
+
 
    // attachment
-   ATTACHMENT_UPLOADED("attachment_uploaded"),
-   ATTACHMENT_DELETED("attachment_deleted");
+   ATTACHMENT_UPLOADED("anexo_da_tarefa_adicionado"),
+   ATTACHMENT_DELETED("anexo_da_tarefa_excluido");
 
 
    @JsonValue

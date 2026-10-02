@@ -41,7 +41,7 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 
 @RestController
-@RequestMapping(ApiConstants.BASE_API_PATH + "/activityLog")
+@RequestMapping(ApiConstants.BASE_API_PATH)
 public class ActivityLogController {
  
    // properties
@@ -54,7 +54,7 @@ public class ActivityLogController {
 
 
    // activity log creation
-   @PostMapping()
+   @PostMapping(value = "/activityLog")
    @Operation(summary = "Activity log creation")
    public ResponseEntity<ApiResponse<ActivityLogResponseDTO>> create(@RequestBody ActivityLogDTO data) {
       ActivityLogResponseDTO activityData = this.activityLogService.create(data);
@@ -71,7 +71,7 @@ public class ActivityLogController {
 
 
    // get activity log by id
-   @GetMapping(value = "/{id}")
+   @GetMapping(value = "/activityLog/{id}")
    @Operation(summary = "Get activity log")
    public ResponseEntity<ApiResponse<ActivityLogResponseDTO>> getActivityById(@PathVariable String id) {
       ActivityLogResponseDTO activityData = this.activityLogService.getById(id);
@@ -88,7 +88,7 @@ public class ActivityLogController {
 
 
    // get all activities log by document id
-   @GetMapping(value = "/{documentId}/document")
+   @GetMapping(value = "/activitiesLog/{documentId}/document")
    @Operation(summary = "Get all activities log by document id")
    public ResponseEntity<ApiResponse<List<ActivityLogResponseDTO>>> getActivitiesByDocumentId(
       @PathVariable UUID documentId,
@@ -108,7 +108,7 @@ public class ActivityLogController {
 
 
    // delete all activities log by document id
-   @DeleteMapping(value = "/{documentId}/document")
+   @DeleteMapping(value = "/activitiesLog/{documentId}/document")
    @Operation(summary = "Delete all activities log by document id")
    public ResponseEntity<ApiResponse<Void>> deleteActivitiesByDocumentId(
       @PathVariable UUID documentId,
@@ -127,7 +127,7 @@ public class ActivityLogController {
 
 
    // delete activity log
-   @DeleteMapping(value = "/{id}")
+   @DeleteMapping(value = "/activityLog/{id}")
    @Operation(summary = "Delete activity log by id")
    public ResponseEntity<ApiResponse<Void>> deleteActivityById(@PathVariable String id) {
       this.activityLogService.deleteActivityLog(id);

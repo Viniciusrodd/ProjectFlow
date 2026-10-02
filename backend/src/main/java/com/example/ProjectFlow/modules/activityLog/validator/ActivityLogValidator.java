@@ -4,7 +4,6 @@ package com.example.ProjectFlow.modules.activityLog.validator;
 
 // imports
 import org.springframework.stereotype.Component;
-import java.util.Arrays;
 import java.util.UUID;
 
 // import exceptions
@@ -13,9 +12,6 @@ import com.example.ProjectFlow.exception.MultiExceptions;
 // import constants
 import com.example.ProjectFlow.common.constants.ResponseMessages;
 import com.example.ProjectFlow.common.constants.ValidationConstants;
-
-// import enums
-import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 
 @Component 
@@ -49,14 +45,6 @@ public class ActivityLogValidator {
          throw MultiExceptions.badRequest(String.format(
             "%s: Ação é obrigatória",
             ResponseMessages.BAD_REQUEST
-         ));
-      }
-
-      if(!ActivityActionEnum.isValid(action)) {
-         throw MultiExceptions.badRequest(String.format(
-            "%s: Ação inválida. Valores permitidos: %s",
-            ResponseMessages.BAD_REQUEST,
-            Arrays.toString(ActivityActionEnum.values())
          ));
       }
    }
