@@ -120,22 +120,6 @@ public class NotificationService {
    }
 
 
-   // get notification document by id
-   public NotificationDocument getDocumentById(String id) {
-      this.notificationValidator.idValidate(id);
-
-      NotificationDocument document = this.notificationRepository.findById(id).orElse(null);
-      if(document == null) {
-         throw MultiExceptions.internal(String.format(
-            "%s: Notificação não existe", 
-            ResponseMessages.NOT_FOUND
-         ));
-      }
-
-      return document;      
-   }
-
-
    // get user notifications
    public List<NotificationResponseDTO> getByUserId(UUID userId) {
       this.userService.existsById(userId);
@@ -156,6 +140,54 @@ public class NotificationService {
       }
 
       return notifications;
+   }
+
+
+   // exists by id
+   public boolean existsById(String id) {
+      this.notificationValidator.idValidate(id);
+
+      boolean exist = this.notificationRepository.existsById(id);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Notificação não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
+
+   // exists by user id
+   public boolean existsByUserId(UUID userId) {
+      this.notificationValidator.userIdValidate(userId);
+
+      boolean exist = this.notificationRepository.existsByUserId(userId);
+      if(!exist) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Notificação não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return exist;
+   }
+
+
+   // get notification document by id
+   public NotificationDocument getDocumentById(String id) {
+      this.notificationValidator.idValidate(id);
+
+      NotificationDocument document = this.notificationRepository.findById(id).orElse(null);
+      if(document == null) {
+         throw MultiExceptions.internal(String.format(
+            "%s: Notificação não existe", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return document;      
    }
 
 }
