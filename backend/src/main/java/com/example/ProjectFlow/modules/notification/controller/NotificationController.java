@@ -2,6 +2,7 @@
 // packages
 package com.example.ProjectFlow.modules.notification.controller;
 
+import java.util.List;
 // imports
 import java.util.UUID;
 
@@ -81,6 +82,23 @@ public class NotificationController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(notificationData)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // get user notifications
+   @GetMapping(value = "/user/{userId}/notifications")
+   @Operation(summary = "Get user notifications")
+   public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getUserNotifications(@PathVariable UUID userId) {
+      List<NotificationResponseDTO> notificationsData = this.notificationService.getByUserId(userId);
+
+      ApiResponse<List<NotificationResponseDTO>> response = new ApiResponse.Builder<List<NotificationResponseDTO>>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(notificationsData)
          .build();
       
       return ResponseEntity.status(HttpStatus.OK).body(response);
