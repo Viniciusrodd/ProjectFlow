@@ -4,8 +4,9 @@ package com.example.ProjectFlow.modules.notification.service;
 
 // imports
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -107,6 +108,28 @@ public class NotificationService {
       }
 
       return this.notificationMapper.toNotificationResponseDTO(document);      
+   }
+
+
+   // get user notifications
+   public List<NotificationResponseDTO> getByUserId(UUID userId) {
+      this.userService.existsById(userId);
+
+      List<NotificationDocument> documents = this.notificationRepository.findAllByUserId(userId);
+      if(documents.isEmpty()) {
+         throw MultiExceptions.internal(String.format(
+            "%s: Notificações não existem", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // mapping
+      List<NotificationResponseDTO> notifications = new ArrayList<>();
+      for(NotificationDocument notification : documents) {
+         notifications.add(this.notificationMapper.toNotificationResponseDTO(notification));
+      }
+
+      return notifications;
    }
 
 }
