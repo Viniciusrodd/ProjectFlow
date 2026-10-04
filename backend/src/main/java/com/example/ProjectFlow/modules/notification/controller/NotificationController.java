@@ -9,6 +9,7 @@ import java.util.UUID;
 // web imports
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,13 +93,29 @@ public class NotificationController {
    @GetMapping(value = "/user/{userId}/notifications")
    @Operation(summary = "Get user notifications")
    public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getUserNotifications(@PathVariable UUID userId) {
-      List<NotificationResponseDTO> notificationsData = this.notificationService.getByUserId(userId);
+      List<NotificationResponseDTO> notificationsData = this.notificationService.getAllByUserId(userId);
 
       ApiResponse<List<NotificationResponseDTO>> response = new ApiResponse.Builder<List<NotificationResponseDTO>>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
          .data(notificationsData)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // delete all by user id
+   @DeleteMapping(value = "/user/{userId}/notifications")
+   @Operation(summary = "Delete all user notifications")
+   public ResponseEntity<ApiResponse<Void>> deleteUserNotifications(@PathVariable UUID userId) {
+      this.notificationService.deleteAllByUserId(userId);
+
+      ApiResponse<Void> response = new ApiResponse.Builder<Void>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
          .build();
       
       return ResponseEntity.status(HttpStatus.OK).body(response);
