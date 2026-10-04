@@ -93,4 +93,20 @@ public class NotificationService {
       }
    }
 
+
+   // get notification by id
+   public NotificationResponseDTO getById(String id) {
+      this.notificationValidator.idValidate(id);
+
+      NotificationDocument document = this.notificationRepository.findById(id).orElse(null);
+      if(document == null) {
+         throw MultiExceptions.internal(String.format(
+            "%s: Notificação não existe", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return this.notificationMapper.toNotificationResponseDTO(document);      
+   }
+
 }
