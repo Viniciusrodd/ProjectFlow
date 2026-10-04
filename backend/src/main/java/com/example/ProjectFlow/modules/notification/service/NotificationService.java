@@ -95,6 +95,12 @@ public class NotificationService {
    }
 
 
+   // turn the notificaion as read
+   public void turnNotificationAsRead(String id) {
+      this.notificationRepository.markAsRead(id);
+   }
+
+
    // get notification by id
    public NotificationResponseDTO getById(String id) {
       this.notificationValidator.idValidate(id);
@@ -107,7 +113,26 @@ public class NotificationService {
          ));
       }
 
+      // turn notification as read
+      this.turnNotificationAsRead(document.getId());
+
       return this.notificationMapper.toNotificationResponseDTO(document);      
+   }
+
+
+   // get notification document by id
+   public NotificationDocument getDocumentById(String id) {
+      this.notificationValidator.idValidate(id);
+
+      NotificationDocument document = this.notificationRepository.findById(id).orElse(null);
+      if(document == null) {
+         throw MultiExceptions.internal(String.format(
+            "%s: Notificação não existe", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      return document;      
    }
 
 
@@ -123,9 +148,10 @@ public class NotificationService {
          ));
       }
 
-      // mapping
+      // mapping + turn as read
       List<NotificationResponseDTO> notifications = new ArrayList<>();
       for(NotificationDocument notification : documents) {
+         this.turnNotificationAsRead(notification.getId());
          notifications.add(this.notificationMapper.toNotificationResponseDTO(notification));
       }
 

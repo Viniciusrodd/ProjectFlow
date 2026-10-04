@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 // mongo imports
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.mongodb.repository.Update;
 
 // import document
 import com.example.ProjectFlow.modules.notification.document.NotificationDocument;
@@ -26,5 +29,11 @@ public interface NotificationRepository extends MongoRepository<NotificationDocu
 
    // delete all by user id
    void deleteAllByUserId(UUID userId);
+
+   // mark notification as read
+   @Modifying 
+   @Query("{ '_id': ?0 }")
+   @Update("{ '$set': { 'read': true } }")
+   void markAsRead(String id);
 
 }
