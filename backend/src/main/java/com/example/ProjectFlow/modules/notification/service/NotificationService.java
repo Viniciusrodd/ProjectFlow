@@ -207,4 +207,21 @@ public class NotificationService {
       this.notificationRepository.deleteAllByUserId(userId);
    }
 
+
+   // delete by id
+   public void deleteNotification(String id) {
+      this.notificationValidator.idValidate(id);
+
+      // notification - validation
+      if(this.notificationRepository.findById(id) == null) {
+         throw MultiExceptions.internal(String.format(
+            "%s: Notificação não existe", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // delete
+      this.notificationRepository.deleteById(id);
+   }
+
 }
