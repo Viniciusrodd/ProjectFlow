@@ -121,4 +121,20 @@ public class NotificationController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
    }
 
+
+   // delete by id
+   @DeleteMapping(value = "/notification/{id}")
+   @Operation(summary = "Delete notification by id")
+   public ResponseEntity<ApiResponse<Void>> deleteNotification(@PathVariable String id) {
+      this.notificationService.deleteNotification(id);
+
+      ApiResponse<Void> response = new ApiResponse.Builder<Void>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.DELETED)
+         .build();
+      
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
 }
