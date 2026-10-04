@@ -121,7 +121,7 @@ public class NotificationService {
 
 
    // get user notifications
-   public List<NotificationResponseDTO> getByUserId(UUID userId) {
+   public List<NotificationResponseDTO> getAllByUserId(UUID userId) {
       this.userService.existsById(userId);
 
       List<NotificationDocument> documents = this.notificationRepository.findAllByUserId(userId);
@@ -188,6 +188,23 @@ public class NotificationService {
       }
 
       return document;      
+   }
+
+
+   // delete all by user id
+   public void deleteAllByUserId(UUID userId) {
+      this.userService.existsById(userId);
+
+      // notifications - validation
+      if(this.notificationRepository.findAllByUserId(userId).isEmpty()) {
+         throw MultiExceptions.internal(String.format(
+            "%s: Notificações não existem", 
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+
+      // delete
+      this.notificationRepository.deleteAllByUserId(userId);
    }
 
 }
