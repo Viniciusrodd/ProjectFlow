@@ -103,13 +103,12 @@ public class ProjectImageService {
          ProjectEntity projectEntity = this.projectService.getEntityById(projectId);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null,
-            projectEntity.getId(), 
-            null, null, null, null,
-            ActivityActionEnum.LOGO_DO_PROJETO_ATUALIZADO,
-            "Imagem do projeto: " + projectEntity.getName() + ", criada"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .projectId(projectEntity.getId())
+            .action(ActivityActionEnum.LOGO_DO_PROJETO_ATUALIZADO)
+            .description("Imagem do projeto: " + projectEntity.getName() + ", criada")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          // return saved document

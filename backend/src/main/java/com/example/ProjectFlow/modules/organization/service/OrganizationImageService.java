@@ -21,6 +21,7 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationImageV
 
 // import DTOs
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+import com.example.ProjectFlow.modules.organization.dto.organizationImageDTO.OrganizationImageResponseDTO;
 
 // import services
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
@@ -33,7 +34,6 @@ import com.example.ProjectFlow.common.constants.ResponseMessages;
 
 // import document
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
-import com.example.ProjectFlow.modules.organization.dto.organizationImageDTO.OrganizationImageResponseDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -103,12 +103,12 @@ public class OrganizationImageService {
          OrganizationEntity organizationEntity = this.organizationService.getEntityById(organizationId);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            organizationEntity.getId(),
-            null, null, null, null, null,
-            ActivityActionEnum.LOGO_DA_ORGANIZACAO_ATUALIZADO,
-            "Imagem da organização: " + organizationEntity.getName() + ", criada"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .organizationId(organizationEntity.getId())
+            .action(ActivityActionEnum.LOGO_DA_ORGANIZACAO_ATUALIZADO)
+            .description("Imagem da organização: " + organizationEntity.getName() + ", criada")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          // return saved document
@@ -174,12 +174,12 @@ public class OrganizationImageService {
       OrganizationEntity organizationEntity = this.organizationService.getEntityById(organizationId);
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         organizationEntity.getId(),
-         null, null, null, null, null,
-         ActivityActionEnum.LOGO_DA_ORGANIZACAO_REMOVIDO,
-         "Imagem da organização: " + organizationEntity.getName() + ", removida"
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .organizationId(organizationEntity.getId())
+         .action(ActivityActionEnum.LOGO_DA_ORGANIZACAO_REMOVIDO)
+         .description("Imagem da organização: " + organizationEntity.getName() + ", removida")
+         .build();
+
       this.activityLogService.create(activityLog);
    }
 

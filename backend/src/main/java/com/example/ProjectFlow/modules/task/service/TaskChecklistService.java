@@ -89,13 +89,15 @@ public class TaskChecklistService {
       TaskChecklistEntity taskChecklistEntity = this.taskChecklistRepository.create(task, data);
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null, null, 
-         taskChecklistEntity.getTask().getId(),
-         null, null, null,
-         ActivityActionEnum.CHECKLIST_DA_TAREFA_CRIADO,
-         "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", criado na posição: " + taskChecklistEntity.getPosition()
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .taskId(taskChecklistEntity.getTask().getId())
+         .action(ActivityActionEnum.CHECKLIST_DA_TAREFA_CRIADO)
+         .description(
+            "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+            ", criado na posição: " + taskChecklistEntity.getPosition()
+         )
+         .build();
+
       this.activityLogService.create(activityLog);
 
       return this.taskChecklistMapper.toTaskChecklistResponseDTO(taskChecklistEntity);
@@ -222,13 +224,12 @@ public class TaskChecklistService {
          TaskChecklistEntity taskChecklistEntity = this.taskChecklistRepository.update(id, data);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskChecklistEntity.getTask().getId(),
-            null, null, null,
-            ActivityActionEnum.CHECKLIST_DA_TAREFA_ATUALIZADO,
-            "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", atualizado"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskChecklistEntity.getTask().getId())
+            .action(ActivityActionEnum.CHECKLIST_DA_TAREFA_ATUALIZADO)
+            .description("Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", atualizado")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.taskChecklistMapper.toTaskChecklistResponseDTO(taskChecklistEntity);
@@ -251,13 +252,15 @@ public class TaskChecklistService {
          TaskChecklistEntity taskChecklistEntity = this.taskChecklistRepository.setCompleted(id, completed);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskChecklistEntity.getTask().getId(),
-            null, null, null,
-            ActivityActionEnum.CHECKLIST_DA_TAREFA_ATUALIZADO,
-            "Campo 'completed' do item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", atualizado"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskChecklistEntity.getTask().getId())
+            .action(ActivityActionEnum.CHECKLIST_DA_TAREFA_ATUALIZADO)
+            .description(
+               "Campo 'completed' do item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+               ", atualizado"
+            )
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.taskChecklistMapper.toTaskChecklistResponseDTO(taskChecklistEntity);
@@ -280,13 +283,12 @@ public class TaskChecklistService {
          TaskChecklistEntity taskChecklistEntity = this.taskChecklistRepository.delete(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskChecklistEntity.getTask().getId(),
-            null, null, null,
-            ActivityActionEnum.CHECKLIST_DA_TAREFA_REMOVIDO,
-            "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", removido"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskChecklistEntity.getTask().getId())
+            .action(ActivityActionEnum.CHECKLIST_DA_TAREFA_REMOVIDO)
+            .description("Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", removido")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.taskChecklistMapper.toTaskChecklistDeletedDTO(taskChecklistEntity);

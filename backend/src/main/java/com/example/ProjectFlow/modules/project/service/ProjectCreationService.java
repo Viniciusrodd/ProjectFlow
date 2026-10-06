@@ -66,14 +66,16 @@ public class ProjectCreationService {
       );
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null, 
-         project.getId(), 
-         null, null, null,
-         project.getOwnerId(),
-         ActivityActionEnum.PROJETO_CRIADO,
-         "Projeto: " + project.getName() + ", criado por: " + project.getOwner().getName()
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .projectId(project.getId())
+         .userId(project.getOwnerId())
+         .action(ActivityActionEnum.PROJETO_CRIADO)
+         .description(
+            "Projeto: " + project.getName() + 
+            ", criado por: " + project.getOwner().getName()
+         )
+         .build();
+
       this.activityLogService.create(activityLog);
 
       return this.projectMapper.toProjectResponseDTO(project);

@@ -66,13 +66,16 @@ public class OrganizationCreationService {
       );
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         organization.getId(),
-         null, null, null, null,
-         organization.getOwnerId(),
-         ActivityActionEnum.ORGANIZACAO_CRIADA,
-         "Organização: " + organization.getName() + ", criada por: " + organization.getOwner().getName()
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .organizationId(organization.getId())
+         .userId(organization.getOwnerId())
+         .action(ActivityActionEnum.ORGANIZACAO_CRIADA)
+         .description(
+            "Organização: " + organization.getName() + 
+            ", criada por: " + organization.getOwner().getName()
+         )
+         .build();
+
       this.activityLogService.create(activityLog);
 
       return this.organizationMapper.toOrganizationResponseDTO(organization);

@@ -96,13 +96,16 @@ public class TaskLabelService {
       TaskLabelsEntity taskLabelsEntity = this.taskLabelsRepository.create(task, label);
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null, null, 
-         taskLabelsEntity.getTask().getId(),
-         null, null, null,
-         ActivityActionEnum.ETIQUETA_DA_TAREFA_ADICIONADA,
-         "Etiqueta: " + taskLabelsEntity.getLabel().getName() + ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + ", criada"
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .taskId(taskLabelsEntity.getTask().getId())
+         .action(ActivityActionEnum.ETIQUETA_DA_TAREFA_ADICIONADA)
+         .description(
+            "Etiqueta: " + taskLabelsEntity.getLabel().getName() + 
+            ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + 
+            ", criada"
+         )
+         .build();
+
       this.activityLogService.create(activityLog);
 
       return this.taskLabelsMapper.toTaskLabelsResponseDTO(taskLabelsEntity);
@@ -219,13 +222,16 @@ public class TaskLabelService {
          TaskLabelsEntity taskLabelsEntity = this.taskLabelsRepository.removeRelation(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskLabelsEntity.getTask().getId(),
-            null, null, null,
-            ActivityActionEnum.ETIQUETA_DA_TAREFA_REMOVIDA,
-            "Etiqueta: " + taskLabelsEntity.getLabel().getName() + ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + ", removida"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskLabelsEntity.getTask().getId())
+            .action(ActivityActionEnum.ETIQUETA_DA_TAREFA_REMOVIDA)
+            .description(
+               "Etiqueta: " + taskLabelsEntity.getLabel().getName() + 
+               ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + 
+               ", removida"
+            )
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.taskLabelsMapper.toTaskLabelsDeletedDTO(taskLabelsEntity);

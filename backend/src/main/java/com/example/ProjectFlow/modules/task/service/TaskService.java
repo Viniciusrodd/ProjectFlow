@@ -108,14 +108,17 @@ public class TaskService {
       TasksEntity taskEntity = this.taskRepository.create(data, project, column, owner);
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null, null, 
-         taskEntity.getId(),
-         null, null,
-         taskEntity.getOwner().getId(),
-         ActivityActionEnum.TAREFA_CRIADA,
-         "Tarefa: " + taskEntity.getTitle() + ", do projeto: " + taskEntity.getProject().getName() + ", criada por: " + project.getOwner().getName()
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .taskId(taskEntity.getId())
+         .userId(taskEntity.getOwner().getId())
+         .action(ActivityActionEnum.TAREFA_CRIADA)
+         .description(
+            "Tarefa: " + taskEntity.getTitle() + 
+            ", do projeto: " + taskEntity.getProject().getName() + 
+            ", criada por: " + project.getOwner().getName()
+         )
+         .build();
+
       this.activityLogService.create(activityLog);
 
       return this.taskMapper.toTasksResponseDTO(taskEntity);
@@ -275,14 +278,17 @@ public class TaskService {
          TasksEntity taskEntity = this.taskRepository.updateColumn(id, boardColumnEntity);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskEntity.getId(),
-            null, null,
-            taskEntity.getOwner().getId(),
-            ActivityActionEnum.POSICAO_DA_TAREFA_ATUALIZADA,
-            "Posição da tarefa: " + taskEntity.getTitle() + ", atualizada para: " + taskEntity.getBoardColumn().getPosition() + ", por: " + taskEntity.getOwner().getName()
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskEntity.getId())
+            .userId(taskEntity.getOwner().getId())
+            .action(ActivityActionEnum.POSICAO_DA_TAREFA_ATUALIZADA)
+            .description(
+               "Posição da tarefa: " + taskEntity.getTitle() + 
+               ", atualizada para: " + taskEntity.getBoardColumn().getPosition() + 
+               ", por: " + taskEntity.getOwner().getName()
+            )
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
@@ -306,13 +312,12 @@ public class TaskService {
          TasksEntity taskEntity = this.taskRepository.update(id, data);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskEntity.getId(),
-            null, null, null,
-            ActivityActionEnum.TAREFA_ATUALIZADA,
-            "Tarefa: " + taskEntity.getTitle() + ", atualizada"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskEntity.getId())
+            .action(ActivityActionEnum.TAREFA_ATUALIZADA)
+            .description("Tarefa: " + taskEntity.getTitle() + ", atualizada")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
@@ -335,13 +340,12 @@ public class TaskService {
          TasksEntity taskEntity = this.taskRepository.taskComplete(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskEntity.getId(),
-            null, null, null,
-            ActivityActionEnum.TAREFA_CONCLUIDA,
-            "Tarefa: " + taskEntity.getTitle() + ", completada"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskEntity.getId())
+            .action(ActivityActionEnum.TAREFA_CONCLUIDA)
+            .description("Tarefa: " + taskEntity.getTitle() + ", completada")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
@@ -364,13 +368,12 @@ public class TaskService {
          TasksEntity taskEntity = this.taskRepository.delete(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskEntity.getId(),
-            null, null, null,
-            ActivityActionEnum.TAREFA_DELETADA,
-            "Tarefa: " + taskEntity.getTitle() + ", deletada"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskEntity.getId())
+            .action(ActivityActionEnum.TAREFA_DELETADA)
+            .description("Tarefa: " + taskEntity.getTitle() + ", deletada")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.taskMapper.toTasksDeletedDTO(taskEntity);

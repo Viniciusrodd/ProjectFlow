@@ -94,14 +94,16 @@ public class CommentService {
       CommentEntity commentEntity = this.commentRepository.create(data, task, user);
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null, null, null,
-         commentEntity.getId(), 
-         null,
-         commentEntity.getAuthor().getId(),
-         ActivityActionEnum.COMENTARIO_DA_TAREFA_CRIADO,
-         "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", criado por: " + commentEntity.getAuthor().getName()
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .commentId(commentEntity.getId())
+         .userId(commentEntity.getAuthor().getId())
+         .action(ActivityActionEnum.COMENTARIO_DA_TAREFA_CRIADO)
+         .description(
+            "Comentário da tarefa: " + commentEntity.getTask().getTitle() + 
+            ", criado por: " + commentEntity.getAuthor().getName()
+         )
+         .build();
+
       this.activityLogService.create(activityLog);
 
       return this.commentMapper.toCommentResponseDTO(commentEntity);
@@ -235,14 +237,16 @@ public class CommentService {
          CommentEntity commentEntity = this.commentRepository.updateContent(id, content);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, null,
-            commentEntity.getId(), 
-            null,
-            commentEntity.getAuthor().getId(),
-            ActivityActionEnum.COMENTARIO_DA_TAREFA_ATUALIZADO,
-            "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", atualizado por: " + commentEntity.getAuthor().getName()
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .commentId(commentEntity.getId())
+            .userId(commentEntity.getAuthor().getId())
+            .action(ActivityActionEnum.COMENTARIO_DA_TAREFA_ATUALIZADO)
+            .description(
+               "Comentário da tarefa: " + commentEntity.getTask().getTitle() + 
+               ", atualizado por: " + commentEntity.getAuthor().getName()
+            )
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.commentMapper.toCommentResponseDTO(commentEntity);
@@ -265,14 +269,16 @@ public class CommentService {
          CommentEntity commentEntity = this.commentRepository.delete(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, null,
-            commentEntity.getId(), 
-            null,
-            commentEntity.getAuthor().getId(),
-            ActivityActionEnum.COMENTARIO_DA_TAREFA_REMOVIDO,
-            "Comentário da tarefa: " + commentEntity.getTask().getTitle() + ", deletado por: " + commentEntity.getAuthor().getName()
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .commentId(commentEntity.getId())
+            .userId(commentEntity.getAuthor().getId())
+            .action(ActivityActionEnum.COMENTARIO_DA_TAREFA_REMOVIDO)
+            .description(
+               "Comentário da tarefa: " + commentEntity.getTask().getTitle() + 
+               ", deletado por: " + commentEntity.getAuthor().getName()
+            )
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.commentMapper.toCommentDeleteDTO(commentEntity);

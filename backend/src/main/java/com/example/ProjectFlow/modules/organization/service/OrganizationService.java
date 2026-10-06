@@ -229,12 +229,12 @@ public class OrganizationService {
          OrganizationEntity organizationEntity = this.organizationRepository.update(id, data);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            organizationEntity.getId(),
-            null, null, null, null, null,
-            ActivityActionEnum.ORGANIZACAO_ATUALIZADA,
-            "Organização: " + organizationEntity.getName() + " atualizada"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .organizationId(organizationEntity.getId())
+            .action(ActivityActionEnum.ORGANIZACAO_ATUALIZADA)
+            .description("Organização: " + organizationEntity.getName() + " atualizada")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.organizationMapper.toOrganizationResponseDTO(organizationEntity);
@@ -257,12 +257,12 @@ public class OrganizationService {
          OrganizationEntity organizationEntity = this.organizationRepository.delete(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            organizationEntity.getId(),
-            null, null, null, null, null,
-            ActivityActionEnum.ORGANIZACAO_DELETADA,
-            "Organização: " + organizationEntity.getName() + " deletada"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .organizationId(organizationEntity.getId())
+            .action(ActivityActionEnum.ORGANIZACAO_DELETADA)
+            .description("Organização: " + organizationEntity.getName() + " deletada")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.organizationMapper.toOrganizationDeletedDTO(organizationEntity);

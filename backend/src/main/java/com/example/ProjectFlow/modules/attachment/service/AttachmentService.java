@@ -103,15 +103,13 @@ public class AttachmentService {
          TasksEntity taskEntity = this.taskService.getEntityById(taskId); 
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, null, 
-            taskEntity.getId(), 
-            null,
-            UUID.fromString(savedDocument.getId()), 
-            null,
-            ActivityActionEnum.ANEXO_DA_TAREFA_ADICIONADO,
-            "Anexo da tarefa: " + taskEntity.getTitle() + ", criado"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .taskId(taskEntity.getId())
+            .attachmentId(UUID.fromString(savedDocument.getId()))
+            .action(ActivityActionEnum.ANEXO_DA_TAREFA_ADICIONADO)
+            .description("Anexo da tarefa: " + taskEntity.getTitle() + ", criado")
+            .build();
+         
          this.activityLogService.create(activityLog);
 
          return this.attachmentMapper.toAttachmentResponseDTO(savedDocument);
@@ -197,13 +195,12 @@ public class AttachmentService {
       TasksEntity taskEntity = this.taskService.getEntityById(taskId); 
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null, null, 
-         taskEntity.getId(), 
-         null, null, null,
-         ActivityActionEnum.ANEXO_DA_TAREFA_REMOVIDO,
-         "Anexos da tarefa: " + taskEntity.getTitle() + ", deletados"
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .taskId(taskEntity.getId())
+         .action(ActivityActionEnum.ANEXO_DA_TAREFA_REMOVIDO)
+         .description("Anexos da tarefa: " + taskEntity.getTitle() + ", deletados")
+         .build();
+
       this.activityLogService.create(activityLog);
    }
 
@@ -228,15 +225,13 @@ public class AttachmentService {
       TasksEntity taskEntity = this.taskService.getEntityById(taskId);
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null, null, 
-         taskId, 
-         null, 
-         UUID.fromString(id), 
-         null,
-         ActivityActionEnum.ANEXO_DA_TAREFA_REMOVIDO,
-         "Anexo da tarefa: " + taskEntity.getTitle() + ", deletado"
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .taskId(taskEntity.getId())
+         .attachmentId(UUID.fromString(id))
+         .action(ActivityActionEnum.ANEXO_DA_TAREFA_REMOVIDO)
+         .description("Anexo da tarefa: " + taskEntity.getTitle() + ", deletado")
+         .build();
+         
       this.activityLogService.create(activityLog);
    }
 

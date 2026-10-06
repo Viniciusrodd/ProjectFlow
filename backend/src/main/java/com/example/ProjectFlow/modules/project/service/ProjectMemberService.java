@@ -95,14 +95,17 @@ public class ProjectMemberService {
       ProjectMembersEntity projectMembersEntity = this.projectMembersRepository.createMemberParticipation(data, user, project);
    
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null,
-         projectMembersEntity.getProjectId(), 
-         null, null, null,
-         user.getId(),
-         ActivityActionEnum.MEMBRO_ADICIONADO_AO_PROJETO,
-         "Participação do usuário: " + projectMembersEntity.getUser().getName() + ", adicionada ao projeto: " + projectMembersEntity.getProject().getName() + ", como: " + projectMembersEntity.getRole()
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .projectId(projectMembersEntity.getProjectId())
+         .userId(user.getId())
+         .action(ActivityActionEnum.MEMBRO_ADICIONADO_AO_PROJETO)
+         .description(
+            "Participação do usuário: " + projectMembersEntity.getUser().getName() + 
+            ", adicionada ao projeto: " + projectMembersEntity.getProject().getName() + 
+            ", como: " + projectMembersEntity.getRole()
+         )
+         .build();
+
       this.activityLogService.create(activityLog);
 
       return this.projectMembersMapper.toProjectMembersResponseDTO(projectMembersEntity);
@@ -312,14 +315,17 @@ public class ProjectMemberService {
          ProjectMembersEntity memberEntity = this.projectMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null,
-            memberEntity.getProjectId(), 
-            null, null, null,
-            memberEntity.getUserId(),
-            ActivityActionEnum.PAPEL_DO_MEMBRO_DO_PROJETO_ATUALIZADA,
-            "Papel do usuário: " + memberEntity.getUser().getName() + ", do projeto: " + memberEntity.getProject().getName() + ", atualizado para: " + memberEntity.getRole()
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .projectId(memberEntity.getProjectId())
+            .userId(memberEntity.getUserId())
+            .action(ActivityActionEnum.PAPEL_DO_MEMBRO_DO_PROJETO_ATUALIZADA)
+            .description(
+               "Papel do usuário: " + memberEntity.getUser().getName() + 
+               ", do projeto: " + memberEntity.getProject().getName() + 
+               ", atualizado para: " + memberEntity.getRole()
+            )
+            .build();
+
          this.activityLogService.create(activityLog);
          
          return this.projectMembersMapper.toProjectMembersResponseDTO(memberEntity);
@@ -349,14 +355,16 @@ public class ProjectMemberService {
          ProjectMembersEntity memberEntity = this.projectMembersRepository.removeParticipation(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null,
-            memberEntity.getProjectId(), 
-            null, null, null,
-            memberEntity.getUserId(),
-            ActivityActionEnum.MEMBRO_REMOVIDO_DO_PROJETO,
-            "Participação do usuário: " + memberEntity.getUser().getName() + ", removida do projeto: " + memberEntity.getProject().getName()
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .projectId(memberEntity.getProjectId())
+            .userId(memberEntity.getUserId())
+            .action(ActivityActionEnum.MEMBRO_REMOVIDO_DO_PROJETO)
+            .description(
+               "Participação do usuário: " + memberEntity.getUser().getName() + 
+               ", removida do projeto: " + memberEntity.getProject().getName()
+            )
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.projectMembersMapper.toProjectMembersDeletedDTO(memberEntity);

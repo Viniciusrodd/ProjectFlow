@@ -262,13 +262,12 @@ public class ProjectService {
          ProjectEntity projectEntity = this.projectRepository.update(id, data);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, 
-            projectEntity.getId(), 
-            null, null, null, null,
-            ActivityActionEnum.PROJETO_ATUALIZADO,
-            "Projeto: " + projectEntity.getName() + " atualizado"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .projectId(projectEntity.getId())
+            .action(ActivityActionEnum.PROJETO_ATUALIZADO)
+            .description("Projeto: " + projectEntity.getName() + " atualizado")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.projectMapper.toProjectResponseDTO(projectEntity);
@@ -291,13 +290,12 @@ public class ProjectService {
          ProjectEntity projectEntity = this.projectRepository.delete(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            null, 
-            projectEntity.getId(), 
-            null, null, null, null,
-            ActivityActionEnum.PROJETO_DELETADO,
-            "Projeto: " + projectEntity.getName() + " deletado"
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .projectId(projectEntity.getId())
+            .action(ActivityActionEnum.PROJETO_DELETADO)
+            .description("Projeto: " + projectEntity.getName() + " deletado")
+            .build();
+
          this.activityLogService.create(activityLog);
 
          return this.projectMapper.toProjectDeletedDTO(projectEntity);
