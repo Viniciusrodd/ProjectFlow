@@ -8,6 +8,7 @@ import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
 
 public record NotificationDTO (
 
+   String userId,
    NotificationTitleEnum title,
    String message
 

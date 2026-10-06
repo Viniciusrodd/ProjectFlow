@@ -65,15 +65,15 @@ public class NotificationService {
 
    // notification creation
    @Transactional 
-   public NotificationResponseDTO create(UUID userId, NotificationDTO data) {
-      this.userService.existsById(userId);
+   public NotificationResponseDTO create(NotificationDTO data) {
+      this.userService.existsById(UUID.fromString(data.userId()));
       this.notificationValidator.titleValidate(data.title().toString());
       if(data.message() != null && !data.message().isEmpty()) this.notificationValidator.messageValidate(data.message());
 
       try {
          // document setup
          NotificationDocument document = new NotificationDocument.Builder()
-            .userId(userId)
+            .userId(UUID.fromString(data.userId()))
             .title(data.title())
             .message(data.message())
             .read(false)

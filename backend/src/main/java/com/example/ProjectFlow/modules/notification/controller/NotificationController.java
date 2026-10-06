@@ -2,8 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.notification.controller;
 
-import java.util.List;
 // imports
+import java.util.List;
 import java.util.UUID;
 
 // web imports
@@ -53,13 +53,10 @@ public class NotificationController {
 
 
    // notification creation
-   @PostMapping(value = "/notification/{userId}")
+   @PostMapping(value = "/notification")
    @Operation(summary = "Notification creation")
-   public ResponseEntity<ApiResponse<NotificationResponseDTO>> create(
-      @PathVariable UUID userId,
-      @RequestBody NotificationDTO data
-   ) {
-      NotificationResponseDTO notificationData = this.notificationService.create(userId, data);
+   public ResponseEntity<ApiResponse<NotificationResponseDTO>> create(@RequestBody NotificationDTO data) {
+      NotificationResponseDTO notificationData = this.notificationService.create(data);
 
       ApiResponse<NotificationResponseDTO> response = new ApiResponse.Builder<NotificationResponseDTO>()
          .success(true)
