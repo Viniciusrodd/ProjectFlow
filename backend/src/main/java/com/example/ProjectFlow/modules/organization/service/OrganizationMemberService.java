@@ -21,6 +21,7 @@ import com.example.ProjectFlow.modules.organization.validator.OrganizationMember
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
+import com.example.ProjectFlow.modules.notification.service.NotificationService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.MemberByOrganizationResponseDTO;
@@ -28,6 +29,7 @@ import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.O
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersDeletedDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationMembersDTO.OrganizationMembersResponseDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -37,6 +39,7 @@ import com.example.ProjectFlow.modules.user.entity.UserEntity;
 // import enums
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -57,6 +60,7 @@ public class OrganizationMemberService {
    private final UserService userService;
    private final OrganizationService organizationService;
    private final ActivityLogService activityLogService;
+   private final NotificationService notificationService;
    private final OrganizationMembersMapper organizationMembersMapper;
    
 
@@ -67,6 +71,7 @@ public class OrganizationMemberService {
       UserService userService,
       OrganizationService organizationService,
       ActivityLogService activityLogService,
+      NotificationService notificationService,
       OrganizationMembersMapper organizationMembersMapper
    ) {
       this.organizationMembersRepository = organizationMembersRepository;
@@ -74,6 +79,7 @@ public class OrganizationMemberService {
       this.userService = userService;
       this.organizationService = organizationService;
       this.activityLogService = activityLogService;
+      this.notificationService = notificationService;
       this.organizationMembersMapper = organizationMembersMapper;
    }
 
@@ -103,6 +109,17 @@ public class OrganizationMemberService {
          "Participação do usuário: " + organizationMembersEntity.getUser().getName() + ", adicionada á organização: " + organizationMembersEntity.getOrganization().getName() + ", como: " + organizationMembersEntity.getRole()
       );
       this.activityLogService.create(activityLog);
+
+      // notification - registering
+      for(OrganizationMembersEntity notifyMember : organization.getMembers()) {
+         NotificationDTO notification = new NotificationDTO.Builder()
+            .userId(notifyMember.getUser().getId().toString())
+            .title(NotificationTitleEnum.MEMBRO_ADICIONADO_A_ORGANIZACAO)
+            .message("O usuário: " + user.getName() + ", foi adicionado á organização: " + organization.getName())
+            .build();
+
+         this.notificationService.create(notification);
+      } 
 
       return this.organizationMembersMapper.toOrganizationMembersResponseDTO(organizationMembersEntity);
    }
@@ -323,6 +340,21 @@ public class OrganizationMemberService {
             "Papel do usuário: " + memberEntity.getUser().getName() + ", da organização: " + memberEntity.getOrganization().getName() + ", atualizado para: " + memberEntity.getRole()
          );
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(OrganizationMembersEntity notifyMember : memberEntity.getOrganization().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.PAPEL_DO_MEMBRO_DA_ORGANIZACAO_ATUALIZADA)
+               .message(
+                  "Papel do usuário: " + memberEntity.getUser().getName() + 
+                  ", foi atualizado para: " + memberEntity.getRole() + 
+                  ", na organização: " + memberEntity.getOrganization().getName()
+               )
+               .build();
+               
+            this.notificationService.create(notification);
+         }
          
          return this.organizationMembersMapper.toOrganizationMembersResponseDTO(memberEntity);
       }
@@ -359,6 +391,20 @@ public class OrganizationMemberService {
             "Participação do usuário: " + memberEntity.getUser().getName() + ", removida da organização: " + memberEntity.getOrganization().getName()
          );
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(OrganizationMembersEntity notifyMember : memberEntity.getOrganization().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.MEMBRO_REMOVIDO_DA_ORGANIZACAO)
+               .message(
+                  "Usuário: " + memberEntity.getUser().getName() +  
+                  ", foi removido da organização: " + memberEntity.getOrganization().getName()
+               )
+               .build();
+               
+            this.notificationService.create(notification);
+         }
       
          return this.organizationMembersMapper.toOrganizationMembersDeletedDTO(memberEntity);
       }

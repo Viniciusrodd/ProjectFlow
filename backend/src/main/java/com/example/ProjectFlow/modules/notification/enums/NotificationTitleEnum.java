@@ -11,12 +11,12 @@ public enum NotificationTitleEnum {
  
    // organização
    MEMBRO_ADICIONADO_A_ORGANIZACAO("membro_adicionado_a_organizacao"),
-   PERMISSAO_DO_MEMBRO_DA_ORGANIZACAO_ATUALIZADA("permissao_do_membro_da_organizacao_atualizada"),
+   PAPEL_DO_MEMBRO_DA_ORGANIZACAO_ATUALIZADA("papel_do_membro_da_organizacao_atualizada"),
    MEMBRO_REMOVIDO_DA_ORGANIZACAO("membro_removido_da_organizacao"),
 
    // projeto
    MEMBRO_ADICIONADO_AO_PROJETO("membro_adicionado_ao_projeto"),
-   PERMISSAO_DO_MEMBRO_DO_PROJETO_ATUALIZADA("permissao_do_membro_do_projeto_atualizada"),
+   PAPEL_DO_MEMBRO_DO_PROJETO_ATUALIZADA("papel_do_membro_do_projeto_atualizada"),
    MEMBRO_REMOVIDO_DO_PROJETO("membro_removido_do_projeto"),
 
    // tarefa
