@@ -101,13 +101,17 @@ public class OrganizationMemberService {
       OrganizationMembersEntity organizationMembersEntity = this.organizationMembersRepository.createMemberParticipation(data, user, organization);
    
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         organizationMembersEntity.getOrganizationId(),
-         null, null, null, null,
-         user.getId(),
-         ActivityActionEnum.MEMBRO_ADICIONADO_A_ORGANIZACAO,
-         "Participação do usuário: " + organizationMembersEntity.getUser().getName() + ", adicionada á organização: " + organizationMembersEntity.getOrganization().getName() + ", como: " + organizationMembersEntity.getRole()
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .organizationId(organizationMembersEntity.getOrganizationId())
+         .userId(user.getId())
+         .action(ActivityActionEnum.MEMBRO_ADICIONADO_A_ORGANIZACAO)
+         .description(
+            "Participação do usuário: " + organizationMembersEntity.getUser().getName() + 
+            ", adicionada á organização: " + organizationMembersEntity.getOrganization().getName() + 
+            ", como: " + organizationMembersEntity.getRole()
+         )
+         .build();
+
       this.activityLogService.create(activityLog);
 
       // notification - registering
@@ -332,13 +336,17 @@ public class OrganizationMemberService {
          OrganizationMembersEntity memberEntity = this.organizationMembersRepository.updateMemberRole(id, RoleEnum.valueOf(role.toUpperCase()));
          
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            memberEntity.getOrganizationId(),
-            null, null, null, null,
-            memberEntity.getUserId(),
-            ActivityActionEnum.PAPEL_DO_MEMBRO_DA_ORGANIZACAO_ATUALIZADA,
-            "Papel do usuário: " + memberEntity.getUser().getName() + ", da organização: " + memberEntity.getOrganization().getName() + ", atualizado para: " + memberEntity.getRole()
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .organizationId(memberEntity.getOrganizationId())
+            .userId(memberEntity.getUserId())
+            .action(ActivityActionEnum.PAPEL_DO_MEMBRO_DA_ORGANIZACAO_ATUALIZADA)
+            .description(
+               "Papel do usuário: " + memberEntity.getUser().getName() + 
+               ", da organização: " + memberEntity.getOrganization().getName() + 
+               ", atualizado para: " + memberEntity.getRole()
+            )
+            .build();
+
          this.activityLogService.create(activityLog);
 
          // notification - registering
@@ -383,13 +391,16 @@ public class OrganizationMemberService {
          OrganizationMembersEntity memberEntity = this.organizationMembersRepository.removeParticipation(id);
 
          // activity log - registering
-         ActivityLogDTO activityLog = new ActivityLogDTO(
-            memberEntity.getOrganizationId(),
-            null, null, null, null,
-            memberEntity.getUserId(),
-            ActivityActionEnum.MEMBRO_REMOVIDO_DA_ORGANIZACAO,
-            "Participação do usuário: " + memberEntity.getUser().getName() + ", removida da organização: " + memberEntity.getOrganization().getName()
-         );
+         ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+            .organizationId(memberEntity.getOrganizationId())
+            .userId(memberEntity.getUserId())
+            .action(ActivityActionEnum.MEMBRO_REMOVIDO_DA_ORGANIZACAO)
+            .description(
+               "Participação do usuário: " + memberEntity.getUser().getName() + 
+               ", removida da organização: " + memberEntity.getOrganization().getName()
+            )
+            .build();
+            
          this.activityLogService.create(activityLog);
 
          // notification - registering
