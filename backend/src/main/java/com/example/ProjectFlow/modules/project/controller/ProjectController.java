@@ -147,13 +147,14 @@ public class ProjectController {
 
 
    // project update
-   @PutMapping(value = "/project/{id}")
+   @PutMapping(value = "/project/{id}/user/{userId}")
    @Operation(summary = "Update project")
    public ResponseEntity<ApiResponse<ProjectResponseDTO>> updateProject(
       @PathVariable UUID id,
+      @PathVariable UUID userId,
       @RequestBody ProjectUpdateDTO data
    ) {
-      ProjectResponseDTO updatedProject = this.projectService.update(id, data);
+      ProjectResponseDTO updatedProject = this.projectService.update(id, userId, data);
 
       ApiResponse<ProjectResponseDTO> response = new ApiResponse.Builder<ProjectResponseDTO>()
          .success(true)
@@ -167,10 +168,13 @@ public class ProjectController {
 
 
    // delete project
-   @DeleteMapping(value = "/project/{id}")
+   @DeleteMapping(value = "/project/{id}/user/{userId}")
    @Operation(summary = "Delete project")
-   public ResponseEntity<ApiResponse<ProjectDeletedDTO>> deleteProject(@PathVariable UUID id) {
-      ProjectDeletedDTO deletedProject = this.projectService.delete(id);
+   public ResponseEntity<ApiResponse<ProjectDeletedDTO>> deleteProject(
+      @PathVariable UUID id,
+      @PathVariable UUID userId
+   ) {
+      ProjectDeletedDTO deletedProject = this.projectService.delete(id, userId);
 
       ApiResponse<ProjectDeletedDTO> response = new ApiResponse.Builder<ProjectDeletedDTO>()
          .success(true)
