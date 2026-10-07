@@ -63,13 +63,16 @@ public class OrganizationImageController {
 
 
    // upload organization image
-   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @PostMapping(value = "/user/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload organization image")
    public ResponseEntity<ApiResponse<OrganizationImageResponseDTO>> uploadOrganizationImage(
       @PathVariable UUID organizationId, 
+      @PathVariable UUID userId,
       @RequestParam MultipartFile file
    ) {
-      OrganizationImageResponseDTO organizationImageData = this.organizationImageService.uploadOrganizationImage(organizationId, file);
+      OrganizationImageResponseDTO organizationImageData = this.organizationImageService.uploadOrganizationImage(
+         organizationId, userId, file
+      );
 
       ApiResponse<OrganizationImageResponseDTO> response = new ApiResponse.Builder<OrganizationImageResponseDTO>()
          .success(true)
@@ -117,10 +120,13 @@ public class OrganizationImageController {
 
 
    // delete organization image
-   @DeleteMapping()
+   @DeleteMapping(value = "/user/{userId}")
    @Operation(summary = "Organization image delete")
-   public ResponseEntity<ApiResponse<Void>> deleteOrganizationImage(@PathVariable UUID organizationId) {
-      this.organizationImageService.deleteOrganizationImage(organizationId);
+   public ResponseEntity<ApiResponse<Void>> deleteOrganizationImage(
+      @PathVariable UUID organizationId,
+      @PathVariable UUID userId
+   ) {
+      this.organizationImageService.deleteOrganizationImage(organizationId, userId);
 
       ApiResponse<Void> response = new ApiResponse.Builder<Void>()
          .success(true)

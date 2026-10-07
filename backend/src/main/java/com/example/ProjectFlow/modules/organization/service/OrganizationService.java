@@ -227,6 +227,9 @@ public class OrganizationService {
 
    // check if user is admin
    public void userIsAdmin(UUID userId, UUID organizationId) {
+      this.userService.existsById(userId);
+      this.existsById(organizationId);
+
       OrganizationMembersEntity member = this.organizationMembersRepository.getMemberByOrganizationId(userId, organizationId);
       if(member.getRole() != RoleEnum.ADMIN) {
          throw MultiExceptions.unauthorized(String.format(
@@ -241,7 +244,6 @@ public class OrganizationService {
    @Transactional
    public OrganizationResponseDTO update(UUID id, UUID userId, OrganizationUpdateDTO data) {
       this.organizationValidator.idValidate(id);
-      this.userService.existsById(userId);
       this.organizationValidator.updateValidations(data);
       
       try {
@@ -274,7 +276,6 @@ public class OrganizationService {
    @Transactional
    public OrganizationDeletedDTO delete(UUID id, UUID userId) {
       this.organizationValidator.idValidate(id);
-      this.userService.existsById(userId);
 
       try {
          // check if user is a organization admin
