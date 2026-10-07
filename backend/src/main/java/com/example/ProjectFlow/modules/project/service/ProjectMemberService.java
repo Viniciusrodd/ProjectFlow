@@ -21,6 +21,7 @@ import com.example.ProjectFlow.modules.project.validator.ProjectMembersValidator
 // import service
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
+import com.example.ProjectFlow.modules.notification.service.NotificationService;
 
 // import DTOs
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.MemberByProjectResponseDTO;
@@ -28,6 +29,7 @@ import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMemb
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersDeletedDTO;
 import com.example.ProjectFlow.modules.project.dto.projectMembersDTO.ProjectMembersResponseDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -37,6 +39,7 @@ import com.example.ProjectFlow.modules.user.entity.UserEntity;
 // import enums
 import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -57,6 +60,7 @@ public class ProjectMemberService {
    private final ProjectService projectService;
    private final UserService userService;
    private final ActivityLogService activityLogService;
+   private final NotificationService notificationService;
    private final ProjectMembersMapper projectMembersMapper;
 
 
@@ -67,6 +71,7 @@ public class ProjectMemberService {
       UserService userService,
       ProjectService projectService,
       ActivityLogService activityLogService,
+      NotificationService notificationService,
       ProjectMembersMapper projectMembersMapper
    ) {
       this.projectMembersRepository = projectMembersRepository;
@@ -74,6 +79,7 @@ public class ProjectMemberService {
       this.userService = userService;
       this.projectService = projectService;
       this.activityLogService = activityLogService;
+      this.notificationService = notificationService;
       this.projectMembersMapper = projectMembersMapper;
    }
 
@@ -105,6 +111,17 @@ public class ProjectMemberService {
             ", como: " + projectMembersEntity.getRole()
          )
          .build();
+
+      // notification - registering
+      for(ProjectMembersEntity notifyMember : project.getMembers()) {
+         NotificationDTO notification = new NotificationDTO.Builder()
+            .userId(notifyMember.getUser().getId().toString())
+            .title(NotificationTitleEnum.MEMBRO_ADICIONADO_AO_PROJETO)
+            .message("O usuário: " + user.getName() + ", foi adicionado ao projeto: " + project.getName())
+            .build();
+         
+         this.notificationService.create(notification);
+      }
 
       this.activityLogService.create(activityLog);
 
@@ -326,6 +343,21 @@ public class ProjectMemberService {
             )
             .build();
 
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : memberEntity.getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.PAPEL_DO_MEMBRO_DO_PROJETO_ATUALIZADA)
+               .message(
+                  "Papel do usuário: " + memberEntity.getUser().getName() + 
+                  ", foi atualizado para: " + memberEntity.getRole() + 
+                  ", no projeto: " + memberEntity.getProject().getName()
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
+
          this.activityLogService.create(activityLog);
          
          return this.projectMembersMapper.toProjectMembersResponseDTO(memberEntity);
@@ -364,6 +396,20 @@ public class ProjectMemberService {
                ", removida do projeto: " + memberEntity.getProject().getName()
             )
             .build();
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : memberEntity.getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.MEMBRO_REMOVIDO_DO_PROJETO)
+               .message(
+                  "Participação do usuário: " + memberEntity.getUser().getName() + 
+                  ", removida da organização: " + memberEntity.getProject().getName()
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          this.activityLogService.create(activityLog);
 
