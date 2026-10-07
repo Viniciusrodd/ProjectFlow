@@ -63,13 +63,14 @@ public class ProjectImageController {
 
 
    // upload project image
-   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   @PostMapping(value = "/user/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
    @Operation(summary = "Upload project image")
    public ResponseEntity<ApiResponse<ProjectImageResponseDTO>> uploadProjectImage(
       @PathVariable UUID projectId,
+      @PathVariable UUID userId,
       @RequestParam MultipartFile file
    ) {
-      ProjectImageResponseDTO projectImageData = this.projectImageService.uploadProjectImage(projectId, file);
+      ProjectImageResponseDTO projectImageData = this.projectImageService.uploadProjectImage(projectId, userId, file);
 
       ApiResponse<ProjectImageResponseDTO> response = new ApiResponse.Builder<ProjectImageResponseDTO>()
          .success(true)
@@ -117,10 +118,13 @@ public class ProjectImageController {
 
 
    // delete project image
-   @DeleteMapping()
+   @DeleteMapping(value = "/user/{userId}")
    @Operation(summary = "Delete project image")
-   public ResponseEntity<ApiResponse<Void>> deleteProjectImage(@PathVariable UUID projectId) {
-      this.projectImageService.deleteProjectImage(projectId);
+   public ResponseEntity<ApiResponse<Void>> deleteProjectImage(
+      @PathVariable UUID projectId,
+      @PathVariable UUID userId
+   ) {
+      this.projectImageService.deleteProjectImage(projectId, userId);
 
       ApiResponse<Void> response = new ApiResponse.Builder<Void>()
          .success(true)

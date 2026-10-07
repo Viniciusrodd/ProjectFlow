@@ -268,7 +268,7 @@ public class ProjectService {
 
       try {
          // check if user is a organization admin
-         this.organizationMemberService.userIsAdmin(userId, this.getEntityById(id).getOrganizationId());
+         this.organizationMemberService.userIsAdmin(userId, this.getById(id).organizationId());
 
          ProjectEntity projectEntity = this.projectRepository.update(id, data);
 
@@ -300,7 +300,7 @@ public class ProjectService {
 
       try {
          // check if user is a organization admin
-         this.organizationMemberService.userIsAdmin(userId, this.getEntityById(id).getOrganizationId());
+         this.organizationMemberService.userIsAdmin(userId, this.getById(id).organizationId());
 
          ProjectEntity projectEntity = this.projectRepository.delete(id);
 
