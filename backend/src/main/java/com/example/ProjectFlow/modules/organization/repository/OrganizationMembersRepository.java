@@ -97,6 +97,23 @@ public class OrganizationMembersRepository {
    }
 
 
+   // get member by organization id
+   public OrganizationMembersEntity getMemberByOrganizationId(UUID userId, UUID organizationId) throws NoResultException {
+      OrganizationMembersEntity member = this.entityManager
+         .createQuery(
+            "SELECT m FROM OrganizationMembersEntity m " +
+            "WHERE m.user.id = :userId " +
+            "AND m.organization.id = :organizationId ",
+            OrganizationMembersEntity.class 
+         )
+         .setParameter("userId", userId)
+         .setParameter("organizationId", organizationId)
+         .getSingleResult();
+      
+      return member;
+   }
+
+
    // get all members by role
    public List<OrganizationMembersEntity> getAllMembersByRole(
       UUID organizationId,

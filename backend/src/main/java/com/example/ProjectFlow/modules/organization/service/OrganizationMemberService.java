@@ -170,9 +170,6 @@ public class OrganizationMemberService {
 
    // get all members by organization
    public List<MemberByOrganizationResponseDTO> getAllMembersByOrganizationId(UUID organizationId) {
-      this.organizationMembersValidator.organizationIdValidate(organizationId);
-      
-      // organization existence - check
       this.organizationService.existsById(organizationId);
 
       // get members
@@ -195,16 +192,45 @@ public class OrganizationMemberService {
    }
 
 
+   // get member by organization id
+   public MemberByOrganizationResponseDTO getMemberByOrganizationId(UUID userId, UUID organizationId) {
+      this.userService.existsById(userId);
+      this.organizationService.existsById(organizationId);
+
+      try {
+         OrganizationMembersEntity member = this.organizationMembersRepository.getMemberByOrganizationId(userId, organizationId);
+
+         return this.organizationMembersMapper.toMemberByOrganizationResponseDTO(member);
+      }
+      catch (NoResultException error) {
+         throw MultiExceptions.notFound(String.format(
+            "%s: Membro não existe",
+            ResponseMessages.NOT_FOUND
+         ));
+      }
+   }
+
+
+   // check if user is admin
+   public void userIsAdmin(UUID userId, UUID organizationId) {
+      MemberByOrganizationResponseDTO member = this.getMemberByOrganizationId(userId, organizationId);
+      
+      if(member.role() != RoleEnum.ADMIN) {
+         throw MultiExceptions.unauthorized(String.format(
+            "%s: Membro não é um administrador",
+            ResponseMessages.UNAUTHORIZED
+         ));
+      }
+   }
+
+
    // get all members by role
    public List<MemberByOrganizationResponseDTO> getAllMembersByRole(
       UUID organizationId,
       String role
    ) {
-      this.organizationMembersValidator.organizationIdValidate(organizationId);
-      this.organizationMembersValidator.roleValidate(role);
-      
-      // organization existence - check
       this.organizationService.existsById(organizationId);
+      this.organizationMembersValidator.roleValidate(role);
 
       // get members
       List<OrganizationMembersEntity> membersEntity = this.organizationMembersRepository.getAllMembersByRole(organizationId, RoleEnum.valueOf(role.toUpperCase()));
@@ -277,13 +303,7 @@ public class OrganizationMemberService {
 
    // check if user is a membership
    public boolean checkUserMembership(UUID userId, UUID organizationId) {
-      this.organizationMembersValidator.userIdValidate(userId);
-      this.organizationMembersValidator.organizationIdValidate(organizationId);
-      
-      // user existence - check
-      this.userService.existsById(userId);
-      
-      // organization existence - check
+      this.userService.existsById(userId);      
       this.organizationService.existsById(organizationId);
 
       boolean exist = this.organizationMembersRepository.checkUserMembership(userId, organizationId);
