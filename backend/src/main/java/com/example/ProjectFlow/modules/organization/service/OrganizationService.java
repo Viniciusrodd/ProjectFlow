@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 
 // import repository
 import com.example.ProjectFlow.modules.organization.repository.OrganizationRepository;
+import com.example.ProjectFlow.modules.organization.repository.OrganizationMembersRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationValidator;
@@ -31,6 +32,7 @@ import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
+import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import exceptions
@@ -44,6 +46,7 @@ import com.example.ProjectFlow.modules.organization.mapper.OrganizationMapper;
 
 // import enums
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 
 
 @Service
@@ -51,6 +54,7 @@ public class OrganizationService {
  
    // properties
    private final OrganizationRepository organizationRepository;
+   private final OrganizationMembersRepository organizationMembersRepository;
    private final OrganizationValidator organizationValidator;
    private final UserService userService;
    private final ActivityLogService activityLogService;
@@ -60,12 +64,14 @@ public class OrganizationService {
    // constructor - dependency injection
    public OrganizationService(
       OrganizationRepository organizationRepository,
+      OrganizationMembersRepository organizationMembersRepository,
       OrganizationValidator organizationValidator,
       UserService userService,
       ActivityLogService activityLogService,
       OrganizationMapper organizationMapper
    ) {
       this.organizationRepository = organizationRepository;
+      this.organizationMembersRepository = organizationMembersRepository;
       this.organizationValidator = organizationValidator;
       this.userService = userService;
       this.activityLogService = activityLogService;
@@ -219,13 +225,29 @@ public class OrganizationService {
    }
 
 
+   // check if user is admin
+   public void userIsAdmin(UUID userId, UUID organizationId) {
+      OrganizationMembersEntity member = this.organizationMembersRepository.getMemberByOrganizationId(userId, organizationId);
+      if(member.getRole() != RoleEnum.ADMIN) {
+         throw MultiExceptions.unauthorized(String.format(
+            "%s: Membro não é um administrador",
+            ResponseMessages.UNAUTHORIZED
+         ));
+      }
+   }
+
+
    // update organization
    @Transactional
-   public OrganizationResponseDTO update(UUID id, OrganizationUpdateDTO data) {
+   public OrganizationResponseDTO update(UUID id, UUID userId, OrganizationUpdateDTO data) {
       this.organizationValidator.idValidate(id);
+      this.userService.existsById(userId);
       this.organizationValidator.updateValidations(data);
       
       try {
+         // check if user is a organization admin
+         this.userIsAdmin(userId, id);
+
          OrganizationEntity organizationEntity = this.organizationRepository.update(id, data);
 
          // activity log - registering
@@ -250,10 +272,14 @@ public class OrganizationService {
 
    // delete organization
    @Transactional
-   public OrganizationDeletedDTO delete(UUID id) {
+   public OrganizationDeletedDTO delete(UUID id, UUID userId) {
       this.organizationValidator.idValidate(id);
+      this.userService.existsById(userId);
 
       try {
+         // check if user is a organization admin
+         this.userIsAdmin(userId, id);
+
          OrganizationEntity organizationEntity = this.organizationRepository.delete(id);
 
          // activity log - registering

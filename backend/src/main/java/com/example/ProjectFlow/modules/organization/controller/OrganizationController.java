@@ -132,13 +132,14 @@ public class OrganizationController {
 
 
    // update organization
-   @PutMapping(value = "/organization/{id}")
+   @PutMapping(value = "/organization/{id}/user/{userId}")
    @Operation(summary = "Update organization")
    public ResponseEntity<ApiResponse<OrganizationResponseDTO>> updateOrganization(
       @PathVariable UUID id,
+      @PathVariable UUID userId,
       @RequestBody OrganizationUpdateDTO data
    ) {
-      OrganizationResponseDTO organization = this.organizationService.update(id, data);
+      OrganizationResponseDTO organization = this.organizationService.update(id, userId, data);
 
       ApiResponse<OrganizationResponseDTO> response = new ApiResponse.Builder<OrganizationResponseDTO>()
          .success(true)
@@ -152,10 +153,13 @@ public class OrganizationController {
 
 
    // delete organization
-   @DeleteMapping(value = "/organization/{id}")
+   @DeleteMapping(value = "/organization/{id}/user/{userId}")
    @Operation(summary = "Delete organization")
-   public ResponseEntity<ApiResponse<OrganizationDeletedDTO>> deleteOrganization(@PathVariable UUID id) {
-      OrganizationDeletedDTO organizationDeleted = this.organizationService.delete(id);
+   public ResponseEntity<ApiResponse<OrganizationDeletedDTO>> deleteOrganization(
+      @PathVariable UUID id,
+      @PathVariable UUID userId
+   ) {
+      OrganizationDeletedDTO organizationDeleted = this.organizationService.delete(id, userId);
 
       ApiResponse<OrganizationDeletedDTO> response = new ApiResponse.Builder<OrganizationDeletedDTO>()
          .success(true)
