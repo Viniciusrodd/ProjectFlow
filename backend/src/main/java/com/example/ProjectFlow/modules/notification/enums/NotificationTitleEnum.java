@@ -21,7 +21,7 @@ public enum NotificationTitleEnum {
 
    // tarefa
    TAREFA_ATRIBUIDA("tarefa_atribuida"),
-   STATUS_DA_TAREFA_ATUALIZADO("status_da_tarefa_atualizado"),
+   POSICAO_DA_TAREFA_ATUALIZADO("posicao_da_tarefa_atualizado"),
    TAREFA_CONCLUIDA("tarefa_concluida"),
    TAREFA_EXCLUIDA("tarefa_excluida"),
 

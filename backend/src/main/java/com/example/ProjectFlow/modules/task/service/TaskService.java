@@ -23,9 +23,11 @@ import com.example.ProjectFlow.modules.project.service.ProjectService;
 import com.example.ProjectFlow.modules.board.service.BoardColumnService;
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
+import com.example.ProjectFlow.modules.notification.service.NotificationService;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 import com.example.ProjectFlow.modules.board.entity.BoardColumnsEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
@@ -37,6 +39,7 @@ import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksDeletedDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskDTO.TasksUpdateDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
@@ -49,6 +52,7 @@ import com.example.ProjectFlow.modules.task.mapper.TaskMapper;
 
 // import enums
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
 
 
 @Service
@@ -61,6 +65,7 @@ public class TaskService {
    private final BoardColumnService boardColumnService;
    private final UserService userService;
    private final ActivityLogService activityLogService;
+   private final NotificationService notificationService;
    private final TaskMapper taskMapper;
 
 
@@ -72,6 +77,7 @@ public class TaskService {
       BoardColumnService boardColumnService,
       UserService userService,
       ActivityLogService activityLogService,
+      NotificationService notificationService,
       TaskMapper taskMapper
    ) {
       this.taskRepository = taskRepository;
@@ -80,6 +86,7 @@ public class TaskService {
       this.boardColumnService = boardColumnService;
       this.userService = userService;
       this.activityLogService = activityLogService;
+      this.notificationService = notificationService;
       this.taskMapper = taskMapper;
    }
 
@@ -115,11 +122,26 @@ public class TaskService {
          .description(
             "Tarefa: " + taskEntity.getTitle() + 
             ", do projeto: " + taskEntity.getProject().getName() + 
-            ", criada por: " + project.getOwner().getName()
+            ", criada por: " + owner.getName()
          )
          .build();
 
       this.activityLogService.create(activityLog);
+
+      // notification - registering
+      for(ProjectMembersEntity notifyMember : project.getMembers()) {
+         NotificationDTO notification = new NotificationDTO.Builder()
+            .userId(notifyMember.getUser().getId().toString())
+            .title(NotificationTitleEnum.TAREFA_ATRIBUIDA)
+            .message(
+               "Tarefa: " + taskEntity.getTitle() + 
+               ", atribuida ao projeto: " + taskEntity.getProject().getName() + 
+               ", por: " + owner.getName()
+            )
+            .build();
+         
+         this.notificationService.create(notification);
+      }
 
       return this.taskMapper.toTasksResponseDTO(taskEntity);
    }
@@ -285,11 +307,28 @@ public class TaskService {
             .description(
                "Posição da tarefa: " + taskEntity.getTitle() + 
                ", atualizada para: " + taskEntity.getBoardColumn().getPosition() + 
-               ", por: " + taskEntity.getOwner().getName()
+               ", por: " + taskEntity.getOwner().getName() +
+               ", no projeto: " + taskEntity.getProject().getName()
             )
             .build();
 
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : taskEntity.getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.POSICAO_DA_TAREFA_ATUALIZADO)
+               .message(
+                  "Posição da tarefa: " + taskEntity.getTitle() + 
+                  ", atualizada para: " + taskEntity.getBoardColumn().getPosition() + 
+                  ", por: " + taskEntity.getOwner().getName() +
+                  ", no projeto: " + taskEntity.getProject().getName()
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          return this.taskMapper.toTasksCompleteResponseDTO(taskEntity);
       }
@@ -343,8 +382,27 @@ public class TaskService {
          ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
             .taskId(taskEntity.getId())
             .action(ActivityActionEnum.TAREFA_CONCLUIDA)
-            .description("Tarefa: " + taskEntity.getTitle() + ", completada")
+            .description(
+               "Tarefa: " + taskEntity.getTitle() +
+               ", do projeto: " + taskEntity.getProject().getName() + 
+               ", completada"
+            )
             .build();
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : taskEntity.getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.TAREFA_CONCLUIDA)
+               .message(
+                  "Tarefa: " + taskEntity.getTitle() +
+                  ", do projeto: " + taskEntity.getProject().getName() + 
+                  ", completada"
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          this.activityLogService.create(activityLog);
 
@@ -371,10 +429,29 @@ public class TaskService {
          ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
             .taskId(taskEntity.getId())
             .action(ActivityActionEnum.TAREFA_DELETADA)
-            .description("Tarefa: " + taskEntity.getTitle() + ", deletada")
+            .description(
+               "Tarefa: " + taskEntity.getTitle() + 
+               ", do projeto: " + taskEntity.getProject().getName() +
+               ", deletada"
+            )
             .build();
 
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : taskEntity.getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.TAREFA_EXCLUIDA)
+               .message(
+                  "Tarefa: " + taskEntity.getTitle() +
+                  ", do projeto: " + taskEntity.getProject().getName() + 
+                  ", deletada"
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          return this.taskMapper.toTasksDeletedDTO(taskEntity);
       }
