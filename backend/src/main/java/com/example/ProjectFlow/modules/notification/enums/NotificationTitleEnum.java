@@ -30,7 +30,10 @@ public enum NotificationTitleEnum {
    ETIQUETA_DA_TAREFA_REMOVIDA("etiqueta_da_tarefa_removida"),
 
    // checklist da tarefa
+   CHECKLIST_DA_TAREFA_CRIADO("checklist_da_tarefa_criado"),
    CHECKLIST_DA_TAREFA_ATUALIZADO("checklist_da_tarefa_atualizado"),
+   CHECKLIST_DA_TAREFA_COMPLETADO("checklist_da_tarefa_completado"),
+   CHECKLIST_DA_TAREFA_REMOVIDO("checklist_da_tarefa_removido"),
 
    // comentário
    COMENTARIO_ADICIONADO_A_TAREFA("comentario_adicionado_a_tarefa"),

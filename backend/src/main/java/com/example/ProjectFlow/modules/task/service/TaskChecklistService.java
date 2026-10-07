@@ -18,7 +18,8 @@ import com.example.ProjectFlow.modules.task.repository.TaskChecklistRepository;
 
 // import services
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
-
+import com.example.ProjectFlow.modules.notification.service.NotificationService;
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 // import validator
 import com.example.ProjectFlow.modules.task.validator.TaskChecklistValidator;
 
@@ -28,6 +29,7 @@ import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistDe
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskChecklistDTO.TaskChecklistUpdateDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TaskChecklistEntity;
@@ -44,6 +46,7 @@ import com.example.ProjectFlow.modules.task.mapper.TaskChecklistMapper;
 
 // import enums
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
 
 
 @Service
@@ -54,6 +57,7 @@ public class TaskChecklistService {
    private final TaskChecklistValidator taskChecklistValidator;
    private final TaskService taskService;
    private final ActivityLogService activityLogService;
+   private final NotificationService notificationService;
    private final TaskChecklistMapper taskChecklistMapper;
    
    // constructor - dependency injection
@@ -62,12 +66,14 @@ public class TaskChecklistService {
       TaskChecklistValidator taskChecklistValidator,
       TaskService taskService,
       ActivityLogService activityLogService,
+      NotificationService notificationService,
       TaskChecklistMapper taskChecklistMapper
    ) {
       this.taskChecklistRepository = taskChecklistRepository;
       this.taskChecklistValidator = taskChecklistValidator;
       this.taskService = taskService;
       this.activityLogService = activityLogService;
+      this.notificationService = notificationService;
       this.taskChecklistMapper = taskChecklistMapper;
    }
 
@@ -94,11 +100,27 @@ public class TaskChecklistService {
          .action(ActivityActionEnum.CHECKLIST_DA_TAREFA_CRIADO)
          .description(
             "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
-            ", criado na posição: " + taskChecklistEntity.getPosition()
+            ", criado na posição: " + taskChecklistEntity.getPosition() +
+            ", do projeto: " + task.getProject().getName()
          )
          .build();
 
       this.activityLogService.create(activityLog);
+
+      // notification - registering
+      for(ProjectMembersEntity notifyMember : taskChecklistEntity.getTask().getProject().getMembers()) {
+         NotificationDTO notification = new NotificationDTO.Builder()
+            .userId(notifyMember.getUser().getId().toString())
+            .title(NotificationTitleEnum.CHECKLIST_DA_TAREFA_CRIADO)
+            .message(
+               "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+               ", criado na posição: " + taskChecklistEntity.getPosition() +
+               ", do projeto: " + task.getProject().getName()
+            )
+            .build();
+         
+         this.notificationService.create(notification);
+      }
 
       return this.taskChecklistMapper.toTaskChecklistResponseDTO(taskChecklistEntity);
    }
@@ -227,10 +249,27 @@ public class TaskChecklistService {
          ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
             .taskId(taskChecklistEntity.getTask().getId())
             .action(ActivityActionEnum.CHECKLIST_DA_TAREFA_ATUALIZADO)
-            .description("Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", atualizado")
+            .description(
+               "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+               ", atualizado no projeto: " + taskChecklistEntity.getTask().getProject().getName()
+            )
             .build();
 
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : taskChecklistEntity.getTask().getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.CHECKLIST_DA_TAREFA_ATUALIZADO)
+               .message(
+                  "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+                  ", atualizado no projeto: " + taskChecklistEntity.getTask().getProject().getName()
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          return this.taskChecklistMapper.toTaskChecklistResponseDTO(taskChecklistEntity);
       }
@@ -256,12 +295,26 @@ public class TaskChecklistService {
             .taskId(taskChecklistEntity.getTask().getId())
             .action(ActivityActionEnum.CHECKLIST_DA_TAREFA_ATUALIZADO)
             .description(
-               "Campo 'completed' do item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
-               ", atualizado"
+               "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+               ", completado no projeto: " + taskChecklistEntity.getTask().getProject().getName()
             )
             .build();
 
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : taskChecklistEntity.getTask().getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.CHECKLIST_DA_TAREFA_COMPLETADO)
+               .message(
+                  "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+                  ", completado no projeto: " + taskChecklistEntity.getTask().getProject().getName()
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          return this.taskChecklistMapper.toTaskChecklistResponseDTO(taskChecklistEntity);
       }
@@ -286,10 +339,27 @@ public class TaskChecklistService {
          ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
             .taskId(taskChecklistEntity.getTask().getId())
             .action(ActivityActionEnum.CHECKLIST_DA_TAREFA_REMOVIDO)
-            .description("Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + ", removido")
+            .description(
+               "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+               ", removido no projeto: " + taskChecklistEntity.getTask().getProject().getName()
+            )
             .build();
 
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : taskChecklistEntity.getTask().getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.CHECKLIST_DA_TAREFA_REMOVIDO)
+               .message(
+                  "Item de checklist da tarefa: " + taskChecklistEntity.getTask().getTitle() + 
+                  ", removido no projeto: " + taskChecklistEntity.getTask().getProject().getName()
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          return this.taskChecklistMapper.toTaskChecklistDeletedDTO(taskChecklistEntity);
       }
