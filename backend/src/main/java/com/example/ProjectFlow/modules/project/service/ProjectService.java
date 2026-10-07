@@ -29,7 +29,6 @@ import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
-import com.example.ProjectFlow.modules.organization.service.OrganizationMemberService;
 
 // import entity
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
@@ -58,7 +57,6 @@ public class ProjectService {
    private final UserService userService;
    private final OrganizationService organizationService;
    private final ActivityLogService activityLogService;
-   private final OrganizationMemberService organizationMemberService;
    private final ProjectMapper projectMapper;
 
 
@@ -69,7 +67,6 @@ public class ProjectService {
       UserService userService,
       OrganizationService organizationService,
       ActivityLogService activityLogService,
-      OrganizationMemberService organizationMemberService,
       ProjectMapper projectMapper
    ) {
       this.projectRepository = projectRepository;
@@ -77,7 +74,6 @@ public class ProjectService {
       this.userService = userService;
       this.organizationService = organizationService;
       this.activityLogService = activityLogService;
-      this.organizationMemberService = organizationMemberService;
       this.projectMapper = projectMapper;
    }
 
@@ -97,7 +93,7 @@ public class ProjectService {
       OrganizationEntity organization = this.organizationService.getEntityById(data.organizationId());
 
       // check if user is a organization admin
-      this.organizationMemberService.userIsAdmin(owner.getId(), organization.getId());
+      this.organizationService.userIsAdmin(owner.getId(), organization.getId());
 
       // project creation
       ProjectEntity projectEntity = this.projectRepository.create(data, organization, owner);
@@ -268,7 +264,7 @@ public class ProjectService {
 
       try {
          // check if user is a organization admin
-         this.organizationMemberService.userIsAdmin(userId, this.getById(id).organizationId());
+         this.organizationService.userIsAdmin(userId, this.getById(id).organizationId());
 
          ProjectEntity projectEntity = this.projectRepository.update(id, data);
 
@@ -300,7 +296,7 @@ public class ProjectService {
 
       try {
          // check if user is a organization admin
-         this.organizationMemberService.userIsAdmin(userId, this.getById(id).organizationId());
+         this.organizationService.userIsAdmin(userId, this.getById(id).organizationId());
 
          ProjectEntity projectEntity = this.projectRepository.delete(id);
 

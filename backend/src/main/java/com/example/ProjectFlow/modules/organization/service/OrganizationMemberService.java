@@ -211,19 +211,6 @@ public class OrganizationMemberService {
    }
 
 
-   // check if user is admin
-   public void userIsAdmin(UUID userId, UUID organizationId) {
-      MemberByOrganizationResponseDTO member = this.getMemberByOrganizationId(userId, organizationId);
-      
-      if(member.role() != RoleEnum.ADMIN) {
-         throw MultiExceptions.unauthorized(String.format(
-            "%s: Membro não é um administrador",
-            ResponseMessages.UNAUTHORIZED
-         ));
-      }
-   }
-
-
    // get all members by role
    public List<MemberByOrganizationResponseDTO> getAllMembersByRole(
       UUID organizationId,

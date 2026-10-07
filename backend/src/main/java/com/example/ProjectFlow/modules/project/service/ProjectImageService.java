@@ -18,7 +18,7 @@ import com.example.ProjectFlow.modules.project.repository.ProjectImageRepository
 
 // import services
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
-import com.example.ProjectFlow.modules.organization.service.OrganizationMemberService;
+import com.example.ProjectFlow.modules.organization.service.OrganizationService;
 
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectImageValidator;
@@ -52,7 +52,7 @@ public class ProjectImageService {
    // properties
    private final ProjectService projectService;
    private final ActivityLogService activityLogService;
-   private final OrganizationMemberService organizationMemberService;
+   private final OrganizationService organizationService;
    private final ProjectImageRepository projectImageRepository;
    private final ProjectImageValidator projectImageValidator;
    private final ProjectImageMapper projectImageMapper;
@@ -62,14 +62,14 @@ public class ProjectImageService {
    public ProjectImageService(
       ProjectService projectService,
       ActivityLogService activityLogService,
-      OrganizationMemberService organizationMemberService,
+      OrganizationService organizationService,
       ProjectImageRepository projectImageRepository,
       ProjectImageValidator projectImageValidator,
       ProjectImageMapper projectImageMapper
    ) {
       this.projectService = projectService;
       this.activityLogService = activityLogService;
-      this.organizationMemberService = organizationMemberService;
+      this.organizationService = organizationService;
       this.projectImageRepository = projectImageRepository;
       this.projectImageValidator = projectImageValidator;
       this.projectImageMapper = projectImageMapper;
@@ -83,7 +83,7 @@ public class ProjectImageService {
 
       try {
          // check if user is a organization admin
-         this.organizationMemberService.userIsAdmin(userId, this.projectService.getById(projectId).organizationId());
+         this.organizationService.userIsAdmin(userId, this.projectService.getById(projectId).organizationId());
 
          // replace old image for new one
          if(this.projectImageRepository.existsByProjectId(projectId)) {
@@ -164,7 +164,7 @@ public class ProjectImageService {
    // delete project image
    public void deleteProjectImage(UUID projectId, UUID userId) {
       // check if user is a organization admin
-      this.organizationMemberService.userIsAdmin(userId, this.projectService.getById(projectId).organizationId());
+      this.organizationService.userIsAdmin(userId, this.projectService.getById(projectId).organizationId());
 
       // project image existence - validation
       if(this.projectImageRepository.findByProjectId(projectId) == null) {
