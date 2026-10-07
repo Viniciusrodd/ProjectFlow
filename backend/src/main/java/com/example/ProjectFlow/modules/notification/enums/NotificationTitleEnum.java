@@ -40,6 +40,7 @@ public enum NotificationTitleEnum {
 
    // anexo
    ANEXO_ADICIONADO_A_TAREFA("anexo_adicionado_a_tarefa"),
+   ANEXOS_REMOVIDOS_DA_TAREFA("anexos_removidos_da_tarefa"),
    ANEXO_REMOVIDO_DA_TAREFA("anexo_removido_da_tarefa");
 
 

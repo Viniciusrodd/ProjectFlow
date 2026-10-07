@@ -21,7 +21,8 @@ import com.example.ProjectFlow.modules.attachment.repository.AttachmentRepositor
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
-
+import com.example.ProjectFlow.modules.notification.service.NotificationService;
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
@@ -40,12 +41,14 @@ import com.example.ProjectFlow.modules.attachment.document.AttachmentDocument;
 // import DTO
 import com.example.ProjectFlow.modules.attachment.dto.AttachmentResponseDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import mapper
 import com.example.ProjectFlow.modules.attachment.mapper.AttachmentMapper;
 
 // import enums
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
 
 
 @Service 
@@ -55,6 +58,7 @@ public class AttachmentService {
    private final UserService userService;
    private final TaskService taskService;
    private final ActivityLogService activityLogService;
+   private final NotificationService notificationService;
    private final AttachmentRepository attachmentRepository;
    private final AttachmentValidator attachmentValidator;
    private final AttachmentMapper attachmentMapper;
@@ -65,6 +69,7 @@ public class AttachmentService {
       UserService userService,
       TaskService taskService,
       ActivityLogService activityLogService,
+      NotificationService notificationService,
       AttachmentRepository attachmentRepository,
       AttachmentValidator attachmentValidator,
       AttachmentMapper attachmentMapper
@@ -72,6 +77,7 @@ public class AttachmentService {
       this.userService = userService;
       this.taskService = taskService;
       this.activityLogService = activityLogService;
+      this.notificationService = notificationService;
       this.attachmentRepository = attachmentRepository;
       this.attachmentValidator = attachmentValidator;
       this.attachmentMapper = attachmentMapper;
@@ -107,10 +113,27 @@ public class AttachmentService {
             .taskId(taskEntity.getId())
             .attachmentId(UUID.fromString(savedDocument.getId()))
             .action(ActivityActionEnum.ANEXO_DA_TAREFA_ADICIONADO)
-            .description("Anexo da tarefa: " + taskEntity.getTitle() + ", criado")
+            .description(
+               "Anexo da tarefa: " + taskEntity.getTitle() + 
+               ", criado no projeto: " + taskEntity.getProject().getName()
+            )
             .build();
          
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : taskEntity.getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.ANEXO_ADICIONADO_A_TAREFA)
+               .message(
+                  "Anexo da tarefa: " + taskEntity.getTitle() + 
+                  ", criado no projeto: " + taskEntity.getProject().getName()
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          return this.attachmentMapper.toAttachmentResponseDTO(savedDocument);
       }
@@ -198,10 +221,27 @@ public class AttachmentService {
       ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
          .taskId(taskEntity.getId())
          .action(ActivityActionEnum.ANEXO_DA_TAREFA_REMOVIDO)
-         .description("Anexos da tarefa: " + taskEntity.getTitle() + ", deletados")
+         .description(
+            "Anexos da tarefa: " + taskEntity.getTitle() + 
+            ", deletados do projeto: " + taskEntity.getProject().getName()
+         )
          .build();
-
+         
       this.activityLogService.create(activityLog);
+      
+      // notification - registering
+      for(ProjectMembersEntity notifyMember : taskEntity.getProject().getMembers()) {
+         NotificationDTO notification = new NotificationDTO.Builder()
+            .userId(notifyMember.getUser().getId().toString())
+            .title(NotificationTitleEnum.ANEXOS_REMOVIDOS_DA_TAREFA)
+            .message(
+               "Anexos da tarefa: " + taskEntity.getTitle() + 
+               ", deletados do projeto: " + taskEntity.getProject().getName()
+            )
+            .build();
+         
+         this.notificationService.create(notification);
+      }
    }
 
 
@@ -229,10 +269,27 @@ public class AttachmentService {
          .taskId(taskEntity.getId())
          .attachmentId(UUID.fromString(id))
          .action(ActivityActionEnum.ANEXO_DA_TAREFA_REMOVIDO)
-         .description("Anexo da tarefa: " + taskEntity.getTitle() + ", deletado")
+         .description(
+            "Anexo da tarefa: " + taskEntity.getTitle() + 
+            ", deletado do projeto: " + taskEntity.getProject().getName()
+         )
          .build();
          
       this.activityLogService.create(activityLog);
+
+      // notification - registering
+      for(ProjectMembersEntity notifyMember : taskEntity.getProject().getMembers()) {
+         NotificationDTO notification = new NotificationDTO.Builder()
+            .userId(notifyMember.getUser().getId().toString())
+            .title(NotificationTitleEnum.ANEXO_REMOVIDO_DA_TAREFA)
+            .message(
+               "Anexo da tarefa: " + taskEntity.getTitle() + 
+               ", deletado do projeto: " + taskEntity.getProject().getName()
+            )
+            .build();
+         
+         this.notificationService.create(notification);
+      }
    }
 
 }
