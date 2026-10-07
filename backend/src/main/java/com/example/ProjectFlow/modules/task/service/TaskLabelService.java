@@ -21,13 +21,15 @@ import com.example.ProjectFlow.modules.task.validator.TaskLabelsValidator;
 // import service
 import com.example.ProjectFlow.modules.labels.service.LabelService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
-
+import com.example.ProjectFlow.modules.notification.service.NotificationService;
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.LabelsByTaskResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsDeletedDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
@@ -45,6 +47,7 @@ import com.example.ProjectFlow.modules.task.mapper.TaskLabelsMapper;
 
 // import enums
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
 
 
 @Service
@@ -56,6 +59,7 @@ public class TaskLabelService {
    private final TaskService taskService;
    private final LabelService labelService;
    private final ActivityLogService activityLogService;
+   private final NotificationService notificationService;
    private final TaskLabelsMapper taskLabelsMapper;
 
 
@@ -66,6 +70,7 @@ public class TaskLabelService {
       TaskService taskService,
       LabelService labelService,
       ActivityLogService activityLogService,
+      NotificationService notificationService,
       TaskLabelsMapper taskLabelsMapper
    ) {
       this.taskLabelsRepository = taskLabelsRepository;
@@ -73,6 +78,7 @@ public class TaskLabelService {
       this.taskService = taskService;
       this.labelService = labelService;
       this.activityLogService = activityLogService;
+      this.notificationService = notificationService;
       this.taskLabelsMapper = taskLabelsMapper;
    }
 
@@ -102,9 +108,24 @@ public class TaskLabelService {
          .description(
             "Etiqueta: " + taskLabelsEntity.getLabel().getName() + 
             ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + 
-            ", criada"
+            ", criada no projeto: " + task.getProject().getName()
          )
          .build();
+
+      // notification - registering
+      for(ProjectMembersEntity notifyMember : task.getProject().getMembers()) {
+         NotificationDTO notification = new NotificationDTO.Builder()
+            .userId(notifyMember.getUser().getId().toString())
+            .title(NotificationTitleEnum.ETIQUETA_DA_TAREFA_ADICIONADA)
+            .message(
+               "Etiqueta: " + taskLabelsEntity.getLabel().getName() + 
+               ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + 
+               ", criada no projeto: " + task.getProject().getName()
+            )
+            .build();
+         
+         this.notificationService.create(notification);
+      }
 
       this.activityLogService.create(activityLog);
 
@@ -228,11 +249,26 @@ public class TaskLabelService {
             .description(
                "Etiqueta: " + taskLabelsEntity.getLabel().getName() + 
                ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + 
-               ", removida"
+               ", removida no projeto: " + taskLabelsEntity.getTask().getProject().getName()
             )
             .build();
 
          this.activityLogService.create(activityLog);
+
+         // notification - registering
+         for(ProjectMembersEntity notifyMember : taskLabelsEntity.getTask().getProject().getMembers()) {
+            NotificationDTO notification = new NotificationDTO.Builder()
+               .userId(notifyMember.getUser().getId().toString())
+               .title(NotificationTitleEnum.ETIQUETA_DA_TAREFA_REMOVIDA)
+               .message(
+                  "Etiqueta: " + taskLabelsEntity.getLabel().getName() + 
+                  ", da tarefa: " + taskLabelsEntity.getTask().getTitle() + 
+                  ", removida no projeto: " + taskLabelsEntity.getTask().getProject().getName()
+               )
+               .build();
+            
+            this.notificationService.create(notification);
+         }
 
          return this.taskLabelsMapper.toTaskLabelsDeletedDTO(taskLabelsEntity);
       }
