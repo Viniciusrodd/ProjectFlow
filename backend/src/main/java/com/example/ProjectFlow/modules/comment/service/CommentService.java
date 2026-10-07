@@ -22,12 +22,14 @@ import com.example.ProjectFlow.modules.comment.validator.CommentValidator;
 import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
-
+import com.example.ProjectFlow.modules.notification.service.NotificationService;
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 // import DTOs
 import com.example.ProjectFlow.modules.comment.dto.CommentDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentDeleteDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentResponseDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
+import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
@@ -45,6 +47,7 @@ import com.example.ProjectFlow.modules.comment.mapper.CommentMapper;
 
 // import enums
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.notification.enums.NotificationTitleEnum;
 
 
 @Service
@@ -56,6 +59,7 @@ public class CommentService {
    private final TaskService taskService;
    private final UserService userService;
    private final ActivityLogService activityLogService;
+   private final NotificationService notificationService;
    private final CommentMapper commentMapper;
 
 
@@ -66,6 +70,7 @@ public class CommentService {
       TaskService taskService,
       UserService userService,
       ActivityLogService activityLogService,
+      NotificationService notificationService,
       CommentMapper commentMapper
    ) {
       this.commentRepository = commentRepository;
@@ -73,6 +78,7 @@ public class CommentService {
       this.taskService = taskService;
       this.userService = userService;
       this.activityLogService = activityLogService;
+      this.notificationService = notificationService;
       this.commentMapper = commentMapper;
    }
 
@@ -100,11 +106,27 @@ public class CommentService {
          .action(ActivityActionEnum.COMENTARIO_DA_TAREFA_CRIADO)
          .description(
             "Comentário da tarefa: " + commentEntity.getTask().getTitle() + 
-            ", criado por: " + commentEntity.getAuthor().getName()
+            ", criado por: " + commentEntity.getAuthor().getName() +
+            ", no projeto: " + task.getProject().getName()
          )
          .build();
 
       this.activityLogService.create(activityLog);
+
+      // notification - registering
+      for(ProjectMembersEntity notifyMember : task.getProject().getMembers()) {
+         NotificationDTO notification = new NotificationDTO.Builder()
+            .userId(notifyMember.getUser().getId().toString())
+            .title(NotificationTitleEnum.COMENTARIO_ADICIONADO_A_TAREFA)
+            .message(
+               "Comentário adicionado a tarefa: " + commentEntity.getTask().getTitle() + 
+               ", por: " + commentEntity.getAuthor().getName() +
+               ", no projeto: " + task.getProject().getName()
+            )
+            .build();
+         
+         this.notificationService.create(notification);
+      }
 
       return this.commentMapper.toCommentResponseDTO(commentEntity);
    }
