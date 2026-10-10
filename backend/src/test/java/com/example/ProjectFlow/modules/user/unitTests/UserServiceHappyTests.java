@@ -2,8 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.user.unitTests;
 
-import java.time.LocalDateTime;
 // imports
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +17,7 @@ import org.mockito.Mock;
 // mockito imports
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -73,17 +74,19 @@ public class UserServiceHappyTests {
    @DisplayName("getAll() - must return all users")
    void getAll() {
       // user 1 - setup
-      UserEntity user1 = new UserEntity();
-      user1.setId(UUID.randomUUID());
-      user1.setName("Vini");
-      user1.setEmail("vini@gmail.com");
+      UserEntity user1 = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .name("Vini")
+         .email("vini@gmail.com")
+         .build();
       UserProfileDTO dto1 = new UserProfileDTO(user1.getId(), user1.getEmail(), user1.getName(), null); 
 
       // user 2 - setup
-      UserEntity user2 = new UserEntity();
-      user2.setId(UUID.randomUUID());
-      user2.setName("Maria");
-      user2.setEmail("maria@gmail.com");
+      UserEntity user2 = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .name("Maria")
+         .email("maria@gmail.com")
+         .build();
       UserProfileDTO dto2 = new UserProfileDTO(user2.getId(), user2.getEmail(), user2.getName(), null); 
 
       // list - setup
@@ -112,10 +115,11 @@ public class UserServiceHappyTests {
    @DisplayName("getById() - must return user by id")
    void getById() {
       // user 1 - setup
-      UserEntity user = new UserEntity();
-      user.setId(UUID.randomUUID());
-      user.setName("Vini");
-      user.setEmail("vini@gmail.com");
+      UserEntity user = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .name("Vini")
+         .email("vini@gmail.com")
+         .build();
       UserProfileDTO dto = new UserProfileDTO(user.getId(), user.getEmail(), user.getName(), null);
 
       // mocks config
@@ -139,11 +143,12 @@ public class UserServiceHappyTests {
    @DisplayName("getByEmail() - must return user by email")
    void getByEmail() {
       // user 1 - setup
-      UserEntity user = new UserEntity();
-      user.setId(UUID.randomUUID());
-      user.setName("Vini");
-      user.setEmail("vini@gmail.com");
-      user.setPassword("vini123");
+      UserEntity user = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .name("Vini")
+         .email("vini@gmail.com")
+         .password("vini123")
+         .build();
       UserDTO dto = new UserDTO(user.getId(), user.getEmail(), user.getName(), user.getPassword());
 
       // mocks config
@@ -167,8 +172,9 @@ public class UserServiceHappyTests {
    @DisplayName("getEntityById() - must return user entity by id")
    void getEntityById() {
       // user 1 - setup
-      UserEntity user = new UserEntity();
-      user.setId(UUID.randomUUID());
+      UserEntity user = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .build();
 
       // mocks config
       when(this.userRepository.getEntityById(user.getId())).thenReturn(user);
@@ -189,17 +195,16 @@ public class UserServiceHappyTests {
    @DisplayName("existsById() - must check if user exist by id")
    void existsById() {
       // user 1 - setup
-      UserEntity user = new UserEntity();
-      user.setId(UUID.randomUUID());
+      UserEntity user = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .build();
 
       // mocks config
       when(this.userRepository.existsById(user.getId())).thenReturn(true);
 
       // act and assert
       boolean result = this.usersService.existsById(user.getId());
-      assertThat(result)
-         .isNotNull()
-         .isEqualTo(true);
+      assertThat(result).isTrue();
       
       // checks
       verify(this.userValidator, times(1)).idValidate(user.getId());
@@ -211,10 +216,11 @@ public class UserServiceHappyTests {
    @DisplayName("update() - must update user (only the name)")
    void update() {
       // user 1 - setup
-      UserEntity user = new UserEntity();
-      user.setId(UUID.randomUUID());
-      user.setName("Novo Nome");
-      user.setEmail("vini@gmail.com");
+      UserEntity user = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .name("Novo Nome")
+         .email("vini@gmail.com")
+         .build();
       
       // DTOs - setup
       UserUpdateDTO dataToUpdate = new UserUpdateDTO("Novo Nome", null, null);
@@ -232,6 +238,7 @@ public class UserServiceHappyTests {
       
       // checks
       verify(this.userValidator, times(1)).updateValidations(dataToUpdate);
+      verify(this.userRepository, never()).getById(any(UUID.class));
       verify(this.userRepository, times(1)).update(user.getId(), dataToUpdate);
       verify(this.userMapper, times(1)).toUserProfileDTO(user);
       
@@ -245,10 +252,11 @@ public class UserServiceHappyTests {
    @DisplayName("delete() - must delete user")
    void delete() {
       // user 1 - setup
-      UserEntity user = new UserEntity();
-      user.setId(UUID.randomUUID());
-      user.setName("Vini");
-      user.setEmail("vini@gmail.com");
+      UserEntity user = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .name("Vini")
+         .email("vini@gmail.com")
+         .build();
       UserDeletedDTO dto = new UserDeletedDTO(user.getId(), user.getName(), user.getEmail(), LocalDateTime.now());
 
       // mocks config
@@ -272,17 +280,16 @@ public class UserServiceHappyTests {
    @DisplayName("isDeleted() - must check if user is deleted")
    void isDeleted() {
       // user 1 - setup
-      UserEntity user = new UserEntity();
-      user.setId(UUID.randomUUID());
+      UserEntity user = new UserEntity.Builder()
+         .id(UUID.randomUUID())
+         .build();
 
       // mocks config
       when(this.userRepository.isDeleted(user.getId())).thenReturn(true);
 
       // act and assert
       boolean result = this.usersService.isDeleted(user.getId());
-      assertThat(result)
-         .isNotNull()
-         .isEqualTo(true);
+      assertThat(result).isTrue();
       
       // checks
       verify(this.userValidator, times(1)).idValidate(user.getId());
