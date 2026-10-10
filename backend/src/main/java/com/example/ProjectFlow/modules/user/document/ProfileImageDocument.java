@@ -43,6 +43,7 @@ public class ProfileImageDocument {
 
    // constructor - builder
    public ProfileImageDocument(Builder builder) {
+      setId(builder.id);
       setUserId(builder.userId);
       setFileName(builder.fileName);
       setMimeType(builder.mimeType);
@@ -76,12 +77,18 @@ public class ProfileImageDocument {
 
 
    public static class Builder {
+      private String id;
       private UUID userId;
       private String fileName;
       private String mimeType;
       private Long size;
       private LocalDateTime uploadDate;
       private byte[] binary;
+
+      public Builder id(String id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder userId(UUID userId) {
          this.userId = userId;
