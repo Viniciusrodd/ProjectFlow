@@ -7,32 +7,32 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
-
-// jakarta imports
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 
 // import interfaces
 import com.example.ProjectFlow.common.interfaces.crudBase.SoftDeleteInterface;
 
 // import entities
+import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
-import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
+
+// jakarta imports
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 
 @Entity
@@ -98,8 +98,20 @@ public class UserEntity implements SoftDeleteInterface {
    private LocalDateTime deletedAt;
 
 
-   // constructor
+   // constructor - empty
    public UserEntity() {}
+
+
+   // constructor - builder
+   public UserEntity(Builder builder) {
+      setId(builder.id);
+      setName(builder.name);
+      setEmail(builder.email);
+      setPassword(builder.password);
+      setProfileImageId(builder.profileImageId);
+      setCreatedAt(builder.createdAt);
+      setDeletedAt(builder.deletedAt);
+   }
 
 
    // getters
@@ -138,5 +150,58 @@ public class UserEntity implements SoftDeleteInterface {
 
    // utils
    public boolean isDeleted() { return this.deletedAt != null; }
+
+
+   //// builder
+
+
+   public static class Builder {
+      private UUID id;
+      private String name;
+      private String email;
+      private String password;
+      private String profileImageId;
+      private LocalDateTime createdAt;
+      private LocalDateTime deletedAt;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
+
+      public Builder name(String name) {
+         this.name = name;
+         return this;
+      }
+
+      public Builder email(String email) {
+         this.email = email;
+         return this;
+      }
+
+      public Builder password(String password) {
+         this.password = password;
+         return this;
+      }
+
+      public Builder profileImageId(String profileImageId) {
+         this.profileImageId = profileImageId;
+         return this;
+      }
+
+      public Builder createdAt(LocalDateTime createdAt) {
+         this.createdAt = createdAt;
+         return this;
+      }
+
+      public Builder deletedAt(LocalDateTime deletedAt) {
+         this.deletedAt = deletedAt;
+         return this;
+      }
+
+      public UserEntity build() {
+         return new UserEntity(this);
+      }
+   }
 
 }
