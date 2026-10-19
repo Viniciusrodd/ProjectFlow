@@ -51,7 +51,7 @@ import com.example.ProjectFlow.modules.auth.validator.LoginValidator;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Unit tests (Happy path) - AuthService")
-public class AuthServiceHappyTests {
+public class AuthHappyTests {
  
    // mock dependencies
    @Mock
