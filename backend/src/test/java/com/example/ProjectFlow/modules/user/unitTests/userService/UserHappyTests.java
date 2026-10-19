@@ -238,11 +238,11 @@ public class UserHappyTests {
       
       // checks
       verify(this.userValidator, times(1)).updateValidations(dataToUpdate);
-      verify(this.userRepository, never()).getById(any(UUID.class));
       verify(this.userRepository, times(1)).update(user.getId(), dataToUpdate);
       verify(this.userMapper, times(1)).toUserProfileDTO(user);
       
       // no checks
+      verify(this.userRepository, never()).getById(any(UUID.class));
       verifyNoInteractions(this.passwordService);
       verify(this.userRepository, never()).existsByEmail(anyString());
    }
