@@ -51,7 +51,7 @@ import com.example.ProjectFlow.modules.user.validator.UserValidator;
 
 @ExtendWith(MockitoExtension.class) // enable Mockito in JUnit 5
 @DisplayName("Unit tests (Happy path) - UserService")
-public class UserServiceHappyTests {
+public class UserHappyTests {
  
    // mock dependencies
    @Mock

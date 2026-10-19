@@ -50,7 +50,7 @@ import jakarta.persistence.NoResultException;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Unit tests (Bad path) - UserService")
-public class UserServiceBadTests {
+public class UserBadTests {
  
    // mock dependencies
    @Mock
