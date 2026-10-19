@@ -45,7 +45,7 @@ import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Unit tests (Happy path) - OrganizationCreationService")
-public class OrganizationCreationHappyTests {
+public class OrganizationCreationTests {
  
    // mock dependencies
    @Mock
