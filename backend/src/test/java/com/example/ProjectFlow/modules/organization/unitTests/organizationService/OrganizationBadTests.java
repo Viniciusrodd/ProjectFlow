@@ -3,7 +3,6 @@
 package com.example.ProjectFlow.modules.organization.unitTests.organizationService;
 
 // imports
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +15,6 @@ import org.mockito.Mock;
 
 // mockito imports
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -32,15 +30,11 @@ import com.example.ProjectFlow.modules.organization.repository.OrganizationMembe
 import com.example.ProjectFlow.modules.organization.validator.OrganizationValidator;
 
 // import DTOs
-import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationDeletedDTO;
-import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationResponseDTO;
 import com.example.ProjectFlow.modules.organization.dto.organizationDTO.OrganizationUpdateDTO;
-import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
 // import entities
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEntity;
-import com.example.ProjectFlow.modules.user.entity.UserEntity;
 
 // import mapper
 import com.example.ProjectFlow.modules.organization.mapper.OrganizationMapper;
@@ -54,7 +48,6 @@ import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import enums
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
-import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 
 @ExtendWith(MockitoExtension.class)
