@@ -88,6 +88,7 @@ public class OrganizationEntity implements SoftDeleteInterface {
 
    // constructor - builder
    public OrganizationEntity(Builder builder) {
+      setId(builder.id);
       setOwner(builder.owner);
       setName(builder.name);
       setDescription(builder.description);
@@ -129,9 +130,15 @@ public class OrganizationEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private UserEntity owner;
       private String name;
       private String description;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder owner(UserEntity owner) {
          this.owner = owner;
