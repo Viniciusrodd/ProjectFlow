@@ -94,6 +94,7 @@ public class UserBadTests {
    @Test 
    @DisplayName("getById() - must throw user not found")
    void getById() {
+      // id - setup
       UUID userId = UUID.randomUUID();
       
       // mocks config
@@ -116,7 +117,7 @@ public class UserBadTests {
    @Test 
    @DisplayName("getByEmail() - must throw user not found")
    void getByEmail() {
-      // data
+      // data - setup
       String userEmail = "vini@gmail.com";
 
       // mocks config
@@ -139,7 +140,7 @@ public class UserBadTests {
    @Test 
    @DisplayName("getEntityById() - must throw user not found")
    void getEntityById() {
-      // data
+      // id - setup
       UUID userId = UUID.randomUUID();
       
       // mocks config
@@ -159,7 +160,7 @@ public class UserBadTests {
    @Test 
    @DisplayName("existsById() - must throw when user does not exist")
    void existsById() {
-      // data
+      // data - setup
       UUID userId = UUID.randomUUID();
 
       // mocks config
@@ -179,7 +180,7 @@ public class UserBadTests {
    @Test 
    @DisplayName("update() - must throw when email is already registered")
    void update() {
-      // data
+      // data - setup
       UUID userId = UUID.randomUUID();
       String newEmail = "novo@gmail.com";
       UserEntity user = new UserEntity.Builder()
@@ -217,7 +218,7 @@ public class UserBadTests {
    @Test 
    @DisplayName("delete() - must throw when user does not exist")
    void delete() {
-      // data
+      // id - setup
       UUID userId = UUID.randomUUID();
 
       // mocks config
@@ -240,7 +241,7 @@ public class UserBadTests {
    @Test 
    @DisplayName("isDeleted() - must throw when user does not exist")
    void isDeleted() {
-      // data
+      // id - setup
       UUID userId = UUID.randomUUID();
 
       // mocks config

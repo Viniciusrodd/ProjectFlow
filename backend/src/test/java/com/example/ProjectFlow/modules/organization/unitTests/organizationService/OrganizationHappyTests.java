@@ -92,9 +92,6 @@ public class OrganizationHappyTests {
          .name("organization 1")
          .description("organization test 1")
          .build();
-      OrganizationResponseDTO dto1 = new OrganizationResponseDTO(
-         organization1.getId(), organization1.getOwnerId(), organization1.getName(), organization1.getDescription()
-      );
 
       // organization 2 - setup
       OrganizationEntity organization2 = new OrganizationEntity.Builder()
@@ -103,6 +100,12 @@ public class OrganizationHappyTests {
          .name("organization 2")
          .description("organization test 2")
          .build();
+         
+      // DTO's - setup
+      OrganizationResponseDTO dto1 = new OrganizationResponseDTO(
+         organization1.getId(), organization1.getOwnerId(), organization1.getName(), organization1.getDescription()
+      );
+      
       OrganizationResponseDTO dto2 = new OrganizationResponseDTO(
          organization2.getId(), organization2.getOwnerId(), organization2.getName(), organization2.getDescription()
       );
@@ -146,6 +149,8 @@ public class OrganizationHappyTests {
          .name("organization")
          .description("organization test")
          .build();
+      
+      // DTO - setup
       OrganizationResponseDTO organizationResponseDTO = new OrganizationResponseDTO(
          organizationEntity.getId(), organizationEntity.getOwnerId(), organizationEntity.getName(), organizationEntity.getDescription()
       );
@@ -184,9 +189,6 @@ public class OrganizationHappyTests {
          .name("organization 1")
          .description("organization test 1")
          .build();
-      OrganizationResponseDTO dto1 = new OrganizationResponseDTO(
-         organization1.getId(), organization1.getOwnerId(), organization1.getName(), organization1.getDescription()
-      );
 
       // organization 2 - setup
       OrganizationEntity organization2 = new OrganizationEntity.Builder()
@@ -195,6 +197,12 @@ public class OrganizationHappyTests {
          .name("organization 2")
          .description("organization test 2")
          .build();
+
+      // DTO's - setup
+      OrganizationResponseDTO dto1 = new OrganizationResponseDTO(
+         organization1.getId(), organization1.getOwnerId(), organization1.getName(), organization1.getDescription()
+      );
+      
       OrganizationResponseDTO dto2 = new OrganizationResponseDTO(
          organization2.getId(), organization2.getOwnerId(), organization2.getName(), organization2.getDescription()
       );
@@ -279,7 +287,7 @@ public class OrganizationHappyTests {
    @Test
    @DisplayName("update() - must update organization (only the name)")
    void update() {
-      // update - setup
+      // data - setup
       String newName = "new organization name";
 
       // user - setup
@@ -335,9 +343,11 @@ public class OrganizationHappyTests {
       // checks
       verify(this.organizationValidator, times(2)).idValidate(organizationEntity.getId());
       verify(this.organizationValidator, times(1)).updateValidations(organizationUpdateDTO);
+
       verify(this.userService, times(1)).existsById(userEntity.getId());
       verify(this.organizationRepository, times(1)).existsById(organizationEntity.getId());
       verify(this.organizationMembersRepository, times(1)).getMemberByOrganizationId(userEntity.getId(), organizationEntity.getId());
+      
       verify(this.organizationRepository, times(1)).update(organizationEntity.getId(), organizationUpdateDTO);
       verify(this.activityLogService, times(1)).create(activityLogDTO);
       verify(this.organizationMapper, times(1)).toOrganizationResponseDTO(organizationEntity);
@@ -393,9 +403,12 @@ public class OrganizationHappyTests {
 
       // checks
       verify(this.organizationValidator, times(2)).idValidate(organizationEntity.getId());
+      
       verify(this.userService, times(1)).existsById(userEntity.getId());
       verify(this.organizationRepository, times(1)).existsById(organizationEntity.getId());
       verify(this.organizationMembersRepository, times(1)).getMemberByOrganizationId(userEntity.getId(), organizationEntity.getId());
+      
+      verify(this.organizationRepository, times(1)).delete(organizationEntity.getId());
       verify(this.activityLogService, times(1)).create(activityLogDTO);
       verify(this.organizationMapper, times(1)).toOrganizationDeletedDTO(organizationEntity);
    }

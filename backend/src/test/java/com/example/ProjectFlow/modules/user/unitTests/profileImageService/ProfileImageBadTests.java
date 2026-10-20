@@ -66,7 +66,7 @@ public class ProfileImageBadTests {
    @Test
    @DisplayName("uploadProfileImage() - must fail in profile image processing")
    void uploadProfileImage() throws Exception {
-      // data
+      // id - setup
       UUID userId = UUID.randomUUID();
 
       // file - mock
@@ -100,7 +100,7 @@ public class ProfileImageBadTests {
    @Test 
    @DisplayName("getProfileImage() - must throw profile user image not found")
    void getProfileImage() {
-      // data
+      // id - setup
       UUID userId = UUID.randomUUID();
 
       // mocks config

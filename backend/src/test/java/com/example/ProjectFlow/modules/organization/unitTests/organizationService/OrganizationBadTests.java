@@ -23,8 +23,12 @@ import static org.mockito.Mockito.when;
 
 // import repositories
 import com.example.ProjectFlow.modules.organization.repository.OrganizationRepository;
-import com.example.ProjectFlow.modules.organization.service.OrganizationService;
 import com.example.ProjectFlow.modules.organization.repository.OrganizationMembersRepository;
+
+// import services
+import com.example.ProjectFlow.modules.organization.service.OrganizationService;
+import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
+import com.example.ProjectFlow.modules.user.service.UserService;
 
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationValidator;
@@ -39,12 +43,8 @@ import com.example.ProjectFlow.modules.organization.entity.OrganizationMembersEn
 // import mapper
 import com.example.ProjectFlow.modules.organization.mapper.OrganizationMapper;
 
-// import services
-import com.example.ProjectFlow.modules.user.service.UserService;
-
+// jakarta imports
 import jakarta.persistence.NoResultException;
-
-import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 
 // import enums
 import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
@@ -98,7 +98,7 @@ public class OrganizationBadTests {
    @Test
    @DisplayName("getById() - must throw organization not found")
    void getById() {
-      // data
+      // id - setup
       UUID organizationId = UUID.randomUUID();
 
       // mocks config
@@ -121,7 +121,7 @@ public class OrganizationBadTests {
    @Test
    @DisplayName("getByOwnerId() - must throw owner organizations not found")
    void getByOwnerId() {
-      // data
+      // data - setup
       UUID ownerId = UUID.randomUUID();
       List<OrganizationEntity> organizationsList = List.of();
 
@@ -145,7 +145,7 @@ public class OrganizationBadTests {
    @Test
    @DisplayName("getEntityById() - must throw organization not found")
    void getEntityById() {
-      // data
+      // id - setup
       UUID organizationId = UUID.randomUUID();
 
       // mocks config
@@ -165,7 +165,7 @@ public class OrganizationBadTests {
    @Test
    @DisplayName("existsById() - must throw when organization does not exist")
    void existsById() {
-      // data
+      // id - setup
       UUID organizationId = UUID.randomUUID();
 
       // mocks config
@@ -185,7 +185,7 @@ public class OrganizationBadTests {
    @Test
    @DisplayName("update() - must throw when user is not a admin")
    void update() {
-      // data
+      // id - setup
       UUID userId = UUID.randomUUID();
       UUID organizationId = UUID.randomUUID();
 
@@ -218,7 +218,7 @@ public class OrganizationBadTests {
    @Test
    @DisplayName("delete() - must throw when user is not a admin")
    void delete() {
-      // data
+      // id - setup
       UUID userId = UUID.randomUUID();
       UUID organizationId = UUID.randomUUID();
 
@@ -247,7 +247,7 @@ public class OrganizationBadTests {
    @Test
    @DisplayName("isDeleted() - must throw when organization does not exist")
    void isDeleted() {
-      // data
+      // id - setup
       UUID organizationId = UUID.randomUUID();
 
       // mock config

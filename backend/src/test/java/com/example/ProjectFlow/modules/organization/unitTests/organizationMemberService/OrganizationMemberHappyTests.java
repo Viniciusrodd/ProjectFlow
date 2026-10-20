@@ -105,6 +105,8 @@ public class OrganizationMemberHappyTests {
          .organization(organizationEntity)
          .role(RoleEnum.MEMBER)
          .build();
+
+      // set members
       organizationEntity.setMembers(List.of(memberEntity));
 
       // dto - setup
@@ -180,19 +182,22 @@ public class OrganizationMemberHappyTests {
          .id(UUID.randomUUID())
          .role(RoleEnum.MEMBER)
          .build();
+         
+      // organization member 2 - setup
+      OrganizationMembersEntity memberEntity2 = new OrganizationMembersEntity.Builder()
+      .id(UUID.randomUUID())
+      .role(RoleEnum.MEMBER)
+      .build();
+         
+      // DTO's - setup   
       MemberByOrganizationResponseDTO dto1 = new MemberByOrganizationResponseDTO(
          memberEntity1.getId(), userProfileDTO, memberEntity1.getRole(), LocalDateTime.now()
       );
 
-      // organization member 2 - setup
-      OrganizationMembersEntity memberEntity2 = new OrganizationMembersEntity.Builder()
-         .id(UUID.randomUUID())
-         .role(RoleEnum.MEMBER)
-         .build();
       MemberByOrganizationResponseDTO dto2 = new MemberByOrganizationResponseDTO(
          memberEntity2.getId(), userProfileDTO, memberEntity2.getRole(), LocalDateTime.now()
       );
-
+         
       // list - setup
       List<OrganizationMembersEntity> membersEntities = List.of(memberEntity1, memberEntity2);
 
@@ -224,7 +229,7 @@ public class OrganizationMemberHappyTests {
          .role(RoleEnum.MEMBER)
          .build();
 
-      // dto - setup
+      // DTO's - setup
       UserProfileDTO userProfileDTO = new UserProfileDTO(
          UUID.randomUUID(),
          "vini@gmail.com",
@@ -255,7 +260,7 @@ public class OrganizationMemberHappyTests {
    @Test
    @DisplayName("getAllMembersByOrganizationId() - must return all members by organization")
    void getAllMembersByOrganizationId() {
-      // organization id
+      // id - setup
       UUID organizationId = UUID.randomUUID();
 
       // DTO - setup
@@ -271,15 +276,18 @@ public class OrganizationMemberHappyTests {
          .id(UUID.randomUUID())
          .role(RoleEnum.MEMBER)
          .build();
-      MemberByOrganizationResponseDTO dto1 = new MemberByOrganizationResponseDTO(
-         memberEntity1.getId(), userProfileDTO, memberEntity1.getRole(), LocalDateTime.now()
-      );
 
       // organization member 2 - setup
       OrganizationMembersEntity memberEntity2 = new OrganizationMembersEntity.Builder()
          .id(UUID.randomUUID())
          .role(RoleEnum.MEMBER)
          .build();
+         
+      // DTO's - setup
+      MemberByOrganizationResponseDTO dto1 = new MemberByOrganizationResponseDTO(
+         memberEntity1.getId(), userProfileDTO, memberEntity1.getRole(), LocalDateTime.now()
+      );
+
       MemberByOrganizationResponseDTO dto2 = new MemberByOrganizationResponseDTO(
          memberEntity2.getId(), userProfileDTO, memberEntity2.getRole(), LocalDateTime.now()
       );
@@ -320,7 +328,7 @@ public class OrganizationMemberHappyTests {
          .role(RoleEnum.MEMBER)
          .build();
 
-      // dto - setup
+      // DTO's - setup
       UserProfileDTO userProfileDTO = new UserProfileDTO(
          userId,
          "vini@gmail.com",
@@ -370,15 +378,18 @@ public class OrganizationMemberHappyTests {
          .id(UUID.randomUUID())
          .role(RoleEnum.MEMBER)
          .build();
-      MemberByOrganizationResponseDTO dto1 = new MemberByOrganizationResponseDTO(
-         memberEntity1.getId(), userProfileDTO, memberEntity1.getRole(), LocalDateTime.now()
-      );
-
+         
       // organization member 2 - setup
       OrganizationMembersEntity memberEntity2 = new OrganizationMembersEntity.Builder()
          .id(UUID.randomUUID())
          .role(RoleEnum.MEMBER)
          .build();
+         
+      // DTO's - setup   
+      MemberByOrganizationResponseDTO dto1 = new MemberByOrganizationResponseDTO(
+         memberEntity1.getId(), userProfileDTO, memberEntity1.getRole(), LocalDateTime.now()
+      );
+      
       MemberByOrganizationResponseDTO dto2 = new MemberByOrganizationResponseDTO(
          memberEntity2.getId(), userProfileDTO, memberEntity2.getRole(), LocalDateTime.now()
       );
@@ -409,7 +420,7 @@ public class OrganizationMemberHappyTests {
    @Test
    @DisplayName("getEntityById() - must return organization member entity by id")
    void getEntityById() {
-      // organization id
+      // id - setup
       UUID organizationId = UUID.randomUUID();
 
       // organization member - setup
@@ -436,7 +447,7 @@ public class OrganizationMemberHappyTests {
    @Test
    @DisplayName("existsById() - must check if member exists by id")
    void existsById() {
-      // organization member id
+      // id - setup
       UUID organizationMemberId = UUID.randomUUID();
 
       // mocks config
@@ -455,7 +466,7 @@ public class OrganizationMemberHappyTests {
    @Test
    @DisplayName("existsByOrganizationIdAndMemberId() - must check if member exists by organization and member id")
    void existsByOrganizationIdAndMemberId() {
-      // id's - setup
+      // id - setup
       UUID organizationId = UUID.randomUUID();
       UUID memberId = UUID.randomUUID();
 
@@ -476,7 +487,7 @@ public class OrganizationMemberHappyTests {
    @Test
    @DisplayName("checkUserMembership() - must check if user is an organization membership")
    void checkUserMembership() {
-      // id's - setup
+      // id - setup
       UUID userId = UUID.randomUUID();
       UUID organizationId = UUID.randomUUID();
 
@@ -521,6 +532,8 @@ public class OrganizationMemberHappyTests {
          .organization(organizationEntity)
          .role(roleToUpdate)
          .build();
+
+      // set members
       organizationEntity.setMembers(List.of(memberEntity));
 
       // DTO's - setup
@@ -601,6 +614,8 @@ public class OrganizationMemberHappyTests {
          .organization(organizationEntity)
          .role(RoleEnum.MEMBER)
          .build();
+
+      // set members
       organizationEntity.setMembers(List.of(memberEntity));
 
       // DTO's - setup

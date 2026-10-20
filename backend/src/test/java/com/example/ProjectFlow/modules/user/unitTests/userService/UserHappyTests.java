@@ -114,12 +114,14 @@ public class UserHappyTests {
    @Test 
    @DisplayName("getById() - must return user by id")
    void getById() {
-      // user 1 - setup
+      // user - setup
       UserEntity user = new UserEntity.Builder()
          .id(UUID.randomUUID())
          .name("Vini")
          .email("vini@gmail.com")
          .build();
+
+      // DTO - setup
       UserProfileDTO dto = new UserProfileDTO(user.getId(), user.getEmail(), user.getName(), null);
 
       // mocks config
@@ -142,13 +144,15 @@ public class UserHappyTests {
    @Test 
    @DisplayName("getByEmail() - must return user by email")
    void getByEmail() {
-      // user 1 - setup
+      // user - setup
       UserEntity user = new UserEntity.Builder()
          .id(UUID.randomUUID())
          .name("Vini")
          .email("vini@gmail.com")
          .password("vini123")
          .build();
+
+      // DTO - setup
       UserDTO dto = new UserDTO(user.getId(), user.getEmail(), user.getName(), user.getPassword());
 
       // mocks config
@@ -171,7 +175,7 @@ public class UserHappyTests {
    @Test 
    @DisplayName("getEntityById() - must return user entity by id")
    void getEntityById() {
-      // user 1 - setup
+      // user - setup
       UserEntity user = new UserEntity.Builder()
          .id(UUID.randomUUID())
          .build();
@@ -194,7 +198,7 @@ public class UserHappyTests {
    @Test 
    @DisplayName("existsById() - must check if user exist by id")
    void existsById() {
-      // user 1 - setup
+      // user - setup
       UserEntity user = new UserEntity.Builder()
          .id(UUID.randomUUID())
          .build();
@@ -215,7 +219,7 @@ public class UserHappyTests {
    @Test 
    @DisplayName("update() - must update user (only the name)")
    void update() {
-      // user 1 - setup
+      // user - setup
       UserEntity user = new UserEntity.Builder()
          .id(UUID.randomUUID())
          .name("Novo Nome")
@@ -251,12 +255,14 @@ public class UserHappyTests {
    @Test 
    @DisplayName("delete() - must delete user")
    void delete() {
-      // user 1 - setup
+      // user - setup
       UserEntity user = new UserEntity.Builder()
          .id(UUID.randomUUID())
          .name("Vini")
          .email("vini@gmail.com")
          .build();
+      
+      // DTO - setup
       UserDeletedDTO dto = new UserDeletedDTO(user.getId(), user.getName(), user.getEmail(), LocalDateTime.now());
 
       // mocks config
@@ -279,7 +285,7 @@ public class UserHappyTests {
    @Test 
    @DisplayName("isDeleted() - must check if user is deleted")
    void isDeleted() {
-      // user 1 - setup
+      // user - setup
       UserEntity user = new UserEntity.Builder()
          .id(UUID.randomUUID())
          .build();

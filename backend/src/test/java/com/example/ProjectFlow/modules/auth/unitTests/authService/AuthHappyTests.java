@@ -95,7 +95,6 @@ public class AuthHappyTests {
       RegisterResponseDTO expectedDto = new RegisterResponseDTO(user.getId(), user.getName(), user.getEmail(), LocalDateTime.now());
 
       // mocks config
-      // userService.isRegister() -> null
       when(this.passwordService.encryptPassword(rawPassword)).thenReturn(encryptedPassword);
       when(this.authRepository.register(userData)).thenReturn(user);
       when(this.authMapper.toRegisterResponseDTO(user)).thenReturn(expectedDto);

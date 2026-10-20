@@ -66,7 +66,7 @@ public class ProfileImageHappyTests {
    @Test
    @DisplayName("uploadProfileImage() - must upload a profile image")
    void uploadProfileImage() {
-      // data
+      // data - setup
       UUID userId = UUID.randomUUID();
       byte[] binary = {1, 2, 3};
 
@@ -97,9 +97,7 @@ public class ProfileImageHappyTests {
       // mocks config
       when(this.userService.existsById(userId)).thenReturn(true);
       when(this.profileImageRepository.existsByUserId(userId)).thenReturn(true);
-      // profileImageRepository.deleteByUserId -> void
       when(this.profileImageRepository.save(any(ProfileImageDocument.class))).thenReturn(savedDocument);
-      //userService.updateProfileImageId -> void
       when(this.profileImageMapper.toProfileImageResponseDTO(savedDocument)).thenReturn(expectedDto);
 
       // act and assert
@@ -111,8 +109,10 @@ public class ProfileImageHappyTests {
       // checks
       verify(this.userService, times(1)).existsById(userId);
       verify(this.profileImageValidator, times(1)).validate(file);
+
       verify(this.profileImageRepository, times(1)).existsByUserId(userId);
       verify(this.profileImageRepository, times(1)).deleteByUserId(userId);
+      
       verify(this.profileImageRepository, times(1)).save(any(ProfileImageDocument.class));
       verify(this.userService, times(1)).updateProfileImageId(userId, "1");
       verify(this.profileImageMapper, times(1)).toProfileImageResponseDTO(savedDocument);      
@@ -122,7 +122,7 @@ public class ProfileImageHappyTests {
    @Test 
    @DisplayName("getProfileImage() - must get a profile user image")
    void getProfileImage() {
-      // data
+      // data - setup
       UUID userId = UUID.randomUUID();
       byte[] binary = {1, 2, 3};
 
@@ -156,7 +156,7 @@ public class ProfileImageHappyTests {
    @Test 
    @DisplayName("getAllProfileImages() - must return all profile images")
    void getAllProfileImages() {
-      // data
+      // data - setup
       UUID userId = UUID.randomUUID();
       byte[] binary = {1, 2, 3};
 
