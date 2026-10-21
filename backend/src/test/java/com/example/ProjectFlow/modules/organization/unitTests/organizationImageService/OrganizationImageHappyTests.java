@@ -78,7 +78,7 @@ public class OrganizationImageHappyTests {
    @Test
    @DisplayName("uploadOrganizationImage() - must upload an organization image")
    void uploadOrganizationImage() {
-      // id - setup
+      // id's - setup
       String organizationImageId = UUID.randomUUID().toString();
       UUID userId = UUID.randomUUID();
       UUID organizationId = UUID.randomUUID();
@@ -247,4 +247,5 @@ public class OrganizationImageHappyTests {
       verify(this.organizationService, times(1)).getEntityById(organizationId);
       verify(this.activityLogService, times(1)).create(activityLogDTO);
    }
+
 }
