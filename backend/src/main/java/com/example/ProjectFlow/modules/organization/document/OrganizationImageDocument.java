@@ -43,6 +43,7 @@ public class OrganizationImageDocument {
 
    // constructor - builder
    public OrganizationImageDocument(Builder builder) {
+      setId(builder.id);
       setOrganizationId(builder.organizationId);
       setFileName(builder.fileName);
       setMimeType(builder.mimeType);
@@ -76,12 +77,18 @@ public class OrganizationImageDocument {
 
 
    public static class Builder {
+      private String id;
       private UUID organizationId;
       private String fileName;
       private String mimeType;
       private Long size;
       private LocalDateTime uploadDate;
       private byte[] binary;
+
+      public Builder id(String id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder organizationId(UUID organizationId) {
          this.organizationId = organizationId;
