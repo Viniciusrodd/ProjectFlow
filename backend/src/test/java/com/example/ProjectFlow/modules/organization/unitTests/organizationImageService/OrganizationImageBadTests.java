@@ -56,9 +56,10 @@ import com.example.ProjectFlow.modules.organization.mapper.OrganizationImageMapp
 
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Unit tests (Happy path) - OrganizationImageService")
+@DisplayName("Unit tests (Bad path) - OrganizationImageService")
 public class OrganizationImageBadTests {
  
+   // mock dependencies
    @Mock
    private OrganizationImageRepository organizationImageRepository;
    @Mock
