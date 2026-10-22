@@ -104,7 +104,7 @@ public class OrganizationCreationTests {
          .description("Organização: " + organizationEntity.getName() + ", criada por: " + userEntity.getName())
          .build();
 
-      // mocks config
+      // stubs
       when(this.organizationService.create(organizationDTO)).thenReturn(organizationEntity);
       when(this.organizationMapper.toOrganizationResponseDTO(organizationEntity)).thenReturn(organizationResponseDTO);
 

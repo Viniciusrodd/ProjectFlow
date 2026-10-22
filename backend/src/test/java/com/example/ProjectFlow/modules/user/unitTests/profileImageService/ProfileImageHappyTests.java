@@ -94,7 +94,7 @@ public class ProfileImageHappyTests {
          "1", userId, "filename.png", "image/png", 3L, savedDocument.getUploadDate()
       );
 
-      // mocks config
+      // stubs
       when(this.userService.existsById(userId)).thenReturn(true);
       when(this.profileImageRepository.existsByUserId(userId)).thenReturn(true);
       when(this.profileImageRepository.save(any(ProfileImageDocument.class))).thenReturn(savedDocument);
@@ -137,7 +137,7 @@ public class ProfileImageHappyTests {
          .binary(binary)
          .build();
 
-      // mocks config
+      // stubs
       when(this.userService.existsById(userId)).thenReturn(true);
       when(this.profileImageRepository.findByUserId(userId)).thenReturn(document);
 
@@ -185,7 +185,7 @@ public class ProfileImageHappyTests {
       // list - setup
       List<ProfileImageDocument> documents = List.of(doc1, doc2);
 
-      // mocks config
+      // stubs
       when(this.profileImageRepository.findAll()).thenReturn(documents);
 
       // act and assert

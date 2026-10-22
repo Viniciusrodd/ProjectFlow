@@ -95,7 +95,7 @@ public class OrganizationImageBadTests {
          binary
       );
 
-      // mocks config
+      // stubs
       doThrow(MultiExceptions.unauthorized(errorMessage))
          .when(this.organizationService).userIsAdmin(userId, organizationId);
 
@@ -123,7 +123,7 @@ public class OrganizationImageBadTests {
       // id - setup
       UUID organizationId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.organizationImageRepository.findByOrganizationId(organizationId)).thenReturn(null);
 
       // act and assert
@@ -143,7 +143,7 @@ public class OrganizationImageBadTests {
       // list - setup
       List<OrganizationImageDocument> documentList = List.of();
 
-      // mocks config
+      // stubs
       when(this.organizationImageRepository.findAll()).thenReturn(documentList);
 
       // act and assert
@@ -163,7 +163,7 @@ public class OrganizationImageBadTests {
       UUID userId = UUID.randomUUID();
       UUID organizationId = UUID.randomUUID();
 
-      // mocks setup
+      // stubs
       when(this.organizationImageRepository.findByOrganizationId(organizationId)).thenReturn(null);
 
       // act and assert

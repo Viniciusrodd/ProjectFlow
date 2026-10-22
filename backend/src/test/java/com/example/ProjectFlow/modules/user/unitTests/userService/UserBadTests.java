@@ -75,7 +75,7 @@ public class UserBadTests {
       // list - setup
       List<UserEntity> users = List.of();
 
-      // mocks config
+      // stubs
       when(this.userRepository.getAll()).thenReturn(users);
 
       // act and assert
@@ -97,7 +97,7 @@ public class UserBadTests {
       // id - setup
       UUID userId = UUID.randomUUID();
       
-      // mocks config
+      // stubs
       when(this.userRepository.getById(userId)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -120,7 +120,7 @@ public class UserBadTests {
       // data - setup
       String userEmail = "vini@gmail.com";
 
-      // mocks config
+      // stubs
       when(this.userRepository.getByEmail(userEmail)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -143,7 +143,7 @@ public class UserBadTests {
       // id - setup
       UUID userId = UUID.randomUUID();
       
-      // mocks config
+      // stubs
       when(this.userRepository.getEntityById(userId)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -163,7 +163,7 @@ public class UserBadTests {
       // data - setup
       UUID userId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.userRepository.existsById(userId)).thenReturn(false);
 
       // act and assert
@@ -193,7 +193,7 @@ public class UserBadTests {
       UserUpdateDTO dataToUpdate = new UserUpdateDTO(null, newEmail, null);
       UserProfileDTO expectedDto = new UserProfileDTO(userId, user.getEmail(), user.getName(), null);
 
-      // mocks config
+      // stubs
       when(this.userRepository.getById(userId)).thenReturn(user);
       when(this.userMapper.toUserProfileDTO(user)).thenReturn(expectedDto);
       when(this.userRepository.existsByEmail(newEmail)).thenReturn(true);
@@ -221,7 +221,7 @@ public class UserBadTests {
       // id - setup
       UUID userId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.userRepository.delete(userId)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -244,7 +244,7 @@ public class UserBadTests {
       // id - setup
       UUID userId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.userRepository.isDeleted(userId)).thenThrow(NoResultException.class);
 
       // act and assert

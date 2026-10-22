@@ -136,7 +136,7 @@ public class OrganizationMemberHappyTests {
          memberEntity.getRole(), LocalDateTime.now()
       );
 
-      // mocks config
+      // stubs
       when(this.userService.getEntityById(userEntity.getId())).thenReturn(userEntity);
       when(this.organizationService.getEntityById(organizationEntity.getId())).thenReturn(organizationEntity);
       when(this.organizationMembersRepository.createMemberParticipation(
@@ -201,7 +201,7 @@ public class OrganizationMemberHappyTests {
       // list - setup
       List<OrganizationMembersEntity> membersEntities = List.of(memberEntity1, memberEntity2);
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.getAllOrganizationMembers()).thenReturn(membersEntities);
       when(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(memberEntity1)).thenReturn(dto1);
       when(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(memberEntity2)).thenReturn(dto2);
@@ -241,7 +241,7 @@ public class OrganizationMemberHappyTests {
          memberEntity.getId(), userProfileDTO, memberEntity.getRole(), LocalDateTime.now()
       );
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.getOrganizationMemberById(memberEntity.getId())).thenReturn(memberEntity);
       when(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(memberEntity)).thenReturn(memberByOrganizationResponseDTO);
 
@@ -295,7 +295,7 @@ public class OrganizationMemberHappyTests {
       // list - setup
       List<OrganizationMembersEntity> membersEntities = List.of(memberEntity1, memberEntity2);
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.getAllMembersByOrganizationId(organizationId)).thenReturn(membersEntities);
       when(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(memberEntity1)).thenReturn(dto1);
       when(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(memberEntity2)).thenReturn(dto2);
@@ -340,7 +340,7 @@ public class OrganizationMemberHappyTests {
          memberEntity.getId(), userProfileDTO, memberEntity.getRole(), LocalDateTime.now()
       );
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.getMemberByOrganizationId(userId, organizationId)).thenReturn(memberEntity);
       when(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(memberEntity)).thenReturn(memberByOrganizationResponseDTO);      
 
@@ -397,7 +397,7 @@ public class OrganizationMemberHappyTests {
       // list - setup
       List<OrganizationMembersEntity> membersEntities = List.of(memberEntity1, memberEntity2);
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.getAllMembersByRole(organizationId, role)).thenReturn(membersEntities);
       when(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(memberEntity1)).thenReturn(dto1);
       when(this.organizationMembersMapper.toMemberByOrganizationResponseDTO(memberEntity2)).thenReturn(dto2);
@@ -429,7 +429,7 @@ public class OrganizationMemberHappyTests {
          .role(RoleEnum.MEMBER)
          .build();
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.getEntityById(organizationId)).thenReturn(memberEntity);
 
       // act and assert
@@ -450,7 +450,7 @@ public class OrganizationMemberHappyTests {
       // id - setup
       UUID organizationMemberId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.existsById(organizationMemberId)).thenReturn(true);
 
       // act and assert
@@ -470,7 +470,7 @@ public class OrganizationMemberHappyTests {
       UUID organizationId = UUID.randomUUID();
       UUID memberId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.existsByOrganizationIdAndMemberId(organizationId, memberId)).thenReturn(true);
 
       // act and assert
@@ -491,7 +491,7 @@ public class OrganizationMemberHappyTests {
       UUID userId = UUID.randomUUID();
       UUID organizationId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.checkUserMembership(userId, organizationId)).thenReturn(true);
 
       // act and assert
@@ -563,7 +563,7 @@ public class OrganizationMemberHappyTests {
          memberEntity.getRole(), LocalDateTime.now()
       );
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.getEntityById(organizationMemberId)).thenReturn(memberEntity);
       when(this.organizationMembersRepository.updateMemberRole(organizationMemberId, roleToUpdate)).thenReturn(memberEntity);
       when(this.organizationMembersMapper.toOrganizationMembersResponseDTO(memberEntity)).thenReturn(organizationMembersResponseDTO);
@@ -643,7 +643,7 @@ public class OrganizationMemberHappyTests {
          memberEntity.getRole(), LocalDateTime.now(), LocalDateTime.now()
       );
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.getEntityById(organizationMemberId)).thenReturn(memberEntity);
       when(this.organizationMembersRepository.removeParticipation(organizationMemberId)).thenReturn(memberEntity);
       when(this.organizationMembersMapper.toOrganizationMembersDeletedDTO(memberEntity)).thenReturn(organizationMembersDeletedDTO);
@@ -673,7 +673,7 @@ public class OrganizationMemberHappyTests {
       // id - setup
       UUID organizationMemberId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.organizationMembersRepository.isRemoved(organizationMemberId)).thenReturn(true);
 
       // act and assert

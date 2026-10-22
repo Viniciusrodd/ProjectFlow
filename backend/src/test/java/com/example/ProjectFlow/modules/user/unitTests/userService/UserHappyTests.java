@@ -92,7 +92,7 @@ public class UserHappyTests {
       // list - setup
       List<UserEntity> users = List.of(user1, user2);
 
-      // mocks config
+      // stubs
       when(this.userRepository.getAll()).thenReturn(users);
       when(this.userMapper.toUserProfileDTO(user1)).thenReturn(dto1);
       when(this.userMapper.toUserProfileDTO(user2)).thenReturn(dto2);
@@ -124,7 +124,7 @@ public class UserHappyTests {
       // DTO - setup
       UserProfileDTO dto = new UserProfileDTO(user.getId(), user.getEmail(), user.getName(), null);
 
-      // mocks config
+      // stubs
       when(this.userRepository.getById(user.getId())).thenReturn(user);
       when(this.userMapper.toUserProfileDTO(user)).thenReturn(dto);
 
@@ -155,7 +155,7 @@ public class UserHappyTests {
       // DTO - setup
       UserDTO dto = new UserDTO(user.getId(), user.getEmail(), user.getName(), user.getPassword());
 
-      // mocks config
+      // stubs
       when(this.userRepository.getByEmail(user.getEmail())).thenReturn(user);
       when(this.userMapper.toUserDTO(user)).thenReturn(dto);
 
@@ -180,7 +180,7 @@ public class UserHappyTests {
          .id(UUID.randomUUID())
          .build();
 
-      // mocks config
+      // stubs
       when(this.userRepository.getEntityById(user.getId())).thenReturn(user);
 
       // act and assert
@@ -203,7 +203,7 @@ public class UserHappyTests {
          .id(UUID.randomUUID())
          .build();
 
-      // mocks config
+      // stubs
       when(this.userRepository.existsById(user.getId())).thenReturn(true);
 
       // act and assert
@@ -230,7 +230,7 @@ public class UserHappyTests {
       UserUpdateDTO dataToUpdate = new UserUpdateDTO("Novo Nome", null, null);
       UserProfileDTO expectedDto = new UserProfileDTO(user.getId(), user.getEmail(), dataToUpdate.name(), null);
 
-      // mocks config
+      // stubs
       when(this.userRepository.update(user.getId(), dataToUpdate)).thenReturn(user);
       when(this.userMapper.toUserProfileDTO(user)).thenReturn(expectedDto);
 
@@ -265,7 +265,7 @@ public class UserHappyTests {
       // DTO - setup
       UserDeletedDTO dto = new UserDeletedDTO(user.getId(), user.getName(), user.getEmail(), LocalDateTime.now());
 
-      // mocks config
+      // stubs
       when(this.userRepository.delete(user.getId())).thenReturn(user);
       when(this.userMapper.toUserDeletedDTO(user)).thenReturn(dto);
 
@@ -290,7 +290,7 @@ public class UserHappyTests {
          .id(UUID.randomUUID())
          .build();
 
-      // mocks config
+      // stubs
       when(this.userRepository.isDeleted(user.getId())).thenReturn(true);
 
       // act and assert

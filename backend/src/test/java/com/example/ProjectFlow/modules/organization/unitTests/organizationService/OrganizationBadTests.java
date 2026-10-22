@@ -79,7 +79,7 @@ public class OrganizationBadTests {
       // list - setup
       List<OrganizationEntity> organizationsList = List.of();
 
-      // mock config
+      // stubs
       when(this.organizationRepository.getAll()).thenReturn(organizationsList);
 
       // act and assert
@@ -101,7 +101,7 @@ public class OrganizationBadTests {
       // id - setup
       UUID organizationId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.getById(organizationId)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -125,7 +125,7 @@ public class OrganizationBadTests {
       UUID ownerId = UUID.randomUUID();
       List<OrganizationEntity> organizationsList = List.of();
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.getByOwnerId(ownerId)).thenReturn(organizationsList);
 
       // act and assert
@@ -148,7 +148,7 @@ public class OrganizationBadTests {
       // id - setup
       UUID organizationId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.getEntityById(organizationId)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -168,7 +168,7 @@ public class OrganizationBadTests {
       // id - setup
       UUID organizationId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.existsById(organizationId)).thenReturn(false);
 
       // act and assert
@@ -197,7 +197,7 @@ public class OrganizationBadTests {
       // DTO - setup
       OrganizationUpdateDTO organizationUpdateDTO = new OrganizationUpdateDTO("new name", null);
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.existsById(organizationId)).thenReturn(true);
       when(this.organizationMembersRepository.getMemberByOrganizationId(userId, organizationId)).thenReturn(memberEntity);
 
@@ -227,7 +227,7 @@ public class OrganizationBadTests {
          .role(RoleEnum.OWNER)
          .build();
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.existsById(organizationId)).thenReturn(true);
       when(this.organizationMembersRepository.getMemberByOrganizationId(userId, organizationId)).thenReturn(memberEntity);
 
@@ -250,7 +250,7 @@ public class OrganizationBadTests {
       // id - setup
       UUID organizationId = UUID.randomUUID();
 
-      // mock config
+      // stubs
       when(this.organizationRepository.isDeleted(organizationId)).thenThrow(NoResultException.class);
       
       // act and assert

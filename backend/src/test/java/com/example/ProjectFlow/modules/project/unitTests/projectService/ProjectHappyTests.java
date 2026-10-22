@@ -98,7 +98,7 @@ public class ProjectHappyTests {
          projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
       );
 
-      // mocks config
+      // stubs
       when(this.projectRepository.getAll()).thenReturn(projectList);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
 
@@ -137,7 +137,7 @@ public class ProjectHappyTests {
          projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
       );
 
-      // mocks config
+      // stubs
       when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
 
@@ -165,7 +165,7 @@ public class ProjectHappyTests {
          .id(projectId)
          .build();
 
-      // mocks config
+      // stubs
       when(this.projectRepository.getEntityById(projectId)).thenReturn(projectEntity);
 
       // act and assert
@@ -186,7 +186,7 @@ public class ProjectHappyTests {
       // id's - setup
       UUID projectId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.projectRepository.existsById(projectId)).thenReturn(true);
 
       // act and assert
@@ -224,7 +224,7 @@ public class ProjectHappyTests {
          projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
       );
 
-      // mocks config
+      // stubs
       when(this.projectRepository.getByOrganizationId(organizationId)).thenReturn(projectList);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
 
@@ -267,7 +267,7 @@ public class ProjectHappyTests {
          projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
       );
 
-      // mocks config
+      // stubs
       when(this.projectRepository.getByOwnerId(ownerId)).thenReturn(projectList);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
 
@@ -320,7 +320,7 @@ public class ProjectHappyTests {
          projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
       );
 
-      // mocks config
+      // stubs
       when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
       when(this.projectRepository.update(projectId, projectUpdateDTO)).thenReturn(projectEntity);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
@@ -379,7 +379,7 @@ public class ProjectHappyTests {
          LocalDateTime.now()
       );
 
-      // mocks config
+      // stubs
       when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
       when(this.projectRepository.delete(projectId)).thenReturn(projectEntity);
@@ -411,7 +411,7 @@ public class ProjectHappyTests {
       // id's - setup
       UUID projectId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.projectRepository.isDeleted(projectId)).thenReturn(true);
 
       // act and assert

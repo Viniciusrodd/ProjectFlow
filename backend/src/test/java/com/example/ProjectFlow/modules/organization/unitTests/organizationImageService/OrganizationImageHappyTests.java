@@ -124,7 +124,7 @@ public class OrganizationImageHappyTests {
          organizationImageDocument.getSize(), LocalDateTime.now() 
       );
 
-      // mocks config
+      // stubs
       when(this.organizationImageRepository.existsByOrganizationId(organizationId)).thenReturn(true);
       when(this.organizationImageRepository.save(any(OrganizationImageDocument.class))).thenReturn(organizationImageDocument);
       when(this.organizationService.getEntityById(organizationId)).thenReturn(organizationEntity);
@@ -164,7 +164,7 @@ public class OrganizationImageHappyTests {
          .fileName("filename.png")
          .build();
 
-      // mocks config
+      // stubs
       when(this.organizationImageRepository.findByOrganizationId(organizationId)).thenReturn(organizationImageDocument);
 
       // act and assert
@@ -190,7 +190,7 @@ public class OrganizationImageHappyTests {
       // list - setup
       List<OrganizationImageDocument> documentList = List.of(organizationImageDocument);
 
-      // mocks config
+      // stubs
       when(this.organizationImageRepository.findAll()).thenReturn(documentList);
 
       // act and assert
@@ -229,7 +229,7 @@ public class OrganizationImageHappyTests {
          .description("Imagem da organização: " + organizationEntity.getName() + ", removida")
          .build();
 
-      // mocks config
+      // stubs
       when(this.organizationImageRepository.findByOrganizationId(organizationId)).thenReturn(organizationImageDocument);
       when(this.organizationService.getEntityById(organizationId)).thenReturn(organizationEntity);
 

@@ -80,7 +80,7 @@ public class ProjectBadTests {
       // list - setup
       List<ProjectEntity> projectList = List.of();
 
-      // mock config
+      // stubs
       when(this.projectRepository.getAll()).thenReturn(projectList);
 
       // act and assert
@@ -102,7 +102,7 @@ public class ProjectBadTests {
       // id - setup
       UUID projectId = UUID.randomUUID();
 
-      // mock config
+      // stubs
       when(this.projectRepository.getById(projectId)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -125,7 +125,7 @@ public class ProjectBadTests {
       // id - setup
       UUID projectId = UUID.randomUUID();
 
-      // mock config
+      // stubs
       when(this.projectRepository.getEntityById(projectId)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -145,7 +145,7 @@ public class ProjectBadTests {
       // id - setup
       UUID projectId = UUID.randomUUID();
 
-      // mock config
+      // stubs
       when(this.projectRepository.existsById(projectId)).thenReturn(false);
 
       // act and assert
@@ -168,7 +168,7 @@ public class ProjectBadTests {
       // list - setup
       List<ProjectEntity> projectList = List.of();
 
-      // mock config
+      // stubs
       when(this.projectRepository.getByOrganizationId(organizationId)).thenReturn(projectList);
 
       // act and assert
@@ -194,7 +194,7 @@ public class ProjectBadTests {
       // list - setup
       List<ProjectEntity> projectList = List.of();
 
-      // mock config
+      // stubs
       when(this.projectRepository.getByOwnerId(ownerId)).thenReturn(projectList);
 
       // act and assert
@@ -237,7 +237,7 @@ public class ProjectBadTests {
          projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
       );
 
-      // mock config
+      // stubs
       when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
       when(this.projectRepository.update(projectId, projectUpdateDTO)).thenThrow(NoResultException.class);
@@ -284,7 +284,7 @@ public class ProjectBadTests {
          projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
       );
 
-      // mock config
+      // stubs
       when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
       when(this.projectRepository.delete(projectId)).thenThrow(NoResultException.class);

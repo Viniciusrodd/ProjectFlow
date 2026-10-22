@@ -76,7 +76,7 @@ public class ProfileImageBadTests {
       when(file.getSize()).thenReturn(3L);
       when(file.getBytes()).thenThrow(IOException.class);
 
-      // mocks config
+      // stubs
       when(this.userService.existsById(userId)).thenReturn(true);
       when(this.profileImageRepository.existsByUserId(userId)).thenReturn(false);
 
@@ -103,7 +103,7 @@ public class ProfileImageBadTests {
       // id - setup
       UUID userId = UUID.randomUUID();
 
-      // mocks config
+      // stubs
       when(this.userService.existsById(userId)).thenReturn(true);
       when(this.profileImageRepository.findByUserId(userId)).thenReturn(null);
 
@@ -124,7 +124,7 @@ public class ProfileImageBadTests {
       // list - setup
       List<ProfileImageDocument> documents = new ArrayList<>();
 
-      // mocks config
+      // stubs
       when(this.profileImageRepository.findAll()).thenReturn(documents);
 
       // act and assert

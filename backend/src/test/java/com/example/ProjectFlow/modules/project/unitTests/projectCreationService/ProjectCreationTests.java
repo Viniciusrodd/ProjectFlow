@@ -111,7 +111,7 @@ public class ProjectCreationTests {
          projectEntity.getName(), projectEntity.getDescription(), status
       );
 
-      // mocks config
+      // stubs
       when(this.projectService.create(projectDTO)).thenReturn(projectEntity);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
 

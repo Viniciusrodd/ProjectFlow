@@ -113,7 +113,7 @@ public class OrganizationHappyTests {
       // list - setup
       List<OrganizationEntity> organizationsList = List.of(organization1, organization2);
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.getAll()).thenReturn(organizationsList);
       when(this.organizationMapper.toOrganizationResponseDTO(organization1)).thenReturn(dto1);
       when(this.organizationMapper.toOrganizationResponseDTO(organization2)).thenReturn(dto2);
@@ -155,7 +155,7 @@ public class OrganizationHappyTests {
          organizationEntity.getId(), organizationEntity.getOwnerId(), organizationEntity.getName(), organizationEntity.getDescription()
       );
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.getById(organizationEntity.getId())).thenReturn(organizationEntity);
       when(this.organizationMapper.toOrganizationResponseDTO(organizationEntity)).thenReturn(organizationResponseDTO);
 
@@ -210,7 +210,7 @@ public class OrganizationHappyTests {
       // list - setup
       List<OrganizationEntity> organizationsList = List.of(organization1, organization2);
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.getByOwnerId(ownerEntity.getId())).thenReturn(organizationsList);
       when(this.organizationMapper.toOrganizationResponseDTO(organization1)).thenReturn(dto1);
       when(this.organizationMapper.toOrganizationResponseDTO(organization2)).thenReturn(dto2);
@@ -248,7 +248,7 @@ public class OrganizationHappyTests {
          .description("organization test")
          .build();
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.getEntityById(organizationEntity.getId())).thenReturn(organizationEntity);
 
       // act and assert
@@ -271,7 +271,7 @@ public class OrganizationHappyTests {
          .id(UUID.randomUUID())
          .build();
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.existsById(organizationEntity.getId())).thenReturn(true);
 
       // act and assert
@@ -326,7 +326,7 @@ public class OrganizationHappyTests {
          .description("Organização: " + organizationUpdateDTO.name() + " atualizada")
          .build();
 
-      // mocks config
+      // stubs
       when(this.organizationRepository.existsById(organizationEntity.getId())).thenReturn(true);
       when(this.organizationMembersRepository.getMemberByOrganizationId(userEntity.getId(), organizationEntity.getId())).thenReturn(admin);
       when(this.organizationRepository.update(organizationEntity.getId(), organizationUpdateDTO)).thenReturn(organizationEntity);
@@ -389,7 +389,7 @@ public class OrganizationHappyTests {
          organizationEntity.getId(), userEntity.getId(), organizationEntity.getName(), organizationEntity.getDescription(), LocalDateTime.now()
       );
       
-      // mocks config
+      // stubs
       when(this.organizationRepository.existsById(organizationEntity.getId())).thenReturn(true);
       when(this.organizationMembersRepository.getMemberByOrganizationId(userEntity.getId(), organizationEntity.getId())).thenReturn(admin);
       when(this.organizationRepository.delete(organizationEntity.getId())).thenReturn(organizationEntity);
@@ -422,7 +422,7 @@ public class OrganizationHappyTests {
          .id(UUID.randomUUID())
          .build();
 
-      // mock config
+      // stubs
       when(this.organizationRepository.isDeleted(organizationEntity.getId())).thenReturn(true);
       
       // act and assert
