@@ -84,7 +84,7 @@ public class OrganizationMemberBadTests {
    @Test
    @DisplayName("createMemberParticipation() - must throw that user does not exist")
    void createMemberParticipation() {
-      // id - setup
+      // data - setup
       UUID organizationId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
       RoleEnum role = RoleEnum.MEMBER;
