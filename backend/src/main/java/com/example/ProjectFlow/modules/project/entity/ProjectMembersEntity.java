@@ -84,6 +84,7 @@ public class ProjectMembersEntity implements SoftDeleteInterface {
 
    // constructor - builder
    public ProjectMembersEntity(Builder builder) {
+      setId(builder.id);
       setUser(builder.user);
       setProject(builder.project);
       setRole(builder.role);
@@ -121,10 +122,16 @@ public class ProjectMembersEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private UserEntity user;
       private ProjectEntity project;
       private RoleEnum role;
       private LocalDateTime joinedAt;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder user(UserEntity user) {
          this.user = user;

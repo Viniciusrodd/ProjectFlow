@@ -111,6 +111,8 @@ public class ProjectMemberService {
             ", como: " + projectMembersEntity.getRole()
          )
          .build();
+         
+      this.activityLogService.create(activityLog);
 
       // notification - registering
       for(ProjectMembersEntity notifyMember : project.getMembers()) {
@@ -122,8 +124,6 @@ public class ProjectMemberService {
          
          this.notificationService.create(notification);
       }
-
-      this.activityLogService.create(activityLog);
 
       return this.projectMembersMapper.toProjectMembersResponseDTO(projectMembersEntity);
    }
