@@ -169,14 +169,6 @@ public class OrganizationMemberHappyTests {
    @Test
    @DisplayName("getAllOrganizationMembers() - must return all members")
    void getAllOrganizationMembers() {
-      // DTO - setup
-      UserProfileDTO userProfileDTO = new UserProfileDTO(
-         UUID.randomUUID(),
-         "vini@gmail.com",
-         "vini",
-         "123456789"
-      );
-
       // organization member 1 - setup
       OrganizationMembersEntity memberEntity1 = new OrganizationMembersEntity.Builder()
          .id(UUID.randomUUID())
@@ -190,6 +182,13 @@ public class OrganizationMemberHappyTests {
       .build();
          
       // DTO's - setup   
+      UserProfileDTO userProfileDTO = new UserProfileDTO(
+         UUID.randomUUID(),
+         "vini@gmail.com",
+         "vini",
+         "123456789"
+      );
+
       MemberByOrganizationResponseDTO dto1 = new MemberByOrganizationResponseDTO(
          memberEntity1.getId(), userProfileDTO, memberEntity1.getRole(), LocalDateTime.now()
       );
@@ -221,7 +220,7 @@ public class OrganizationMemberHappyTests {
 
 
    @Test
-   @DisplayName("getOrganizationMemberById() - must return member by relation")
+   @DisplayName("getOrganizationMemberById() - must return a organization member")
    void getOrganizationMemberById() {
       // organization member - setup
       OrganizationMembersEntity memberEntity = new OrganizationMembersEntity.Builder()
