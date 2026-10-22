@@ -54,7 +54,7 @@ import com.example.ProjectFlow.modules.organization.enums.RoleEnum;
 @DisplayName("Unit tests (Bad path) - OrganizationService")
 public class OrganizationBadTests {
  
-      // mock dependencies
+   // mock dependencies
    @Mock
    private OrganizationRepository organizationRepository;
    @Mock
