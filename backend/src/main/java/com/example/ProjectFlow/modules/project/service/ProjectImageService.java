@@ -184,13 +184,12 @@ public class ProjectImageService {
       ProjectEntity projectEntity = this.projectService.getEntityById(projectId);
 
       // activity log - registering
-      ActivityLogDTO activityLog = new ActivityLogDTO(
-         null,
-         projectEntity.getId(), 
-         null, null, null, null,
-         ActivityActionEnum.LOGO_DO_PROJETO_REMOVIDO,
-         "Imagem do projeto: " + projectEntity.getName() + ", removida"
-      );
+      ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
+         .projectId(projectEntity.getId())
+         .action(ActivityActionEnum.LOGO_DO_PROJETO_REMOVIDO)
+         .description("Imagem do projeto: " + projectEntity.getName() + ", removida")
+         .build();
+
       this.activityLogService.create(activityLog);
    }
 

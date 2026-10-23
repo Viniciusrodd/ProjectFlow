@@ -25,8 +25,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-// jakarta imports
-
 // import repository
 import com.example.ProjectFlow.modules.organization.repository.OrganizationImageRepository;
 
@@ -58,7 +56,8 @@ import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Unit tests (Happy path) - OrganizationImageService")
 public class OrganizationImageHappyTests {
- 
+
+   // mock dependencies
    @Mock
    private OrganizationImageRepository organizationImageRepository;
    @Mock

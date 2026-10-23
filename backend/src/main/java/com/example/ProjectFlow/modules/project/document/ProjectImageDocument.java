@@ -43,6 +43,7 @@ public class ProjectImageDocument {
 
    // constructor - builder
    public ProjectImageDocument(Builder builder) {
+      setId(builder.id);
       setProjectId(builder.projectId);
       setFileName(builder.fileName);
       setMimeType(builder.mimeType);
@@ -76,12 +77,18 @@ public class ProjectImageDocument {
 
 
    public static class Builder {
+      private String id;
       private UUID projectId;
       private String fileName;
       private String mimeType;
       private Long size;
       private LocalDateTime uploadDate;
       private byte[] binary;
+
+      public Builder id(String id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder projectId(UUID projectId) {
          this.projectId = projectId;
