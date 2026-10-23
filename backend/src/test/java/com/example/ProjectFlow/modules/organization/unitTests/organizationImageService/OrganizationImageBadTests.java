@@ -2,8 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.organization.unitTests.organizationImageService;
 
-import java.util.List;
 // imports
+import java.util.List;
 import java.util.UUID;
 
 // JUnit imports
@@ -27,17 +27,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-// jakarta imports
-
 // import repository
 import com.example.ProjectFlow.modules.organization.repository.OrganizationImageRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationImageValidator;
 
+// import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
-
-// import DTOs
 
 // import services
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
@@ -45,14 +42,8 @@ import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 import com.example.ProjectFlow.modules.organization.service.OrganizationImageService;
 import com.example.ProjectFlow.modules.organization.document.OrganizationImageDocument;
 
-// import document
-
-// import entity
-
 // import mapper
 import com.example.ProjectFlow.modules.organization.mapper.OrganizationImageMapper;
-
-// import enums
 
 
 @ExtendWith(MockitoExtension.class)
