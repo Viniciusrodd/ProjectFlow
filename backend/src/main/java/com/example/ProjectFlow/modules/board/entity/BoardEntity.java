@@ -77,6 +77,7 @@ public class BoardEntity implements SoftDeleteInterface {
 
    // constructor - builder
    public BoardEntity(Builder builder) {
+      setId(builder.id);
       setProject(builder.project);
       setName(builder.name);
    }
@@ -111,8 +112,14 @@ public class BoardEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private ProjectEntity project;
       private String name;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }      
 
       public Builder project(ProjectEntity project) {
          this.project = project;

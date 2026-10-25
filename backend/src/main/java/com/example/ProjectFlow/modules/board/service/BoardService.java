@@ -2,8 +2,8 @@
 // packages
 package com.example.ProjectFlow.modules.board.service;
 
-import java.util.ArrayList;
 // imports
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
