@@ -207,7 +207,7 @@ public class AttachmentService {
       // task attachment - validation
       if(this.attachmentRepository.findByTaskId(taskId).isEmpty()) {
          throw MultiExceptions.notFound(String.format(
-            "%s: Anexos de tarefa não existe",
+            "%s: Anexos de tarefa não existem",
             ResponseMessages.NOT_FOUND
          ));
       }
