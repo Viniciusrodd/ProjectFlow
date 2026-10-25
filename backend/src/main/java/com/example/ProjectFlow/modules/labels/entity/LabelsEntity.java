@@ -81,6 +81,7 @@ public class LabelsEntity implements SoftDeleteInterface {
 
    // constructor - builder
    public LabelsEntity(Builder builder) {
+      setId(builder.id);
       setProject(builder.project);
       setName(builder.name);
       setColor(builder.color);
@@ -118,9 +119,15 @@ public class LabelsEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private ProjectEntity project;
       private String name;
       private String color;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder project(ProjectEntity project) {
          this.project = project;

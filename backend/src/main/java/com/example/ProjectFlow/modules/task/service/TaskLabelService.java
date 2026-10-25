@@ -22,7 +22,7 @@ import com.example.ProjectFlow.modules.task.validator.TaskLabelsValidator;
 import com.example.ProjectFlow.modules.labels.service.LabelService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 import com.example.ProjectFlow.modules.notification.service.NotificationService;
-import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
+
 // import DTOs
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TaskLabelsResponseDTO;
 import com.example.ProjectFlow.modules.task.dto.taskLabelsDTO.TasksByLabelResponseDTO;
@@ -32,6 +32,7 @@ import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import entity
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 import com.example.ProjectFlow.modules.task.entity.TaskLabelsEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 import com.example.ProjectFlow.modules.labels.entity.LabelsEntity;

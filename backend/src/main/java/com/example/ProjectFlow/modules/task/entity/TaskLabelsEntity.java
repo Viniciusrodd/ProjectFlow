@@ -70,6 +70,7 @@ public class TaskLabelsEntity implements SoftDeleteInterface {
 
    // constructor - builder
    public TaskLabelsEntity(Builder builder) {
+      setId(builder.id);
       setTask(builder.task);
       setLabel(builder.label);
    }
@@ -99,8 +100,14 @@ public class TaskLabelsEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private TasksEntity task;
       private LabelsEntity label;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder task(TasksEntity task) {
          this.task = task;
