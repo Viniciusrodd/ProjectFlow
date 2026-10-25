@@ -19,7 +19,7 @@ import com.example.ProjectFlow.modules.task.repository.TaskChecklistRepository;
 // import services
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 import com.example.ProjectFlow.modules.notification.service.NotificationService;
-import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
+
 // import validator
 import com.example.ProjectFlow.modules.task.validator.TaskChecklistValidator;
 
@@ -32,6 +32,7 @@ import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import entity
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 import com.example.ProjectFlow.modules.task.entity.TaskChecklistEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 

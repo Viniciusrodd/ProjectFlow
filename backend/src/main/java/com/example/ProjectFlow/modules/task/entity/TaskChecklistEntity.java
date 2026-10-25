@@ -72,6 +72,7 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
 
    // constructor - builder
    public TaskChecklistEntity(Builder builder) {
+      setId(builder.id);
       setTask(builder.task);
       setDescription(builder.description);
       setCompleted(builder.completed);
@@ -110,10 +111,16 @@ public class TaskChecklistEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private TasksEntity task;
       private String description;
       private boolean completed;
       private int position;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder task(TasksEntity task) {
          this.task = task;
