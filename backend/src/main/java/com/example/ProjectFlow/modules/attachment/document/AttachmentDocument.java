@@ -46,6 +46,7 @@ public class AttachmentDocument {
 
    // constructor - builder
    public AttachmentDocument(Builder builder) {
+      setId(builder.id);
       setTaskId(builder.taskId);
       setUploadedBy(builder.uploadedBy);
       setFileName(builder.fileName);
@@ -81,6 +82,7 @@ public class AttachmentDocument {
 
 
    public static class Builder {
+      private String id;
       private UUID taskId;
       private UUID uploadedBy;
       private String fileName;
@@ -88,6 +90,11 @@ public class AttachmentDocument {
       private Long size;
       private LocalDateTime uploadDate;
       private byte[] binary;
+
+      public Builder id(String id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder taskId(UUID taskId) {
          this.taskId = taskId;

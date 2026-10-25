@@ -22,8 +22,9 @@ import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 import com.example.ProjectFlow.modules.notification.service.NotificationService;
-import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
+
 // import entity
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 
 // import validator
@@ -257,12 +258,12 @@ public class AttachmentService {
          ));
       }
 
-      // remove
-      this.attachmentRepository.deleteById(id);
-
       // get task
       UUID taskId = this.getTaskAttachmentById(id).getTaskId();
       TasksEntity taskEntity = this.taskService.getEntityById(taskId);
+      
+      // remove
+      this.attachmentRepository.deleteById(id);
 
       // activity log - registering
       ActivityLogDTO activityLog = new ActivityLogDTO.Builder()
