@@ -88,6 +88,7 @@ public class BoardColumnsEntity implements SoftDeleteInterface {
    
    // constructor - builder
    public BoardColumnsEntity(Builder builder) {
+      setId(builder.id);
       setBoard(builder.board);
       setName(builder.name);
       setPosition(builder.position);
@@ -128,10 +129,16 @@ public class BoardColumnsEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private BoardEntity board;
       private BoardEnum name;
       private int position;
       private String color;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder board(BoardEntity board) {
          this.board = board;
