@@ -117,6 +117,7 @@ public class TasksEntity implements SoftDeleteInterface {
 
    // constructor - builder
    public TasksEntity(Builder builder) {
+      setId(builder.id);
       setProject(builder.project);
       setBoardColumn(builder.boardColumn);
       setOwner(builder.owner);
@@ -174,6 +175,7 @@ public class TasksEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private ProjectEntity project;
       private BoardColumnsEntity boardColumn;
       private UserEntity owner;
@@ -181,6 +183,11 @@ public class TasksEntity implements SoftDeleteInterface {
       private String description;
       private PriorityEnum priority;
       private LocalDate dueDate;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder project(ProjectEntity project) {
          this.project = project;
