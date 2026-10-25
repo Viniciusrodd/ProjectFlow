@@ -75,6 +75,7 @@ public class CommentEntity implements SoftDeleteInterface {
 
    // constructor - builder
    public CommentEntity(Builder builder) {
+      setId(builder.id);
       setTask(builder.task);
       setAuthor(builder.author);
       setContent(builder.content);
@@ -109,9 +110,15 @@ public class CommentEntity implements SoftDeleteInterface {
 
 
    public static class Builder {
+      private UUID id;
       private TasksEntity task;
       private UserEntity author;
       private String content;
+
+      public Builder id(UUID id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder task(TasksEntity task) {
          this.task = task;

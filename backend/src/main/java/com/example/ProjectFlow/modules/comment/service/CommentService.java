@@ -23,7 +23,7 @@ import com.example.ProjectFlow.modules.task.service.TaskService;
 import com.example.ProjectFlow.modules.user.service.UserService;
 import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 import com.example.ProjectFlow.modules.notification.service.NotificationService;
-import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
+
 // import DTOs
 import com.example.ProjectFlow.modules.comment.dto.CommentDTO;
 import com.example.ProjectFlow.modules.comment.dto.CommentDeleteDTO;
@@ -32,6 +32,7 @@ import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 import com.example.ProjectFlow.modules.notification.dto.NotificationDTO;
 
 // import entity
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 import com.example.ProjectFlow.modules.comment.entity.CommentEntity;
 import com.example.ProjectFlow.modules.task.entity.TasksEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
