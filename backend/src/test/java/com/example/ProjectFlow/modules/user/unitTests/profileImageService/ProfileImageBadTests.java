@@ -64,25 +64,22 @@ public class ProfileImageBadTests {
 
 
    @Test
-   @DisplayName("uploadProfileImage() - must fail in profile image processing")
-   void uploadProfileImage() throws Exception {
+   @DisplayName("uploadProfileImage() - must throw when file cannot be read")
+   void uploadProfileImage() throws IOException {
       // id - setup
       UUID userId = UUID.randomUUID();
 
       // file - mock
       MultipartFile file = mock(MultipartFile.class);
-      when(file.getOriginalFilename()).thenReturn("filename.png");
-      when(file.getContentType()).thenReturn("image/png");
-      when(file.getSize()).thenReturn(3L);
-      when(file.getBytes()).thenThrow(IOException.class);
 
       // stubs
       when(this.userService.existsById(userId)).thenReturn(true);
       when(this.profileImageRepository.existsByUserId(userId)).thenReturn(false);
+      when(file.getBytes()).thenThrow(new IOException("Falha ao processar imagem de usuário"));
 
       // act and assert
       assertThatThrownBy(() -> this.profileImageService.uploadProfileImage(userId, file))
-         .isInstanceOf(Exception.class)
+         .isInstanceOf(RuntimeException.class)
          .hasMessageContaining("Erro interno do servidor: Falha ao processar imagem de usuário");
 
       // checks

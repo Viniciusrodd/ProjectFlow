@@ -3,6 +3,7 @@
 package com.example.ProjectFlow.modules.project.unitTests.projectImageService;
 
 // imports
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,12 +16,11 @@ import org.mockito.Mock;
 
 // mockito imports
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,9 +44,6 @@ import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
 
 // import DTO
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
-
-// import exceptions
-import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
@@ -82,24 +79,15 @@ public class ProjectImageBadTests {
 
 
    @Test
-   @DisplayName("uploadProjectImage() - must throw an error when user is not a admin")
-   void uploadProjectImage() {
+   @DisplayName("uploadProjectImage() - must throw when file cannot be read")
+   void uploadProjectImage() throws IOException {
       // id's - setup
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
       UUID organizationId = UUID.randomUUID();
       
-      // data - setup
-      byte[] binary = {1, 2, 3};
-      String errorMessage = "Não autorizado: Membro não é um administrador";
-
-      // file - setup
-      MultipartFile file = new MockMultipartFile(
-         "file",
-         "filename.png",
-         "image/png",
-         binary
-      );
+      // file - mock
+      MultipartFile file = mock(MultipartFile.class);
       
       // project - setup
       ProjectEntity projectEntity = new ProjectEntity.Builder()
@@ -116,21 +104,22 @@ public class ProjectImageBadTests {
 
       // stubs
       when(this.projectService.getById(projectId)).thenReturn(projectResponseDTO);
-      doThrow(MultiExceptions.unauthorized(errorMessage))
-         .when(this.organizationService).userIsAdmin(userId, organizationId);
+      when(this.projectImageRepository.existsByProjectId(projectId)).thenReturn(false);
+      when(file.getBytes()).thenThrow(new IOException("Falha ao processar imagem da organização"));      
 
       // act and assert
       assertThatThrownBy(() -> this.projectImageService.uploadProjectImage(projectId, userId, file))
          .isInstanceOf(RuntimeException.class)
-         .hasMessage(errorMessage);
+         .hasMessageContaining("Erro interno do servidor: Falha ao processar imagem do projeto");
 
       // checks
       verify(this.projectImageValidator, times(1)).validate(file);
       verify(this.projectService, times(1)).getById(projectId);
       verify(this.organizationService, times(1)).userIsAdmin(userId, projectResponseDTO.organizationId());
+      verify(this.projectImageRepository, times(1)).existsByProjectId(projectId);
       
       // no checks
-      verifyNoInteractions(this.projectImageRepository);
+      verify(this.projectImageRepository, never()).save(any());
       verify(this.projectService, never()).updateLogoImageId(any(UUID.class), anyString());
       verify(this.projectService, never()).getEntityById(any(UUID.class));
       verifyNoInteractions(this.activityLogService);

@@ -3,6 +3,7 @@
 package com.example.ProjectFlow.modules.organization.unitTests.organizationImageService;
 
 // imports
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,12 +16,11 @@ import org.mockito.Mock;
 
 // mockito imports
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -32,9 +32,6 @@ import com.example.ProjectFlow.modules.organization.repository.OrganizationImage
 
 // import validator
 import com.example.ProjectFlow.modules.organization.validator.OrganizationImageValidator;
-
-// import exceptions
-import com.example.ProjectFlow.exception.MultiExceptions;
 
 // import services
 import com.example.ProjectFlow.modules.organization.service.OrganizationService;
@@ -68,39 +65,31 @@ public class OrganizationImageBadTests {
 
 
    @Test
-   @DisplayName("uploadOrganizationImage() - must throw an error when user is not a admin")
-   void uploadOrganizationImage() {
+   @DisplayName("uploadOrganizationImage() - must throw when file cannot be read")
+   void uploadOrganizationImage() throws IOException {
       // id's - setup
       UUID userId = UUID.randomUUID();
       UUID organizationId = UUID.randomUUID();
 
-      // data - setup
-      byte[] binary = {1, 2, 3};
-      String errorMessage = "Não autorizado: Membro não é um administrador";
-
-      // file - setup
-      MultipartFile file = new MockMultipartFile(
-         "file",
-         "filename.png",
-         "image/png",
-         binary
-      );
+      // file - mock
+      MultipartFile file = mock(MultipartFile.class);
 
       // stubs
-      doThrow(MultiExceptions.unauthorized(errorMessage))
-         .when(this.organizationService).userIsAdmin(userId, organizationId);
+      when(this.organizationImageRepository.existsByOrganizationId(organizationId)).thenReturn(false);
+      when(file.getBytes()).thenThrow(new IOException("Falha ao processar imagem da organização"));
 
       // act and assert
       assertThatThrownBy(() -> this.organizationImageService.uploadOrganizationImage(organizationId, userId, file))
          .isInstanceOf(RuntimeException.class)
-         .hasMessage(errorMessage);
+         .hasMessageContaining("Erro interno do servidor: Falha ao processar imagem da organização");
 
       // checks
       verify(this.organizationImageValidator, times(1)).validate(file);
       verify(this.organizationService, times(1)).userIsAdmin(userId, organizationId);
+      verify(this.organizationImageRepository, times(1)).existsByOrganizationId(organizationId);
 
       // no checks
-      verifyNoInteractions(this.organizationImageRepository);
+      verify(this.organizationImageRepository, never()).save(any());
       verify(this.organizationService, never()).updateLogoImageId(any(UUID.class), anyString());
       verify(this.organizationService, never()).getEntityById(any(UUID.class));
       verifyNoInteractions(this.activityLogService);

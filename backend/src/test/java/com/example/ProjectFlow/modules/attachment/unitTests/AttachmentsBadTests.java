@@ -83,12 +83,12 @@ public class AttachmentsBadTests {
       MultipartFile file = mock(MultipartFile.class);
  
       // stubs
-      when(file.getBytes()).thenThrow(new IOException("erro de leitura"));
+      when(file.getBytes()).thenThrow(new IOException("Falha ao processar anexo de tarefa"));
  
       // act and assert
       assertThatThrownBy(() -> this.attachmentService.uploadAttachment(taskId, uploadedBy, file))
          .isInstanceOf(RuntimeException.class)
-         .hasMessageContaining("Falha ao processar anexo de tarefa: erro de leitura");
+         .hasMessageContaining("Erro interno do servidor: Falha ao processar anexo de tarefa");
  
       // checks
       verify(this.userService, times(1)).existsById(uploadedBy);
