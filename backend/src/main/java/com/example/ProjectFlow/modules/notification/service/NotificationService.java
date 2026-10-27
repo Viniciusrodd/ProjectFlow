@@ -213,7 +213,7 @@ public class NotificationService {
       this.notificationValidator.idValidate(id);
 
       // notification - validation
-      if(this.notificationRepository.findById(id) == null) {
+      if(this.notificationRepository.findById(id).isEmpty()) {
          throw MultiExceptions.internal(String.format(
             "%s: Notificação não existe", 
             ResponseMessages.NOT_FOUND

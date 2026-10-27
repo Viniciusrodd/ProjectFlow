@@ -251,7 +251,7 @@ public class AttachmentService {
       this.attachmentValidator.idValidate(id);
 
       // task attachment - validation
-      if(this.attachmentRepository.findById(id) == null) {
+      if(this.attachmentRepository.findById(id).isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Anexo de tarefa não existe",
             ResponseMessages.NOT_FOUND

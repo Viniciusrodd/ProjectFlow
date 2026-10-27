@@ -240,7 +240,7 @@ public class ActivityLogService {
       this.activityLogValidator.idValidate(id);
 
       // activity log - validation
-      if(this.activityLogRepository.findById(id) == null) {
+      if(this.activityLogRepository.findById(id).isEmpty()) {
          throw MultiExceptions.notFound(String.format(
             "%s: Registro de atividade não existe",
             ResponseMessages.NOT_FOUND
