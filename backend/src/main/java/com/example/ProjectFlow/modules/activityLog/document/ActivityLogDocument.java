@@ -49,6 +49,7 @@ public class ActivityLogDocument {
 
    // constructor - builder
    public ActivityLogDocument(Builder builder) {
+      setId(builder.id);
       setOrganizationId(builder.organizationId);
       setProjectId(builder.projectId);
       setTaskId(builder.taskId);
@@ -85,6 +86,7 @@ public class ActivityLogDocument {
 
 
    public static class Builder {
+      private String id;
       private UUID organizationId;
       private UUID projectId;
       private UUID taskId;
@@ -92,7 +94,12 @@ public class ActivityLogDocument {
       private ActivityActionEnum action;
       private String description;
       private LocalDateTime createdAt;
-
+      
+      public Builder id(String id) {
+         this.id = id;
+         return this;
+      }
+     
       public Builder organizationId(UUID organizationId) {
          this.organizationId = organizationId;
          return this;
