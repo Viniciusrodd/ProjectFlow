@@ -107,7 +107,7 @@ public class NotificationService {
 
       NotificationDocument document = this.notificationRepository.findById(id).orElse(null);
       if(document == null) {
-         throw MultiExceptions.internal(String.format(
+         throw MultiExceptions.notFound(String.format(
             "%s: Notificação não existe", 
             ResponseMessages.NOT_FOUND
          ));
@@ -126,7 +126,7 @@ public class NotificationService {
 
       List<NotificationDocument> documents = this.notificationRepository.findAllByUserId(userId);
       if(documents.isEmpty()) {
-         throw MultiExceptions.internal(String.format(
+         throw MultiExceptions.notFound(String.format(
             "%s: Notificações não existem", 
             ResponseMessages.NOT_FOUND
          ));
@@ -181,7 +181,7 @@ public class NotificationService {
 
       NotificationDocument document = this.notificationRepository.findById(id).orElse(null);
       if(document == null) {
-         throw MultiExceptions.internal(String.format(
+         throw MultiExceptions.notFound(String.format(
             "%s: Notificação não existe", 
             ResponseMessages.NOT_FOUND
          ));
@@ -197,7 +197,7 @@ public class NotificationService {
 
       // notifications - validation
       if(this.notificationRepository.findAllByUserId(userId).isEmpty()) {
-         throw MultiExceptions.internal(String.format(
+         throw MultiExceptions.notFound(String.format(
             "%s: Notificações não existem", 
             ResponseMessages.NOT_FOUND
          ));
@@ -214,7 +214,7 @@ public class NotificationService {
 
       // notification - validation
       if(this.notificationRepository.findById(id).isEmpty()) {
-         throw MultiExceptions.internal(String.format(
+         throw MultiExceptions.notFound(String.format(
             "%s: Notificação não existe", 
             ResponseMessages.NOT_FOUND
          ));

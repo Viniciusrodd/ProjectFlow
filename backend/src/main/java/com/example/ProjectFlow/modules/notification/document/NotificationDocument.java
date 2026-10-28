@@ -43,6 +43,7 @@ public class NotificationDocument {
 
    // constructor - builder
    public NotificationDocument(Builder builder) {
+      setId(builder.id);
       setUserId(builder.userId);
       setTitle(builder.title);
       setMessage(builder.message);
@@ -72,11 +73,17 @@ public class NotificationDocument {
 
 
    public static class Builder {
+      private String id;
       private UUID userId;
       private NotificationTitleEnum title;
       private String message;
       private boolean read;
       private LocalDateTime createdAt;
+
+      public Builder id(String id) {
+         this.id = id;
+         return this;
+      }
 
       public Builder userId(UUID userId) {
          this.userId = userId;
