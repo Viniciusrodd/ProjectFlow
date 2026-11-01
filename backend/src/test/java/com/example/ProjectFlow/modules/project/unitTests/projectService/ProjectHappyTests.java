@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 
 // import repository
 import com.example.ProjectFlow.modules.project.repository.ProjectRepository;
+import com.example.ProjectFlow.modules.project.repository.ProjectMembersRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectValidator;
@@ -41,11 +42,13 @@ import com.example.ProjectFlow.modules.project.service.ProjectService;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 
 // import mapper
 import com.example.ProjectFlow.modules.project.mapper.ProjectMapper;
 
 // import enum
+import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 import com.example.ProjectFlow.modules.project.enums.StatusEnum;
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
@@ -57,6 +60,8 @@ public class ProjectHappyTests {
    // mock dependencies
    @Mock
    private ProjectRepository projectRepository;
+   @Mock
+   private ProjectMembersRepository projectMembersRepository;
    @Mock
    private ProjectValidator projectValidator;
    @Mock
@@ -304,6 +309,13 @@ public class ProjectHappyTests {
          .status(StatusEnum.ACTIVE)
          .build();
 
+      // member - setup
+      ProjectMembersEntity member = new ProjectMembersEntity.Builder()
+         .id(UUID.randomUUID())
+         .project(projectEntity)
+         .role(RoleEnum.ADMIN)
+         .build();
+
       // DTO - setup
       ProjectUpdateDTO projectUpdateDTO = new ProjectUpdateDTO(
          newName, projectEntity.getDescription(), projectEntity.getStatus().toString()
@@ -321,7 +333,8 @@ public class ProjectHappyTests {
       );
 
       // stubs
-      when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
+      when(this.projectRepository.existsById(projectId)).thenReturn(true);
+      when(this.projectMembersRepository.getMemberByProjectId(userId, projectId)).thenReturn(member);
       when(this.projectRepository.update(projectId, projectUpdateDTO)).thenReturn(projectEntity);
       when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
 
@@ -332,16 +345,16 @@ public class ProjectHappyTests {
          .isEqualTo(projectResponseDTO);
 
       // checks
+      verify(this.userService, times(2)).existsById(userId);
+      verify(this.projectRepository, times(1)).existsById(projectId);
+      verify(this.projectMembersRepository, times(1)).getMemberByProjectId(userId, projectId);
       verify(this.projectValidator, times(2)).idValidate(projectId);
-      verify(this.userService, times(1)).existsById(userId);
       verify(this.projectValidator, times(1)).updateValidations(projectUpdateDTO);
 
-      verify(this.organizationService, times(1)).userIsAdmin(userId, organizationId);
-      verify(this.projectRepository, times(1)).getById(projectId);
-
       verify(this.projectRepository, times(1)).update(projectId, projectUpdateDTO);
+
       verify(this.activityLogService, times(1)).create(activityLogDTO);
-      verify(this.projectMapper, times(2)).toProjectResponseDTO(projectEntity);
+      verify(this.projectMapper, times(1)).toProjectResponseDTO(projectEntity);
    }
 
 
@@ -361,17 +374,19 @@ public class ProjectHappyTests {
          .status(StatusEnum.ACTIVE)
          .build();
 
+      // project member - setup
+      ProjectMembersEntity projectMembersEntity = new ProjectMembersEntity.Builder()
+          .id(UUID.randomUUID())
+         .project(projectEntity)
+         .role(RoleEnum.ADMIN)
+         .build();
+
       // DTO's - setup
       ActivityLogDTO activityLogDTO = new ActivityLogDTO.Builder()
          .projectId(projectEntity.getId())
          .action(ActivityActionEnum.PROJETO_DELETADO)
          .description("Projeto: " + projectEntity.getName() + " deletado")
          .build();
-
-      ProjectResponseDTO projectResponseDTO = new ProjectResponseDTO(
-         projectId, organizationId, userId,
-         projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
-      );
       
       ProjectDeletedDTO projectDeletedDTO = new ProjectDeletedDTO(
          projectId, organizationId, userId,
@@ -380,8 +395,8 @@ public class ProjectHappyTests {
       );
 
       // stubs
-      when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
-      when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
+      when(this.projectRepository.existsById(projectId)).thenReturn(true); 
+      when(this.projectMembersRepository.getMemberByProjectId(userId, projectId)).thenReturn(projectMembersEntity);
       when(this.projectRepository.delete(projectId)).thenReturn(projectEntity);
       when(this.projectMapper.toProjectDeletedDTO(projectEntity)).thenReturn(projectDeletedDTO);
 
@@ -392,15 +407,14 @@ public class ProjectHappyTests {
          .isEqualTo(projectDeletedDTO);
 
       // checks
-      verify(this.projectValidator, times(2)).idValidate(projectId);
-      verify(this.userService, times(1)).existsById(userId);
+      verify(this.userService, times(2)).existsById(userId);
+      verify(this.projectRepository, times(1)).existsById(projectId);
+      verify(this.projectMembersRepository, times(1)).getMemberByProjectId(userId, projectId);
 
-      verify(this.organizationService, times(1)).userIsAdmin(userId, organizationId);
-      verify(this.projectRepository, times(1)).getById(projectId);
-      verify(this.projectMapper, times(1)).toProjectResponseDTO(projectEntity);
+      verify(this.projectValidator, times(2)).idValidate(projectId);
 
       verify(this.projectRepository, times(1)).delete(projectId);
-      verify(this.activityLogService, times(1)).create(activityLogDTO);      
+      verify(this.activityLogService, times(1)).create(activityLogDTO);
       verify(this.projectMapper, times(1)).toProjectDeletedDTO(projectEntity);
    }
 

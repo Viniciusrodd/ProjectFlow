@@ -16,20 +16,19 @@ import org.mockito.Mock;
 // mockito imports
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 // import repository
+import com.example.ProjectFlow.modules.project.repository.ProjectMembersRepository;
 import com.example.ProjectFlow.modules.project.repository.ProjectRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectValidator;
 
 // import DTOs
-import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectUpdateDTO;
 
 // import service
@@ -40,11 +39,13 @@ import com.example.ProjectFlow.modules.project.service.ProjectService;
 
 // import entity
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 
 // import mapper
 import com.example.ProjectFlow.modules.project.mapper.ProjectMapper;
 
 // import enum
+import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 import com.example.ProjectFlow.modules.project.enums.StatusEnum;
 
 // jakarta imports
@@ -58,6 +59,8 @@ public class ProjectBadTests {
    // mock dependencies
    @Mock
    private ProjectRepository projectRepository;
+   @Mock
+   private ProjectMembersRepository projectMembersRepository; 
    @Mock
    private ProjectValidator projectValidator;
    @Mock
@@ -217,7 +220,6 @@ public class ProjectBadTests {
       // id's - setup
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
-      UUID organizationId = UUID.randomUUID();
       
       // data - setup
       ProjectEntity projectEntity = new ProjectEntity.Builder()
@@ -227,19 +229,22 @@ public class ProjectBadTests {
          .status(StatusEnum.ACTIVE)
          .build();
 
+      // member - setup
+      ProjectMembersEntity member = new ProjectMembersEntity.Builder()
+         .id(UUID.randomUUID())
+         .project(projectEntity)
+         .role(RoleEnum.ADMIN)
+         .build();
+
       // DTO - setup
       ProjectUpdateDTO projectUpdateDTO = new ProjectUpdateDTO(
          projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus().toString()
       );
 
-      ProjectResponseDTO projectResponseDTO = new ProjectResponseDTO(
-         projectId, organizationId, userId,
-         projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
-      );
-
       // stubs
-      when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
-      when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
+      when(this.userService.existsById(userId)).thenReturn(true);
+      when(this.projectRepository.existsById(projectId)).thenReturn(true);
+      when(this.projectMembersRepository.getMemberByProjectId(userId, projectId)).thenReturn(member);
       when(this.projectRepository.update(projectId, projectUpdateDTO)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -247,19 +252,20 @@ public class ProjectBadTests {
          .isInstanceOf(RuntimeException.class)
          .hasMessageContaining("Recurso não encontrado: Projeto não existe");
       
-      // checks
+       // checks
       verify(this.projectValidator, times(2)).idValidate(projectId);
-      verify(this.userService, times(1)).existsById(userId);
       verify(this.projectValidator, times(1)).updateValidations(projectUpdateDTO);
-      
-      verify(this.organizationService, times(1)).userIsAdmin(userId, organizationId);
-      verify(this.projectRepository, times(1)).getById(projectId);
-      verify(this.projectMapper, times(1)).toProjectResponseDTO(projectEntity);
+
+      verify(this.userService, times(2)).existsById(userId);
+      verify(this.projectRepository, times(1)).existsById(projectId);
+      verify(this.projectMembersRepository, times(1)).getMemberByProjectId(userId, projectId);
 
       verify(this.projectRepository, times(1)).update(projectId, projectUpdateDTO);
 
       // no checks
-      verifyNoInteractions(this.activityLogService);      
+      verifyNoInteractions(this.activityLogService);
+      verifyNoInteractions(this.projectMapper);
+      verifyNoInteractions(this.organizationService);     
    }
 
 
@@ -269,7 +275,6 @@ public class ProjectBadTests {
       // id's - setup
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
-      UUID organizationId = UUID.randomUUID();
       
       // data - setup
       ProjectEntity projectEntity = new ProjectEntity.Builder()
@@ -279,14 +284,17 @@ public class ProjectBadTests {
          .status(StatusEnum.ACTIVE)
          .build();
 
-      ProjectResponseDTO projectResponseDTO = new ProjectResponseDTO(
-         projectId, organizationId, userId,
-         projectEntity.getName(), projectEntity.getDescription(), projectEntity.getStatus()
-      );
+      // member - setup
+      ProjectMembersEntity member = new ProjectMembersEntity.Builder()
+         .id(UUID.randomUUID())
+         .project(projectEntity)
+         .role(RoleEnum.ADMIN)
+         .build();
 
       // stubs
-      when(this.projectRepository.getById(projectId)).thenReturn(projectEntity);
-      when(this.projectMapper.toProjectResponseDTO(projectEntity)).thenReturn(projectResponseDTO);
+      when(this.userService.existsById(userId)).thenReturn(true);
+      when(this.projectRepository.existsById(projectId)).thenReturn(true);
+      when(this.projectMembersRepository.getMemberByProjectId(userId, projectId)).thenReturn(member);
       when(this.projectRepository.delete(projectId)).thenThrow(NoResultException.class);
 
       // act and assert
@@ -296,17 +304,17 @@ public class ProjectBadTests {
       
       // checks
       verify(this.projectValidator, times(2)).idValidate(projectId);
-      verify(this.userService, times(1)).existsById(userId);
-      
-      verify(this.organizationService, times(1)).userIsAdmin(userId, organizationId);
-      verify(this.projectRepository, times(1)).getById(projectId);
-      verify(this.projectMapper, times(1)).toProjectResponseDTO(projectEntity);
+
+      verify(this.userService, times(2)).existsById(userId);
+      verify(this.projectRepository, times(1)).existsById(projectId);
+      verify(this.projectMembersRepository, times(1)).getMemberByProjectId(userId, projectId);
 
       verify(this.projectRepository, times(1)).delete(projectId);
 
       // no checks
-      verifyNoInteractions(this.activityLogService);  
-      verify(this.projectMapper, never()).toProjectDeletedDTO(projectEntity);
+      verifyNoInteractions(this.activityLogService);
+      verifyNoInteractions(this.projectMapper);
+      verifyNoInteractions(this.organizationService);
    }
 
 }
