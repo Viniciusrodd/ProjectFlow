@@ -326,6 +326,27 @@ public class OrganizationMemberService {
    }
 
 
+   // count owners members by organization
+   public Long countOwnersByOrganization(UUID organizationId) {
+      this.organizationMembersValidator.organizationIdValidate(organizationId);
+
+      return this.organizationMembersRepository.countOwnersByOrganization(organizationId);
+   }
+
+
+   // last owner member by organization - validate
+   public void validateLastOwner(UUID organizationId) {
+      long owners = this.countOwnersByOrganization(organizationId);
+
+      if(owners <= 1) {
+         throw MultiExceptions.unauthorized(String.format(
+            "%s: Uma organização deve ter pelo menos 1 dono",
+            ResponseMessages.UNAUTHORIZED
+         ));
+      }
+   }
+
+
    // update member role
    @Transactional
    public OrganizationMembersResponseDTO updateMemberRole(UUID id, UUID adminId, String role) {
@@ -341,6 +362,11 @@ public class OrganizationMemberService {
          // last admin - check
          if(member.getRole() == RoleEnum.ADMIN && !role.equalsIgnoreCase("ADMIN")) {
             this.validateLastAdmin(member.getOrganization().getId());
+         }
+
+         // last owner - check
+         if(member.getRole() == RoleEnum.OWNER && !role.equalsIgnoreCase("OWNER")) {
+            this.validateLastOwner(member.getOrganization().getId());
          }
 
          // update
@@ -400,6 +426,11 @@ public class OrganizationMemberService {
          // last admin - check
          if(member.getRole() == RoleEnum.ADMIN) {
             this.validateLastAdmin(member.getOrganization().getId());
+         }
+
+         // last owner - check
+         if(member.getRole() == RoleEnum.OWNER) {
+            this.validateLastOwner(member.getOrganization().getId());
          }
 
          // remove

@@ -209,6 +209,23 @@ public class OrganizationMembersRepository {
    }
 
 
+   // count owners members by organization
+   public Long countOwnersByOrganization(UUID organizationId) {
+      Long owners = this.entityManager
+         .createQuery(
+            "SELECT COUNT(m) FROM OrganizationMembersEntity m " +
+            "WHERE m.organization.id = :organizationId " +
+            "AND m.role = :role ",
+            Long.class
+         )
+         .setParameter("organizationId", organizationId)
+         .setParameter("role", RoleEnum.OWNER)
+         .getSingleResult();
+
+      return owners;
+   }
+
+
    // update member role
    @Transactional
    public OrganizationMembersEntity updateMemberRole(UUID id, RoleEnum role) throws NoResultException {
