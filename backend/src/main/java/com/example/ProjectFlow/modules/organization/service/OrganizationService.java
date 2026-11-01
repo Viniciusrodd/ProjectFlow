@@ -231,7 +231,7 @@ public class OrganizationService {
       this.existsById(organizationId);
 
       OrganizationMembersEntity member = this.organizationMembersRepository.getMemberByOrganizationId(userId, organizationId);
-      if(member.getRole() != RoleEnum.ADMIN) {
+      if(member.getRole() != RoleEnum.ADMIN && member.getRole() != RoleEnum.OWNER) {
          throw MultiExceptions.unauthorized(String.format(
             "%s: Membro não é um administrador",
             ResponseMessages.UNAUTHORIZED

@@ -57,12 +57,13 @@ public class OrganizationMembersController {
 
 
    // create member participation
-   @PostMapping("/organization/member")
+   @PostMapping("/organization/member/{adminId}")
    @Operation(summary = "Create a organization member participation")
    public ResponseEntity<ApiResponse<OrganizationMembersResponseDTO>> createMemberParticipation(
+      @PathVariable UUID adminId,
       @RequestBody OrganizationMembersDTO data
    ) {
-      OrganizationMembersResponseDTO member = this.organizationMemberService.createMemberParticipation(data);
+      OrganizationMembersResponseDTO member = this.organizationMemberService.createMemberParticipation(adminId, data);
 
       ApiResponse<OrganizationMembersResponseDTO> response = new ApiResponse.Builder<OrganizationMembersResponseDTO>()
          .success(true)
@@ -171,13 +172,14 @@ public class OrganizationMembersController {
 
 
    // update member role
-   @PutMapping(value = "/organization/member/{id}")
+   @PutMapping(value = "/organization/member/{id}/{adminId}")
    @Operation(summary = "Update a member role")
    public ResponseEntity<ApiResponse<OrganizationMembersResponseDTO>> updateMemberRole(
       @PathVariable UUID id,
+      @PathVariable UUID adminId,
       @RequestParam String r
    ) {
-      OrganizationMembersResponseDTO updatedMember = this.organizationMemberService.updateMemberRole(id, r);
+      OrganizationMembersResponseDTO updatedMember = this.organizationMemberService.updateMemberRole(id, adminId, r);
 
       ApiResponse<OrganizationMembersResponseDTO> response = new ApiResponse.Builder<OrganizationMembersResponseDTO>()
          .success(true)
@@ -191,12 +193,13 @@ public class OrganizationMembersController {
 
 
    // remove member participation
-   @DeleteMapping(value = "/organization/member/{id}")
+   @DeleteMapping(value = "/organization/member/{id}/{adminId}")
    @Operation(summary = "Remove a member's participation")
    public ResponseEntity<ApiResponse<OrganizationMembersDeletedDTO>> removeMemberParticipation(
-      @PathVariable UUID id
+      @PathVariable UUID id,
+      @PathVariable UUID adminId
    ) {
-      OrganizationMembersDeletedDTO participationRemoved = this.organizationMemberService.removeParticipation(id);
+      OrganizationMembersDeletedDTO participationRemoved = this.organizationMemberService.removeParticipation(id, adminId);
 
       ApiResponse<OrganizationMembersDeletedDTO> response = new ApiResponse.Builder<OrganizationMembersDeletedDTO>()
          .success(true)

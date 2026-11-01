@@ -86,7 +86,10 @@ public class OrganizationMemberService {
 
    // create member participation
    @Transactional
-   public OrganizationMembersResponseDTO createMemberParticipation(OrganizationMembersDTO data) {
+   public OrganizationMembersResponseDTO createMemberParticipation(UUID adminId, OrganizationMembersDTO data) {
+      // check if user is admin
+      this.organizationService.userIsAdmin(adminId, data.organizationId());
+      
       this.organizationMembersValidator.userIdValidate(data.userId());
       this.organizationMembersValidator.organizationIdValidate(data.organizationId());
       this.organizationMembersValidator.roleValidate(data.role());
@@ -328,13 +331,18 @@ public class OrganizationMemberService {
 
    // update member role
    @Transactional
-   public OrganizationMembersResponseDTO updateMemberRole(UUID id, String role) {
+   public OrganizationMembersResponseDTO updateMemberRole(UUID id, UUID adminId, String role) {
+      // get member
+      OrganizationMembersEntity member = this.getEntityById(id);
+
+      // check if user is admin
+      this.organizationService.userIsAdmin(adminId, member.getOrganizationId());
+
       this.organizationMembersValidator.idValidate(id);
       this.organizationMembersValidator.roleValidate(role); // not allow update to "owner"
 
       try {
          // last admin - check
-         OrganizationMembersEntity member = this.getEntityById(id);
          if(member.getRole() == RoleEnum.ADMIN && !role.equalsIgnoreCase("ADMIN")) {
             this.validateLastAdmin(member.getOrganization().getId());
          }
@@ -384,12 +392,17 @@ public class OrganizationMemberService {
 
    // remove member participation
    @Transactional
-   public OrganizationMembersDeletedDTO removeParticipation(UUID id) {
+   public OrganizationMembersDeletedDTO removeParticipation(UUID id, UUID adminId) {
       this.organizationMembersValidator.idValidate(id);
+
+      // get member
+      OrganizationMembersEntity member = this.getEntityById(id);
+
+      // check if user is admin
+      this.organizationService.userIsAdmin(adminId, member.getOrganizationId());
 
       try {
          // last admin - check
-         OrganizationMembersEntity member = this.getEntityById(id);
          if(member.getRole() == RoleEnum.ADMIN) {
             this.validateLastAdmin(member.getOrganization().getId());
          }
