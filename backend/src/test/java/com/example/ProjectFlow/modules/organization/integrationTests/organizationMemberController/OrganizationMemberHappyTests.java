@@ -1,6 +1,6 @@
 
 // packages
-package com.example.ProjectFlow.modules.organization.integrationTests.organizationMembersController;
+package com.example.ProjectFlow.modules.organization.integrationTests.organizationMemberController;
 
 // imports
 import java.time.LocalDateTime;
@@ -56,7 +56,7 @@ import com.example.ProjectFlow.security.JWT.JwtFilter;
 @WebMvcTest(OrganizationMembersController.class) // focus only in this controller
 @AutoConfigureMockMvc(addFilters = false) // disable security filter in test
 @DisplayName("Integration tests (Happy path) - OrganizationMembersController")
-public class OrganizationMembersHappyTests {
+public class OrganizationMemberHappyTests {
    
    // for reqs http simulation
    @Autowired
