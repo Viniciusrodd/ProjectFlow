@@ -277,16 +277,13 @@ public class ProjectService {
 
    // update project
    @Transactional
-   public ProjectResponseDTO update(UUID id, UUID userId, ProjectUpdateDTO data) {
-      this.userIsAdmin(userId, id);
-      projectValidator.idValidate(id);
-      this.userService.existsById(userId);
-      projectValidator.updateValidations(data);
-
+   public ProjectResponseDTO update(UUID id, UUID userId, ProjectUpdateDTO data) {      
       try {
-         // check if user is a organization admin
-         this.organizationService.userIsAdmin(userId, this.getById(id).organizationId());
-
+         this.userIsAdmin(userId, id);
+         projectValidator.idValidate(id);
+         this.userService.existsById(userId);
+         projectValidator.updateValidations(data);
+         
          ProjectEntity projectEntity = this.projectRepository.update(id, data);
 
          // activity log - registering
@@ -311,14 +308,11 @@ public class ProjectService {
 
    // delete project
    @Transactional
-   public ProjectDeletedDTO delete(UUID id, UUID userId) {
-      this.userIsAdmin(userId, id);
-      projectValidator.idValidate(id);
-      this.userService.existsById(userId);
-
+   public ProjectDeletedDTO delete(UUID id, UUID userId) {      
       try {
-         // check if user is a organization admin
-         this.organizationService.userIsAdmin(userId, this.getById(id).organizationId());
+         this.userIsAdmin(userId, id);
+         projectValidator.idValidate(id);
+         this.userService.existsById(userId);
 
          ProjectEntity projectEntity = this.projectRepository.delete(id);
 
