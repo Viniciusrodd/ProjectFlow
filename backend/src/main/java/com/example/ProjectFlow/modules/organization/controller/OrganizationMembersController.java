@@ -57,13 +57,12 @@ public class OrganizationMembersController {
 
 
    // create member participation
-   @PostMapping("/organization/member/{adminId}")
+   @PostMapping("/organization/member")
    @Operation(summary = "Create a organization member participation")
    public ResponseEntity<ApiResponse<OrganizationMembersResponseDTO>> createMemberParticipation(
-      @PathVariable UUID adminId,
       @RequestBody OrganizationMembersDTO data
    ) {
-      OrganizationMembersResponseDTO member = this.organizationMemberService.createMemberParticipation(adminId, data);
+      OrganizationMembersResponseDTO member = this.organizationMemberService.createMemberParticipation(data);
 
       ApiResponse<OrganizationMembersResponseDTO> response = new ApiResponse.Builder<OrganizationMembersResponseDTO>()
          .success(true)

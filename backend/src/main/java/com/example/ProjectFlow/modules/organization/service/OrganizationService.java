@@ -243,13 +243,11 @@ public class OrganizationService {
    // update organization
    @Transactional
    public OrganizationResponseDTO update(UUID id, UUID userId, OrganizationUpdateDTO data) {
+      this.userIsAdmin(userId, id);
       this.organizationValidator.idValidate(id);
       this.organizationValidator.updateValidations(data);
       
       try {
-         // check if user is a organization admin
-         this.userIsAdmin(userId, id);
-
          OrganizationEntity organizationEntity = this.organizationRepository.update(id, data);
 
          // activity log - registering
@@ -275,12 +273,10 @@ public class OrganizationService {
    // delete organization
    @Transactional
    public OrganizationDeletedDTO delete(UUID id, UUID userId) {
+      this.userIsAdmin(userId, id);
       this.organizationValidator.idValidate(id);
 
       try {
-         // check if user is a organization admin
-         this.userIsAdmin(userId, id);
-
          OrganizationEntity organizationEntity = this.organizationRepository.delete(id);
 
          // activity log - registering

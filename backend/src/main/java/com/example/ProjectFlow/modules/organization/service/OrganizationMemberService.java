@@ -86,10 +86,7 @@ public class OrganizationMemberService {
 
    // create member participation
    @Transactional
-   public OrganizationMembersResponseDTO createMemberParticipation(UUID adminId, OrganizationMembersDTO data) {
-      // check if user is admin
-      this.organizationService.userIsAdmin(adminId, data.organizationId());
-      
+   public OrganizationMembersResponseDTO createMemberParticipation(OrganizationMembersDTO data) {
       this.organizationMembersValidator.userIdValidate(data.userId());
       this.organizationMembersValidator.organizationIdValidate(data.organizationId());
       this.organizationMembersValidator.roleValidate(data.role());
@@ -335,9 +332,8 @@ public class OrganizationMemberService {
       // get member
       OrganizationMembersEntity member = this.getEntityById(id);
 
-      // check if user is admin
+      // validations
       this.organizationService.userIsAdmin(adminId, member.getOrganizationId());
-
       this.organizationMembersValidator.idValidate(id);
       this.organizationMembersValidator.roleValidate(role); // not allow update to "owner"
 
@@ -393,12 +389,11 @@ public class OrganizationMemberService {
    // remove member participation
    @Transactional
    public OrganizationMembersDeletedDTO removeParticipation(UUID id, UUID adminId) {
-      this.organizationMembersValidator.idValidate(id);
-
       // get member
       OrganizationMembersEntity member = this.getEntityById(id);
-
-      // check if user is admin
+            
+      // validations
+      this.organizationMembersValidator.idValidate(id);
       this.organizationService.userIsAdmin(adminId, member.getOrganizationId());
 
       try {
