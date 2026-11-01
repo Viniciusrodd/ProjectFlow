@@ -14,6 +14,7 @@ import jakarta.persistence.NoResultException;
 
 // import repository
 import com.example.ProjectFlow.modules.project.repository.ProjectRepository;
+import com.example.ProjectFlow.modules.project.repository.ProjectMembersRepository;
 
 // import validator
 import com.example.ProjectFlow.modules.project.validator.ProjectValidator;
@@ -34,7 +35,7 @@ import com.example.ProjectFlow.modules.activityLog.service.ActivityLogService;
 import com.example.ProjectFlow.modules.organization.entity.OrganizationEntity;
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
 import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
-
+import com.example.ProjectFlow.modules.project.entity.ProjectMembersEntity;
 // import exceptions
 import com.example.ProjectFlow.exception.MultiExceptions;
 
@@ -46,6 +47,7 @@ import com.example.ProjectFlow.modules.project.mapper.ProjectMapper;
 
 // import enum
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
+import com.example.ProjectFlow.modules.project.enums.RoleEnum;
 
 
 @Service
@@ -53,6 +55,7 @@ public class ProjectService {
  
    // properties
    private final ProjectRepository projectRepository;
+   private final ProjectMembersRepository projectMembersRepository;
    private final ProjectValidator projectValidator;
    private final UserService userService;
    private final OrganizationService organizationService;
@@ -63,6 +66,7 @@ public class ProjectService {
    // constructor - dependency injection
    public ProjectService(
       ProjectRepository projectRepository,
+      ProjectMembersRepository projectMembersRepository,
       ProjectValidator projectValidator,
       UserService userService,
       OrganizationService organizationService,
@@ -70,6 +74,7 @@ public class ProjectService {
       ProjectMapper projectMapper
    ) {
       this.projectRepository = projectRepository;
+      this.projectMembersRepository = projectMembersRepository;
       this.projectValidator = projectValidator;
       this.userService = userService;
       this.organizationService = organizationService;
@@ -255,9 +260,25 @@ public class ProjectService {
    }
 
 
+   // check if user is admin
+   public void userIsAdmin(UUID userId, UUID projectId) {
+      this.userService.existsById(userId);
+      this.existsById(projectId);
+
+      ProjectMembersEntity member = this.projectMembersRepository.getMemberByProjectId(userId, projectId);
+      if(member.getRole() != RoleEnum.ADMIN) {
+         throw MultiExceptions.unauthorized(String.format(
+            "%s: Membro não é um administrador",
+            ResponseMessages.UNAUTHORIZED
+         ));
+      }
+   }
+
+
    // update project
    @Transactional
    public ProjectResponseDTO update(UUID id, UUID userId, ProjectUpdateDTO data) {
+      this.userIsAdmin(userId, id);
       projectValidator.idValidate(id);
       this.userService.existsById(userId);
       projectValidator.updateValidations(data);
@@ -291,6 +312,7 @@ public class ProjectService {
    // delete project
    @Transactional
    public ProjectDeletedDTO delete(UUID id, UUID userId) {
+      this.userIsAdmin(userId, id);
       projectValidator.idValidate(id);
       this.userService.existsById(userId);
 

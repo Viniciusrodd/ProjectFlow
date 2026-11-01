@@ -151,13 +151,14 @@ public class ProjectMembersController {
 
 
    // update member role
-   @PutMapping(value = "/project/member/{id}")
+   @PutMapping(value = "/project/member/{id}/{adminId}")
    @Operation(summary = "Update a member role")
    public ResponseEntity<ApiResponse<ProjectMembersResponseDTO>> updateMemberRole(
       @PathVariable UUID id,
+      @PathVariable UUID adminId,
       @RequestParam String r
    ) {
-      ProjectMembersResponseDTO updatedMember = this.projectMemberService.updateMemberRole(id, r);
+      ProjectMembersResponseDTO updatedMember = this.projectMemberService.updateMemberRole(id, adminId, r);
 
       ApiResponse<ProjectMembersResponseDTO> response = new ApiResponse.Builder<ProjectMembersResponseDTO>()
          .success(true)
@@ -171,12 +172,13 @@ public class ProjectMembersController {
 
 
    // remove member participation
-   @DeleteMapping(value = "/project/member/{id}")
+   @DeleteMapping(value = "/project/member/{id}/{adminId}")
    @Operation(summary = "Remove a member's participation")
    public ResponseEntity<ApiResponse<ProjectMembersDeletedDTO>> removeMemberParticipation(
-      @PathVariable UUID id
+      @PathVariable UUID id,
+      @PathVariable UUID adminId
    ) {
-      ProjectMembersDeletedDTO participationRemoved = this.projectMemberService.removeParticipation(id);
+      ProjectMembersDeletedDTO participationRemoved = this.projectMemberService.removeParticipation(id, adminId);
 
       ApiResponse<ProjectMembersDeletedDTO> response = new ApiResponse.Builder<ProjectMembersDeletedDTO>()
          .success(true)

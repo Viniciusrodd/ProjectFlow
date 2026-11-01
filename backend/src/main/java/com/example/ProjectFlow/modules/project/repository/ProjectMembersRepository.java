@@ -97,6 +97,23 @@ public class ProjectMembersRepository {
    }
 
 
+   // get member by project id
+   public ProjectMembersEntity getMemberByProjectId(UUID userId, UUID projectId) throws NoResultException {
+      ProjectMembersEntity member = this.entityManager
+         .createQuery(
+            "SELECT p FROM ProjectMembersEntity p " +
+            "WHERE p.user.id = :userId " +
+            "AND p.project.id = :projectId ",
+            ProjectMembersEntity.class 
+         )
+         .setParameter("userId", userId)
+         .setParameter("projectId", projectId)
+         .getSingleResult();
+      
+      return member;
+   }
+
+
    // get all members by role
    public List<ProjectMembersEntity> getAllMembersByRole(
       UUID projectId,

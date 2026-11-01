@@ -317,13 +317,17 @@ public class ProjectMemberService {
 
    // update member role
    @Transactional
-   public ProjectMembersResponseDTO updateMemberRole(UUID id, String role) {
+   public ProjectMembersResponseDTO updateMemberRole(UUID id, UUID adminId, String role) {
+      // get member
+      ProjectMembersEntity member = this.getEntityById(id);
+
+      // validations
+      this.projectService.userIsAdmin(adminId, member.getProjectId());
       this.projectMembersValidator.idValidate(id);
       this.projectMembersValidator.roleValidate(role);
 
       try {
          // last admin - check
-         ProjectMembersEntity member = this.getEntityById(id);
          if(member.getRole() == RoleEnum.ADMIN && !role.equalsIgnoreCase("ADMIN")) {
             this.validateLastAdmin(member.getProject().getId());
          }
@@ -373,12 +377,16 @@ public class ProjectMemberService {
 
    // remove member participation
    @Transactional
-   public ProjectMembersDeletedDTO removeParticipation(UUID id) {
+   public ProjectMembersDeletedDTO removeParticipation(UUID id, UUID adminId) {
+      // get member
+      ProjectMembersEntity member = this.getEntityById(id);
+
+      // validations
       this.projectMembersValidator.idValidate(id);
+      this.projectService.userIsAdmin(adminId, member.getProjectId());
 
       try {
          // last admin - check
-         ProjectMembersEntity member = this.getEntityById(id);
          if(member.getRole() == RoleEnum.ADMIN) {
             this.validateLastAdmin(member.getProject().getId());
          }
