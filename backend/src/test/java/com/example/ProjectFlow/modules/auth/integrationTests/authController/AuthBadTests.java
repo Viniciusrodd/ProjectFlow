@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 // mockito imports
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 
@@ -96,6 +97,9 @@ public class AuthBadTests {
          .andExpect(jsonPath("$.statusCode").value(409))
          .andExpect(jsonPath("$.message").value(errorMessage))
          .andExpect(jsonPath("$.data").isEmpty());
+
+      // checks
+      verify(this.authService).register(registerDTO);
    }
 
 
@@ -124,6 +128,9 @@ public class AuthBadTests {
          .andExpect(jsonPath("$.statusCode").value(401))
          .andExpect(jsonPath("$.message").value(errorMessage))
          .andExpect(jsonPath("$.data").isEmpty());
+
+      // checks
+      verify(this.authService).login(loginDTO);
    }
 
 }

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 // mockito imports
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 
@@ -103,6 +104,9 @@ public class AuthHappyTests {
          .andExpect(jsonPath("$.data.id").value(registerResponseDTO.id().toString()))
          .andExpect(jsonPath("$.data.name").value(registerResponseDTO.name()))
          .andExpect(jsonPath("$.data.email").value(registerResponseDTO.email()));
+
+      // checks
+      verify(this.authService).register(registerDTO);
    }
 
    
@@ -136,6 +140,9 @@ public class AuthHappyTests {
          .andExpect(jsonPath("$.data.name").value(loginResponseDTO.name()))
          .andExpect(jsonPath("$.data.email").value(loginResponseDTO.email()))
          .andExpect(jsonPath("$.data.token").value(loginResponseDTO.token()));   
+
+      // checks
+      verify(this.authService).login(loginDTO);
    }
    
 }
