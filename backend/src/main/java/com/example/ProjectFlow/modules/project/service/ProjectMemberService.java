@@ -382,8 +382,8 @@ public class ProjectMemberService {
       ProjectMembersEntity member = this.getEntityById(id);
 
       // validations
-      this.projectMembersValidator.idValidate(id);
       this.projectService.userIsAdmin(adminId, member.getProjectId());
+      this.projectMembersValidator.idValidate(id);
 
       try {
          // last admin - check

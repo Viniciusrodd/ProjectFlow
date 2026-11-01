@@ -421,6 +421,7 @@ public class ProjectMemberHappyTests {
    @DisplayName("updateMemberRole() - must update member role")
    void updateMemberRole() {
       // id's - setup
+      UUID adminId = UUID.randomUUID();
       UUID relationId = UUID.randomUUID();
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
@@ -479,16 +480,17 @@ public class ProjectMemberHappyTests {
       when(this.projectMembersMapper.toProjectMembersResponseDTO(projectMembersEntity)).thenReturn(projectMembersResponseDTO);
 
       // act and assert
-      ProjectMembersResponseDTO result = this.projectMemberService.updateMemberRole(relationId, role.toString());
+      ProjectMembersResponseDTO result = this.projectMemberService.updateMemberRole(relationId, adminId, role.toString());
       assertThat(result)
          .isNotNull()
          .isEqualTo(projectMembersResponseDTO);
       
       // checks
-      verify(this.projectMembersValidator, times(2)).idValidate(relationId);
-      verify(this.projectMembersValidator, times(1)).roleValidate(role.toString());
-      
       verify(this.projectMembersRepository, times(1)).getEntityById(relationId);
+      verify(this.projectService, times(1)).userIsAdmin(adminId, projectMembersEntity.getProjectId());
+
+      verify(this.projectMembersValidator, times(2)).idValidate(relationId);
+      verify(this.projectMembersValidator, times(1)).roleValidate(role.toString());      
       verify(this.projectMembersRepository, times(1)).updateMemberRole(relationId, role);
       
       verify(this.activityLogService, times(1)).create(activityLogDTO);      
@@ -501,6 +503,7 @@ public class ProjectMemberHappyTests {
    @DisplayName("removeParticipation() - must remove a member participation")
    void removeParticipation() {
       // id's - setup
+      UUID adminId = UUID.randomUUID();
       UUID relationId = UUID.randomUUID();
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
@@ -557,15 +560,16 @@ public class ProjectMemberHappyTests {
       when(this.projectMembersMapper.toProjectMembersDeletedDTO(projectMembersEntity)).thenReturn(projectMembersDeletedDTO);
 
       // act and assert
-      ProjectMembersDeletedDTO result = this.projectMemberService.removeParticipation(relationId);
+      ProjectMembersDeletedDTO result = this.projectMemberService.removeParticipation(relationId, adminId);
       assertThat(result)
          .isNotNull()
          .isEqualTo(projectMembersDeletedDTO);
       
       // checks
-      verify(this.projectMembersValidator, times(2)).idValidate(relationId);    
-
       verify(this.projectMembersRepository, times(1)).getEntityById(relationId);
+      verify(this.projectService, times(1)).userIsAdmin(adminId, projectMembersEntity.getProjectId());
+      
+      verify(this.projectMembersValidator, times(2)).idValidate(relationId);    
       verify(this.projectMembersRepository, times(1)).removeParticipation(relationId);
       
       verify(this.activityLogService, times(1)).create(activityLogDTO);      

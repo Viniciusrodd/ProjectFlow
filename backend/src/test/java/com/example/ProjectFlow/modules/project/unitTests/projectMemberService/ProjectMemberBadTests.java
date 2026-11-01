@@ -312,6 +312,7 @@ public class ProjectMemberBadTests {
    @DisplayName("updateMemberRole() - must throw when the last admin changes the role (should exist at least 1 admin)")
    void updateMemberRole() {
       // data - setup
+      UUID adminId = UUID.randomUUID();
       UUID relationId = UUID.randomUUID();
       RoleEnum currentRole = RoleEnum.ADMIN;
       RoleEnum roleToUpdate = RoleEnum.MEMBER;
@@ -333,14 +334,16 @@ public class ProjectMemberBadTests {
       when(this.projectMembersRepository.countAdminsByProject(projectMembersEntity.getProject().getId())).thenReturn(1L);
 
       // act and assert
-      assertThatThrownBy(() -> this.projectMemberService.updateMemberRole(relationId, roleToUpdate.toString()))
+      assertThatThrownBy(() -> this.projectMemberService.updateMemberRole(relationId, adminId, roleToUpdate.toString()))
          .isInstanceOf(RuntimeException.class)
          .hasMessageContaining("Não autorizado: Um projeto deve ter pelo menos 1 administrador");
       
       // checks
+      verify(this.projectMembersRepository, times(1)).getEntityById(relationId);
+      verify(this.projectService, times(1)).userIsAdmin(adminId, projectMembersEntity.getProjectId());
+
       verify(this.projectMembersValidator, times(2)).idValidate(relationId);
       verify(this.projectMembersValidator, times(1)).roleValidate(roleToUpdate.toString());
-      verify(this.projectMembersRepository, times(1)).getEntityById(relationId);
       verify(this.projectMembersValidator, times(1)).projectIdValidate(projectMembersEntity.getProject().getId());
       verify(this.projectMembersRepository, times(1)).countAdminsByProject(projectMembersEntity.getProject().getId());
 
@@ -356,6 +359,7 @@ public class ProjectMemberBadTests {
    @DisplayName("removeParticipation() - must throw when the last admin changes the role (should exist at least 1 admin)")
    void removeParticipation() {
       // data - setup
+      UUID adminId = UUID.randomUUID();
       UUID relationId = UUID.randomUUID();
 
       // project - setup
@@ -375,13 +379,15 @@ public class ProjectMemberBadTests {
       when(this.projectMembersRepository.countAdminsByProject(projectMembersEntity.getProject().getId())).thenReturn(1L);
 
       // act and assert
-      assertThatThrownBy(() -> this.projectMemberService.removeParticipation(relationId))
+      assertThatThrownBy(() -> this.projectMemberService.removeParticipation(relationId, adminId))
          .isInstanceOf(RuntimeException.class)
          .hasMessageContaining("Não autorizado: Um projeto deve ter pelo menos 1 administrador");
       
       // checks
-      verify(this.projectMembersValidator, times(2)).idValidate(relationId);
       verify(this.projectMembersRepository, times(1)).getEntityById(relationId);
+      verify(this.projectService, times(1)).userIsAdmin(adminId, projectMembersEntity.getProjectId());
+      
+      verify(this.projectMembersValidator, times(2)).idValidate(relationId);
       verify(this.projectMembersValidator, times(1)).projectIdValidate(projectMembersEntity.getProject().getId());
       verify(this.projectMembersRepository, times(1)).countAdminsByProject(projectMembersEntity.getProject().getId());
 

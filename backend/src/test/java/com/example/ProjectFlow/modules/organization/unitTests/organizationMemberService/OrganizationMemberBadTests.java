@@ -331,6 +331,7 @@ public class OrganizationMemberBadTests {
    @DisplayName("updateMemberRole() - must throw when the last admin changes the role (should exist at least 1 admin)")
    void updateMemberRole() {
       // data - setup
+      UUID adminId = UUID.randomUUID();
       UUID organizationMemberId = UUID.randomUUID();
       RoleEnum currentRole = RoleEnum.ADMIN;
       RoleEnum roleToUpdate = RoleEnum.MEMBER;
@@ -352,14 +353,15 @@ public class OrganizationMemberBadTests {
       when(this.organizationMembersRepository.countAdminsByOrganization(memberEntity.getOrganization().getId())).thenReturn(1L);
 
       // act and assert
-      assertThatThrownBy(() -> this.organizationMemberService.updateMemberRole(organizationMemberId, roleToUpdate.toString()))
+      assertThatThrownBy(() -> this.organizationMemberService.updateMemberRole(organizationMemberId, adminId, roleToUpdate.toString()))
          .isInstanceOf(RuntimeException.class)
          .hasMessageContaining("Não autorizado: Uma organização deve ter pelo menos 1 administrador");
       
       // checks
+      verify(this.organizationMembersRepository, times(1)).getEntityById(organizationMemberId);
+      verify(this.organizationService, times(1)).userIsAdmin(adminId, memberEntity.getOrganizationId());
       verify(this.organizationMembersValidator, times(2)).idValidate(organizationMemberId);
       verify(this.organizationMembersValidator, times(1)).roleValidate(roleToUpdate.toString());
-      verify(this.organizationMembersRepository, times(1)).getEntityById(organizationMemberId);
       verify(this.organizationMembersValidator, times(1)).organizationIdValidate(memberEntity.getOrganization().getId());
       verify(this.organizationMembersRepository, times(1)).countAdminsByOrganization(memberEntity.getOrganization().getId());
 
@@ -375,6 +377,7 @@ public class OrganizationMemberBadTests {
    @DisplayName("removeParticipation() - must throw when rest the last admin (should exist at least 1 admin)")
    void removeParticipation() {
       // data - setup
+      UUID adminId = UUID.randomUUID();
       UUID organizationMemberId = UUID.randomUUID();
       RoleEnum currentRole = RoleEnum.ADMIN;
 
@@ -395,13 +398,14 @@ public class OrganizationMemberBadTests {
       when(this.organizationMembersRepository.countAdminsByOrganization(memberEntity.getOrganization().getId())).thenReturn(1L);
 
       // act and assert
-      assertThatThrownBy(() -> this.organizationMemberService.removeParticipation(organizationMemberId))
+      assertThatThrownBy(() -> this.organizationMemberService.removeParticipation(organizationMemberId, adminId))
          .isInstanceOf(RuntimeException.class)
          .hasMessageContaining("Não autorizado: Uma organização deve ter pelo menos 1 administrador");
       
       // checks
-      verify(this.organizationMembersValidator, times(2)).idValidate(organizationMemberId);
       verify(this.organizationMembersRepository, times(1)).getEntityById(organizationMemberId);
+      verify(this.organizationMembersValidator, times(2)).idValidate(organizationMemberId);
+      verify(this.organizationService, times(1)).userIsAdmin(adminId, memberEntity.getOrganizationId());
       verify(this.organizationMembersValidator, times(1)).organizationIdValidate(memberEntity.getOrganization().getId());
       verify(this.organizationMembersRepository, times(1)).countAdminsByOrganization(memberEntity.getOrganization().getId());
 
