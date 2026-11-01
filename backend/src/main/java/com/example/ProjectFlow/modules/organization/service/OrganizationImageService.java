@@ -75,12 +75,12 @@ public class OrganizationImageService {
    // organization image upload
    @Transactional
    public OrganizationImageResponseDTO uploadOrganizationImage(UUID organizationId, UUID userId, MultipartFile file) {
+      // check if user is a organization admin
+      this.organizationService.userIsAdmin(userId, organizationId);
+      
       this.organizationImageValidator.validate(file);
-
+      
       try {
-         // check if user is a organization admin
-         this.organizationService.userIsAdmin(userId, organizationId);
-
          // replace old image for new one
          if(this.organizationImageRepository.existsByOrganizationId(organizationId)) {
             this.organizationImageRepository.deleteByOrganizationId(organizationId);
@@ -158,6 +158,7 @@ public class OrganizationImageService {
 
 
    // delete organization image
+   @Transactional
    public void deleteOrganizationImage(UUID organizationId, UUID userId) {
       // check if user is a organization admin
       this.organizationService.userIsAdmin(userId, organizationId);
