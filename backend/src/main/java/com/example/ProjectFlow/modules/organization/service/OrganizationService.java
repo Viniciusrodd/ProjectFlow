@@ -84,7 +84,7 @@ public class OrganizationService {
    public OrganizationEntity create(OrganizationDTO data) {
       this.organizationValidator.idValidate(data.ownerId());
       this.organizationValidator.nameValidate(data.name());
-      if(!data.description().trim().isEmpty()) this.organizationValidator.descriptionValidate(data.description());
+      if(data.description() != null) this.organizationValidator.descriptionValidate(data.description());
    
       // get owner data
       UserEntity owner = this.userService.getEntityById(data.ownerId());
