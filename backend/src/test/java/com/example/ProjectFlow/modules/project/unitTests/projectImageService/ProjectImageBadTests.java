@@ -42,17 +42,8 @@ import com.example.ProjectFlow.modules.project.validator.ProjectImageValidator;
 // import document
 import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
 
-// import DTO
-import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
-
-// import entity
-import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
-
 // import mapper
 import com.example.ProjectFlow.modules.project.mapper.ProjectImageMapper;
-
-// import enums
-import com.example.ProjectFlow.modules.project.enums.StatusEnum;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -84,26 +75,11 @@ public class ProjectImageBadTests {
       // id's - setup
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
-      UUID organizationId = UUID.randomUUID();
       
       // file - mock
       MultipartFile file = mock(MultipartFile.class);
-      
-      // project - setup
-      ProjectEntity projectEntity = new ProjectEntity.Builder()
-         .id(projectId)
-         .name("project x")
-         .build();
-
-      // DTO - setup
-      ProjectResponseDTO projectResponseDTO = new ProjectResponseDTO(
-         projectId, organizationId, userId, 
-         projectEntity.getName(), projectEntity.getDescription(),
-         StatusEnum.ACTIVE
-      );
 
       // stubs
-      when(this.projectService.getById(projectId)).thenReturn(projectResponseDTO);
       when(this.projectImageRepository.existsByProjectId(projectId)).thenReturn(false);
       when(file.getBytes()).thenThrow(new IOException("Falha ao processar imagem da organização"));      
 
@@ -114,8 +90,7 @@ public class ProjectImageBadTests {
 
       // checks
       verify(this.projectImageValidator, times(1)).validate(file);
-      verify(this.projectService, times(1)).getById(projectId);
-      verify(this.organizationService, times(1)).userIsAdmin(userId, projectResponseDTO.organizationId());
+      verify(this.projectService, times(1)).userIsAdmin(userId, projectId);
       verify(this.projectImageRepository, times(1)).existsByProjectId(projectId);
       
       // no checks
@@ -172,23 +147,8 @@ public class ProjectImageBadTests {
       // id's - setup
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
-      UUID organizationId = UUID.randomUUID();
-
-      // project - setup
-      ProjectEntity projectEntity = new ProjectEntity.Builder()
-         .id(projectId)
-         .name("project x")
-         .build();
-
-      // DTO - setup
-      ProjectResponseDTO projectResponseDTO = new ProjectResponseDTO(
-         projectId, organizationId, userId, 
-         projectEntity.getName(), projectEntity.getDescription(),
-         StatusEnum.ACTIVE
-      );
 
       // stubs
-      when(this.projectService.getById(projectId)).thenReturn(projectResponseDTO);
       when(this.projectImageRepository.findByProjectId(projectId)).thenReturn(null);
 
       // act and assert
@@ -197,8 +157,7 @@ public class ProjectImageBadTests {
          .hasMessage("Recurso não encontrado: Imagem de projeto não existe");
 
       // checks
-      verify(this.organizationService, times(1)).userIsAdmin(userId, projectResponseDTO.organizationId());
-      verify(this.projectService, times(1)).getById(projectId);
+      verify(this.projectService, times(1)).userIsAdmin(userId, projectId);
       verify(this.projectImageRepository, times(1)).findByProjectId(projectId);
 
       // no checks

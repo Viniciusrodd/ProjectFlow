@@ -41,7 +41,6 @@ import com.example.ProjectFlow.modules.project.validator.ProjectImageValidator;
 import com.example.ProjectFlow.modules.project.document.ProjectImageDocument;
 
 // import DTO
-import com.example.ProjectFlow.modules.project.dto.projectDTO.ProjectResponseDTO;
 import com.example.ProjectFlow.modules.project.dto.projectImageDTO.ProjectImageResponseDTO;
 import com.example.ProjectFlow.modules.activityLog.dto.ActivityLogDTO;
 
@@ -52,7 +51,6 @@ import com.example.ProjectFlow.modules.project.entity.ProjectEntity;
 import com.example.ProjectFlow.modules.project.mapper.ProjectImageMapper;
 
 // import enums
-import com.example.ProjectFlow.modules.project.enums.StatusEnum;
 import com.example.ProjectFlow.modules.activityLog.enums.ActivityActionEnum;
 
 
@@ -86,7 +84,6 @@ public class ProjectImageHappyTests {
       String projectImageId = UUID.randomUUID().toString();
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
-      UUID organizationId = UUID.randomUUID();
       
       // binary - setup
       byte[] binary = {1, 2, 3};
@@ -116,13 +113,6 @@ public class ProjectImageHappyTests {
          .name("project x")
          .build();
 
-      // DTO - setup
-      ProjectResponseDTO projectResponseDTO = new ProjectResponseDTO(
-         projectId, organizationId, userId, 
-         projectEntity.getName(), projectEntity.getDescription(),
-         StatusEnum.ACTIVE
-      );
-
       ActivityLogDTO activityLogDTO = new ActivityLogDTO.Builder()
          .projectId(projectEntity.getId())
          .action(ActivityActionEnum.LOGO_DO_PROJETO_ATUALIZADO)
@@ -136,7 +126,6 @@ public class ProjectImageHappyTests {
       );
 
       // stubs
-      when(this.projectService.getById(projectId)).thenReturn(projectResponseDTO);
       when(this.projectImageRepository.existsByProjectId(projectId)).thenReturn(true);
       when(this.projectImageRepository.save(any(ProjectImageDocument.class))).thenReturn(projectImageDocument);      
       when(this.projectService.getEntityById(projectId)).thenReturn(projectEntity);      
@@ -150,8 +139,7 @@ public class ProjectImageHappyTests {
 
       // checks
       verify(this.projectImageValidator, times(1)).validate(file);
-      verify(this.organizationService, times(1)).userIsAdmin(userId, projectResponseDTO.organizationId());
-      verify(this.projectService, times(1)).getById(projectId);
+      verify(this.projectService, times(1)).userIsAdmin(userId, projectId);
 
       verify(this.projectImageRepository, times(1)).existsByProjectId(projectId);
       verify(this.projectImageRepository, times(1)).deleteByProjectId(projectId);
@@ -223,7 +211,6 @@ public class ProjectImageHappyTests {
       String projectImageId = UUID.randomUUID().toString();
       UUID projectId = UUID.randomUUID();
       UUID userId = UUID.randomUUID();
-      UUID organizationId = UUID.randomUUID();
 
       // project image - setup
       ProjectImageDocument projectImageDocument = new ProjectImageDocument.Builder()
@@ -236,13 +223,6 @@ public class ProjectImageHappyTests {
          .name("project x")
          .build();
 
-      // DTO - setup
-      ProjectResponseDTO projectResponseDTO = new ProjectResponseDTO(
-         projectId, organizationId, userId, 
-         projectEntity.getName(), projectEntity.getDescription(),
-         StatusEnum.ACTIVE
-      );
-
       ActivityLogDTO activityLogDTO = new ActivityLogDTO.Builder()
          .projectId(projectEntity.getId())
          .action(ActivityActionEnum.LOGO_DO_PROJETO_REMOVIDO)
@@ -250,7 +230,6 @@ public class ProjectImageHappyTests {
          .build();
 
       // stubs
-      when(this.projectService.getById(projectId)).thenReturn(projectResponseDTO);
       when(this.projectImageRepository.findByProjectId(projectId)).thenReturn(projectImageDocument);
       when(this.projectService.getEntityById(projectId)).thenReturn(projectEntity);      
 
@@ -259,10 +238,9 @@ public class ProjectImageHappyTests {
          .doesNotThrowAnyException();
 
       // checks and assert (in this case)
-      verify(this.organizationService, times(1)).userIsAdmin(userId, projectResponseDTO.organizationId());
-      verify(this.projectService, times(1)).getById(projectId);
-
+      verify(this.projectService, times(1)).userIsAdmin(userId, projectId);
       verify(this.projectImageRepository, times(1)).findByProjectId(projectId);
+
       verify(this.projectService, times(1)).removeLogoImageId(projectId);
       verify(this.projectImageRepository, times(1)).deleteByProjectId(projectId);
 
