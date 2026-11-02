@@ -3,6 +3,8 @@
 package com.example.ProjectFlow.modules.comment.controller;
 
 // imports
+import java.util.List;
+import java.util.UUID;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
-import java.util.UUID;
 
 // http imports
 import org.springframework.http.HttpStatus;
