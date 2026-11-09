@@ -1,0 +1,63 @@
+
+services:
+   mysql:
+      image: mysql:8.0
+      container_name: mysql-db
+      restart: unless-stopped
+      environment:
+         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+         MYSQL_DATABASE: projectFlow
+         MYSQL_USER: ${MYSQL_USER}
+         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      volumes:
+        - mysql_data:/var/lib/mysql
+      networks:
+        - projectFlow-network
+      healthcheck:
+         test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD"]
+         interval: 10s
+         timeout: 5s
+         retries: 10
+
+   mongodb:
+      image: mongo:8
+      container_name: projectFlow-mongodb
+      restart: unless-stopped
+      volumes:
+        - mongodb_data:/data/db
+      networks:
+        - projectFlow-network
+      healthcheck:
+         test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+         interval: 10s
+         timeout: 5s
+         retries: 10
+
+   backend:
+      build:
+         context: ./backend
+      container_name: projectFlow-backend
+      restart: unless-stopped
+      depends_on:
+         mysql:
+            condition: service_healthy
+         mongodb:
+            condition: service_healthy
+      environment:
+         SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/projectFlow
+         SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+         SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+         SPRING_MONGODB_URI: mongodb://mongodb:27017/projectFlow
+         JWT_SECRET: ${JWT_SECRET}
+      ports:
+        - "8080:8080"
+      networks:
+        - projectFlow-network
+
+volumes:
+   mongodb_data:
+   mysql_data:
+
+networks:
+   projectFlow-network:
+      driver: bridge
