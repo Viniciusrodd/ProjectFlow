@@ -123,3 +123,59 @@ O projeto usa dois bancos, cada um para o que faz melhor:
 - Comunicação exclusivamente via API REST
 - Código separado em camadas (apresentação, regras de negócio e acesso a dados)
 - Multiplataforma (Windows, Linux e macOS)
+
+
+## 🐋 Instalação e execução com Docker
+O backend (API + MySQL + MongoDB) roda em containers. 
+
+O app desktop (Electron) será executado separadamente e se conectara à API em `http://localhost:8080`. 🛠️ (frontend ainda em desenvolvimento)
+
+### Pré-requisitos
+- [Git](https://git-scm.com/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (ou Docker Engine + Compose no Linux)
+
+### Passo a passo
+
+1. Clone o repositório:
+
+   ```bash
+   git clone https://github.com/Viniciusrodd/ProjectFlow.git
+   cd ProjectFlow
+   ```
+
+2. Crie o arquivo `.env` a partir do exemplo:
+
+   ```bash
+   # Linux / macOS / Git Bash / PowerShell
+   cp .env.example .env
+
+   # CMD (Windows)
+   copy .env.example .env
+   ```
+
+   Edite o `.env` e troque as senhas/`JWT_SECRET` por seus valores. 
+   
+   O `JWT_SECRET` é uma *chave secreta*: use uma string aleatória com pelo menos 32 caracteres,
+   por exemplo `k8Jx2vQ9mZpL4rT7wB1nYc5dFgH3sA6e`.
+   Você pode gerar uma com qualquer *gerador de senhas* ou pelo *terminal*:
+
+   ```bash
+   # Linux / macOS / Git Bash
+   openssl rand -base64 48
+   ```
+
+3. Suba a aplicação:
+
+   ```bash
+   docker compose up --build
+   ```
+
+A API fica disponível em `http://localhost:8080`.
+
+### Encerrando
+
+```bash
+docker compose stop      # para os containers (mantém os dados)
+docker compose down      # remove containers e rede (mantém os dados)
+docker compose down -v   # remove tudo, incluindo o banco de dados
+```
