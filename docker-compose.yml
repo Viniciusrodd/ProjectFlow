@@ -2,7 +2,7 @@
 services:
    mysql:
       image: mysql:8.0
-      container_name: mysql-db
+      container_name: projectFlow-mysqldb
       restart: unless-stopped
       environment:
          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

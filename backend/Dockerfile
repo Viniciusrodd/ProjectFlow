@@ -5,7 +5,7 @@
 FROM eclipse-temurin:25-jdk AS builder
 WORKDIR /app
 
-# wrapper + pom first: cache layer while dependencies doesnt change
+# wrapper + pom first: cache layer while dependencies dont change
 COPY mvnw pom.xml ./
 COPY .mvn .mvn
 
@@ -15,7 +15,7 @@ RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
 RUN --mount=type=cache,target=/root/.m2 ./mvnw dependency:go-offline -B
 
 COPY src ./src
-RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests -B
+RUN --mount=type=cache,target=/root/.m2 ./mvnw clean package -DskipTests -B
 
 
 # ==============================
