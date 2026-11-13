@@ -18,6 +18,7 @@
          "@auth/*": ["src/renderer/src/modules/auth/*"],
          "@board/*": ["src/renderer/src/modules/board/*"],
          "@comment/*": ["src/renderer/src/modules/comment/*"],
+         "@labels/*": ["src/renderer/src/modules/labels/*"],
          "@notification/*": ["src/renderer/src/modules/notification/*"],
          "@organization/*": ["src/renderer/src/modules/organization/*"],
          "@project/*": ["src/renderer/src/modules/project/*"],

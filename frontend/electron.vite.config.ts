@@ -23,6 +23,7 @@ export default defineConfig({
             '@auth': resolve('src/renderer/src/modules/auth'),
             '@board': resolve('src/renderer/src/modules/board'),
             '@comment': resolve('src/renderer/src/modules/comment'),
+            '@labels': resolve('src/renderer/src/modules/labels'),
             '@notification': resolve('src/renderer/src/modules/notification'),
             '@organization': resolve('src/renderer/src/modules/organization'),
             '@project': resolve('src/renderer/src/modules/project'),
