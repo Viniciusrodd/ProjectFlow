@@ -1,45 +1,54 @@
 
 // imports
-import { app, BrowserWindow, screen } from 'electron';
-import { join } from 'path';
+import { app, screen, BrowserWindow } from 'electron';
+
+// window imports
+import { createWindow } from '@window/createWindow';
 
 
-// window creation
-function createWindow(): void {
+class Main {
 
-   // get user primary monitor display
-   const primaryDisplay = screen.getPrimaryDisplay();
-   const { width, height } = primaryDisplay.workAreaSize;
+   // properties
+   private mainWindow: BrowserWindow | null = null;
 
-   // window config
-   const window = new BrowserWindow({
-      width,
-      height,
-      webPreferences: {
-         preload: join(__dirname, '../preload/index.js'),
-         sandbox: false
-      }
-   });
 
-   if(!app.isPackaged && process.env['ELECTRON_RENDERER_URL']) {
-      window.loadURL(process.env['ELECTRON_RENDERER_URL']); // dev ambience: load from Vite server (with HMR)
-   } else {
-      window.loadFile(join(__dirname, '../renderer/index.html')); // prod ambience: load final html file
+   // start methods
+   public start(): void {
+      this.lifecycleHandlers();
+
+      void app.whenReady().then(() => {
+         this.createWindow()
+      });
    }
 
-};
 
-
-// ready call
-app.whenReady().then(() => {
-   
    // create window
-   createWindow();
+   private createWindow(): void {
+      const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+      this.mainWindow = createWindow(width, height);
 
-});
+      console.log('✔️ main window: ', this.mainWindow.id);
+   }
 
 
-// close all windows -> close app
-app.on('window-all-closed', () => {
-   if(process.platform !== 'darwin') app.quit();
-});
+   // lifecycle handlers
+   private lifecycleHandlers(): void {
+      app.on('window-all-closed', () => {
+         if (process.platform !== 'darwin') {
+            app.quit()
+         };
+      });
+
+      app.on('activate', () => {
+         if (BrowserWindow.getAllWindows().length === 0) {
+            this.createWindow()
+         };
+      });
+   }
+
+}
+
+
+// start main
+const main: Main = new Main();
+main.start();

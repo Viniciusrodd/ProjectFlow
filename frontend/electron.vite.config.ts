@@ -5,7 +5,14 @@ import { defineConfig } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-   main: {},
+   main: {
+      resolve: {
+         alias: {
+            '@window': resolve('src/main/window')
+         }
+      },
+      plugins: [react()]
+   },
    preload: {},
    renderer: {
       resolve: {
