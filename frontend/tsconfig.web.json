@@ -13,7 +13,16 @@
       "baseUrl": ".",
       "paths": {
          // modules
-         "@auth/*": ["src/renderer/src/modules/auth/*"]
+         "@activityLog/*": ["src/renderer/src/modules/activityLog/*"],
+         "@attachment/*": ["src/renderer/src/modules/attachment/*"],
+         "@auth/*": ["src/renderer/src/modules/auth/*"],
+         "@board/*": ["src/renderer/src/modules/board/*"],
+         "@comment/*": ["src/renderer/src/modules/comment/*"],
+         "@notification/*": ["src/renderer/src/modules/notification/*"],
+         "@organization/*": ["src/renderer/src/modules/organization/*"],
+         "@project/*": ["src/renderer/src/modules/project/*"],
+         "@task/*": ["src/renderer/src/modules/task/*"],
+         "@user/*": ["src/renderer/src/modules/user/*"],
       }
    }
 }
