@@ -14,7 +14,8 @@
       "ignoreDeprecations": "6.0",
       "baseUrl": ".",
       "paths": {
-         "@window/*": ["src/main/window/*"],
+
+         "@main/*": ["src/main/*"],
          "@preload/*": ["src/preload/*"],         
          "@renderer/*": ["src/renderer/*"]
       }

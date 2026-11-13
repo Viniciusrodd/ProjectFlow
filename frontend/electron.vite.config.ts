@@ -8,7 +8,7 @@ export default defineConfig({
    main: {
       resolve: {
          alias: {
-            '@window': resolve('src/main/window'),
+            '@main': resolve('src/main'),
             '@preload': resolve('src/preload'),            
             '@renderer': resolve('src/renderer')
          }

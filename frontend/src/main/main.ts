@@ -3,7 +3,7 @@
 import { app, screen, BrowserWindow } from 'electron';
 
 // window imports
-import { createWindow } from '@window/createWindow';
+import { createWindow } from '@main/window/createWindow';
 
 
 class Main {
@@ -17,7 +17,7 @@ class Main {
       this.lifecycleHandlers();
 
       void app.whenReady().then(() => {
-         this.createWindow()
+         this.createWindow();
       });
    }
 
