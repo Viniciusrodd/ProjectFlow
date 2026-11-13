@@ -1,14 +1,22 @@
 
 {
    "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-   "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*"],
+   "include": [
+      "electron.vite.config.*", 
+      "src/main/**/*", 
+      "src/preload/**/*",
+      "src/renderer/src/**/*",
+      "src/renderer/src/**/*.tsx",
+   ],
    "compilerOptions": {
       "composite": true,
       "types": ["electron-vite/node"],
       "ignoreDeprecations": "6.0",
       "baseUrl": ".",
       "paths": {
-         "@window/*": ["src/main/window/*"]
+         "@window/*": ["src/main/window/*"],
+         "@preload/*": ["src/preload/*"],         
+         "@renderer/*": ["src/renderer/*"]
       }
    }
 }

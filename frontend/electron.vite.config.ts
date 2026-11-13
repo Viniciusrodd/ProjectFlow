@@ -8,7 +8,9 @@ export default defineConfig({
    main: {
       resolve: {
          alias: {
-            '@window': resolve('src/main/window')
+            '@window': resolve('src/main/window'),
+            '@preload': resolve('src/preload'),            
+            '@renderer': resolve('src/renderer')
          }
       },
       plugins: [react()]
