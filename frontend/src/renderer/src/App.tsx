@@ -3,7 +3,8 @@
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // import pages
-import LoginPage from '@auth/pages/LoginPage';
+import LoginPage from './modules/auth/pages/LoginPage';
+import RegisterPage from './modules/auth/pages/RegisterPage';
 
 
 function App() {
@@ -11,10 +12,11 @@ function App() {
       <HashRouter>
          <Routes>
             {/* modules */}
-            <Route path='/' element={<LoginPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/login' element={<LoginPage />} />
 
             {/* 404 -> redirect to Login page */}
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<Navigate to="/login" />} />
          </Routes>
       </HashRouter>
    );

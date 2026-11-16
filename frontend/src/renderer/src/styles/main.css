@@ -1,0 +1,17 @@
+
+body {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   overflow: hidden;
+   background-size: cover;
+   background-color: #161D26;
+}
+
+
+/* specific tags */
+
+
+input:focus{
+   outline: none;
+}

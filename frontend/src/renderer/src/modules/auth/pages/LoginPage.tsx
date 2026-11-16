@@ -1,13 +1,27 @@
 
 // imports
+import { useNavigate } from 'react-router-dom';
+
+// import styles
+import styles from '../styles/Auth.module.css';
 
 
-// tsx
 const LoginPage = () => {
+   // states
+   const navigate = useNavigate();
+   
+
+   // tsx
    return (
-      <div>
-         <h1>Login page</h1>    
-      </div>
+      <section className={ styles.container }>
+         <div className={ styles.data_container }>
+            <h1>Login page</h1>
+            
+            <button onClick={ () => navigate('/register') }>
+               Go to Register page
+            </button>
+         </div>
+      </section>
    );
 };
 
