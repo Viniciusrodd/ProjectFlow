@@ -14,10 +14,10 @@ const RegisterPage = () => {
    const [ registerData, setRegisterData ] = useState<RegisterDTO>({
       name:'', email: '', password: ''
    });
-   const [ result, setResult ] = useState<RegisterResponseDTO>({ 
+   const [ result, /*setResult*/ ] = useState<RegisterResponseDTO>({ 
       id: null, name:'', email: '', password: '', createdAt: '' 
    });
-   const [showResult, setShowResult] = useState<boolean>(false);
+   const [showResult, /*setShowResult*/] = useState<boolean>(false);
 
 
    // tsx

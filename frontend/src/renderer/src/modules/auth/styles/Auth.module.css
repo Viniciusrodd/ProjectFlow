@@ -25,6 +25,7 @@ h1 {
    padding: 30px 0px;
    border: 2px solid white;
    border-radius: 10px;
+   margin-bottom: 20px;
 
    & input {
       height: 30px;
@@ -36,24 +37,24 @@ h1 {
       border-bottom: 2px solid white;
       color: white;
    }
+}
 
-   & button {
-      height: 40px;
-      width: 30%;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: bold;
-      text-transform: uppercase;
-      background-color: #1d222a;
-      color: white;
-      border: none;
-      transition: ease-in-out transform 0.2s;
-   }
-   & button:hover {
-      cursor: pointer;
-      background-color: #212832;
-      transform: scale(1.02);
-   }
+button {
+   height: 45px;
+   width: 15vw;
+   border-radius: 10px;
+   font-size: 13px;
+   font-weight: bold;
+   text-transform: uppercase;
+   background-color: #1d222a;
+   color: white;
+   border: none;
+   transition: ease-in-out transform 0.2s;
+}
+button:hover {
+   cursor: pointer;
+   background-color: #212832;
+   transform: scale(1.02);
 }
 
 
