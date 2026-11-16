@@ -1,6 +1,6 @@
 
 // import enums
-import { ActivityActionEnum } from "@activityLog/enums/activityActions.enum";
+import { ActivityActionEnum } from "../enums/activityActions.enum";
 
 // uuid
 export type UUID = string;

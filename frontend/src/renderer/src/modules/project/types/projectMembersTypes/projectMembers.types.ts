@@ -1,9 +1,9 @@
 
 // import types
-import { UserProfileDTO } from "@user/types/userTypes/user.types";
+import { UserProfileDTO } from "../../../user/types/userTypes/user.types";
 
 // import enums
-import { RoleEnum } from "@project/enums/role.enum";
+import { RoleEnum } from "../../enums/role.enum";
 
 // uuid
 export type UUID = string;

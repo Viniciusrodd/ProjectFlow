@@ -1,6 +1,6 @@
 
 // import enums
-import { BoardEnum } from '@board/enums/board.enum';
+import { BoardEnum } from "../../enums/board.enum";
 
 // uuid
 export type UUID = string;

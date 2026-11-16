@@ -1,7 +1,7 @@
 
 // import types
-import { TasksResponseDTO } from "@task/types/taskTypes/task.type";
-import { LabelsResponseDTO } from "@labels/types/labels.types";
+import { TasksResponseDTO } from "../../types/taskTypes/task.type";
+import { LabelsResponseDTO } from "../../../labels/types/labels.types";
 
 // uuid
 export type UUID = string;

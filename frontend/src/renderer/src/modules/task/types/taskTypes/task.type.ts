@@ -1,6 +1,6 @@
 
 // import enums
-import { PriorityEnum } from "@task/enums/priority.enum";
+import { PriorityEnum } from "../../enums/priority.enum";
 
 // uuid
 export type UUID = string;

@@ -1,6 +1,6 @@
 
 // import enums
-import { StatusEnum } from "@project/enums/status.enum";
+import { StatusEnum } from "../../enums/status.enum";
 
 // uuid
 export type UUID = string;

@@ -1,6 +1,6 @@
 
 // import enums
-import { NotificationEnum } from "@notification/enums/notification.enum";
+import { NotificationEnum } from "../enums/notification.enum";
 
 // uuid
 export type UUID = string;
