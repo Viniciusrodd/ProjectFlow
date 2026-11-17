@@ -7,7 +7,7 @@ import { TokenStore } from "./tokenStore";
 
 // import interfaces
 import { iAuth } from "@preload/types/auth.types";
-import { LoginDTO, LoginResponseDTO, LoginCleanResponseDTO } from "@renderer/src/modules/auth/types/loginTypes/login.types";
+import { LoginDTO, LoginResponseDTO, LoginCleanResponseDTO } from "@shared/types/auth/login.types";
 import { iApiResponse } from "@preload/types/api.types";
 
 // import env

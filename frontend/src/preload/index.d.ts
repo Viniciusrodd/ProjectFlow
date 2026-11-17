@@ -3,7 +3,7 @@
 import { ElectronAPI } from '@electron-toolkit/preload';
 
 // import types
-import { iAuth } from '@preload/types/auth.types';
+import { iAuth } from './types/auth.types';
 import { iApi } from '@preload/types/api.types';
 
 

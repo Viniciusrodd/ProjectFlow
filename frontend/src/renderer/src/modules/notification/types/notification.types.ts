@@ -1,6 +1,6 @@
 
 // import enums
-import { NotificationEnum } from "../enums/notification.enum";
+import { NotificationEnum } from "@renderer/src/modules/notification/enums/notification.enum";
 
 // uuid
 export type UUID = string;

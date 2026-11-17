@@ -3,10 +3,10 @@
 import { useState } from 'react'
 
 // import styles
-import styles from '../styles/Auth.module.css';
+import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
 
 // import types
-import { RegisterDTO, RegisterResponseDTO } from '../types/registerTypes/register.types';
+import { RegisterDTO, RegisterResponseDTO } from '@renderer/src/modules/auth/types/registerTypes/register.types';
 
 
 const RegisterPage = () => {

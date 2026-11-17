@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react'
 
 // import styles
-import styles from '../styles/Auth.module.css';
+import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
 
 // import types
-import { LoginDTO, LoginCleanResponseDTO } from '../types/loginTypes/login.types';
+import { LoginDTO, LoginCleanResponseDTO } from '@renderer/src/modules/auth/types/loginTypes/login.types';
 
 
 const LoginPage = () => {

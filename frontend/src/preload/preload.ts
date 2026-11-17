@@ -3,7 +3,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 // import types
-import { LoginDTO, LoginCleanResponseDTO } from '@renderer/src/modules/auth/types/loginTypes/login.types';
+import { LoginDTO, LoginCleanResponseDTO } from '@shared/types/auth/login.types'
 //import { iConfig, iApiResponse } from "@preload/types/api.types";
 
 

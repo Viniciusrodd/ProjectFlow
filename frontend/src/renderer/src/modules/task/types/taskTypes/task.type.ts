@@ -1,6 +1,6 @@
 
 // import enums
-import { PriorityEnum } from "../../enums/priority.enum";
+import { PriorityEnum } from "@renderer/src/modules/task/enums/priority.enum";
 
 // uuid
 export type UUID = string;

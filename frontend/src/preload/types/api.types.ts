@@ -1,16 +1,16 @@
 
 // api response
 export interface iApiResponse<T = unknown>{
-   message: string; 
+   success: boolean;
    statusCode: number;
-   success: boolean 
+   message: string; 
    data?: T;
 };
 
 
 // request config
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-export interface iConfig {
+export interface iApiRequest {
    method: HttpMethod;
    path: string;
    body?: object;
@@ -20,6 +20,6 @@ export interface iConfig {
 // api requests
 export interface iApi {
 
-   request(config: iConfig): Promise<iApiResponse>
+   request(req: iApiRequest): Promise<iApiResponse>
 
 };

@@ -4,7 +4,7 @@
       "src/renderer/src/env.d.ts",
       "src/renderer/src/**/*",
       "src/renderer/src/**/*.tsx",
-      "src/preload/*.d.ts"
+      "src/shared/**/*"
    ],
    "compilerOptions": {
       "composite": true,
@@ -13,17 +13,8 @@
       "baseUrl": ".",
       "paths": {
          // modules
-         "@activityLog/*": ["src/renderer/src/modules/activityLog/*"],
-         "@attachment/*": ["src/renderer/src/modules/attachment/*"],
-         "@auth/*": ["src/renderer/src/modules/auth/*"],
-         "@board/*": ["src/renderer/src/modules/board/*"],
-         "@comment/*": ["src/renderer/src/modules/comment/*"],
-         "@labels/*": ["src/renderer/src/modules/labels/*"],
-         "@notification/*": ["src/renderer/src/modules/notification/*"],
-         "@organization/*": ["src/renderer/src/modules/organization/*"],
-         "@project/*": ["src/renderer/src/modules/project/*"],
-         "@task/*": ["src/renderer/src/modules/task/*"],
-         "@user/*": ["src/renderer/src/modules/user/*"],
+         "@renderer/*": ["src/renderer/*"],
+         "@shared/*": ["src/shared/*"],
       }
    }
 }

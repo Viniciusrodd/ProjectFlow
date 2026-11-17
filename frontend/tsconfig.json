@@ -1,9 +1,20 @@
 
 {
+   "include": [
+      "electron.vite.config.*", 
+      "src/shared/**/*",
+   ],
+   "files": [],
+   "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }],
    "compilerOptions": {
       "forceConsistentCasingInFileNames": true,
       "strict": true,
+      "types": ["electron-vite/node"],
+      "ignoreDeprecations": "6.0",
+      "baseUrl": ".",
+      "paths": {
+         "@main/*": ["src/main/*"],
+         "@shared/*": ["src/shared/*"],
+      }
    },
-   "files": [],
-   "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
 }
