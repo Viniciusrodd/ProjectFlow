@@ -8,6 +8,7 @@ import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
 
 // import types
 import { LoginDTO, LoginCleanResponseDTO } from '@renderer/src/modules/auth/types/loginTypes/login.types';
+import { iApiResponse } from '@shared/types/api/api.types';
 
 
 const LoginPage = () => {
@@ -19,19 +20,26 @@ const LoginPage = () => {
    const [ result, setResult ] = useState<LoginCleanResponseDTO>({ 
       id: null, name:'', email: ''
    });
+   const [ error, setError ] = useState<string>('');
    const [showResult, setShowResult] = useState<boolean>(false);
 
 
    // login
    const handleLogin = async (): Promise<void> => {
       try {
-         const response: LoginCleanResponseDTO = await window.auth.login(loginData);
-   
-         setResult(response);
+         const response: iApiResponse<LoginCleanResponseDTO> = await window.auth.login(loginData);
+         if(!response.success) throw new Error(response.message);
+
+         setResult(response.data!);
          setShowResult(true);
       }
       catch (error) {
-         console.error('error at handle login: ', error);
+         console.error('❌', error);
+
+         const errorMessage = error instanceof Error ? error.message : String(error);
+
+         setShowResult(true);
+         setError(errorMessage);
       }
    };
 
@@ -66,6 +74,9 @@ const LoginPage = () => {
             <ul>
                <li>nome: { result.name }</li>
                <li>email: { result.email }</li>
+               { error !== '' && (
+                  <li>error: { error }</li>
+               ) }
             </ul>
          )} 
       </section>

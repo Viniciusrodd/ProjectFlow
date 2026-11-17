@@ -59,7 +59,7 @@ button:hover {
 
 
 ul {
-   width: 30%;
+   width: 40%;
    display: flex;
    justify-content: center;
    align-items: flex-start;
@@ -67,9 +67,10 @@ ul {
    margin-top: 10px;
    border: 2px solid white;
    border-radius: 10px;
-   padding: 0px 20px;
+   padding: 10px 40px;
 
    & li {
+      color: white;
       margin: 0;
    }
 }
