@@ -5,18 +5,40 @@ import { app, screen, BrowserWindow } from 'electron';
 // window imports
 import { createWindow } from '@main/window/createWindow';
 
+// ipc imports
+import { AuthIpc } from './ipc/handlers/authIpcHandler';
+
+// import token
+import { TokenStore } from './auth/tokenStore';
+
+// import services
+import { AuthService } from './auth/authService';
+
 
 class Main {
 
    // properties
-   private mainWindow: BrowserWindow | null = null;
+   private tokenStore: TokenStore;
+   private authService: AuthService;
+
+
+   constructor() {
+      this.tokenStore = new TokenStore();
+      this.authService = new AuthService(this.tokenStore);
+   }
 
 
    // start methods
    public start(): void {
       this.lifecycleHandlers();
 
-      void app.whenReady().then(() => {
+      void app.whenReady().then(async () => {
+         // load token
+         await this.tokenStore.load();
+   
+         // ipc's
+         new AuthIpc(this.authService).login();
+         
          this.createWindow();
       });
    }
@@ -25,9 +47,7 @@ class Main {
    // create window
    private createWindow(): void {
       const { width, height } = screen.getPrimaryDisplay().workAreaSize;
-      this.mainWindow = createWindow(width, height);
-
-      console.log('✔️ main window: ', this.mainWindow.id);
+      createWindow(width, height);
    }
 
 

@@ -7,7 +7,7 @@ import { useState } from 'react'
 import styles from '../styles/Auth.module.css';
 
 // import types
-import { LoginDTO, LoginResponseDTO } from '../types/loginTypes/login.types';
+import { LoginDTO, LoginCleanResponseDTO } from '../types/loginTypes/login.types';
 
 
 const LoginPage = () => {
@@ -16,25 +16,30 @@ const LoginPage = () => {
    const [ loginData, setLoginData ] = useState<LoginDTO>({
       email: '', password: ''
    });
-   const [ result, setResult ] = useState<LoginResponseDTO>({ 
-      id: null, name:'', email: '', token: '' 
+   const [ result, setResult ] = useState<LoginCleanResponseDTO>({ 
+      id: null, name:'', email: ''
    });
    const [showResult, setShowResult] = useState<boolean>(false);
 
 
    // login
    const handleLogin = async (): Promise<void> => {
-      const response: LoginResponseDTO = await window.auth.login(loginData);
-
-      setResult(response);
-      setShowResult(true);
+      try {
+         const response: LoginCleanResponseDTO = await window.auth.login(loginData);
+   
+         setResult(response);
+         setShowResult(true);
+      }
+      catch (error) {
+         console.error('error at handle login: ', error);
+      }
    };
 
 
    // clean states
    const clean = () => {
       setLoginData({ email: '', password: '' });
-      setResult({ id: null, name:'', email: '', token: '' });
+      setResult({ id: null, name:'', email: '' });
       setShowResult(false);
    };
    
@@ -57,7 +62,7 @@ const LoginPage = () => {
             Go to Register page
          </button>
 
-         {result && showResult && ( 
+         {showResult && ( 
             <ul>
                <li>nome: { result.name }</li>
                <li>email: { result.email }</li>
