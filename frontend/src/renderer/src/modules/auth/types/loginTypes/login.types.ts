@@ -7,7 +7,7 @@ export type UUID = string;
 export interface LoginDTO {
    email: string;
    password: string;
-}
+};
 
 
 // login response DTO
@@ -16,4 +16,12 @@ export interface LoginResponseDTO {
    name: string;
    email: string;
    token: string;
-}
+};
+
+
+// login response withou token
+export interface LoginCleanResponseDTO {
+   id: UUID | null;   
+   name: string;
+   email: string;
+};

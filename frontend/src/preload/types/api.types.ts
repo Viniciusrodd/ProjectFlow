@@ -9,8 +9,9 @@ export interface iApiResponse<T = unknown>{
 
 
 // request config
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export interface iConfig {
-   method: string;
+   method: HttpMethod;
    path: string;
    body?: object;
 };
