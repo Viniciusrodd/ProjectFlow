@@ -3,14 +3,15 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 // import types
-import { LoginDTO, LoginCleanResponseDTO } from '@shared/types/auth/login.types'
+import { LoginDTO, LoginCleanResponseDTO } from '@shared/types/auth/login.types';
+import { iApiResponse } from '@preload/types/api.types';
 //import { iConfig, iApiResponse } from "@preload/types/api.types";
 
 
 // auth
 contextBridge.exposeInMainWorld('auth', {
 
-   login: (data: LoginDTO): Promise<LoginCleanResponseDTO> => ipcRenderer.invoke('auth:login', data),
+   login: (data: LoginDTO): Promise<iApiResponse<LoginCleanResponseDTO>> => ipcRenderer.invoke('auth:login', data),
    logout: (): Promise<boolean> => ipcRenderer.invoke('auth:logout'),
    isAuthenticated: (): Promise<boolean> => ipcRenderer.invoke('auth:isAuthenticated'),
 

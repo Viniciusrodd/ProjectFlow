@@ -26,7 +26,7 @@ export class AuthService implements iAuth {
 
 
    // login
-   public async login(data: LoginDTO): Promise<LoginCleanResponseDTO> {
+   public async login(data: LoginDTO): Promise<iApiResponse<LoginCleanResponseDTO>> {
       try {
          const res = await axios.post<iApiResponse<LoginResponseDTO>>(ENV.API_BASE_URL + "/auth/login", data);
 
@@ -37,19 +37,32 @@ export class AuthService implements iAuth {
          // save token
          await this.tokenStore.save(res.data.data!.token);
 
-         return { id: res.data.data!.id, name: res.data.data!.name, email: res.data.data!.email };
+         return {
+            success: res.data.success,
+            statusCode: res.data.statusCode,
+            message: res.data.message,
+            data: {
+               id: res.data.data!.id, name: res.data.data!.name, email: res.data.data!.email
+            }
+         }
       }
       catch (error) {
          if (axios.isAxiosError(error)) {
-            throw new Error(
-               error.response?.data?.errorMessage ||
-               error.response?.data?.message ||
-               'Error at Login request',
-               { cause: error }
-            );
+            return {
+               success: false,
+               statusCode: error.response!.status,
+               message:
+                  error.response?.data?.errorMessage ||
+                  error.response?.data?.message ||
+                  'Error at Login request',
+            };
          }
 
-         throw new Error('Unexpected error: ', { cause: error });
+         return { 
+            success: false,
+            statusCode: 500,
+            message: 'Unexpected error' 
+         };
       }
    }
 
