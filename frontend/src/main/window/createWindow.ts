@@ -5,12 +5,12 @@ import { join } from 'path';
 
 
 // create window
-export const createWindow = (width: number, height: number): BrowserWindow => {
+export const createWindow = (width: number, height: number): void => {
    const window = new BrowserWindow({
       width,
       height,
       webPreferences: {
-         preload: join(__dirname, '../../preload/preload.js'),
+         preload: join(__dirname, '../preload/preload.js'),
          contextIsolation: true,
          nodeIntegration: false,
          sandbox: true
@@ -22,6 +22,4 @@ export const createWindow = (width: number, height: number): BrowserWindow => {
    } else {
       window.loadFile(join(__dirname, '../../renderer/index.html')); // prod ambience: load final html file
    }
-
-   return window;
 };

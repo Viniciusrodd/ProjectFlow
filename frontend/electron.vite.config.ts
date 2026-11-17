@@ -15,7 +15,15 @@ export default defineConfig({
       },
       plugins: [react()]
    },
-   preload: {},
+   preload: {
+      build: {
+         rollupOptions: {
+            input: {
+               preload: resolve(__dirname, 'src/preload/preload.ts')
+            }
+         }
+      }
+   },
    renderer: {
       resolve: {
          alias: {
