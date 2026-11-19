@@ -1,7 +1,4 @@
 
-// import axios
-import axios from "axios"; 
-
 // import token store
 import { TokenStore } from "./tokenStore";
 
@@ -10,59 +7,60 @@ import { iAuth } from "@preload/types/auth.types";
 import { LoginDTO, LoginResponseDTO, LoginCleanResponseDTO } from "@shared/types/auth/login.types";
 import { iApiResponse } from "@preload/types/api.types";
 
-// import env
-import { ENV } from "@main/config/env";
+// import api client
+import { ApiClient } from "@main/api/apiClient";
 
 
 export class AuthService implements iAuth {
 
    // properties
    tokenStore: TokenStore;
+   apiClient: ApiClient;
 
 
-   constructor(tokenStore: TokenStore) {
+   constructor(tokenStore: TokenStore, apiClient: ApiClient) {
       this.tokenStore = tokenStore;
+      this.apiClient = apiClient;
    }
 
 
    // login
    public async login(data: LoginDTO): Promise<iApiResponse<LoginCleanResponseDTO>> {
-      try {
-         const res = await axios.post<iApiResponse<LoginResponseDTO>>(ENV.API_BASE_URL + "/auth/login", data);
+      const res: iApiResponse<LoginResponseDTO> = await this.apiClient.request<LoginResponseDTO>({
+         method: 'POST',
+         path: 'auth/login',
+         body: data,
+         private: false
+      });
 
-         if (!res.data.success || !res.data.data?.token) {
-            throw new Error(res.data.message ?? 'Credenciais inválidas.');
-         }
-
-         // save token
-         await this.tokenStore.save(res.data.data!.token);
-
+      if (!res.success || !res.data) {
          return {
-            success: res.data.success,
-            statusCode: res.data.statusCode,
-            message: res.data.message,
-            data: {
-               id: res.data.data!.id, name: res.data.data!.name, email: res.data.data!.email
-            }
-         }
+            success: false,
+            statusCode: res.statusCode,
+            message: res.message ?? 'Login failed',
+         };
       }
-      catch (error) {
-         if (axios.isAxiosError(error)) {
-            return {
-               success: false,
-               statusCode: error.response!.status,
-               message:
-                  error.response?.data?.errorMessage ||
-                  error.response?.data?.message ||
-                  'Error at Login request',
-            };
-         }
 
-         return { 
+      if (!res.data.token) {
+         return {
             success: false,
             statusCode: 500,
-            message: 'Unexpected error' 
+            message: 'Invalid response: missing token',
          };
+      }
+
+      // save token
+      await this.tokenStore.save(res.data.token);
+
+      return {
+         success: res.success,
+         statusCode: res.statusCode,
+         message: res.message,
+         data: {
+            id: res.data!.id, 
+            name: res.data!.name, 
+            email: res.data!.email
+         }
       }
    }
 
