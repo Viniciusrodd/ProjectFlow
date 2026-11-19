@@ -1,7 +1,7 @@
 
 // imports
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 // import styles
 import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
@@ -45,7 +45,7 @@ const RegisterPage = () => {
 
 
    // register
-   const handleForm = async (e: React.SubmitEvent<HTMLFormElement>) => {
+   const handleForm = async (e: React.SubmitEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       setLoading(true);
 
@@ -62,6 +62,7 @@ const RegisterPage = () => {
          if(!response.success) throw new Error(response.message);
 
          setMessage('Você será redirecionado...');
+         setLoading(false);
          setRedirect(true);
       }
       catch (error) {
@@ -96,9 +97,9 @@ const RegisterPage = () => {
                      Registrar
                   </button>
 
-                  <a href="/login">
+                  <Link to="/login">
                      Já possuo registro
-                  </a>
+                  </Link>
                </>
             ) }
          </form> 

@@ -1,84 +1,92 @@
 
 // imports
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react'
+import { Link } from 'react-router-dom';
+import { useState, useContext } from 'react'
 
 // import styles
 import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
 
 // import types
-import { LoginDTO, LoginCleanResponseDTO } from '@renderer/src/modules/auth/types/loginTypes/login.types';
-import { iApiResponse } from '@shared/types/api/api.types';
+import { LoginDTO } from '@renderer/src/modules/auth/types/loginTypes/login.types';
+
+// import context
+import { LoadingContext } from '@renderer/src/app/providers/loading/loading.context';
+import { AuthContext } from '@renderer/src/app/providers/auth/auth.context';
+
+// import components
+import Loading from '@renderer/src/shared/components/ui/loading/Loading';
 
 
 const LoginPage = () => {
    // states
-   const navigate = useNavigate();
    const [ loginData, setLoginData ] = useState<LoginDTO>({
       email: '', password: ''
    });
-   const [ result, setResult ] = useState<LoginCleanResponseDTO>({ 
-      id: null, name:'', email: ''
-   });
    const [ error, setError ] = useState<string>('');
-   const [showResult, setShowResult] = useState<boolean>(false);
-
+   const [ message, setMessage ] = useState<string>('');
+   const { loading, setLoading } = useContext(LoadingContext);
+   const { login } = useContext(AuthContext);
+   
 
    // login
-   const handleLogin = async (): Promise<void> => {
+   const handleForm = async (e: React.SubmitEvent<HTMLFormElement>): Promise<void> => {
+      e.preventDefault();
+      setLoading(true);
+      setError('');
+      setMessage('');
+      
       try {
-         const response: iApiResponse<LoginCleanResponseDTO> = await window.auth.login(loginData);
-         if(!response.success) throw new Error(response.message);
-
-         setResult(response.data!);
-         setShowResult(true);
+         await login(loginData);
+         setLoading(false);
+         setMessage('Você será redirecionado...');
       }
       catch (error) {
+         setLoading(false);
          console.error('❌', error);
 
          const errorMessage = error instanceof Error ? error.message : String(error);
-
-         setShowResult(true);
          setError(errorMessage);
       }
-   };
-
-
-   // clean states
-   const clean = () => {
-      setLoginData({ email: '', password: '' });
-      setResult({ id: null, name:'', email: '' });
-      setShowResult(false);
    };
    
 
    // tsx
    return (
       <section className={ styles.container }>
-         <div className={ styles.form }>
-            <h1>Login page</h1>
+         <form 
+            onSubmit={ handleForm }
+            method='post'
+            className={ styles.form }
+         >
+            <h1>Login</h1>
             
             <input type="email" value={ loginData.email } placeholder='email' onChange={ e => setLoginData(prev => ({ ...prev, email: e.target.value })) } /> 
             <input type="password" value={ loginData.password } placeholder='senha' onChange={ e => setLoginData(prev => ({ ...prev, password: e.target.value })) } /> 
             
-            <button onClick={ handleLogin }> Entrar </button> 
-            <button onClick={ clean }> Limpar </button> 
+            { loading ? (
+               <Loading />
+            ) : (
+               <>
+                  <button type='submit'>
+                     Entrar
+                  </button> 
+                  
+                  <Link to="/register">
+                     Ainda não estou registrado
+                  </Link>
+               </>
+            ) }
+         </form>
 
-         </div>
-
-         <button onClick={ () => navigate('/register') }>
-            Go to Register page
-         </button>
-
-         {showResult && ( 
+         { error !== '' && ( 
             <ul>
-               <li>nome: { result.name }</li>
-               <li>email: { result.email }</li>
-               { error !== '' && (
-                  <li>error: { error }</li>
-               ) }
+               <li>error: { error }</li>
             </ul>
-         )} 
+         )}
+
+         { message !== '' && (
+            <p className={ styles.message }>{ message }</p>
+         ) }
       </section>
    );
 };
