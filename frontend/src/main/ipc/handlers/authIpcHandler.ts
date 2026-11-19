@@ -23,4 +23,20 @@ export class AuthIpc {
       });
    };
 
+
+   // logout
+   public logout() {
+      ipcMain.handle('auth:logout', async () => {
+         return await this.authService.logout();
+      });
+   }
+
+
+   // is authenticated
+   public isAuthenticated() {
+      ipcMain.handle('auth:isAuthenticated', async () => {
+         return await this.authService.isAuthenticated();
+      });
+   }
+
 }

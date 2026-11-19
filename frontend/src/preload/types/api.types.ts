@@ -14,6 +14,7 @@ export interface iApiRequest {
    method: HttpMethod;
    path: string;
    body?: object;
+   private?: boolean;
 };
 
 

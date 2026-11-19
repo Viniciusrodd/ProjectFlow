@@ -14,17 +14,22 @@ import { TokenStore } from './auth/tokenStore';
 // import services
 import { AuthService } from './auth/authService';
 
+// import api client
+import { ApiClient } from "@main/api/apiClient";
+
 
 class Main {
 
    // properties
    private tokenStore: TokenStore;
    private authService: AuthService;
+   private apiClient: ApiClient;
 
 
    constructor() {
       this.tokenStore = new TokenStore();
-      this.authService = new AuthService(this.tokenStore);
+      this.apiClient = new ApiClient(this.tokenStore);
+      this.authService = new AuthService(this.tokenStore, this.apiClient);
    }
 
 
@@ -36,13 +41,21 @@ class Main {
          // load token
          await this.tokenStore.load();
    
-         // ipc's
-         new AuthIpc(this.authService).login();
+         // auth IPC handlers
+         this.authIpcHandlers();
          
          this.createWindow();
       });
    }
 
+
+   // auth IPC handlers
+   private authIpcHandlers(): void {
+      new AuthIpc(this.authService).login();
+      new AuthIpc(this.authService).logout();
+      new AuthIpc(this.authService).isAuthenticated();
+   }
+   
 
    // create window
    private createWindow(): void {

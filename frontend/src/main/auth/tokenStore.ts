@@ -22,6 +22,11 @@ export class TokenStore {
 
    // save token
    public async save(token: string): Promise<void> {
+      if (typeof token !== 'string' || token.length === 0) {
+         console.error('❌ [Save Token] invalid token received:', token);
+         return;
+      }
+
       this.cachedToken = token;
 
       // safeStorage encryption OS service - check
@@ -41,6 +46,7 @@ export class TokenStore {
       }
       catch (error) {
          console.error('❌ Error at save token: ', error);
+         throw error;
       }
    }
 
