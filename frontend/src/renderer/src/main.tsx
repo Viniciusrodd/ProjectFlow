@@ -8,15 +8,16 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 
 // import providers
-import { LoadingProvider } from '@renderer/src/shared/contexts/loading/Loading.provider';
+import { AuthProvider } from '@renderer/src/app/providers/auth/Auth.provider';
+import { LoadingProvider } from '@renderer/src/app/providers/loading/Loading.provider';
 
 
 createRoot(document.getElementById('root')!).render(
    <StrictMode>
-      <LoadingProvider>
-
-         <App />
-      
-      </LoadingProvider>
+      <AuthProvider>
+         <LoadingProvider>
+            <App />
+         </LoadingProvider>
+      </AuthProvider>
    </StrictMode>
 );
