@@ -55,7 +55,7 @@ const LoginPage = () => {
    // tsx
    return (
       <section className={ styles.container }>
-         <div className={ styles.data_container }>
+         <div className={ styles.form }>
             <h1>Login page</h1>
             
             <input type="email" value={ loginData.email } placeholder='email' onChange={ e => setLoginData(prev => ({ ...prev, email: e.target.value })) } /> 
