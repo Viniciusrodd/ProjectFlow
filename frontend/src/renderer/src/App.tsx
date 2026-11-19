@@ -20,17 +20,17 @@ function App() {
          <Routes>
             {/* public - unauthenticated */}
             <Route element={ <PublicRoute /> }>
-               <Route path='/register' element={<RegisterPage />} />
-               <Route path='/login' element={<LoginPage />} />
+               <Route path='/register' element={ <RegisterPage /> } />
+               <Route path='/login' element={ <LoginPage /> } />
             </Route>
 
             {/* protected - authenticated */}
             <Route element={ <ProtectedRoute /> }>
-               <Route index path='/' element={<WelcomePage />} />
+               <Route path='/welcome' element={ <WelcomePage /> } />
             </Route>
 
             {/* 404 */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={ <Navigate to="/login" replace /> } />
          </Routes>
       </HashRouter>
    );

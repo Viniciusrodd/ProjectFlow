@@ -15,7 +15,7 @@ const PublicRoute = () => {
    const { status } = useContext(AuthContext);
 
    if (status === 'loading') return <Loading />;
-   if (status === 'authenticated') return <Navigate to="/" replace />;
+   if (status === 'authenticated') return <Navigate to="/welcome" replace />;
 
    // render next page/component
    return <Outlet />;
