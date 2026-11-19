@@ -21,6 +21,6 @@ export interface iApiRequest {
 // api requests
 export interface iApi {
 
-   request(req: iApiRequest): Promise<iApiResponse>
+   request<T = unknown>(req: iApiRequest): Promise<iApiResponse<T>>
 
 };

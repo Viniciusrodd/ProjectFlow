@@ -5,14 +5,15 @@ import { app, screen, BrowserWindow } from 'electron';
 // window imports
 import { createWindow } from '@main/window/createWindow';
 
-// ipc imports
-import { AuthIpc } from './ipc/handlers/authIpcHandler';
+// ipc handlers imports
+import { AuthIpc } from '@main/ipc/handlers/authIpcHandler';
+import { ApiIpc } from '@main/ipc/handlers/apiIpcHandler';
 
 // import token
-import { TokenStore } from './auth/tokenStore';
+import { TokenStore } from '@main/auth/tokenStore';
 
 // import services
-import { AuthService } from './auth/authService';
+import { AuthService } from '@main/auth/authService';
 
 // import api client
 import { ApiClient } from "@main/api/apiClient";
@@ -41,8 +42,9 @@ class Main {
          // load token
          await this.tokenStore.load();
    
-         // auth IPC handlers
+         // IPC handlers
          this.authIpcHandlers();
+         this.apiIpcHandler();
          
          this.createWindow();
       });
@@ -54,6 +56,12 @@ class Main {
       new AuthIpc(this.authService).login();
       new AuthIpc(this.authService).logout();
       new AuthIpc(this.authService).isAuthenticated();
+   }
+
+
+   // api IPC handlers
+   private apiIpcHandler(): void {
+      new ApiIpc(this.apiClient).request();
    }
    
 

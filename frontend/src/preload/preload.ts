@@ -4,8 +4,7 @@ import { contextBridge, ipcRenderer } from "electron";
 
 // import types
 import { LoginDTO, LoginCleanResponseDTO } from '@shared/types/auth/login.types';
-import { iApiResponse } from '@preload/types/api.types';
-//import { iConfig, iApiResponse } from "@preload/types/api.types";
+import { iApiResponse, iApiRequest, iApi } from '@preload/types/api.types';
 
 
 // auth
@@ -17,11 +16,13 @@ contextBridge.exposeInMainWorld('auth', {
 
 });
 
-/*
+
 // api request
-contextBridge.exposeInMainWorld('api', {
+const api: iApi = {
 
-   request: (config: iConfig): Promise<iApiResponse> => ipcRenderer.invoke('api:request', config),
+   request: <T = unknown>(config: iApiRequest): Promise<iApiResponse<T>> => 
+      ipcRenderer.invoke('api:request', config
+   )
 
-});
-*/
+};
+contextBridge.exposeInMainWorld('api', api);
