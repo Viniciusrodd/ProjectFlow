@@ -11,7 +11,7 @@ import { RegisterDTO, RegisterResponseDTO } from '@renderer/src/modules/auth/typ
 import { iApiRequest, iApiResponse } from '@shared/types/api/api.types';
 
 // import context
-import { LoadingContext } from '@renderer/src/shared/contexts/loading/loading.context';
+import { LoadingContext } from '@renderer/src/app/providers/loading/loading.context';
 
 // import components
 import Loading from '@renderer/src/shared/components/ui/loading/Loading';

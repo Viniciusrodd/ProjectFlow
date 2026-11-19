@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 
 // import context
-import { LoadingContext } from '@renderer/src/shared/contexts/loading/loading.context';
+import { LoadingContext } from '@renderer/src/app/providers/loading/loading.context';
 
 
 // types
