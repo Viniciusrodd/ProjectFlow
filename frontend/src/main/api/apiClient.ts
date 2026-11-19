@@ -65,11 +65,7 @@ export class ApiClient implements iApi {
          };
       }
       catch (error) {
-         console.error('API error:', error);
-
          if (axios.isAxiosError(error)) {
-            console.error('Axios code:', error.code, 'status:', error.response?.status);
-
             return {
                success: false,
                statusCode: error.response?.status ?? 0,

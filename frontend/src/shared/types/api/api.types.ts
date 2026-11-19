@@ -6,3 +6,21 @@ export interface iApiResponse<T = unknown>{
    message: string; 
    data?: T;
 };
+
+
+// request config
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export interface iApiRequest {
+   method: HttpMethod;
+   path: string;
+   body?: object;
+   private?: boolean;
+};
+
+
+// api requests
+export interface iApi {
+
+   request<T = unknown>(req: iApiRequest): Promise<iApiResponse<T>>
+
+};
