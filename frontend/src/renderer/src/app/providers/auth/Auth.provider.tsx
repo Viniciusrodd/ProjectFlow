@@ -4,7 +4,8 @@ import { useEffect, useState, type ReactNode } from 'react';
 
 // import types
 import { AuthStatus } from '@renderer/src/app/providers/auth/auth.context';
-import { LoginDTO } from "@shared/types/auth/login.types";
+import { LoginDTO, LoginCleanResponseDTO } from "@shared/types/auth/login.types";
+import { iApiResponse } from '@shared/types/api/api.types';
 
 // import context
 import { AuthContext } from '@renderer/src/app/providers/auth/auth.context';
@@ -37,16 +38,29 @@ export const AuthProvider = ({ children }: AuthPropsProvider) =>{
 
 
    // login
-   const login = async (data: LoginDTO): Promise<void> => {
-      await window.auth.login(data);
-      setStatus('authenticated');
+   const login = async (data: LoginDTO): Promise<iApiResponse<LoginCleanResponseDTO>> => {
+      const response: iApiResponse<LoginCleanResponseDTO> = await window.auth.login(data);
+      
+      if (response.success) {
+         setStatus('authenticated');
+      } else {
+         setStatus('unauthenticated');
+      };
+
+      return response;
    };
 
    
    // logout
-   const logout = async (): Promise<void> => {
-      await window.auth.logout();
-      setStatus('unauthenticated');
+   const logout = async (): Promise<boolean> => {
+      const response: boolean = await window.auth.logout();
+      if (response) {
+         setStatus('unauthenticated');
+      } else {
+         setStatus('authenticated');
+      };
+
+      return response;
    };
 
 

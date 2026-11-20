@@ -7,7 +7,8 @@ import { useState, useContext } from 'react'
 import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
 
 // import types
-import { LoginDTO } from '@renderer/src/modules/auth/types/loginTypes/login.types';
+import { LoginDTO, LoginCleanResponseDTO } from '@renderer/src/modules/auth/types/loginTypes/login.types';
+import { iApiResponse } from '@shared/types/api/api.types';
 
 // import context
 import { LoadingContext } from '@renderer/src/app/providers/loading/loading.context';
@@ -36,7 +37,9 @@ const LoginPage = () => {
       setMessage('');
       
       try {
-         await login(loginData);
+         const response: iApiResponse<LoginCleanResponseDTO> = await login(loginData);
+         if (!response.success) throw new Error(response.message);
+         
          setLoading(false);
          setMessage('Você será redirecionado...');
       }
@@ -81,7 +84,7 @@ const LoginPage = () => {
          </form>
 
          { error !== '' && ( 
-            <p className={ styles.message }>error: { error }</p>
+            <p className={ styles.message }>{ error }</p>
          )}
 
          { message !== '' && (
