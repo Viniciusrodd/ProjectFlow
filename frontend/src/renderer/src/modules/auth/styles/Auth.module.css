@@ -5,9 +5,10 @@
    --color1: #0e1116;
    --color2: #536284;
    --color2b: #4a556f;
-   --color3: #407899;
    --color4: #95c623;
    --color5: #ba2d0b;
+   --color6: #f63fa1;
+   --color7: #ff65b7;
 }
 
 
@@ -51,14 +52,14 @@
 
    & a {
       font-size: 16px;
-      color: #f63fa1;
+      color: var(--color6);
       text-decoration: none;
       transition: ease-in-out transform 0.2s;
    }
    & a:hover {
       transform: scale(1.02);
       text-decoration: underline;
-      color: #ff65b7;
+      color: var(--color7);
    }
 
    button {
@@ -68,12 +69,12 @@
       font-size: 13px;
       font-weight: bold;
       text-transform: uppercase;
-      background-color: #39435b;
+      background-color: var(--color2);
       color: white;
       border: none;
    }
    button:hover {
-      background-color: #2b3346;
+      background-color: var(--color2b);
    }
 }
 

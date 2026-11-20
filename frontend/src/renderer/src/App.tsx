@@ -8,6 +8,7 @@ import RegisterPage from '@renderer/src/modules/auth/pages/RegisterPage';
 
 // import protected pages
 import WelcomePage from '@renderer/src/pages/WelcomePage';
+import OrganizationPage from '@renderer/src/modules/organization/pages/OrganizationPage';
 
 // import routes
 import ProtectedRoute from '@renderer/src/app/router/ProtectedRoute';
@@ -27,6 +28,7 @@ function App() {
             {/* protected - authenticated */}
             <Route element={ <ProtectedRoute /> }>
                <Route path='/welcome' element={ <WelcomePage /> } />
+               <Route path='/organization' element={ <OrganizationPage /> } />
             </Route>
 
             {/* 404 */}

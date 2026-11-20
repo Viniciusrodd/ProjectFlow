@@ -3,9 +3,10 @@
    --color1: #0e1116;
    --color2: #536284;
    --color2b: #4a556f;
-   --color3: #407899;
    --color4: #95c623;
    --color5: #ba2d0b;
+   --color6: #f63fa1;
+   --color7: #ff65b7;
 }
 
 
@@ -20,9 +21,9 @@ body {
 
 button {
    transition: ease-in-out transform 0.2s;
+   cursor: pointer;
 }
 button:hover {
-   cursor: pointer;
    transform: scale(1.02);
 }
 
@@ -32,4 +33,64 @@ button:hover {
 
 input:focus{
    outline: none;
+}
+
+
+/* tooltip */
+
+.tooltip {
+   position: relative;
+   display: inline-block;
+   cursor: pointer;
+}
+
+.tooltip::after {
+   content: attr(data-tooltip);
+   position: absolute;
+   bottom: 120%;
+   left: 50%;
+   transform: translateX(-50%);
+   background: var(--color1);
+   border: 1px solid var(--color6);
+   color: #fff;
+   padding: 6px 12px;
+   border-radius: 6px;
+   font-size: 13px;
+   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+   opacity: 0;
+   pointer-events: none;
+   transition: opacity 0.3s ease;
+}
+.tooltip:hover::after {
+   opacity: 1;
+}
+
+
+/* scrolls */
+
+
+/* Chrome, Edge and Safari */
+.scroll::-webkit-scrollbar {
+   height: 9px;
+   width: 9px;
+}
+.scroll::-webkit-scrollbar-track {
+   border-radius: 5px;
+   background-color: transparent;
+}
+.scroll::-webkit-scrollbar-track:hover {
+   background-color: transparent;
+}
+.scroll::-webkit-scrollbar-track:active {
+   background-color: transparent;
+}
+.scroll::-webkit-scrollbar-thumb {
+   border-radius: 5px;
+   background-color: var(--color6);
+}
+.scroll::-webkit-scrollbar-thumb:hover {
+   background-color: var(--color7);
+}
+.scroll::-webkit-scrollbar-thumb:active {
+   background-color: var(--color6);
 }
