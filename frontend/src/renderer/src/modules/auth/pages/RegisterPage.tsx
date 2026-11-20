@@ -8,7 +8,7 @@ import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
 
 // import types
 import { RegisterDTO, RegisterResponseDTO } from '@renderer/src/modules/auth/types/registerTypes/register.types';
-import { iApiRequest, iApiResponse } from '@shared/types/api/api.types';
+import { iApiResponse } from '@shared/types/api/api.types';
 
 // import context
 import { LoadingContext } from '@renderer/src/app/providers/loading/loading.context';
@@ -16,10 +16,13 @@ import { LoadingContext } from '@renderer/src/app/providers/loading/loading.cont
 // import components
 import Loading from '@renderer/src/shared/components/ui/loading/Loading';
 
+// import services
+import { registerService } from '@renderer/src/modules/auth/services/register.service';
+
 
 const RegisterPage = () => {
    // variables
-   const [ registerData, setRegisterData ] = useState<RegisterDTO>({
+   const [ data, setData ] = useState<RegisterDTO>({
       name:'', email: '', password: ''
    });
    const [ error, setError ] = useState<string>('');
@@ -49,16 +52,8 @@ const RegisterPage = () => {
       e.preventDefault();
       setLoading(true);
 
-      // data setup
-      const apiRequest: iApiRequest = {
-         method: 'POST',
-         path: 'auth/register',
-         body: registerData,
-         private: false
-      };
-
       try {
-         const response: iApiResponse<RegisterResponseDTO> = await window.api.request<RegisterResponseDTO>(apiRequest);
+         const response: iApiResponse<RegisterResponseDTO> = await registerService.register(data);
          if(!response.success) throw new Error(response.message);
 
          setMessage('Você será redirecionado...');
@@ -87,9 +82,9 @@ const RegisterPage = () => {
                Registre-se
             </h1>
 
-            <input type="text" value={ registerData.name } placeholder='name' onChange={e => setRegisterData(prev => ({ ...prev, name: e.target.value })) } /> 
-            <input type="email" value={ registerData.email } placeholder='email' onChange={e => setRegisterData(prev => ({ ...prev, email: e.target.value })) } /> 
-            <input type="password" value={ registerData.password } placeholder='senha' onChange={e => setRegisterData(prev => ({ ...prev, password: e.target.value })) } /> 
+            <input type="text" value={ data.name } placeholder='name' onChange={e => setData(prev => ({ ...prev, name: e.target.value })) } /> 
+            <input type="email" value={ data.email } placeholder='email' onChange={e => setData(prev => ({ ...prev, email: e.target.value })) } /> 
+            <input type="password" value={ data.password } placeholder='senha' onChange={e => setData(prev => ({ ...prev, password: e.target.value })) } /> 
             
             { loading ? (
                <Loading />
