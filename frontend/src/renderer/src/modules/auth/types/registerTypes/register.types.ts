@@ -1,4 +1,8 @@
 
+// import types
+import { iApiResponse } from "@shared/types/api/api.types";
+
+
 // uuid
 export type UUID = string;
 
@@ -18,4 +22,10 @@ export interface RegisterResponseDTO {
    email: string;
    password: string;
    createdAt: string;  
+}
+
+
+// register method
+export interface iRegisterMethods {
+   register(data: RegisterDTO): Promise<iApiResponse<RegisterResponseDTO>>
 }

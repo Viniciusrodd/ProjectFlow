@@ -1,4 +1,8 @@
 
+// import types
+import { iApiResponse } from "@shared/types/api/api.types";
+
+
 // uuid
 export type UUID = string;
 
@@ -34,4 +38,27 @@ export interface OrganizationResponseDTO {
 export interface OrganizationUpdateDTO {
    name: string;
    description: string;
+}
+
+
+// organization methods
+export interface iOrganizationMethods {
+   createOrganization(data: OrganizationDTO): Promise<iApiResponse<OrganizationResponseDTO>>
+   
+   getAllOrganizations(): Promise<iApiResponse<OrganizationResponseDTO[]>>
+   
+   getById(id: UUID | null): Promise<iApiResponse<OrganizationResponseDTO>>
+   
+   getByOwnerId(ownerId: UUID | null): Promise<iApiResponse<OrganizationResponseDTO[]>>
+   
+   updateOrganization(
+      id: UUID | null,
+      userId: UUID | null,
+      data: OrganizationUpdateDTO
+   ): Promise<iApiResponse<OrganizationResponseDTO>>
+   
+   deleteOrganization(
+      id: UUID | null,
+      userId: UUID | null
+   ): Promise<iApiResponse<OrganizationDeletedDTO>>
 }

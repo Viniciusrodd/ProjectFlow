@@ -1,13 +1,4 @@
 
-// api response
-export interface iApiResponse<T = unknown>{
-   success: boolean;
-   statusCode: number;
-   message: string; 
-   data?: T;
-};
-
-
 // request config
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export interface iApiRequest {
@@ -15,6 +6,15 @@ export interface iApiRequest {
    path: string;
    body?: object;
    private?: boolean;
+};
+
+
+// api response
+export interface iApiResponse<T = unknown>{
+   success: boolean;
+   statusCode: number;
+   message: string; 
+   data?: T;
 };
 
 
