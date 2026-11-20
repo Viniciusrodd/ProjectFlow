@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+
+:root{
+   --color1: #0e1116;
+   --color2: #536284;
+   --color2b: #4a556f;
+   --color4: #95c623;
+   --color5: #ba2d0b;
+   --color6: #f63fa1;
+   --color7: #ff65b7;
+}
+
+
+.container {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   flex-direction: column;
+   height: 30vh;
+   width: 95%;
+   padding: 30px;
+   margin-bottom: 8%;
+   background-color: transparent;
+   border: 2px solid white;
+   border-radius: 10px;
+
+   & h1 {
+      font-size: 30px;
+      margin: 0px;
+      text-decoration: underline;
+      color: white;
+   }
+
+   & .description {
+      font-size: 16px;
+      color: white;
+   }
+
+   & .owner {
+      font-size: 15px;
+      font-style: italic;
+      color: white;
+   }
+}
+
+.buttons {
+   display: flex;
+   justify-content: space-between;
+   height: 5vh;
+   width: 5vw;
+   margin-top: 20px;
+
+   & img {
+      height: 30px;
+      width: 30px;
+      cursor: pointer;
+      transition: ease-in-out transform 0.2s;
+   }
+   & img:hover {
+      transform: scale(1.05);
+   }
+}
