@@ -81,9 +81,11 @@ const RegisterPage = () => {
          <form 
             onSubmit={ handleForm }
             method='post'
-            className={ styles.form }
+            className={ styles.auth_form }
          >
-            <h1>Registre-se</h1>
+            <h1 className={ styles.title }>
+               Registre-se
+            </h1>
 
             <input type="text" value={ registerData.name } placeholder='name' onChange={e => setRegisterData(prev => ({ ...prev, name: e.target.value })) } /> 
             <input type="email" value={ registerData.email } placeholder='email' onChange={e => setRegisterData(prev => ({ ...prev, email: e.target.value })) } /> 
@@ -105,9 +107,7 @@ const RegisterPage = () => {
          </form> 
          
          { error !== '' && ( 
-            <ul>
-               <li>error: { error }</li>
-            </ul>
+            <p className={ styles.message }>error: { error }</p>
          )}
 
          { message !== '' && (

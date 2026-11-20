@@ -1,11 +1,29 @@
 
+:root{
+   --color1: #0e1116;
+   --color2: #536284;
+   --color2b: #4a556f;
+   --color3: #407899;
+   --color4: #95c623;
+   --color5: #ba2d0b;
+}
+
+
 body {
    display: flex;
    align-items: center;
    justify-content: center;
    overflow: hidden;
    background-size: cover;
-   background-color: #161D26;
+   background-color: var(--color1);
+}
+
+button {
+   transition: ease-in-out transform 0.2s;
+}
+button:hover {
+   cursor: pointer;
+   transform: scale(1.02);
 }
 
 

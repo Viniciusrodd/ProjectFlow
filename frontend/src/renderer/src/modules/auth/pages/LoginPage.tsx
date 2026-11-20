@@ -56,9 +56,11 @@ const LoginPage = () => {
          <form 
             onSubmit={ handleForm }
             method='post'
-            className={ styles.form }
+            className={ styles.auth_form }
          >
-            <h1>Login</h1>
+            <h1 className={ styles.title }>
+               Login
+            </h1>
             
             <input type="email" value={ loginData.email } placeholder='email' onChange={ e => setLoginData(prev => ({ ...prev, email: e.target.value })) } /> 
             <input type="password" value={ loginData.password } placeholder='senha' onChange={ e => setLoginData(prev => ({ ...prev, password: e.target.value })) } /> 
@@ -79,9 +81,7 @@ const LoginPage = () => {
          </form>
 
          { error !== '' && ( 
-            <ul>
-               <li>error: { error }</li>
-            </ul>
+            <p className={ styles.message }>error: { error }</p>
          )}
 
          { message !== '' && (
