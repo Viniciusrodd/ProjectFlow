@@ -5,6 +5,7 @@ import { TokenStore } from "./tokenStore";
 // import interfaces
 import { iAuth } from "@preload/types/auth.types";
 import { LoginDTO, LoginResponseDTO, LoginCleanResponseDTO } from "@shared/types/auth/login.types";
+import { iAuthUser } from "@shared/types/auth/authUser.types";
 import { iApiResponse } from "@preload/types/api.types";
 
 // import api client
@@ -78,19 +79,18 @@ export class AuthService implements iAuth {
 
 
    // is authenticated check
-   public async isAuthenticated(): Promise<boolean> {
-      const res: iApiResponse<boolean> = await this.apiClient.request<boolean>({
+   public async isAuthenticated(): Promise<iAuthUser> {
+      const res: iApiResponse<iAuthUser> = await this.apiClient.request<iAuthUser>({
          method: 'GET',
-         path: `auth/expiration`,
+         path: 'auth/',
          private: true // passing safestorage loaded token throught headers authorization
       });
 
-      if (res.success && res.data === true) return true;
-      if (res.statusCode === 401 || res.statusCode === 403) return false;
+      if (!res.success || !res.data || res.statusCode === 401) {
+         return { id: null, email: '', name: '' }
+      };
 
-      // unexpected
-      console.warn('[Auth] isAuthenticated falhou:', res.statusCode, res.message);
-      return false;
+      return res.data;
    }
 
 }
