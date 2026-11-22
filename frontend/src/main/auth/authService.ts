@@ -79,7 +79,18 @@ export class AuthService implements iAuth {
 
    // is authenticated check
    public async isAuthenticated(): Promise<boolean> {
-      return this.tokenStore.has();
+      const res: iApiResponse<boolean> = await this.apiClient.request<boolean>({
+         method: 'GET',
+         path: `auth/expiration`,
+         private: true // passing safestorage loaded token throught headers authorization
+      });
+
+      if (res.success && res.data === true) return true;
+      if (res.statusCode === 401 || res.statusCode === 403) return false;
+
+      // unexpected
+      console.warn('[Auth] isAuthenticated falhou:', res.statusCode, res.message);
+      return false;
    }
 
 }

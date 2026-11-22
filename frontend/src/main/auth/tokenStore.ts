@@ -52,40 +52,27 @@ export class TokenStore {
 
 
    // load token
-   public async load(): Promise<boolean> {
+   public async load(): Promise<string | null> {
       try {
          // get encrypt token(binary)
          const buffer = await fs.readFile(this.filePath);
 
          // safeStorage encryption OS service - check
          const isAvailable = await safeStorage.isAsyncEncryptionAvailable();
-         if (!isAvailable) {
-            console.warn('⚠️ [Load Token] safeStorage unavailable');
-            return false;
-         }
+         if (!isAvailable) return null;
 
-         // descrypt token + return true
+         // getting decrypted token
          const { result } = await safeStorage.decryptStringAsync(buffer);
          this.cachedToken = result;
          
-         if (result.length == 0) {
-            console.warn("⚠️ [Load Token] token doesn't exist");
-            return false;
-         };
+         if (result.length == 0) return null;
 
-         console.log('✔️ token load from: ', this.filePath);
-         return true;
+         return this.cachedToken;
       } 
       catch(error) {
          this.cachedToken = null;
 
-         if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
-            console.warn('⚠️ [Load Token] token file not found (ENOENT)');
-         } else {
-            console.error('❌ [Load Token] failed to load token:', error);
-         }
-
-         return false;
+         return null;
       }
    }
 
