@@ -33,6 +33,7 @@ import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginDTO;
 import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginResponseDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterResponseDTO;
+import com.example.ProjectFlow.modules.auth.dto.AuthUserDTO;
 
 
 @RestController
@@ -82,19 +83,19 @@ public class AuthController {
    }
 
 
-   // check auth expiration
-   @GetMapping("/expiration")
-   @Operation(summary = "Check user authentication expired")
-   public ResponseEntity<ApiResponse<Boolean>> authExpiration(
+   // check user auth
+   @GetMapping("/")
+   @Operation(summary = "Check if user is authenticated")
+   public ResponseEntity<ApiResponse<AuthUserDTO>> userAuthenticated(
       @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authHeader 
    ) {
-      boolean expiration = this.authService.authExpiration(authHeader.substring(7));
+      AuthUserDTO authUser = this.authService.userAuthenticated(authHeader.substring(7));
 
-      ApiResponse<Boolean> response = new ApiResponse.Builder<Boolean>()
+      ApiResponse<AuthUserDTO> response = new ApiResponse.Builder<AuthUserDTO>()
          .success(true)
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.FOUND)
-         .data(expiration)
+         .data(authUser)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);

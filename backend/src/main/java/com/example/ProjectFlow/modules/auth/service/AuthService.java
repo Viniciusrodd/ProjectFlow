@@ -22,6 +22,7 @@ import com.example.ProjectFlow.modules.auth.dto.loginDTO.LoginResponseDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterDTO;
 import com.example.ProjectFlow.modules.auth.dto.registerDTO.RegisterResponseDTO;
 import com.example.ProjectFlow.modules.user.dto.userDTO.UserDTO;
+import com.example.ProjectFlow.modules.auth.dto.AuthUserDTO;
 
 // import entity
 import com.example.ProjectFlow.modules.user.entity.UserEntity;
@@ -122,13 +123,20 @@ public class AuthService {
    }
 
 
-   // check auth expiration
-   public boolean authExpiration(String token) {
+   // check user auth
+   public AuthUserDTO userAuthenticated(String token) {
       // get user
       String email = this.jwtService.extractEmail(token);
       UserDTO user = this.userService.getByEmail(email);
 
-      return this.jwtService.validateToken(token, user);
+      if(!this.jwtService.validateToken(token, user)) {
+         throw MultiExceptions.unauthorized(String.format(
+            "%s: Autenticação expirada",
+            ResponseMessages.UNAUTHORIZED
+         ));
+      }
+
+      return new AuthUserDTO(user.id(), user.email(), user.name());
    }
 
 }
