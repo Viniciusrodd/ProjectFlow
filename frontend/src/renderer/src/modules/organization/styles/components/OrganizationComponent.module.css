@@ -6,9 +6,10 @@
    --color2: #536284;
    --color2b: #4a556f;
    --color4: #95c623;
-   --color5: #ba2d0b;
+   --color5: #ba0b0b;
    --color6: #f63fa1;
    --color7: #ff65b7;
+   --color8: #658bff;
 }
 
 
@@ -51,13 +52,19 @@
    width: 5vw;
    margin-top: 20px;
 
-   & img {
-      height: 30px;
-      width: 30px;
+   & span {
+      font-size: 28px;
       cursor: pointer;
       transition: ease-in-out transform 0.2s;
    }
-   & img:hover {
+   & span:hover {
       transform: scale(1.05);
+   }
+
+   & .edit {
+      color: var(--color8);
+   }
+   & .delete {
+      color: var(--color5);
    }
 }

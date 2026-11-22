@@ -6,31 +6,35 @@ import React from 'react';
 import styles from '@renderer/src/modules/organization/styles/components/OrganizationComponent.module.css';
 
 // import types
-import { OrganizationResponseDTO } from '@renderer/src/modules/organization/types/organizationTypes/organization.types';
-
-// import images
-import edit_png from '@renderer/src/assets/images/utils/edit.png';
-import delete_png from '@renderer/src/assets/images/utils/delete.png';
+import { iOrganizationComponent } from '@renderer/src/modules/organization/types/organizationTypes/organization.types';
 
 
-const OrganizationComponent: React.FC<OrganizationResponseDTO> = ({
-   id, ownerId, name, description
+const OrganizationComponent: React.FC<iOrganizationComponent> = ({
+   id, ownerId, ownerName, authId, name, description
 }) => {
    return (
       <div className={ styles.container } key={ id }>
          <h1>{ name }</h1>
          
          <p className={ styles.description }>{ description }</p>
-         <p className={ styles.owner }>Criado por: { ownerId }</p>
+         <p className={ styles.owner }>
+            Criado por { authId == ownerId ? 'você' : ownerName }
+         </p>
 
-         <div className={ styles.buttons }>
-            <img src={ edit_png } alt="edit_png" />
-            <img 
-               src={ delete_png } alt="delete_png" 
-               className='material-symbols-outlined tooltip'
-               data-tooltip="Editar organização"
-            />
-         </div>
+         { authId == ownerId && (
+            <div className={ styles.buttons }>
+               <span 
+                  className={`material-symbols-outlined tooltip ${ styles.edit }`}
+                  data-tooltip="Editar"
+               > edit_square
+               </span>
+               <span 
+                  className={`material-symbols-outlined tooltip ${ styles.delete }`}
+                  data-tooltip="Deletar"
+               > delete
+               </span>
+            </div>
+         ) }
       </div>
    );
 };

@@ -1,4 +1,8 @@
 
+// import interfaces
+import { iApiResponse } from "@shared/types/api/api.types";
+
+
 // uuid
 export type UUID = string;
 
@@ -21,6 +25,14 @@ export interface UserProfileDTO {
 }
 
 
+// user update DTO
+export interface UserUpdateDTO {
+   email: string;
+   name: string;
+   password: string;
+}
+
+
 // user deleted DTO
 export interface UserDeletedDTO {
    id: UUID | null;
@@ -35,4 +47,18 @@ export interface UserDeletedDTO {
    email: string;
    name: string;
    password: string;
+}
+
+
+// user methods
+export interface iUserMethods {
+
+   getAllUsers(): Promise<iApiResponse<UserProfileDTO[]>>
+   getById(id: UUID | null): Promise<iApiResponse<UserProfileDTO>>
+   updateUser(
+      userId: UUID | null, 
+      data: UserUpdateDTO
+   ): Promise<iApiResponse<UserProfileDTO>>
+   deleteUser(userId: UUID | null): Promise<iApiResponse<UserDeletedDTO>>
+
 }

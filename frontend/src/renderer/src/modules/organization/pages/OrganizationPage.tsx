@@ -6,17 +6,20 @@ import { useState, useContext, useEffect } from 'react';
 import styles from '@renderer/src/modules/organization/styles/pages/OrganizationPage.module.css';
 
 // import types
-import { OrganizationResponseDTO } from '@renderer/src/modules/organization/types/organizationTypes/organization.types';
+import { OrganizationResponseDTO, OrganizationFormatedDTO } from '@renderer/src/modules/organization/types/organizationTypes/organization.types';
 import { iApiResponse } from '@shared/types/api/api.types';
+import { UserProfileDTO } from '@shared/types/user/user.types';
 
 // import context
 import { LoadingContext } from '@renderer/src/app/providers/loading/loading.context';
+import { AuthContext } from '@renderer/src/app/providers/auth/auth.context';
 
 // import components
 import Loading from '@renderer/src/shared/components/ui/loading/Loading';
 
 // import services
 import { organizationService } from '@renderer/src/modules/organization/services/organization.service';
+import { userService } from '@renderer/src/modules/user/services/user.service';
 
 // import components
 import OrganizationComponent from '@renderer/src/modules/organization/components/OrganizationComponent';
@@ -25,8 +28,10 @@ import OrganizationComponent from '@renderer/src/modules/organization/components
 const OrganizationPage = () => {
    // variables
    const [ error, setError ] = useState<string>('');
-   const { loading, setLoading } = useContext(LoadingContext);
    const [ organizations, setOrganizations ] = useState<OrganizationResponseDTO[]>([]);
+   const [ organizationsFormatted, setOrganizationsFormatted ] = useState<OrganizationFormatedDTO[]>([]);
+   const { loading, setLoading } = useContext(LoadingContext);
+   const { authUser } = useContext(AuthContext);
 
 
    // get all organizations
@@ -38,8 +43,8 @@ const OrganizationPage = () => {
             const response: iApiResponse<OrganizationResponseDTO[]> = await organizationService.getAllOrganizations();
             if(!response.success) throw new Error(response.message);
 
-            setLoading(false);
             setOrganizations(response.data ? response.data : []);
+            setLoading(false);
          }
          catch (error) {
             setLoading(false);
@@ -52,6 +57,38 @@ const OrganizationPage = () => {
 
       get();
    }, []);
+
+
+   // format organizations
+   useEffect(() => {
+      if (organizations.length <= 0) return;
+      
+      const formatOrganizations = async () => {
+         organizations.forEach(async (organization) => {
+            const ownerName = await getOwner(organization.ownerId as string);
+            setOrganizationsFormatted((prev) => [
+               ...prev, 
+               { 
+                  id: organization.id,
+                  ownerId: organization.ownerId,
+                  ownerName,
+                  name: organization.name,
+                  description: organization.description
+               }
+            ]);
+         });
+      }
+      formatOrganizations();
+   }, [organizations, setOrganizations]);
+
+
+   // get organization owner
+   const getOwner = async (id: string): Promise<string> => {
+      const response: iApiResponse<UserProfileDTO> = await userService.getById(id);
+      if(!response.success || !response.data) throw new Error(response.message);
+
+      return response.data.name;
+   }   
 
 
    // tsx
@@ -67,10 +104,13 @@ const OrganizationPage = () => {
 
          { /* organizations */ }
          <div className={ `${styles.organization_container} scroll` }>
-            { organizations.length > 0 && organizations.map(organization => (
-               <OrganizationComponent 
+            { organizationsFormatted.length > 0 && organizationsFormatted.map(organization => (
+               <OrganizationComponent
+                  key={ organization.id } 
                   id={ organization.id }
                   ownerId={ organization.ownerId }
+                  ownerName={ organization.ownerName }
+                  authId={ authUser.id }
                   name={ organization.name }
                   description={ organization.description }
                />

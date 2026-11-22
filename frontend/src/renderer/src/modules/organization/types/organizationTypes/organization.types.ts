@@ -34,6 +34,16 @@ export interface OrganizationResponseDTO {
 }
 
 
+// organization DTO
+export interface OrganizationFormatedDTO {
+   id: UUID | null;
+   ownerId: UUID | null;
+   ownerName: string;
+   name: string;
+   description: string;
+}
+
+
 // organization update DTO
 export interface OrganizationUpdateDTO {
    name: string;
@@ -41,24 +51,32 @@ export interface OrganizationUpdateDTO {
 }
 
 
+// organization component
+export interface iOrganizationComponent {
+   id: UUID | null;
+   ownerId: UUID | null;
+   ownerName: string;
+   authId: UUID | null;
+   name: string;
+   description: string;
+}
+
+
 // organization methods
 export interface iOrganizationMethods {
-   createOrganization(data: OrganizationDTO): Promise<iApiResponse<OrganizationResponseDTO>>
-   
+
+   createOrganization(data: OrganizationDTO): Promise<iApiResponse<OrganizationResponseDTO>>   
    getAllOrganizations(): Promise<iApiResponse<OrganizationResponseDTO[]>>
-   
    getById(id: UUID | null): Promise<iApiResponse<OrganizationResponseDTO>>
-   
    getByOwnerId(ownerId: UUID | null): Promise<iApiResponse<OrganizationResponseDTO[]>>
-   
    updateOrganization(
       id: UUID | null,
       userId: UUID | null,
       data: OrganizationUpdateDTO
    ): Promise<iApiResponse<OrganizationResponseDTO>>
-   
    deleteOrganization(
       id: UUID | null,
       userId: UUID | null
    ): Promise<iApiResponse<OrganizationDeletedDTO>>
+
 }

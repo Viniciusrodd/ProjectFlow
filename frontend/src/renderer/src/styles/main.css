@@ -10,6 +10,9 @@
 }
 
 
+/* specific tags */
+
+
 body {
    display: flex;
    align-items: center;
@@ -27,16 +30,13 @@ button:hover {
    transform: scale(1.02);
 }
 
-
-/* specific tags */
-
-
 input:focus{
    outline: none;
 }
 
 
 /* tooltip */
+
 
 .tooltip {
    position: relative;
@@ -47,7 +47,7 @@ input:focus{
 .tooltip::after {
    content: attr(data-tooltip);
    position: absolute;
-   bottom: 120%;
+   bottom: 100%;
    left: 50%;
    transform: translateX(-50%);
    background: var(--color1);
@@ -93,4 +93,13 @@ input:focus{
 }
 .scroll::-webkit-scrollbar-thumb:active {
    background-color: var(--color6);
+}
+
+
+/* material symbols */
+
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined Variable';
+  font-size: 24px;
 }
