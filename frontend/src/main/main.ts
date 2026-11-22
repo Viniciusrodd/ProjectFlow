@@ -39,13 +39,11 @@ class Main {
       this.lifecycleHandlers();
 
       void app.whenReady().then(async () => {
-         // load token
-         await this.tokenStore.load();
-   
          // IPC handlers
          this.authIpcHandlers();
          this.apiIpcHandler();
          
+         // window
          this.createWindow();
       });
    }

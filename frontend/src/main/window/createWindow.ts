@@ -3,6 +3,9 @@
 import { app, BrowserWindow } from 'electron';
 import { join } from 'path';
 
+// import icons
+import app_icon from '../../../resources/app_icon.png?asset';
+
 
 // create window
 export const createWindow = (width: number, height: number): void => {
@@ -14,7 +17,8 @@ export const createWindow = (width: number, height: number): void => {
          contextIsolation: true,
          nodeIntegration: false,
          sandbox: true
-      }
+      },
+      icon: app_icon
    });
 
    if (!app.isPackaged && process.env['ELECTRON_RENDERER_URL']) {
