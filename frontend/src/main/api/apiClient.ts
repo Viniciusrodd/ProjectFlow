@@ -29,15 +29,21 @@ export class ApiClient implements iApi {
          'Content-Type': 'application/json'
       };
       
-      // get token - private endpoints
-      if(req.private) {
-         const token = this.tokenStore.get();
-         if (token == null) throw new Error('Expired session. Login again');
-
-         headers.Authorization = `Bearer ${token}`;
-      }
-         
       try {         
+         // get token - private endpoints
+         if(req.private) {
+            const token = await this.tokenStore.load();
+            if (token == null) {
+               return {
+                  success: false,
+                  statusCode: 401,
+                  message: "Expired session, login again"
+               };
+            }
+   
+            headers.Authorization = `Bearer ${token}`;
+         }
+      
          // axios response
          const response = await axios({
             url: `${ENV.API_BASE_URL}/${req.path}`,
