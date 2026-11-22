@@ -20,8 +20,8 @@
    width: 70vw;
    
    & button {
-      height: 50px;
-      width: 23vw;
+      height: 48px;
+      width: 20vw;
       border-radius: 10px;
       font-size: 13px;
       font-weight: bold;
@@ -34,6 +34,12 @@
    & button:hover {
       background-color: #4a556f;
    }
+}
+
+.welcome_msg {
+   color: white;
+   font-size: 30px;
+   margin: 0px;
 }
 
 .title {
