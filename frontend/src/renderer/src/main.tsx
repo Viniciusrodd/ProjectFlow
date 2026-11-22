@@ -6,6 +6,7 @@ import '../src/styles/main.css';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
+import "@fontsource-variable/material-symbols-outlined";
 
 // import providers
 import { AuthProvider } from '@renderer/src/app/providers/auth/Auth.provider';
