@@ -121,4 +121,14 @@ public class AuthService {
       return this.authMapper.toLoginResponseDTO(user, token);
    }
 
+
+   // check auth expiration
+   public boolean authExpiration(String token) {
+      // get user
+      String email = this.jwtService.extractEmail(token);
+      UserDTO user = this.userService.getByEmail(email);
+
+      return this.jwtService.validateToken(token, user);
+   }
+
 }

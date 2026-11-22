@@ -4,11 +4,14 @@ package com.example.ProjectFlow.modules.auth.controller;
 
 // web imports
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 // http imports
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -73,6 +76,25 @@ public class AuthController {
          .statusCode(HttpStatus.OK.value())
          .message(ResponseMessages.LOGIN_SUCCESS)
          .data(loggedUser)
+         .build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+   }
+
+
+   // check auth expiration
+   @GetMapping("/expiration")
+   @Operation(summary = "Check user authentication expired")
+   public ResponseEntity<ApiResponse<Boolean>> authExpiration(
+      @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authHeader 
+   ) {
+      boolean expiration = this.authService.authExpiration(authHeader.substring(7));
+
+      ApiResponse<Boolean> response = new ApiResponse.Builder<Boolean>()
+         .success(true)
+         .statusCode(HttpStatus.OK.value())
+         .message(ResponseMessages.FOUND)
+         .data(expiration)
          .build();
 
       return ResponseEntity.status(HttpStatus.OK).body(response);
