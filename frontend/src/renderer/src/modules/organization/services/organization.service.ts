@@ -4,9 +4,11 @@ import { iApiRequest, iApiResponse } from "@shared/types/api/api.types";
 import { 
    OrganizationDTO, OrganizationDeletedDTO, 
    OrganizationResponseDTO, OrganizationUpdateDTO,
-   UUID,
    iOrganizationMethods 
 } from "@renderer/src/modules/organization/types/organizationTypes/organization.types";
+
+// uuid
+export type UUID = string;
 
 
 class OrganizationService implements iOrganizationMethods {
