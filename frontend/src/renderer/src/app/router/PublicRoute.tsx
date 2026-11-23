@@ -7,7 +7,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '@renderer/src/app/providers/auth/auth.context';
 
 // import components
-import Loading from '@renderer/src/shared/components/ui/loading/Loading';
+import Loading from '@renderer/src/components/loading/Loading';
 
 
 const PublicRoute = () => {

@@ -1,6 +1,6 @@
 
 // import styles
-import styles from '@renderer/src/shared/components/ui/loading/Loading.module.css';
+import styles from '@renderer/src/components/loading/Loading.module.css';
 
 // import images
 import loading_img from '@renderer/src/assets/images/utils/loading.png';

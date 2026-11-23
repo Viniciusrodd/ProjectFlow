@@ -1,16 +1,6 @@
 @charset "UTF-8";
 
 
-:root{
-   --color1: #0e1116;
-   --color2: #536284;
-   --color2b: #4a556f;
-   --color3: #407899;
-   --color4: #95c623;
-   --color5: #ba2d0b;
-}
-
-
 .container {
    display: flex;
    flex-direction: column;
@@ -26,31 +16,31 @@
       font-size: 13px;
       font-weight: bold;
       text-transform: uppercase;
-      background-color: #536284;
+      background-color: var(--accent);
       color: white;
       border: none;
       margin-top: 20px;
    }
    & button:hover {
-      background-color: #4a556f;
+      background-color: var(--accent_2);
    }
 }
 
 .welcome_msg {
-   color: white;
+   color: var(--text);
    font-size: 30px;
    margin: 0px;
 }
 
 .title {
-   color: white;
+   color: var(--text);
    font-size: 40px;
    margin: 0px;
 }
 
 .subtitle {
    font-size: 16px;
-   color: white;
+   color: var(--text);
    font-style: italic;
    letter-spacing: 0.02cap;
    margin-top: 5px;

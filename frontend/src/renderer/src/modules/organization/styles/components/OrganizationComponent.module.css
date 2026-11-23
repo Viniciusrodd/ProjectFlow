@@ -1,47 +1,35 @@
 @charset "UTF-8";
 
 
-:root{
-   --color1: #0e1116;
-   --color2: #536284;
-   --color2b: #4a556f;
-   --color4: #95c623;
-   --color5: #ba0b0b;
-   --color6: #f63fa1;
-   --color7: #ff65b7;
-   --color8: #658bff;
-}
-
-
 .container {
    display: flex;
    justify-content: space-around;
    align-items: center;
    flex-direction: column;
-   height: 30vh;
+   height: 35vh;
    width: 95%;
    padding: 30px;
    margin-bottom: 8%;
    background-color: transparent;
-   border: 2px solid white;
+   border: 2px solid var(--accent);
    border-radius: 10px;
 
    & h1 {
       font-size: 30px;
       margin: 0px;
       text-decoration: underline;
-      color: white;
+      color: var(--text);
    }
 
    & .description {
       font-size: 16px;
-      color: white;
+      color: var(--text);
    }
 
    & .owner {
       font-size: 15px;
       font-style: italic;
-      color: white;
+      color: var(--text);
    }
 }
 
@@ -62,9 +50,9 @@
    }
 
    & .edit {
-      color: var(--color8);
+      color: var(--accent);
    }
    & .delete {
-      color: var(--color5);
+      color: var(--bad_accent);
    }
 }
