@@ -9,13 +9,15 @@ import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
 // import types
 import { LoginDTO, LoginCleanResponseDTO } from '@renderer/src/modules/auth/types/loginTypes/login.types';
 import { iApiResponse } from '@shared/types/api/api.types';
+import { iModalConfig } from '@renderer/src/shared/types/modal.types';
 
 // import context
 import { LoadingContext } from '@renderer/src/app/providers/loading/loading.context';
 import { AuthContext } from '@renderer/src/app/providers/auth/auth.context';
 
 // import components
-import Loading from '@renderer/src/shared/components/ui/loading/Loading';
+import Loading from '@renderer/src/components/loading/Loading';
+import Modal from '@renderer/src/components/modal/Modal';
 
 
 const LoginPage = () => {
@@ -23,32 +25,63 @@ const LoginPage = () => {
    const [ loginData, setLoginData ] = useState<LoginDTO>({
       email: '', password: ''
    });
-   const [ error, setError ] = useState<string>('');
-   const [ message, setMessage ] = useState<string>('');
    const { loading, setLoading } = useContext(LoadingContext);
    const { login } = useContext(AuthContext);
+
+   // modal
+   const [ modal_display, setModal_display ] = useState<boolean>(false);
+   const [ modal_title, setModal_title ] = useState<string>('');
+   const [ modal_msg, setModal_msg ] = useState<string>('');
+   const [ modal_btt, setmodal_btt ] = useState<boolean | string>(false);
+   const [ modal_btt_2, setModal_btt_2 ] = useState<boolean | string>(false);
+
+
+   // functions
    
+   
+   // modal config
+   const modal_config = ({ title, msg, btt_event, btt_close, display }: iModalConfig) => {
+      setModal_title(title ?? '');
+      setModal_msg(msg ?? '');
+      setmodal_btt(btt_event ?? false);
+      setModal_btt_2(btt_close ?? false);
+      setModal_display(display ?? false);
+   };   
+
+   // close modal
+   const closeModal = () =>{
+      modal_config({
+         title: '', msg: '', btt_event: false, 
+         btt_close: false, display: false
+      });
+
+      setLoading(false);
+   };
+
 
    // login
    const handleForm = async (e: React.SubmitEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       setLoading(true);
-      setError('');
-      setMessage('');
       
       try {
          const response: iApiResponse<LoginCleanResponseDTO> = await login(loginData);
          if (!response.success) throw new Error(response.message);
-         
+
          setLoading(false);
-         setMessage('Você será redirecionado...');
       }
       catch (error) {
          setLoading(false);
-         console.error('❌', error);
 
          const errorMessage = error instanceof Error ? error.message : String(error);
-         setError(errorMessage);
+         const title = errorMessage.split(':')[0];
+         const message = errorMessage.split(':')[1];
+         
+         modal_config({
+            title: `${ title } ❌`, 
+            msg: `${ message }`, 
+            btt_event: false, btt_close: 'Tentar novamente', display: true
+         });
       }
    };
    
@@ -56,17 +89,27 @@ const LoginPage = () => {
    // tsx
    return (
       <section className={ styles.container }>
+         { /* modal */ }
+         <Modal 
+            title={ modal_title }
+            msg={ modal_msg }
+            btt_event={ modal_btt }
+            btt_close={ modal_btt_2 }
+            display={ modal_display }
+            onClose={ closeModal }
+         />
+
          <form 
             onSubmit={ handleForm }
             method='post'
             className={ styles.auth_form }
          >
             <h1 className={ styles.title }>
-               Login
+               Entre com sua conta
             </h1>
             
-            <input type="email" value={ loginData.email } placeholder='email' onChange={ e => setLoginData(prev => ({ ...prev, email: e.target.value })) } /> 
-            <input type="password" value={ loginData.password } placeholder='senha' onChange={ e => setLoginData(prev => ({ ...prev, password: e.target.value })) } /> 
+            <input type="email" value={ loginData.email } placeholder='email' required onChange={ e => setLoginData(prev => ({ ...prev, email: e.target.value })) } /> 
+            <input type="password" value={ loginData.password } placeholder='senha' required onChange={ e => setLoginData(prev => ({ ...prev, password: e.target.value })) } /> 
             
             { loading ? (
                <Loading />
@@ -82,14 +125,6 @@ const LoginPage = () => {
                </>
             ) }
          </form>
-
-         { error !== '' && ( 
-            <p className={ styles.message }>{ error }</p>
-         )}
-
-         { message !== '' && (
-            <p className={ styles.message }>{ message }</p>
-         ) }
       </section>
    );
 };

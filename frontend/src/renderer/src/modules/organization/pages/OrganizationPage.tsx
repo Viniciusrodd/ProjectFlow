@@ -15,7 +15,7 @@ import { LoadingContext } from '@renderer/src/app/providers/loading/loading.cont
 import { AuthContext } from '@renderer/src/app/providers/auth/auth.context';
 
 // import components
-import Loading from '@renderer/src/shared/components/ui/loading/Loading';
+import Loading from '@renderer/src/components/loading/Loading';
 
 // import services
 import { organizationService } from '@renderer/src/modules/organization/services/organization.service';
@@ -61,25 +61,44 @@ const OrganizationPage = () => {
 
    // format organizations
    useEffect(() => {
-      if (organizations.length <= 0) return;
+      if (organizations.length <= 0) {
+         setOrganizationsFormatted([]);
+         return;
+      };
+
+      let cancelled = false;
       
       const formatOrganizations = async () => {
-         organizations.forEach(async (organization) => {
-            const ownerName = await getOwner(organization.ownerId as string);
-            setOrganizationsFormatted((prev) => [
-               ...prev, 
-               { 
-                  id: organization.id,
-                  ownerId: organization.ownerId,
-                  ownerName,
-                  name: organization.name,
-                  description: organization.description
-               }
-            ]);
-         });
+         try {
+            const formatted: OrganizationFormatedDTO[] = await Promise.all(
+               organizations.map(async (organization) => {
+                  const ownerName = await getOwner(organization.ownerId as string);
+
+                  return {
+                     id: organization.id,
+                     ownerId: organization.ownerId,
+                     ownerName,
+                     name: organization.name,
+                     description: organization.description,
+                  };
+               })
+            );
+
+            if (!cancelled) setOrganizationsFormatted(formatted);
+         }
+         catch (error) {
+            if (!cancelled) {
+               const errorMessage = error instanceof Error ? error.message : String(error);
+               setError(errorMessage);
+            }
+         }
       }
       formatOrganizations();
-   }, [organizations, setOrganizations]);
+
+      return () => { 
+         cancelled = true; 
+      };
+   }, [organizations]);
 
 
    // get organization owner

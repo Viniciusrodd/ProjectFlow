@@ -9,12 +9,14 @@ import styles from '@renderer/src/modules/auth/styles/Auth.module.css';
 // import types
 import { RegisterDTO, RegisterResponseDTO } from '@renderer/src/modules/auth/types/registerTypes/register.types';
 import { iApiResponse } from '@shared/types/api/api.types';
+import { iModalConfig } from '@renderer/src/shared/types/modal.types';
 
 // import context
 import { LoadingContext } from '@renderer/src/app/providers/loading/loading.context';
 
 // import components
-import Loading from '@renderer/src/shared/components/ui/loading/Loading';
+import Loading from '@renderer/src/components/loading/Loading';
+import Modal from '@renderer/src/components/modal/Modal';
 
 // import services
 import { registerService } from '@renderer/src/modules/auth/services/register.service';
@@ -25,24 +27,57 @@ const RegisterPage = () => {
    const [ data, setData ] = useState<RegisterDTO>({
       name:'', email: '', password: ''
    });
-   const [ error, setError ] = useState<string>('');
-   const [ message, setMessage ] = useState<string>('');
    const { loading, setLoading } = useContext(LoadingContext);
    const [ redirect, setRedirect ] = useState<boolean>(false);
    const navigate = useNavigate();
+
+   // modal
+   const [ modal_display, setModal_display ] = useState<boolean>(false);
+   const [ modal_title, setModal_title ] = useState<string>('');
+   const [ modal_msg, setModal_msg ] = useState<string>('');
+   const [ modal_btt, setmodal_btt ] = useState<boolean | string>(false);
+   const [ modal_btt_2, setModal_btt_2 ] = useState<boolean | string>(false);
+
+
+   // functions
+
+
+   // modal config
+   const modal_config = ({ title, msg, btt_event, btt_close, display }: iModalConfig) => {
+      setModal_title(title ?? '');
+      setModal_msg(msg ?? '');
+      setmodal_btt(btt_event ?? false);
+      setModal_btt_2(btt_close ?? false);
+      setModal_display(display ?? false);
+   };   
+
+   // close modal
+   const closeModal = () =>{
+      modal_config({
+         title: '', msg: '', btt_event: false, 
+         btt_close: false, display: false
+      });
+
+      setLoading(false);
+   };
 
 
    // redirect
    useEffect(() => {
       if (!redirect) return;
 
-      const timeout = setTimeout(() => {
+      const clearMessage = setTimeout(() => {
+         modal_config({
+            title: '', msg: '', btt_event: false, 
+            btt_close: false, display: false
+         });
+
          navigate('/login');
       }, 3000);
 
       return () => {
          setLoading(false);
-         clearTimeout(timeout);
+         clearTimeout(clearMessage);
       };
    }, [redirect, navigate]);
 
@@ -56,16 +91,27 @@ const RegisterPage = () => {
          const response: iApiResponse<RegisterResponseDTO> = await registerService.register(data);
          if(!response.success) throw new Error(response.message);
 
-         setMessage('Você será redirecionado...');
+         modal_config({
+            title: 'Sucesso ✔️', 
+            msg: `Registro feito com sucesso`, 
+            btt_event: false, btt_close: false, display: true
+         });
+
          setLoading(false);
          setRedirect(true);
       }
       catch (error) {
          setLoading(false);
-         console.error('❌', error);
 
          const errorMessage = error instanceof Error ? error.message : String(error);
-         setError(errorMessage);
+         const title = errorMessage.split(':')[0];
+         const message = errorMessage.split(':')[1];
+         
+         modal_config({
+            title: `${ title } ❌`, 
+            msg: `${ message }`, 
+            btt_event: false, btt_close: 'Tentar novamente', display: true
+         });
       }
    }
 
@@ -73,18 +119,28 @@ const RegisterPage = () => {
    // tsx
    return (
       <section className={ styles.container }>
+         { /* modal */ }
+         <Modal 
+            title={ modal_title }
+            msg={ modal_msg }
+            btt_event={ modal_btt }
+            btt_close={ modal_btt_2 }
+            display={ modal_display }
+            onClose={ closeModal }
+         />
+
          <form 
             onSubmit={ handleForm }
             method='post'
             className={ styles.auth_form }
          >
             <h1 className={ styles.title }>
-               Registre-se
+               Crie sua conta
             </h1>
 
-            <input type="text" value={ data.name } placeholder='name' onChange={e => setData(prev => ({ ...prev, name: e.target.value })) } /> 
-            <input type="email" value={ data.email } placeholder='email' onChange={e => setData(prev => ({ ...prev, email: e.target.value })) } /> 
-            <input type="password" value={ data.password } placeholder='senha' onChange={e => setData(prev => ({ ...prev, password: e.target.value })) } /> 
+            <input type="text" value={ data.name } placeholder='name' required onChange={e => setData(prev => ({ ...prev, name: e.target.value })) } /> 
+            <input type="email" value={ data.email } placeholder='email' required onChange={e => setData(prev => ({ ...prev, email: e.target.value })) } /> 
+            <input type="password" value={ data.password } placeholder='senha' required onChange={e => setData(prev => ({ ...prev, password: e.target.value })) } /> 
             
             { loading ? (
                <Loading />
@@ -99,15 +155,7 @@ const RegisterPage = () => {
                   </Link>
                </>
             ) }
-         </form> 
-         
-         { error !== '' && ( 
-            <p className={ styles.message }>error: { error }</p>
-         )}
-
-         { message !== '' && (
-            <p className={ styles.message }>{ message }</p>
-         ) }
+         </form>
       </section>
    );
 };
