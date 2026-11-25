@@ -7,7 +7,8 @@ import LoginPage from '@renderer/src/modules/auth/pages/LoginPage';
 import RegisterPage from '@renderer/src/modules/auth/pages/RegisterPage';
 
 // import protected pages
-import WelcomePage from '@renderer/src/pages/WelcomePage';
+import WelcomePage from '@renderer/src/pages/welcome/WelcomePage';
+import HomePage from '@renderer/src/pages/homepage/HomePage';
 import OrganizationPage from '@renderer/src/modules/organization/pages/OrganizationPage';
 
 // import routes
@@ -28,6 +29,7 @@ function App() {
             {/* protected - authenticated */}
             <Route element={ <ProtectedRoute /> }>
                <Route path='/welcome' element={ <WelcomePage /> } />
+               <Route path='/home' element={ <HomePage /> } />
                <Route path='/organization' element={ <OrganizationPage /> } />
             </Route>
 

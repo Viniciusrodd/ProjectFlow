@@ -52,7 +52,7 @@
       color: var(--accent_2);
    }
 
-   button {
+   & button {
       height: 45px;
       width: 15vw;
       border-radius: 10px;
@@ -63,7 +63,7 @@
       color: white;
       border: none;
    }
-   button:hover {
+   & button:hover {
       background-color: var(--accent_2);
    }
 }

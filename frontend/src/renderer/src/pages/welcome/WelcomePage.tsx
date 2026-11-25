@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
 // import style
-import styles from '@renderer/src/styles/Welcome.module.css';
+import styles from '@renderer/src/pages/welcome/Welcome.module.css';
 
 // import context
 import { AuthContext } from '@renderer/src/app/providers/auth/auth.context';
@@ -20,7 +20,7 @@ const WelcomePage = () => {
    return (
       <div className={ styles.container }>
          <h1 className={ styles.welcome_msg }>
-            Olá, { authUser.name }!
+            Olá, { authUser.name } <span className='material-symbols-outlined tooltip'>waving_hand</span>
          </h1>
          <h1 className={ styles.title }>
             Bem vindo/a ao ProjectFlow
@@ -32,9 +32,9 @@ const WelcomePage = () => {
          <button 
             type='button' 
             className={ styles.welcome_button }
-            onClick={ () => navigate('/organization') }
+            onClick={ () => navigate('/home') }
          >
-            ir para minhas organizações
+            ir para página principal
          </button>
       </div>
    );

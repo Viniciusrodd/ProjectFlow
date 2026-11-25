@@ -6,8 +6,8 @@
    flex-direction: column;
    justify-content: center;
    align-items: center;
-   height: 90vh;
-   width: 70vw;
+   height: 99.5vh;
+   width: 99.8vw;
    
    & button {
       height: 48px;
@@ -30,6 +30,10 @@
    color: var(--text);
    font-size: 30px;
    margin: 0px;
+   
+   & span {
+      font-size: 32px;
+   }
 }
 
 .title {
