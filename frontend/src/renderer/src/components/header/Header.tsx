@@ -1,6 +1,6 @@
 
 // imports
-import { useState, useContext, useEffect } from 'react';
+import { useContext, useState } from 'react';
 
 // import styles
 import styles from '@renderer/src/components/header/Header.module.css';
@@ -9,49 +9,24 @@ import styles from '@renderer/src/components/header/Header.module.css';
 import logo_image from '@renderer/src/assets/images/app_icon.png';
 import user_image from '@renderer/src/assets/images/user.png';
 
-// import types
-import { NotificationResponseDTO } from '@shared/types/notification/notification.types';
-
 // import context
 import { AuthContext } from '@renderer/src/app/providers/auth/auth.context';
 
-// import services
-import { profileImageService } from '@renderer/src/modules/user/services/profileImage.service';
+// import types
+import { NotificationResponseDTO } from '@renderer/src/modules/notification/types/notification.types';
+
+// import hooks
+import useProfileImage from '@renderer/src/hooks/header/useProfileImage';
+import useUserNotifications from '@renderer/src/hooks/header/useUserNotifications';
 
 
 const Header = () => {
    // states
-   const [ notificationActive, setNotificationActive ] = useState<boolean>(true);
-   const [ notifications, /*setNotifications*/ ] = useState<NotificationResponseDTO[]>([]);
-   const [ imageUrl, setImageUrl ] = useState<string>();
    const { authUser } = useContext(AuthContext);
-
-
-   // get profile image
-   useEffect(() => {
-      let active = true;
-      let objectUrl: string | undefined;
-      
-      const request = async () => {
-         if (!authUser.id) return;
-
-         const response = await profileImageService.getProfileImageData(authUser.id);
-         if (!active || !response.success || !response.data) return;
-
-         const { bytes, mimeType } = response.data;
-         const blob = new Blob([new Uint8Array(bytes)], { type: mimeType });
-         
-         objectUrl = URL.createObjectURL(blob);
-         setImageUrl(objectUrl);
-      };
-      request();
-
-      return () => {
-         active = false;
-         if (objectUrl) URL.revokeObjectURL(objectUrl);
-         setImageUrl(undefined);
-      }
-   }, [authUser.id]);
+   const profileImage = useProfileImage(authUser.id!);
+   const notifications = useUserNotifications(authUser.id!);
+   const [ seenNotifications, setSeenNotifications ] = useState<NotificationResponseDTO[]>();
+   const hasNew = notifications.length > 0 && notifications !== seenNotifications;
 
 
    // tsx
@@ -71,16 +46,16 @@ const Header = () => {
             </div>
 
             <div className={ styles.profile_infos }>
-               <div className={ styles.notification } onClick={ () => setNotificationActive(false) }>
-                  { notificationActive ? (
-                     <span className='material-symbols-outlined'>notifications_active</span>
-                  ) : (
-                     <span className='material-symbols-outlined'>notifications</span>
-                  ) }
-                  <p>
-                     { notifications.length }
-                  </p>
-               </div>
+               <button 
+                  type='button'
+                  className={ styles.notification } 
+                  onClick={ () => setSeenNotifications(notifications) }
+               >
+                  <span className='material-symbols-outlined'>
+                     { hasNew ? 'notifications_active' : 'notifications' }
+                  </span>
+                  <p>{ hasNew ? notifications.length : 0 }</p>
+               </button>
 
                <div className={ styles.profile }>
                   <div className={ styles.infos }>
@@ -92,7 +67,7 @@ const Header = () => {
                      </p>
                   </div>
 
-                  <img src={ imageUrl ?? user_image } alt="user_profile" />
+                  <img src={ profileImage ?? user_image } alt="user_profile" />
                </div>
             </div>
          </div>
