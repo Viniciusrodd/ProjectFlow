@@ -8,7 +8,7 @@ import {
 
 class RegisterService implements iRegisterMethods {
 
-   async register(data: RegisterDTO): Promise<iApiResponse<RegisterResponseDTO>> {
+   public async register(data: RegisterDTO): Promise<iApiResponse<RegisterResponseDTO>> {
       const apiRequest: iApiRequest = {
          method: 'POST',
          path: 'auth/register',

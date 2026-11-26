@@ -13,7 +13,7 @@ export type UUID = string;
 class UserService implements iUserMethods {
 
    // get all
-   async getAllUsers(): Promise<iApiResponse<UserProfileDTO[]>> {
+   public async getAllUsers(): Promise<iApiResponse<UserProfileDTO[]>> {
       const apiRequest: iApiRequest = {
          method: 'GET',
          path: 'users',
@@ -25,7 +25,7 @@ class UserService implements iUserMethods {
 
 
    // get by id
-   async getById(id: UUID | null): Promise<iApiResponse<UserProfileDTO>> {
+   public async getById(id: UUID | null): Promise<iApiResponse<UserProfileDTO>> {
       const apiRequest: iApiRequest = {
          method: 'GET',
          path: `user/${id}`,
@@ -37,7 +37,7 @@ class UserService implements iUserMethods {
 
 
    // update user
-   async updateUser(userId: UUID | null, data: UserUpdateDTO): Promise<iApiResponse<UserProfileDTO>> {
+   public async updateUser(userId: UUID | null, data: UserUpdateDTO): Promise<iApiResponse<UserProfileDTO>> {
       const apiRequest: iApiRequest = {
          method: 'PUT',
          path: `user/${userId}`,
@@ -50,7 +50,7 @@ class UserService implements iUserMethods {
 
 
    // delete user
-   async deleteUser(userId: UUID | null): Promise<iApiResponse<UserDeletedDTO>> {
+   public async deleteUser(userId: UUID | null): Promise<iApiResponse<UserDeletedDTO>> {
       const apiRequest: iApiRequest = {
          method: 'DELETE',
          path: `user/${userId}`,

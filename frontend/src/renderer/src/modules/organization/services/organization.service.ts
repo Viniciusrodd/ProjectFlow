@@ -14,7 +14,7 @@ export type UUID = string;
 class OrganizationService implements iOrganizationMethods {
 
    // creation
-   async createOrganization(data: OrganizationDTO): Promise<iApiResponse<OrganizationResponseDTO>> {
+   public async createOrganization(data: OrganizationDTO): Promise<iApiResponse<OrganizationResponseDTO>> {
       const apiRequest: iApiRequest = {
          method: 'POST',
          path: 'organization',
@@ -26,7 +26,7 @@ class OrganizationService implements iOrganizationMethods {
    }
 
    // get all
-   async getAllOrganizations(): Promise<iApiResponse<OrganizationResponseDTO[]>> {
+   public async getAllOrganizations(): Promise<iApiResponse<OrganizationResponseDTO[]>> {
       const apiRequest: iApiRequest = {
          method: 'GET',
          path: 'organizations',
@@ -37,7 +37,7 @@ class OrganizationService implements iOrganizationMethods {
    }
 
    // get by id
-   async getById(id: UUID | null): Promise<iApiResponse<OrganizationResponseDTO>> {
+   public async getById(id: UUID | null): Promise<iApiResponse<OrganizationResponseDTO>> {
       const apiRequest: iApiRequest = {
          method: 'GET',
          path: `organization/${id}`,
@@ -48,7 +48,7 @@ class OrganizationService implements iOrganizationMethods {
    }
 
    // get by owner
-   async getByOwnerId(ownerId: UUID | null): Promise<iApiResponse<OrganizationResponseDTO[]>> {
+   public async getByOwnerId(ownerId: UUID | null): Promise<iApiResponse<OrganizationResponseDTO[]>> {
       const apiRequest: iApiRequest = {
          method: 'GET',
          path: `organizations/${ownerId}`,
@@ -59,7 +59,7 @@ class OrganizationService implements iOrganizationMethods {
    }
 
    // update
-   async updateOrganization(
+   public async updateOrganization(
       id: UUID | null, 
       userId: UUID | null, 
       data: OrganizationUpdateDTO
@@ -75,7 +75,7 @@ class OrganizationService implements iOrganizationMethods {
    }
 
    // delete
-   async deleteOrganization(
+   public async deleteOrganization(
       id: UUID | null, 
       userId: UUID | null
    ): Promise<iApiResponse<OrganizationDeletedDTO>> {
