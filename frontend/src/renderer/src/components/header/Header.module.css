@@ -5,9 +5,9 @@
    flex-direction: row;
    justify-content: space-around;
    align-items: center;
-   height: 12vh;
+   height: 10vh;
    width: 100%;
-   border-bottom: 1px solid red;
+   border-bottom: 0px solid red;
 }
 
 
@@ -16,7 +16,7 @@
    flex-direction: row;
    justify-content: space-between;
    align-items: center;
-   height: 12vh;
+   height: 10vh;
    width: 14vw;
    border: 0px solid black;
 
@@ -37,7 +37,7 @@
    flex-direction: row;
    justify-content: space-around;
    align-items: center;
-   height: 12vh;
+   height: 10vh;
    width: 82vw;
    border: 0px solid black;
 
@@ -74,14 +74,14 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      height: 12vh;
-      width: 19vw;
+      height: 10vh;
+      width: 20vw;
       border: 0px solid palevioletred;
 
       & .notification {
          display: flex;
          flex-direction: row;
-         justify-content: center;
+         justify-content: space-between;
          align-items: center;
          height: 50%;
          width: 50px;
@@ -105,10 +105,10 @@
       & .profile {
          display: flex;
          flex-direction: row;
-         justify-content: space-between;
+         justify-content: space-around;
          align-items: center;
-         height: 12vh;
-         width: 14vw;
+         height: 10vh;
+         width: 15vw;
          border: 0px solid purple;
 
          & .infos {
@@ -117,7 +117,8 @@
             justify-content: center;
             align-items: flex-end;
             height: 50%;
-            width: 70%;
+            width: 65%;
+            min-width: 0;
             border: 0px solid orange;
 
             & p {
@@ -134,7 +135,7 @@
             height: 50px;
             width: 50px;
             border-radius: 100%;
-            background-color: grey;
+            background-color: var(--primary);
          }
       }
    }
