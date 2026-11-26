@@ -1,4 +1,7 @@
 
+// import types
+import { iApiResponse } from "@shared/types/api/api.types";
+
 // import enums
 import { NotificationEnum } from "@renderer/src/modules/notification/enums/notification.enum";
 
@@ -21,4 +24,16 @@ export interface NotificationResponseDTO {
    title: NotificationEnum;
    message: string;
    read: boolean;
+}
+
+
+// notification methods
+export interface iNotificationMethods {
+
+   create(data: NotificationDTO): Promise<iApiResponse<NotificationResponseDTO>>
+   getNotificationById(id: string): Promise<iApiResponse<NotificationResponseDTO>>
+   getUserNotifications(userId: UUID): Promise<iApiResponse<NotificationResponseDTO[]>>
+   deleteUserNotifications(userId: UUID): Promise<iApiResponse<void>>
+   deleteNotification(id: string): Promise<iApiResponse<void>>
+
 }
