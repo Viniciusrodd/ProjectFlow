@@ -6,7 +6,7 @@ import { ipcMain } from "electron";
 import { ApiClient } from "@main/api/apiClient";
 
 // import types
-import { iApiRequest, iApiResponse } from "@preload/types/api.types";
+import { iApiRequest, iApiResponse, iApiFile } from "@preload/types/api.types";
 
 
 export class ApiIpc {
@@ -25,6 +25,17 @@ export class ApiIpc {
          'api:request', 
          async (_event, data: iApiRequest): Promise<iApiResponse<unknown>> => {
             return await this.apiClient.request(data);
+         }
+      );
+   }
+
+
+   // request file
+   public requestFile() {
+      ipcMain.handle(
+         'api:requestFile', 
+         async (_event, data: iApiRequest): Promise<iApiResponse<iApiFile>> => {
+            return await this.apiClient.requestFile(data);
          }
       );
    }

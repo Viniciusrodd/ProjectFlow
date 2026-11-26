@@ -4,7 +4,7 @@ import { contextBridge, ipcRenderer } from "electron";
 
 // import types
 import { LoginDTO, LoginCleanResponseDTO } from '@shared/types/auth/login.types';
-import { iApiResponse, iApiRequest, iApi } from '@preload/types/api.types';
+import { iApiResponse, iApiRequest, iApi, iApiFile } from '@preload/types/api.types';
 
 
 // auth
@@ -22,6 +22,9 @@ const api: iApi = {
 
    request: <T = unknown>(config: iApiRequest): Promise<iApiResponse<T>> => 
       ipcRenderer.invoke('api:request', config
+   ),
+   requestFile: (config: iApiRequest): Promise<iApiResponse<iApiFile>> => 
+      ipcRenderer.invoke('api:requestFile', config
    )
 
 };

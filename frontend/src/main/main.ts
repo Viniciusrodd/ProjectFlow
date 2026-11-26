@@ -60,6 +60,7 @@ class Main {
    // api IPC handlers
    private apiIpcHandler(): void {
       new ApiIpc(this.apiClient).request();
+      new ApiIpc(this.apiClient).requestFile();
    }
    
 
